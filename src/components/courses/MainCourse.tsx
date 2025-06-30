@@ -1,9 +1,9 @@
 
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import CourseCard from './CourseCard';
 import humanimg from '../../assets/courses icons/demo human.png';
+
 
 const MainCourse = () => {
   const navigate = useNavigate();
@@ -31,6 +31,7 @@ const MainCourse = () => {
           onClick={() => navigate("/about/python")}
         />
       </div>
+      
     </div>
   );
 };

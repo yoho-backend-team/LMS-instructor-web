@@ -27,6 +27,7 @@ import Tickets from '@/pages/Tickets/Tickets';
 
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Batches from '@/components/courses/Batches';
+import CourseNotes from '@/components/courses/coursenotes';
 
 const AppRoutes = () => {
 	// const { isAuthenticated } = useAuth();
@@ -63,7 +64,7 @@ const AppRoutes = () => {
 				<Route path='placement' element={<Placement />} />
 				<Route path='payment' element={<Payment />} />
 				<Route path='about' element={<AboutCourse />} />
-				<Route path='note_materials' element={<NotesMaterials />} />
+				<Route path='note_materials' element={<CourseNotes />} />
 				<Route path='/about/:course' element={<AboutCourse />} />
 				<Route path='batches' element={<Batches />} />
 			</Route>
