@@ -1,10 +1,16 @@
+
+
+
+
+
 import React from 'react'
 import { Card } from '../ui/card'
 import { Button } from '../ui/button'
 import pdfimage from '../../assets/icons/notes/image 59.png'
-import downloadimg from '../../assets/icons/notes/Download.png'
+import Edit from '../../assets/courses icons/Edit-alt.png';
+import Trash from '../../assets/courses icons/Trash.png';
 import { FONTS } from '@/constants/uiConstants';
-import Mainbutton from './button'
+// import Mainbutton from './button'
 
 const NotesMaterials = () => {
 
@@ -26,17 +32,10 @@ const NotesMaterials = () => {
   return (
         // <div className="px-4 py-6 ">
      
-    <div className="w-full mx-auto p-4">
+    <div className="w-full h-screen mx-auto p-4 mt-18">
 
-      <h1 className="text-black text-2xl font-semibold mb-6"> Class notes & materials</h1>
-
-
-   <Mainbutton />
-
-
- <h1 className="text-black text-2xl font-semibold mb-6">Upload Notes</h1>
- 
-      <Card className="overflow-hidden">
+   
+      <Card className="overflow-hidden bg-[#EBEFF3] shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] p-6">
 
         <div className="flex flex-col">
           <Card className="bg-gradient-to-r from-[#7B00FF] to-[#B200FF] text-white p-6 sticky top-0 z-10 ml-4 mr-4 mb-4">
@@ -44,7 +43,7 @@ const NotesMaterials = () => {
               <div className="text-center !text-white" style={{...FONTS.heading_02}}>File</div>
               <div className="text-center !text-white" style={{...FONTS.heading_02}}>Name</div>
               <div className="text-center !text-white" style={{...FONTS.heading_02}}>Chapter</div>
-              <div className="text-center !text-white" style={{...FONTS.heading_02}}>PDF Download</div>
+              <div className="text-center !text-white" style={{...FONTS.heading_02}}>Actions</div>
             </div>
           </Card>
 
@@ -62,10 +61,19 @@ const NotesMaterials = () => {
                   <div className="text-center !text-gray-600" >{note.time}</div>
                   <div className="flex justify-center">
                     <Button 
-                      className="bg-[#EBEFF3] w-20 h-14 hover:bg-[#EBEFF3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset]" 
+                      className="bg-[#EBEFF3] p-2 w-15 h-12 hover:bg-[#EBEFF3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset]" 
                       variant="outline"
                     >
-                      <img src={downloadimg} className="w-8 h-10" alt="Download"/>
+                      <img src={Edit} className="w-5 h-6" alt="Download"/>
+                      
+                    </Button>
+
+                                     <Button 
+                      className="bg-[#EBEFF3] w-15 h-12 hover:bg-[#EBEFF3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset]" 
+                      variant="outline"
+                    >
+                      <img src={Trash} className="w-5 h-6" alt="Download"/>
+                      
                     </Button>
                   </div>
                 </div>
