@@ -45,18 +45,17 @@ const Batches = () => {
           <Button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`px-4 py-2  rounded-md shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] text-sm font-semibold ${
-              activeTab === tab
-                ? 'bg-purple-700 text-white'
-                : 'bg-[#ebeff3] text-gray-700'
-            }`}
+            className={`px-4 py-2  rounded-md shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] text-sm font-semibold ${activeTab === tab
+              ? 'bg-purple-700 text-white btnhovershadow hover:!text-white btnfocusshadow'
+              : 'bg-[#ebeff3] text-gray-700 btnhovershadow hover:!text-white'
+              }`}
           >
             {tab}
           </Button>
         ))}
       </div>
 
-    
+
       <Card className="overflow-hidden bg-[#EBEFF3] rounded-xl shadow-inner">
         <div className="flex flex-col">
           <Card className="bg-gradient-to-r from-[#7B00FF] to-[#B200FF] text-white p-4 mx-4 rounded-md sticky top-0 z-10 mb-4">
@@ -67,7 +66,7 @@ const Batches = () => {
             </div>
           </Card>
 
-        
+
           <div className="min-h-[400px] overflow-y-auto mx-4">
             {selectedBatch.map((item, index) => (
               <Card
