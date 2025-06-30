@@ -158,21 +158,21 @@ const Notifications = () => {
 
 					
 					<div className='flex gap-3 mt-2'>
-						{['all', 'read', 'unread'].map((label) => (
-							<Button
-								key={label}
-								className={`w-[75px] ${
-									filter === label
-										? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white rounded-lg'
-										: 'bg-[#ebeff3] text-black'
-								} shadow-md`}
-								variant='outline'
-								onClick={() => setFilter(label as 'all' | 'read' | 'unread')}
-							>
-								{label.charAt(0).toUpperCase() + label.slice(1)}
-							</Button>
-						))}
-					</div>
+	                     {['all', 'read', 'unread'].map((label) => (
+		                  <Button
+			                 key={label}
+			                 className={`w-[75px] rounded-lg shadow-md cursor-pointer transition-all duration-200 ${
+				                 filter === label
+				        	      ? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white hover:text-white '
+					              : 'bg-[#ebeff3] text-black '
+		                    	  }`}
+			                    variant='outline'
+			                     onClick={() => setFilter(label as 'all' | 'read' | 'unread')}
+		                      >
+			                     {label.charAt(0).toUpperCase() + label.slice(1)}
+		                  </Button>
+	                   ))}
+                   </div>
 
 				
 					<div className='flex flex-col w-full gap-3 px-2 py-3 overflow-y-auto max-h-[400px] scrollbar-hide'>
