@@ -6,8 +6,6 @@ import { useNavigate } from 'react-router-dom'
 
 
 const CourseButton: React.FC<{ activeTabs: string }> = ({ activeTabs }) => {
-
-  // const [activeTab, setactiveTab] = useState<'about' | 'notes' | 'task' | 'track'>('about');
   const navigate = useNavigate();
 
 
