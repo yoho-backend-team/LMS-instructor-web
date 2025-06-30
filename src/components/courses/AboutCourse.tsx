@@ -6,13 +6,25 @@ import classIcon from '../../assets/courses icons/demo human.png';
 import CourseButton from './button';
 import threebox from '../../assets/courses icons/threebox.svg';
 import timer from '../../assets/courses icons/timer.svg';
+import { useNavigate } from 'react-router-dom';
+import navigationicon from '../../assets/courses icons/navigation arrow.svg';
 
 const CourseList: React.FC = () => {
+  
+    const navigate = useNavigate();
   const [enabled, setEnabled] = useState(false);
 
   return (
     <div className="p-8">
-      <h1 className="text-2xl font-semibold text-[#333] mb-6">Course List</h1>
+      <div className="flex items-center gap-3 mb-6">
+              <Button
+                onClick={() => navigate(-1)}
+                className="bg-[#EBEFF3] text-[#333] hover:bg-[#e0e0e0] px-1 py-1 rounded-md shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
+              >
+                <img src={navigationicon} />
+              </Button>
+              <h1 className="text-black text-2xl font-semibold">Course Lists</h1>
+            </div>
 
       <div className="flex justify-center mb-8">
         <CourseButton activeTabs="about" />
