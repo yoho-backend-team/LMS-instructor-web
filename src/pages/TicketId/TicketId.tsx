@@ -4,12 +4,11 @@ import messageicon from '../../assets/icons/Tickets/Frame 301.png';
 import sendicon from '../../assets/icons/Tickets/Frame 5386.png';
 import { Button } from '@/components/ui/button';
 import { COLORS, FONTS } from "@/constants/uiConstants";
+import { useLocation } from 'react-router-dom';
 
 import {
 	Card,
-
 	CardContent,
-
 	CardFooter,
 	CardHeader,
 	CardTitle,
@@ -23,6 +22,9 @@ const TicketId = () => {
 	const handleBack = () => {
 		navigate(-1);
 	}
+	const location = useLocation();
+	const ticket = location.state;
+
 
 	return (
 		<div className="p-6">
@@ -32,7 +34,7 @@ const TicketId = () => {
 					<img
 						src={ticketicon}
 						alt="Back"
-						className="w-12 h-12 cursor-pointer"
+						className=" cursor-pointer"
 						onClick={handleBack}
 					/>
 					<h1 className="text-2xl font-semibold" style={{ ...FONTS.heading_01 }}>Ticket</h1>
@@ -49,8 +51,9 @@ const TicketId = () => {
 				<Card className="bg-[#ebeff3] shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] " style={{ ...FONTS.heading_04 }}>
 					<CardHeader>
 						<CardTitle>
-							<h1> #{id} This Ticket Created From Student Mobile App </h1>
+							<h1>#{id} {ticket?.contentTitle || 'This ticket was created from the Instructor Mobile App'}</h1>
 						</CardTitle>
+
 
 
 					</CardHeader>
@@ -73,13 +76,13 @@ const TicketId = () => {
 								</div>
 								<div className="flex justify-end pt-6 pl-6">
 									<Button
-  className="px-2 py-1 text-xs rounded-sm bg-gradient-to-l from-[#7B00FF] to-[#B200FF] !text-white 
+										className="px-2 py-1 text-xs rounded-sm bg-gradient-to-l from-[#7B00FF] to-[#B200FF] !text-white 
     shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] 
     hover:opacity-90 transition"
-  style={{ ...FONTS.para_01, fontSize: '15px' }}
->
-  problem Solved
-</Button>
+										style={{ ...FONTS.para_01, fontSize: '15px' }}
+									>
+										problem Solved
+									</Button>
 
 
 								</div>
@@ -124,55 +127,49 @@ const TicketId = () => {
 
 
 					<CardContent className="space-y-4">
-
 						<div>
 							<label className="text-sm font-medium !text-gray-800 block mb-1" style={{ ...FONTS.para_01, fontSize: '15px' }}>Issue Description</label>
-							<div className="bg-[#ebeff3] text-sm !text-gray-700 mt-5 rounded-md p-3 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] " style={{ ...FONTS.para_01, fontSize: '14px' }}>
-								If you can this yes successfully mobile app on Android
+							<div className="bg-[#ebeff3] text-sm !text-gray-700 mt-6 rounded-md p-3 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]" style={{ ...FONTS.para_01, fontSize: '14px' }}>
+								{ticket?.contentDescription || "No description available"}
 							</div>
 						</div>
-
 
 						<div>
 							<label className="text-sm font-medium !text-gray-800 block mb-1" style={{ ...FONTS.para_01, fontSize: '15px' }}>Issue Category</label>
-							<div className="bg-[#ebeff3] text-sm mt-5 !text-gray-700 rounded-md p-3  shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]" style={{ ...FONTS.para_01, fontSize: '14px' }}>
-								Feedback
+							<div className="bg-[#ebeff3] text-sm mt-6 !text-gray-700 rounded-md p-3 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]" style={{ ...FONTS.para_01, fontSize: '14px' }}>
+								{ticket?.category || "General"}
 							</div>
 						</div>
-
 
 						<div>
 							<label className="text-sm font-medium !text-gray-800 block mb-1" style={{ ...FONTS.para_01, fontSize: '15px' }}>Attachments</label>
-							<div className="bg-[#ebeff3] text-sm !text-gray-700 mt-5 rounded-md p-3  flex justify-between items-center shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]" style={{ ...FONTS.para_01, fontSize: '14px' }}>
-								<span>sbsxd-rcfvgbh-nj34-56tsdxf-cgvhb-jpeg.</span>
-								<a href="#" className="!text-[#7b00ff] text-sm font-medium hover:underline " style={{ ...FONTS.para_01, fontSize: '14px' }}>View</a>
+							<div className="bg-[#ebeff3] text-sm !text-gray-700 mt-6 rounded-md p-3 flex justify-between items-center shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]" style={{ ...FONTS.para_01, fontSize: '14px' }}>
+								<span>{ticket?.attachment || "No Attachment"}</span>
+								{ticket?.attachment && (
+									<a href={ticket.attachment} target="_blank" rel="noopener noreferrer" className="!text-[#7b00ff] text-sm font-medium hover:underline">
+										View
+									</a>
+								)}
 							</div>
 						</div>
-
 
 						<div>
 							<label className="text-sm font-medium !text-gray-800 block mb-1" style={{ ...FONTS.para_01, fontSize: '15px' }}>Status</label>
 							<div className="bg-[#ebeff3] rounded-md p-2 mt-5 w-full shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]">
-								<Button
-  className="px-5 py-2 text-xs rounded-sm bg-gradient-to-l from-[#7B00FF] to-[#B200FF] !text-white 
-    shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] 
-    hover:opacity-90 transition"
-  style={{ ...FONTS.para_01, fontSize: '15px' }}
->
-  Opened
-</Button>
-
+								<Button className="px-5 py-2 text-xs rounded-sm bg-gradient-to-l from-[#7B00FF] to-[#B200FF] !text-white shadow-[...]" style={{ ...FONTS.para_01, fontSize: '15px' }}>
+									{ticket?.status || "Unknown"}
+								</Button>
 							</div>
 						</div>
-
 
 						<div>
 							<label className="text-sm font-medium !text-gray-800 block mb-1" style={{ ...FONTS.para_01, fontSize: '15px' }}>Attempt</label>
 							<div className="bg-[#ebeff3] text-sm !text-gray-700 rounded-md mt-5 p-3 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]" style={{ ...FONTS.para_01, fontSize: '14px' }}>
-								1
+								{ticket?.count ?? 0}
 							</div>
 						</div>
 					</CardContent>
+
 				</Card>
 
 			</div>
