@@ -12,6 +12,7 @@ interface CompletedItem {
   time: string;
   duration: string;
   id: string;
+  classType: string;
 }
 
 interface DropdownOption {
@@ -24,29 +25,36 @@ interface FilterGroup {
   options: DropdownOption[];
 }
 
+interface Completedclassprobs {
+  showOnlineOnly:boolean;
+}
 
-const Completedclass = () => {
+
+const Completedclass = ({showOnlineOnly }: Completedclassprobs) => {
   const completed: CompletedItem[] = [
     {
       id: '1',
       title: 'HTML,CSS',
       date: "10-03-2025",
       time: '9.00 AM',
-      duration: '45 min'
+      duration: '45 min',
+      classType:'online'
     },
     {
       id: '2',
       title: 'JavaScript',
       date: "10-03-2025",
       time: '9.00 AM',
-      duration: '45 min'
-    },
+      duration: '45 min',
+      classType: 'online'   
+     },
     {
       id: '3',
       title: 'React',
       date: "23-04-2025",
       time: '9.00 AM',
-      duration: '45 min'
+      duration: '45 min',
+      classType: 'offline'
     }
   ];
 
@@ -106,6 +114,10 @@ const [showFilters, setShowFilters] = useState(false);
     setSelectedFilters(prev => ({ ...prev, [groupTitle]: value }));
     setOpenDropdown(null); // Close dropdown after selection
   };
+
+  const fillterClass = showOnlineOnly 
+    ? completed.filter(item => item.classType === 'online')
+    : completed.filter(item => item.classType === 'offline');
   
   return (
     <div style={{ backgroundColor: COLORS.bg_Colour }} className='mb-4'>
@@ -113,7 +125,7 @@ const [showFilters, setShowFilters] = useState(false);
         <Card style={{ backgroundColor: COLORS.bg_Colour }} className='h-[80px]' >
       {/* Filter buttons - only shown when showFilters is true */}
       {showFilters && (
-        <div className='ml-6 grid grid-cols-8  justify-between gap-3'>
+        <div className='ml-6 grid xl:grid-cols-8 lg:grid-cols-6 md:grid-cols-5 justify-between gap-3'>
           {filterGroups.map((group) => (
             <div key={group.title} className="relative">
               <Button
@@ -130,7 +142,7 @@ const [showFilters, setShowFilters] = useState(false);
               {/* Dropdown items - only shown when this dropdown is open */}
               {openDropdown === group.title && (
                 <div className="absolute z-50 w-[120px] mt-2 bg-[#ebeff3] 
-                            shadow-[2px_2px_3px_rgba(189,194,199,0.75)_inset] rounded-md p-1">
+                            shadow-[2px_2px_3px_rgba(189,194,199,0.75)_inset] cursor-pointer rounded-md p-1">
                   {group.options.map((option) => (
                     <div
                     style={{...FONTS.para_02}}
@@ -178,7 +190,7 @@ const [showFilters, setShowFilters] = useState(false);
           </table>
         </Card>
 
-        {completed.map((item) => (
+        {fillterClass.map((item) => (
           <Card 
               key={item.id}
               className='bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] text-black mx-4 p-4
@@ -197,7 +209,7 @@ const [showFilters, setShowFilters] = useState(false);
                   <td>{item.duration}</td>
                   <td>
                     <Button 
-                      className="bg-gradient-to-r from-green-400 to-green-500 text-white hover:from-green-500 hover:to-green-600
+                      className="cursor-pointer bg-gradient-to-r from-green-400 to-green-500 text-white hover:from-green-500 hover:to-green-600
                                 shadow-[0px_3px_4px_0px_rgba(255,255,255,0.75)_inset,3px_-3px_3px_0px_rgba(255,255,255,0.25)_inset,-4px_8px_23px_0px_#3ABE65_inset,-8px_-8px_12px_0px_#3ABE65_inset,2px_3px_3px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-1px_-1px_6px_0px_rgba(255,255,255,0.75),-1px_-1px_6px_1px_rgba(255,255,255,0.25)]"
                     >
                       Completed

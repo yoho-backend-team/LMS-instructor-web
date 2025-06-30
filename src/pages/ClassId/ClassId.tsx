@@ -18,14 +18,14 @@ const ClassId = () => {
 	 <div className='my-2 py-2 '>
 		{/* title section */}
 		<div className='my-4 flex flex-row justify-start items-center gap-5'>
-		<div onClick={handleBackPage} className='p-2 rounded-lg bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset]'>
+		<div onClick={handleBackPage} className='cursor-pointer p-2 rounded-lg bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset]'>
 			<img src={backImg} alt="back-img" />
 		</div>	
 		<h1 style={{...FONTS.heading_01}} >Class Details  -{id}</h1>
 		</div>
 
 		{/* card section */}
-	<div className='grid grid-cols-2 justify-between gap-10 py-2'>
+	<div className='grid xl:grid-cols-2 md:grid-cols-1 justify-between gap-10 py-2'>
         {/* Left side card */}
         <Card style={{backgroundColor:COLORS.bg_Colour}} className='px-4 py-1 h-[400px]'>
             <CardHeader>
