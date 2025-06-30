@@ -1,95 +1,132 @@
-import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-// import { Button } from '@/components/ui/button';
-// import humanimg from '../../assets/courses icons/demo human.png';
-// import CourseCard from './CourseCard';
-// import navigationicon from "../../assets/courses icons/navigation arrow.svg"
-import CourseNotes from '../../components/courses/coursenotes'
-const courseData = {
-  mernstack: {
-    title: "MERN STACK",
-    description: "A MERN Stack Developer is responsible for front-end and back-end development...",
-    modules: "1 Modules",
-    duration: "30 Hours",
-  },
-  python: {
-    title: "PYTHON",
-    description: "A Python Developer builds scalable backend applications...",
-    modules: "2 Modules",
-    duration: "45 Hours",
-  },
-};
+import React, { useState } from 'react';
+import { Switch } from '@headlessui/react';
+import { Button } from '@/components/ui/button';
+import htmlLogo from '../../assets/courses icons/htmlimg.png';
+import classIcon from '../../assets/courses icons/demo human.png';
+import CourseButton from './button';
+import threebox from '../../assets/courses icons/threebox.svg';
+import timer from '../../assets/courses icons/timer.svg';
+import { useNavigate } from 'react-router-dom';
+import navigationicon from '../../assets/courses icons/navigation arrow.svg';
+import { FONTS } from '@/constants/uiConstants';
 
-const AboutCourse: React.FC = () => {
-  const { course } = useParams<{ course: string }>();
+const CourseList: React.FC = () => {
+
   const navigate = useNavigate();
-  const selected = courseData[course?.toLowerCase() as keyof typeof courseData];
-
-  if (!selected) {
-    return <div className="p-6 text-red-500 font-semibold">Course not found.</div>;
-  }
+  const [enabled, setEnabled] = useState(false);
 
   return (
-    // <div className="px-4 py-6 bg-[#F5F7FA] min-h-screen">
-    //   <div className="flex items-center gap-3 mb-6">
-g
-    //     <Button
-    //       onClick={() => navigate(-1)}
-    //       className="bg-[#EBEFF3] text-[#333] hover:bg-[#e0e0e0] px-1 py-1 rounded-md shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
-    //     >
-    //       <img src={navigationicon} />
-    //     </Button>
-    //     <h1 className="text-black text-2xl font-semibold">About</h1>
-    //   </div>
+    <div className="p-8">
+      <div className="flex items-center gap-3 mb-6">
+        <Button
+          onClick={() => navigate(-1)}
+          className="bg-[#EBEFF3] text-[#333] hover:bg-[#e0e0e0] px-1 py-1 rounded-md shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
+        >
+          <img src={navigationicon} />
+        </Button>
+        <h1 className="" style={{ ...FONTS.heading_02 }}>Course Lists</h1>
+      </div>
 
-    //   <div className="flex justify-center gap-4 mb-12">
-    //     <Button className="bg-gradient-to-r from-[#7b00ff] to-[#a855f7] text-white px-6 py-2 rounded-md shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]">
-    //       About
-    //     </Button>
-    //     <Button className="bg-[#EBEFF3] hover:bg-[#EBEFF3] text-[#444] px-6 py-2 rounded-md shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]">Class Notes & Materials</Button>
-    //     <Button className="bg-[#EBEFF3] hover:bg-[#EBEFF3] text-[#444] px-6 py-2 rounded-md shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]">Task & Projects</Button>
-    //     <Button className="bg-[#EBEFF3] hover:bg-[#EBEFF3] text-[#444] px-6 py-2 rounded-md shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]">Course Track</Button>
-    //   </div>
+      <div className="flex justify-center mb-8">
+        <CourseButton activeTabs="about" />
+      </div>
 
-    //   {/* Content */}
-    //   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-screen-xl mx-auto items-start">
-    //     <CourseCard
-    //       title={selected.title}
-    //       description={selected.description}
-    //       image={humanimg}
-    //       modules={selected.modules}
-    //       duration={selected.duration}
-    //     />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-[#ebeff3] rounded-2xl p-6 shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)]">
+          <h2 className=" mb-4" style={{ ...FONTS.heading_02 }}>Course Details</h2>
 
-    //     <div className="bg-[#EBEFF3] shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] p-6 rounded-lg w-full">
-    //       <div className="space-y-6">
-    //         <div>
-    //           <h3 className="text-[#222] font-semibold mb-2">Course Name</h3>
-    //           <Button className="w-full bg-[#EBEFF3] hover:bg-[#EBEFF3] text-left justify-start text-gray-700 py-3 px-4 rounded-md shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]">
-    //             Successfully run the mobile app on Android
-    //           </Button>
-    //         </div>
-    //         <div>
-    //           <h3 className="text-[#222] font-semibold mb-2">Course Durations</h3>
-    //           <Button className="w-full bg-[#EBEFF3] hover:bg-[#EBEFF3] text-left justify-start text-gray-700 py-3 px-4 rounded-md shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]">
-    //             Feedback
-    //           </Button>
-    //         </div>
-    //         <div>
-    //           <h3 className="text-[#222] font-semibold mb-2">Total Hours</h3>
-    //           <Button className="w-full bg-[#EBEFF3] hover:bg-[#EBEFF3] text-left justify-start text-gray-700 py-3 px-4 rounded-md shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] truncate">
-    //             filename-example.pdf <span className="text-[#7b00ff] underline">View</span>
-    //           </Button>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
-<>
-<CourseNotes/>
-</>
+          <div className="flex items-start gap-4">
+            <div className="w-50 h-50 rounded-lg bg-[#EBEFF3] flex items-center justify-center shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)]">
+              <img src={classIcon} alt="Course Icon" className="w-35 h-35 object-contain" />
+            </div>
 
+            <div className="flex-1 w-full">
+              <div className="flex justify-between items-center mb-1">
+                <h3 style={{ ...FONTS.heading_02 }}>MERN STACK</h3>
+                <Switch
+                  checked={enabled}
+                  onChange={setEnabled}
+                  className={`${enabled ? 'bg-[#7b00ff]' : 'bg-gray-300'
+                    } relative inline-flex h-6 w-11 items-center rounded-full transition-colors`}
+                >
+                  <span
+                    className={`${enabled ? 'translate-x-6' : 'translate-x-1'
+                      } inline-block h-4 w-4 transform rounded-full bg-white transition`}
+                  />
+                </Switch>
+              </div>
+
+              <p className=" mb-1" style={{ ...FONTS.para_01 }}>Rajalakshmi Institute</p>
+
+              <div className="flex items-center gap-1 mb-2">
+                {'★★★★☆'.split('').map((star, idx) => (
+                  <span key={idx} className={`text-sm ${star === '☆' ? 'text-gray-300' : 'text-yellow-500'}`}>{star}</span>
+                ))}
+                <span className="text-sm text-gray-600 ml-1">4.5</span>
+              </div>
+
+              <p className=" mb-4" style={{ ...FONTS.para_03 }}>
+                A MERN Stack Developer is responsible for front-end and back-end development, database
+                management, integration and deployment, bug fixing, and working with cross-functional teams.
+              </p>
+
+
+              <div className="flex items-center gap-10 flex-wrap mt-8">
+                <div className="flex items-start gap-2">
+                  <Button className="bg-[#ebeff3] hover:bg-[#ebeff3] shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]">
+                    <img src={threebox} alt="Modules" className="h-5 w-5" />
+                  </Button>
+                  <div className="flex flex-col leading-tight">
+                    <span style={{ ...FONTS.heading_05 }}>Duration</span>
+                    <span style={{ ...FONTS.para_02 }}>30 Days Months</span>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-2">
+                  <Button className="bg-[#ebeff3] hover:bg-[#ebeff3] shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]">
+                    <img src={timer} alt="Status" className="h-5 w-5" />
+                  </Button>
+                  <div className="flex flex-col leading-tight">
+                    <span style={{ ...FONTS.heading_05 }}>Status</span>
+                    <span style={{ ...FONTS.para_02 }}>72%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div className="bg-[#ebeff3] rounded-2xl p-6 shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)]">
+          <div className="flex justify-between items-start mb-4">
+            <h2 style={{ ...FONTS.heading_02 }}>Course Chapters / Topics</h2>
+            <span style={{ ...FONTS.para_02 }}>1 Chapters</span>
+          </div>
+
+          <div className="flex flex-col">
+            <div className="flex justify-between items-start">
+              <div className="space-y-2">
+                <h3 style={{ ...FONTS.heading_02 }}>HTML History</h3>
+                <img src={htmlLogo} alt="HTML Logo" className="w-40 h-40 object-contain rounded-md" />
+                <p style={{ ...FONTS.para_03 }}>Brief History About HTML</p>
+              </div>
+
+              <div className="flex flex-col items-end">
+                <Button className="bg-[#ebeff3] text-black hover:bg-[#ebeff3] shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] text-sm">
+                  <span style={{ ...FONTS.heading_05 }}>12</span>
+                  <span style={{ ...FONTS.para_02 }}>/146 classes</span>
+                </Button>
+              </div>
+            </div>
+
+            <div className="flex justify-end mt-2">
+              <span style={{ ...FONTS.para_02 }}>Enrolled</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
-export default AboutCourse;
+export default CourseList;

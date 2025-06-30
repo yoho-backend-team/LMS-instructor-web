@@ -1,8 +1,10 @@
-import React from 'react'
-import { FONTS, bluebtnHover } from '@/constants/uiConstants'
+import React, { useState } from 'react'
+import { FONTS } from '@/constants/uiConstants'
 import updatesimg from '../../assets/dashboard/updates.png'
 
 const Updates: React.FC = () => {
+
+    const [activeTab, setActiveTab] = useState<'today' | 'upcoming'>('today');
 
     const data = []
 
@@ -13,8 +15,8 @@ const Updates: React.FC = () => {
                 <p style={{ ...FONTS.para_01 }}><span>0</span> New Messages</p>
             </div>
             <div className='flex flex-row gap-10'>
-                <button style={{ fontFamily: FONTS.heading_06.fontFamily, fontSize: FONTS.heading_06.fontSize, fontWeight: FONTS.heading_06.fontWeight }} className={`text-[#716F6F] btnshadow w-[86px] h-[42px] rounded-xl ${bluebtnHover}`}>Today</button>
-                <button style={{ fontFamily: FONTS.heading_06.fontFamily, fontSize: FONTS.heading_06.fontSize, fontWeight: FONTS.heading_06.fontWeight }} className={`text-[#716F6F] btnshadow w-[86px] h-[42px] rounded-xl ${bluebtnHover}`}>Previous</button>
+                <button onClick={() => setActiveTab('today')} style={{ fontFamily: FONTS.heading_06.fontFamily, fontSize: FONTS.heading_06.fontSize, fontWeight: FONTS.heading_06.fontWeight }} className={activeTab === 'today' ? `btnshadow text-white btnfocusshadow  w-[86px] h-[42px] rounded-xl` : `text-[#716F6F] btnshadow w-[86px] h-[42px] rounded-xl btnhovershadow hover:text-white`}>Today</button>
+                <button onClick={() => setActiveTab('upcoming')} style={{ fontFamily: FONTS.heading_06.fontFamily, fontSize: FONTS.heading_06.fontSize, fontWeight: FONTS.heading_06.fontWeight }} className={activeTab === 'upcoming' ? `btnshadow text-white btnfocusshadow w-[86px] h-[42px] rounded-xl` : `text-[#716F6F] btnshadow w-[86px] h-[42px] rounded-xl btnhovershadow hover:text-white focus:text-white`}>Previous</button>
             </div>
             <div>
                 {
