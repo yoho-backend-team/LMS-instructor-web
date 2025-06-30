@@ -8,6 +8,7 @@ import threebox from '../../assets/courses icons/threebox.svg';
 import timer from '../../assets/courses icons/timer.svg';
 import { useNavigate } from 'react-router-dom';
 import navigationicon from '../../assets/courses icons/navigation arrow.svg';
+import { FONTS } from '@/constants/uiConstants';
 
 const CourseList: React.FC = () => {
   
@@ -23,7 +24,7 @@ const CourseList: React.FC = () => {
               >
                 <img src={navigationicon} />
               </Button>
-              <h1 className="text-black text-2xl font-semibold">Course Lists</h1>
+              <h1 className=""style={{...FONTS.heading_02}}>Course Lists</h1>
             </div>
 
       <div className="flex justify-center mb-8">
@@ -32,7 +33,7 @@ const CourseList: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-[#ebeff3] rounded-2xl p-6 shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)]">
-          <h2 className="text-gray-700 font-semibold text-lg mb-4">Course Details</h2>
+          <h2 className=" mb-4"style={{...FONTS.heading_02}}>Course Details</h2>
 
           <div className="flex items-start gap-4">
             <div className="w-50 h-50 rounded-lg bg-[#EBEFF3] flex items-center justify-center shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)]">
@@ -41,7 +42,7 @@ const CourseList: React.FC = () => {
 
             <div className="flex-1 w-full">
               <div className="flex justify-between items-center mb-1">
-                <h3 className="text-lg font-bold text-gray-800">MERN STACK</h3>
+                <h3 style={{...FONTS.heading_02}}>MERN STACK</h3>
                 <Switch
                   checked={enabled}
                   onChange={setEnabled}
@@ -57,7 +58,7 @@ const CourseList: React.FC = () => {
                 </Switch>
               </div>
 
-              <p className="text-sm text-gray-600 mb-1">Rajalakshmi Institute</p>
+              <p className=" mb-1"style={{...FONTS.para_01}}>Rajalakshmi Institute</p>
 
               <div className="flex items-center gap-1 mb-2">
                 {'★★★★☆'.split('').map((star, idx) => (
@@ -66,7 +67,7 @@ const CourseList: React.FC = () => {
                 <span className="text-sm text-gray-600 ml-1">4.5</span>
               </div>
 
-              <p className="text-sm text-gray-600 leading-tight mb-4">
+              <p className=" mb-4"style={{...FONTS.para_03}}>
                 A MERN Stack Developer is responsible for front-end and back-end development, database
                 management, integration and deployment, bug fixing, and working with cross-functional teams.
               </p>
@@ -78,8 +79,8 @@ const CourseList: React.FC = () => {
                     <img src={threebox} alt="Modules" className="h-5 w-5" />
                   </Button>
                   <div className="flex flex-col leading-tight">
-                    <span className="text-xs text-gray-500">Duration</span>
-                    <span className="text-sm text-gray-700 font-medium">30 Days Months</span>
+                    <span style={{...FONTS.heading_05}}>Duration</span>
+                    <span style={{...FONTS.para_02}}>30 Days Months</span>
                   </div>
                 </div>
 
@@ -88,8 +89,8 @@ const CourseList: React.FC = () => {
                     <img src={timer} alt="Status" className="h-5 w-5" />
                   </Button>
                   <div className="flex flex-col leading-tight">
-                    <span className="text-xs text-gray-500">Status</span>
-                    <span className="text-sm text-gray-700 font-medium">72%</span>
+                    <span style={{...FONTS.heading_05}}>Status</span>
+                    <span style={{...FONTS.para_02}}>72%</span>
                   </div>
                 </div>
               </div>
@@ -100,28 +101,28 @@ const CourseList: React.FC = () => {
    
         <div className="bg-[#ebeff3] rounded-2xl p-6 shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)]">
           <div className="flex justify-between items-start mb-4">
-            <h2 className="text-gray-700 font-semibold text-lg">Course Chapters / Topics</h2>
-            <span className="text-sm text-gray-400">1 Chapters</span>
+            <h2 style={{...FONTS.heading_02}}>Course Chapters / Topics</h2>
+            <span style={{...FONTS.para_02}}>1 Chapters</span>
           </div>
 
           <div className="flex flex-col">
             <div className="flex justify-between items-start">
               <div className="space-y-2">
-                <h3 className="text-md font-semibold text-gray-700">HTML History</h3>
+                <h3 style={{...FONTS.heading_02}}>HTML History</h3>
                 <img src={htmlLogo} alt="HTML Logo" className="w-40 h-40 object-contain rounded-md" />
-                <p className="text-sm text-gray-600">Brief History About HTML</p>
+                <p style={{...FONTS.para_03}}>Brief History About HTML</p>
               </div>
 
               <div className="flex flex-col items-end">
                 <Button className="bg-[#ebeff3] text-black hover:bg-[#ebeff3] shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] text-sm">
-                  <span className="text-xl font-bold text-black">12</span>
-                  <span className="text-sm text-gray-600">/146 classes</span>
+                  <span style={{...FONTS.heading_05}}>12</span>
+                  <span style={{...FONTS.para_02}}>/146 classes</span>
                 </Button>
               </div>
             </div>
 
             <div className="flex justify-end mt-2">
-              <span className="text-xs text-black font-medium">Enrolled</span>
+              <span style={{...FONTS.para_02}}>Enrolled</span>
             </div>
           </div>
         </div>

@@ -35,7 +35,7 @@ const Batches = () => {
         >
           <img src={navigationicon} />
         </Button>
-        <h1 className="text-black text-2xl font-semibold">Batches</h1>
+        <h1 style={{...FONTS.heading_02}}>Batches</h1>
       </div>
 
       <CourseButton activeTabs="batches" />
@@ -59,7 +59,7 @@ const Batches = () => {
       <Card className="overflow-hidden bg-[#EBEFF3] rounded-xl shadow-inner">
         <div className="flex flex-col">
           <Card className="bg-gradient-to-r from-[#7B00FF] to-[#B200FF] text-white p-4 mx-4 rounded-md sticky top-0 z-10 mb-4">
-            <div className="grid grid-cols-3 gap-4 text-center">
+            <div className="grid grid-cols-3 gap-4  text-center">
               <div style={{ ...FONTS.heading_02 }}>Name</div>
               <div style={{ ...FONTS.heading_02 }}>Course Name</div>
               <div style={{ ...FONTS.heading_02 }}>Time Period</div>
