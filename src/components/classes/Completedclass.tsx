@@ -122,7 +122,7 @@ const [showFilters, setShowFilters] = useState(false);
   return (
     <div style={{ backgroundColor: COLORS.bg_Colour }} className='mb-4'>
 
-        <Card style={{ backgroundColor: COLORS.bg_Colour }} className='h-[80px]' >
+        <Card style={{ backgroundColor: COLORS.bg_Colour }} className='h-[80px] mb-3' >
       {/* Filter buttons - only shown when showFilters is true */}
       {showFilters && (
         <div className='ml-6 grid xl:grid-cols-8 lg:grid-cols-6 md:grid-cols-5 justify-between gap-3'>
@@ -169,7 +169,7 @@ const [showFilters, setShowFilters] = useState(false);
         <img 
           src={filterImg} 
           alt="filter" 
-          className="absolute right-[60px] top-[255px] cursor-pointer p-2 rounded-lg bg-[#ebeff3] 
+          className="absolute right-[60px] top-[235px] cursor-pointer p-2 rounded-lg bg-[#ebeff3] 
                   shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset]"
           onClick={toggleFilters}
         />

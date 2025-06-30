@@ -44,7 +44,56 @@ const Liveclass = ({ showOnlineOnly }: LiveclassProps) => {
       joinLink: 'www.react.com',
       duration: '60 min',
       classtype:'offline'
-    }
+    },
+     {
+      day: 'Day 1',
+      topic: 'HTML',
+      joinLink: 'www.google.com',
+      duration: '45 min',
+      classtype:'online'
+    },
+    {
+      day: 'Day 2',
+      topic: 'CSS',
+      joinLink: 'www.example.com',
+      duration: '60 min',
+      classtype:'online'
+    },
+    {
+      day: 'Day 3',
+      topic: 'JAVA',
+      joinLink: 'www.JS.com',
+      duration: '60 min',
+      classtype:'online'
+    },
+    {
+      day: 'Day 4',
+      topic: 'React',
+      joinLink: 'www.react.com',
+      duration: '60 min',
+      classtype:'offline'
+    },
+    {
+      day: 'Day 4',
+      topic: 'React',
+      joinLink: 'www.react.com',
+      duration: '60 min',
+      classtype:'offline'
+    },
+    {
+      day: 'Day 4',
+      topic: 'React',
+      joinLink: 'www.react.com',
+      duration: '60 min',
+      classtype:'offline'
+    },
+    {
+      day: 'Day 4',
+      topic: 'React',
+      joinLink: 'www.react.com',
+      duration: '60 min',
+      classtype:'offline'
+    },
   ];
 
   const filteredClasses = showOnlineOnly 
@@ -55,7 +104,7 @@ const Liveclass = ({ showOnlineOnly }: LiveclassProps) => {
   const headers = ['Day', 'Topic', 'Join Link', 'Duration', 'Action'];
 
   return (
-   <div>
+   <div >
       <Card style={{ backgroundColor: COLORS.bg_Colour }}>
         {/* Header Card */}
         <Card className='bg-gradient-to-r from-[#7B00FF] to-[#B200FF] !text-white mx-4 p-4'>
