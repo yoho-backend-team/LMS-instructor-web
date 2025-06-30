@@ -29,8 +29,8 @@ import Taskprojects from '@/components/courses/Task_projects';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 const AppRoutes = () => {
-	// const { isAuthenticated } = useAuth();
-	const isAuthenticated = true;
+	const { isAuthenticated } = useAuth();
+	// const isAuthenticated = true;
 
 	const AuthRoutes = () => (
 		<Routes>
@@ -38,7 +38,7 @@ const AppRoutes = () => {
 			<Route path='forgot-password' element={<EmailVerification />} />
 			<Route path='otp-verify' element={<OtpVerification />} />
 			<Route path='change-password' element={<ChangePassword />} />
-			<Route path='*' element={<Navigate to='/login' />} />
+			{/* <Route path='*' element={<Navigate to='/login' />} /> */}
 		</Routes>
 	);
 
@@ -67,6 +67,7 @@ const AppRoutes = () => {
 				<Route path='task_projects' element={<Taskprojects />} />
 				<Route path='/about/:course' element={<AboutCourse />} />
 				<Route path='notes_materials' element={<Notes_Materials />} />
+				<Route path='*' element={<Navigate to='/' />} />
 			</Route>
 		</Routes>
 	);
