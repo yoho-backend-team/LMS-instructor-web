@@ -3,11 +3,10 @@ import { Download, QrCode } from 'lucide-react';
 import { COLORS, FONTS } from '@/constants/uiConstants';
 
 interface IDCardData {
-  studentName: string;
-  studentId: string;
+  staffName: string;
+  staffId: string;
   course: string;
   batch: string;
-  rollNumber: string;
   validFrom: string;
   validUntil: string;
   institution: string;
@@ -25,11 +24,10 @@ const IDCard: React.FC<IDCardProps> = ({ data }) => {
   
   // Sample data - replace with actual data from props or API
   const idCardData: IDCardData = data || {
-    studentName: 'Albert Einstein',
-    studentId: 'U56TRN241',
+    staffName: 'Albert Einstein',
+    staffId: 'U56TRN241',
     course: 'Theoretical Physics',
     batch: 'Batch 2024-25',
-    rollNumber: 'PHY001',
     validFrom: '2024-01-01',
     validUntil: '2024-12-31',
     institution: 'Classie',
@@ -60,7 +58,7 @@ const IDCard: React.FC<IDCardProps> = ({ data }) => {
         <div className="p-4 sm:p-6 border-b border-gray-200 flex-shrink-0">
           <div className="flex justify-between items-center">
             <h2 className="font-bold text-2xl leading-none" style={{ color: COLORS.text_title, fontFamily: FONTS.heading_01.fontFamily, fontWeight: FONTS.heading_01.fontWeight }}>
-              Student ID Card
+            Staff ID Card
             </h2>
           </div>
         </div>
@@ -86,7 +84,7 @@ const IDCard: React.FC<IDCardProps> = ({ data }) => {
                       {/* Header */}
                       <div className="text-center mb-4">
                         <h3 className="text-lg font-bold mb-1" style={{ fontFamily: FONTS.heading_04.fontFamily }}>{idCardData.institution}</h3>
-                        <p className="text-sm opacity-90" style={{ fontFamily: FONTS.para_01.fontFamily }}>STUDENT ID CARD</p>
+                        <p className="text-sm opacity-90" style={{ fontFamily: FONTS.para_01.fontFamily }}>STAFF ID CARD</p>
                         <div className="w-16 h-0.5 bg-white/50 mx-auto mt-2"></div>
                       </div>
 
@@ -95,15 +93,15 @@ const IDCard: React.FC<IDCardProps> = ({ data }) => {
                         <div className="w-20 h-20 rounded-full border-4 border-white/30 overflow-hidden bg-white/10">
                           <img 
                             src={idCardData.profileImage} 
-                            alt={idCardData.studentName}
+                            alt={idCardData.staffName}
                             className="w-full h-full object-cover"
                           />
                         </div>
                       </div>
 
-                      {/* Student Info */}
+                      {/* Staff Info */}
                       <div className="text-center">
-                        <h4 className="text-lg font-bold mb-1" style={{ fontFamily: FONTS.heading_04.fontFamily }}>{idCardData.studentName}</h4>
+                        <h4 className="text-lg font-bold mb-1" style={{ fontFamily: FONTS.heading_04.fontFamily }}>{idCardData.staffName}</h4>
                         <p className="text-sm opacity-90" style={{ fontFamily: FONTS.para_01.fontFamily }}>{idCardData.course}</p>
                       </div>
 
@@ -117,12 +115,8 @@ const IDCard: React.FC<IDCardProps> = ({ data }) => {
                       {/* Details */}
                       <div className="space-y-2 text-sm flex-1" style={{ fontFamily: FONTS.para_01.fontFamily }}>
                         <div className="flex justify-between">
-                          <span className="opacity-70">Student ID:</span>
-                          <span className="font-semibold">{idCardData.studentId}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="opacity-70">Roll No:</span>
-                          <span className="font-semibold">{idCardData.rollNumber}</span>
+                          <span className="opacity-70">Staff ID:</span>
+                          <span className="font-semibold">{idCardData.staffId}</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="opacity-70">Batch:</span>
@@ -183,7 +177,7 @@ const IDCard: React.FC<IDCardProps> = ({ data }) => {
                       </div>
                       
                       <div className="text-center">
-                        <p className="text-sm opacity-90 mb-2" style={{ fontFamily: FONTS.para_01.fontFamily }}>Student ID: {idCardData.studentId}</p>
+                        <p className="text-sm opacity-90 mb-2" style={{ fontFamily: FONTS.para_01.fontFamily }}>Staff ID: {idCardData.staffId}</p>
                         <p className="text-xs opacity-70" style={{ fontFamily: FONTS.para_01.fontFamily }}>Scan this QR code for quick verification</p>
                       </div>
                     </div>
@@ -207,19 +201,19 @@ const IDCard: React.FC<IDCardProps> = ({ data }) => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <label className="block font-medium mb-2 text-sm leading-relaxed" style={{ color: COLORS.text_desc, fontFamily: FONTS.para_01.fontFamily }}>
-                  Student Name
+                  Staff Name
                 </label>
                 <div className="rounded-lg px-4 py-3 text-sm leading-relaxed shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] min-h-[44px] flex items-center" style={{ backgroundColor: COLORS.bg_Colour, fontFamily: FONTS.para_01.fontFamily, color: COLORS.text_desc }}>
-                  {idCardData.studentName}
+                  {idCardData.staffName}
                 </div>
               </div>
 
               <div>
                 <label className="block font-medium mb-2 text-sm leading-relaxed" style={{ color: COLORS.text_desc, fontFamily: FONTS.para_01.fontFamily }}>
-                  Student ID
+                  Staff ID
                 </label>
                 <div className="rounded-lg px-4 py-3 text-sm leading-relaxed shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] min-h-[44px] flex items-center" style={{ backgroundColor: COLORS.bg_Colour, fontFamily: FONTS.para_01.fontFamily, color: COLORS.text_desc }}>
-                  {idCardData.studentId}
+                  {idCardData.staffId}
                 </div>
               </div>
 
@@ -241,14 +235,7 @@ const IDCard: React.FC<IDCardProps> = ({ data }) => {
                 </div>
               </div>
 
-              <div>
-                <label className="block font-medium mb-2 text-sm leading-relaxed" style={{ color: COLORS.text_desc, fontFamily: FONTS.para_01.fontFamily }}>
-                  Roll Number
-                </label>
-                <div className="rounded-lg px-4 py-3 text-sm leading-relaxed shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] min-h-[44px] flex items-center" style={{ backgroundColor: COLORS.bg_Colour, fontFamily: FONTS.para_01.fontFamily, color: COLORS.text_desc }}>
-                  {idCardData.rollNumber}
-                </div>
-              </div>
+
 
               <div>
                 <label className="block font-medium mb-2 text-sm leading-relaxed" style={{ color: COLORS.text_desc, fontFamily: FONTS.para_01.fontFamily }}>
@@ -295,7 +282,7 @@ const IDCard: React.FC<IDCardProps> = ({ data }) => {
                 </div>
                 <div>
                   <p className="font-semibold text-green-800" style={{ fontFamily: FONTS.heading_06.fontFamily }}>Active ID Card</p>
-                  <p className="text-sm text-green-600" style={{ fontFamily: FONTS.para_01.fontFamily }}>Your student ID card is active and valid.</p>
+                  <p className="text-sm text-green-600" style={{ fontFamily: FONTS.para_01.fontFamily }}>Your staff ID card is active and valid.</p>
                 </div>
               </div>
             </div>
