@@ -32,7 +32,7 @@ const AboutCourse: React.FC = () => {
   return (
     // <div className="px-4 py-6 bg-[#F5F7FA] min-h-screen">
     //   <div className="flex items-center gap-3 mb-6">
-
+g
     //     <Button
     //       onClick={() => navigate(-1)}
     //       className="bg-[#EBEFF3] text-[#333] hover:bg-[#e0e0e0] px-1 py-1 rounded-md shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
