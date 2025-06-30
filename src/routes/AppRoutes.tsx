@@ -38,7 +38,7 @@ const AppRoutes = () => {
 			<Route path='forgot-password' element={<EmailVerification />} />
 			<Route path='otp-verify' element={<OtpVerification />} />
 			<Route path='change-password' element={<ChangePassword />} />
-			{/* <Route path='*' element={<Navigate to='/login' />} /> */}
+			<Route path='*' element={<Navigate to='/login' />} />
 		</Routes>
 	);
 
@@ -53,7 +53,7 @@ const AppRoutes = () => {
 				<Route path='activity-logs' element={<ActivityLogs />} />
 				<Route path='tickets' element={<Tickets />} />
 				<Route path='ticket/:id' element={<TicketId />} />
-					<Route path='/tickets/create-ticket' element={<Createtickets />} />
+				<Route path='/tickets/create-ticket' element={<Createtickets />} />
 				<Route path='profile' element={<Profile />} />
 				<Route path='help-center' element={<HelpCenter />} />
 				<Route path='faqs' element={<FAQs />} />
