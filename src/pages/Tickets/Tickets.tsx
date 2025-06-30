@@ -18,7 +18,7 @@ import { useState } from "react";
 
 const ticketData = [
   {
-    id: "ANTITS101",
+    id: "ANTITS01",
     date: "10 Jan",
     count: 1,
     status: "open",
@@ -26,7 +26,7 @@ const ticketData = [
     contentDescription: "Instructor reported that PDFs fail to upload due to file size restriction errors.",
   },
   {
-    id: "ANTITS102",
+    id: "ANTITS02",
     date: "15 Feb",
     count: 2,
     status: "closed",
@@ -34,7 +34,7 @@ const ticketData = [
     contentDescription: "Progress bar remains at 0% even after completing all modules.",
   },
   {
-    id: "ANTITS103",
+    id: "ANTITS03",
     date: "21 Mar",
     count: 1,
     status: "open",
@@ -42,7 +42,7 @@ const ticketData = [
     contentDescription: "Live session throws error: 'Meeting ID not valid or expired'.",
   },
   {
-    id: "ANTITS104",
+    id: "ANTITS04",
     date: "03 Apr",
     count: 3,
     status: "closed",
@@ -50,7 +50,7 @@ const ticketData = [
     contentDescription: "Instructor app crashes when marking attendance for more than 40 students.",
   },
   {
-    id: "ANTITS105",
+    id: "ANTITS05",
     date: "12 May",
     count: 2,
     status: "open",
@@ -58,7 +58,7 @@ const ticketData = [
     contentDescription: "Recorded videos do not have instructor voice on certain devices.",
   },
   {
-    id: "ANTITS106",
+    id: "ANTITS06",
     date: "22 May",
     count: 1,
     status: "closed",
@@ -66,7 +66,7 @@ const ticketData = [
     contentDescription: "Instructor's calendar page is blank even after scheduling classes.",
   },
   {
-    id: "ANTITS107",
+    id: "ANTITS07",
     date: "01 Jun",
     count: 1,
     status: "closed",
@@ -74,7 +74,7 @@ const ticketData = [
     contentDescription: "Instructor reported not getting reset password link via email.",
   },
   {
-    id: "ANTITS108",
+    id: "ANTITS08",
     date: "08 Jun",
     count: 4,
     status: "open",
@@ -82,7 +82,7 @@ const ticketData = [
     contentDescription: "Number of enrolled students showing 0 despite active enrollments.",
   },
   {
-    id: "ANTITS109",
+    id: "ANTITS09",
     date: "19 Jun",
     count: 2,
     status: "closed",
@@ -90,7 +90,7 @@ const ticketData = [
     contentDescription: "Unable to update date/time once class has been published.",
   },
   {
-    id: "ANTITS110",
+    id: "ANTITS10",
     date: "25 Jun",
     count: 3,
     status: "open",
