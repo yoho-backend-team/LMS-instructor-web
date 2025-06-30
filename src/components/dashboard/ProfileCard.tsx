@@ -2,8 +2,11 @@ import Gridprofile from '@/components/dashboard/ui/GridProgress'
 import React from 'react'
 import proLogo from '../../assets/dashboard/image.png'
 import { FONTS } from '@/constants/uiConstants'
+import { useNavigate } from 'react-router-dom'
 
 const ProfileCard: React.FC = () => {
+
+    const navigate = useNavigate()
 
     const data = [
         {
@@ -54,8 +57,9 @@ const ProfileCard: React.FC = () => {
                     </div>
                 </div>
                 <button type="button"
+                    onClick={() => navigate('/profile')}
                     style={{ fontFamily: FONTS.heading_06.fontFamily, fontWeight: FONTS.heading_06.fontWeight }}
-                    className='items-center w-[104px] h-[48px] rounded-xl btnshadow text-[#716F6F] text-[14px]'
+                    className='items-center w-[104px] h-[48px] rounded-xl btnshadow text-[#716F6F] text-[14px] hover:text-white btnhovershadow'
                 >View Profile</button>
             </div>
             <div className="grid grid-cols-3 gap-5">
