@@ -30,6 +30,7 @@ import { Createtickets } from '@/components/Tickets/Createtickets';
 
 const AppRoutes = () => {
 	const { isAuthenticated } = useAuth();
+	// const isAuthenticated = true;
 
 	const AuthRoutes = () => (
 		<Routes>
