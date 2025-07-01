@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { Switch } from '@headlessui/react';
+
 import { Button } from '@/components/ui/button';
 import htmlLogo from '../../assets/courses icons/htmlimg.png';
 import classIcon from '../../assets/courses icons/demo human.png';
@@ -13,7 +12,6 @@ import { FONTS } from '@/constants/uiConstants';
 const CourseList: React.FC = () => {
 
   const navigate = useNavigate();
-  const [enabled, setEnabled] = useState(false);
 
   return (
     <div className="p-8">
@@ -43,17 +41,6 @@ const CourseList: React.FC = () => {
             <div className="flex-1 w-full">
               <div className="flex justify-between items-center mb-1">
                 <h3 style={{ ...FONTS.heading_02 }}>MERN STACK</h3>
-                <Switch
-                  checked={enabled}
-                  onChange={setEnabled}
-                  className={`${enabled ? 'bg-[#7b00ff]' : 'bg-gray-300'
-                    } relative inline-flex h-6 w-11 items-center rounded-full transition-colors`}
-                >
-                  <span
-                    className={`${enabled ? 'translate-x-6' : 'translate-x-1'
-                      } inline-block h-4 w-4 transform rounded-full bg-white transition`}
-                  />
-                </Switch>
               </div>
 
               <p className=" mb-1" style={{ ...FONTS.para_01 }}>Rajalakshmi Institute</p>
