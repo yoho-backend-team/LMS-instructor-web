@@ -26,12 +26,13 @@ import Tickets from '@/pages/Tickets/Tickets';
 
 
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { Createtickets } from '@/components/Tickets/Createtickets';
 import Batches from '@/components/courses/Batches';
 import CourseNotes from '@/components/courses/coursenotes';
 
 const AppRoutes = () => {
-	// const { isAuthenticated } = useAuth();
-	const isAuthenticated = true;
+	const { isAuthenticated } = useAuth();
+	// const isAuthenticated = true;
 
 	const AuthRoutes = () => (
 		<Routes>
@@ -54,6 +55,7 @@ const AppRoutes = () => {
 				<Route path='activity-logs' element={<ActivityLogs />} />
 				<Route path='tickets' element={<Tickets />} />
 				<Route path='ticket/:id' element={<TicketId />} />
+				<Route path='/tickets/create-ticket' element={<Createtickets />} />
 				<Route path='profile' element={<Profile />} />
 				<Route path='help-center' element={<HelpCenter />} />
 				<Route path='faqs' element={<FAQs />} />
@@ -66,6 +68,8 @@ const AppRoutes = () => {
 				<Route path='about' element={<AboutCourse />} />
 				<Route path='note_materials' element={<CourseNotes />} />
 				<Route path='/about/:course' element={<AboutCourse />} />
+				<Route path='notes_materials' element={<NotesMaterials />} />
+				<Route path='*' element={<Navigate to='/' />} />
 				<Route path='batches' element={<Batches />} />
 			</Route>
 		</Routes>

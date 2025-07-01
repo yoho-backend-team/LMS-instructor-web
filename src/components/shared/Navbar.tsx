@@ -50,12 +50,6 @@ const Navbar = () => {
 			iconActive: NavbarIcons.CommunityActiveImg,
 			iconInactive: NavbarIcons.CommunityInActiveImg,
 		},
-		{
-			path: 'placement',
-			name: 'Placement',
-			iconActive: NavbarIcons.PlacementActiveImg,
-			iconInactive: NavbarIcons.PlacementInActiveImg,
-		},
 	];
 
 	return (
