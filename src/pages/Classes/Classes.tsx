@@ -17,17 +17,9 @@ const Classes = () => {
 	};
 
 	return (
-		<div
-			style={{
-				backgroundColor: COLORS.bg_Colour,
-				height: '100vh',
-				display: 'flex',
-				flexDirection: 'column',
-			}}
-			className='pb-3 fixed'
-		>
+		<div className="h-screen flex flex-col">
 			{/* Fixed Header Section */}
-			<div className='pt-2 px-4 pb-3'>
+			<div className='pt-2 px-4 pb-3 relative flex-shrink-0'>
 				<h1 style={{ ...FONTS.heading_01 }} className='mb-4'>
 					Classes
 				</h1>
@@ -129,7 +121,7 @@ const Classes = () => {
 			</div>
 
 			{/* Scrollable Content Section */}
-			<div className='flex-1 overflow-y-auto px-4 pb-4 scrollbar-hide'>
+			<div className='flex-1 overflow-y-auto px-4 pb-4 scrollbar-hide min-h-0'>
 				{activeTab === 'live' && <Liveclass showOnlineOnly={isOn} />}
 				{activeTab === 'upcoming' && <Upcomingclass />}
 				{activeTab === 'completed' && <Completedclass showOnlineOnly={isOn} />}
