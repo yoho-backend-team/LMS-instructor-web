@@ -4,6 +4,7 @@ import { COLORS, FONTS } from '@/constants/uiConstants'
 import { Line, LineChart, ResponsiveContainer, XAxis } from 'recharts'
 import {
   Card,
+  CardContent,
   CardHeader,
 } from '@/components/ui/card'
 import {
@@ -25,13 +26,14 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
+
 const chartData = [
-  { month: 'January', desktop: 10 },
-  { month: 'February', desktop: 11.5 },
-  { month: 'March', desktop: 10 },
-  { month: 'April', desktop: 11 },
-  { month: 'May', desktop: 10 },
-  { month: 'June', desktop: 11 },
+  { month: 'January', desktop: 120 },
+  { month: 'February', desktop: 135 },
+  { month: 'March', desktop: 120},
+  { month: 'April', desktop: 137 },
+   { month: 'May', desktop: 120 },
+  { month: 'June', desktop: 140 },
 ]
 
 const chartConfig = {
@@ -73,6 +75,7 @@ export const Attendance = () => {
   const [selectedYear, setSelectedYear] = useState<number>(selectedDate.getFullYear())
   const [showFilters, setShowFilters] = useState<boolean>(false)
 
+  // const current = new Date()
 
   const handleMonthChange = (newMonth: string) => {
     const monthIndex = months.indexOf(newMonth)
@@ -94,7 +97,7 @@ export const Attendance = () => {
     setSelectedYear(newMonth.getFullYear())
   }
 
-  const years = Array.from({ length: 36 }, (_, i) => 2000 + i)
+  const years = Array.from({ length: 5 }, (_, i) => 2021 + i)
 
   return (
     <div className="p-4">
@@ -105,7 +108,7 @@ export const Attendance = () => {
         <div className="relative flex items-center">
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="p-2 rounded-full shadow-[3px_3px_6px_rgba(189,194,199,0.75),-3px_-3px_6px_rgba(255,255,255,0.7)] hover:scale-105 transition z-10"
+            className="p-2 rounded-md shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] hover:scale-105 transition z-10"
             style={{ backgroundColor: COLORS.bg_Colour }}
           >
             <img src={filter} alt="Filter" className="w-6 h-6" />
@@ -119,7 +122,7 @@ export const Attendance = () => {
             <Select value={selectedMonth} onValueChange={handleMonthChange}>
               <SelectTrigger
                 style={{ ...FONTS.para_02, backgroundColor: COLORS.bg_Colour }}
-                className="w-[100px] rounded-sm border-0 px-2 py-3 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] focus:outline-none"
+                className="w-max-sm rounded-sm border-0 px-1 py-3 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] focus:outline-none"
               >
                 <SelectValue placeholder="Select month" />
               </SelectTrigger>
@@ -149,12 +152,12 @@ export const Attendance = () => {
 
             <Select value={selectedYear.toString()} onValueChange={handleYearChange}>
               <SelectTrigger
-                className="w-[100px] rounded-sm border-0 px-4 py-3 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] focus:outline-none"
+                className="w-max-sm rounded-sm border-0 px-2 py-2 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] focus:outline-none"
                 style={{ ...FONTS.para_02, backgroundColor: COLORS.bg_Colour }}
               >
                 <SelectValue placeholder="Select year" />
               </SelectTrigger>
-              <SelectContent className="bg-[#ebeff3] rounded-sm p-2 shadow-[4px_4px_6px_rgba(189,194,199,0.5),-4px_-4px_6px_rgba(255,255,255,0.7)]">
+              <SelectContent className="bg-[#ebeff3] rounded-sm w-[40px] px-2 py-2 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]">
                 {years.map((year) => (
                   <SelectItem
                     key={year}
@@ -184,21 +187,36 @@ export const Attendance = () => {
       <div className="flex flex-row gap-4 justify-center pt-6">
         {attendanceCards.map((card) => (
           <Card
-            key={card.label}
-            className="relative bg-[#ebeff3] w-full h-[120px] shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),5px_5px_4px_rgba(189,194,199,0.75)] overflow-hidden"
-          >
-            <CardHeader>
-              <div className="flex justify-between">
+          key={card.label}
+          className="
+            relative 
+            w-full 
+             md:max-w-full
+            md:h-[150px]
+            h-auto 
+            shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),5px_5px_4px_rgba(189,194,199,0.75)] 
+            overflow-hidden
+          "
+          style={{ backgroundColor: COLORS.bg_Colour }}
+        >
+        
+            <CardHeader className='md:w-auto md:text-[10px] h-full'>
+              <div className="max-w-screen-xl flex justify-between">
                 <span style={{ ...FONTS.heading_04 }}>{card.label}</span>
                 <span className="text-2xl font-bold" style={{ ...FONTS.heading_01 }}>
                   <span style={{ color: card.color }}>{card.current}</span>
                   <span className="text-sm text-gray-500">/{card.total}</span>
                 </span>
               </div>
-
-              <ChartContainer config={chartConfig} style={{ ...FONTS.para_03 }}>
-                <ResponsiveContainer width="100%" height={70}>
-                  <LineChart data={chartData} margin={{ left: 0, right: 0 }}>
+              </CardHeader>
+               <CardContent className='h-full md:h-[30px] md:w-[220px] md:pb-0 lg:w-[100%] lg:mb-2 '>
+              <ChartContainer  config={chartConfig} style={{ ...FONTS.para_03 }} >
+                {/* <ResponsiveContainer width="100%" height={70}> */}
+                  <LineChart data={chartData} margin={{ left: 0, right: 0 }}
+                  width={500} 
+                  height={70}
+                  className='md:mb-20'
+                  >
                     <XAxis dataKey="month" hide />
                     <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
                     <Line
@@ -207,16 +225,18 @@ export const Attendance = () => {
                       stroke={card.color}
                       strokeWidth={2.5}
                       dot={true}
+                      className='max-w-sm  md:max-w-full h-auto md:h-[60px]'
                     />
                   </LineChart>
-                </ResponsiveContainer>
+                {/* </ResponsiveContainer> */}
               </ChartContainer>
-            </CardHeader>
+              </CardContent>
+           
           </Card>
         ))}
       </div>
 
-      <div className="flex flex-row gap-6 pt-6">
+      <div className="flex flex-row gap-6 pt-6 ">
         <div className="flex flex-col">
           <h2 className="text-xl font-semibold mb-4 mt-2" style={{ ...FONTS.heading_02 }}>Calendar</h2>
           <Calendar
@@ -226,8 +246,13 @@ export const Attendance = () => {
             onSelect={setSelectedDate}
             month={selectedDate}
             onMonthChange={handleCalendarMonthChange}
-            className="bg-[#ebeff3] border rounded-lg  **:gap-5 **:py-0.5 shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),5px_5px_4px_rgba(189,194,199,0.75)]"
-            style={{ ...FONTS.heading_02 }}
+            className="border **:gap-5 **:py-0.5 md:**:gap-2  rounded-lg shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),5px_5px_4px_rgba(189,194,199,0.75)]"
+            style={{ ...FONTS.heading_02, backgroundColor: COLORS.bg_Colour }}
+            // modifiers={{ current: current }}
+            // modifiersClassNames={{
+            //   current: "text-[#A32AF3] font-bold" ,
+            //   selected: "text-white",
+            // }}
           />
         </div>
 
@@ -235,9 +260,9 @@ export const Attendance = () => {
           <h3 className="text-lg font-semibold mb-4 mt-2" style={{ ...FONTS.heading_02 }}>
             Day Overview
           </h3>
-          <div className="flex flex-col w-full justify-between bg-[#ebeff3] rounded-md p-6  h-[315px] shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),5px_5px_4px_rgba(189,194,199,0.75)]">
+          <div className="flex flex-col justify-between rounded-md p-6  h-full shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),5px_5px_4px_rgba(189,194,199,0.75)]" style={{ backgroundColor: COLORS.bg_Colour }}>
             <div>
-              <p className="text-sm mb-4 text-gray-700">
+              <p className="text-sm mb-4 text-gray-700" style={{...FONTS.para_01}}>
                 {selectedDate ? selectedDate.toDateString() : "Select a date"}
               </p>
               <ul className="space-y-2 text-gray-700" style={{ ...FONTS.heading_06 }}>
@@ -248,8 +273,8 @@ export const Attendance = () => {
               </ul>
             </div>
             <button
-              className="mt-4 self-start px-4 py-2 rounded-md text-gray-700 shadow-[inset_2px_2px_4px_rgba(189,194,199,0.75),inset_-2px_-2px_4px_rgba(255,255,255,0.7)]"
-              style={{ ...FONTS.heading_06, backgroundColor: COLORS.bg_Colour }}
+              className=" w-max-sm mt-4 self-start px-4 py-2 rounded-md bg-[#7b00ff] !text-white hover:bg-[#7b00ff] hover:text-white shadow-[inset_2px_2px_4px_rgba(189,194,199,0.75),inset_-2px_-2px_4px_rgba(255,255,255,0.7)]"
+              style={{ ...FONTS.heading_06 }}
             >
               View Details
             </button>
