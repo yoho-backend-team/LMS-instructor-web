@@ -24,15 +24,14 @@ import Profile from '@/pages/Profile/Profile';
 import TicketId from '@/pages/TicketId/TicketId';
 import Tickets from '@/pages/Tickets/Tickets';
 
-
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Createtickets } from '@/components/Tickets/Createtickets';
 import Batches from '@/components/courses/Batches';
 import CourseNotes from '@/components/courses/coursenotes';
 
 const AppRoutes = () => {
-	const { isAuthenticated } = useAuth();
-	// const isAuthenticated = true;
+	const { isAuthenticated, isLoading } = useAuth();
+	if (isLoading) return null;
 
 	const AuthRoutes = () => (
 		<Routes>
@@ -69,8 +68,8 @@ const AppRoutes = () => {
 				<Route path='note_materials' element={<CourseNotes />} />
 				<Route path='/about/:course' element={<AboutCourse />} />
 				<Route path='notes_materials' element={<NotesMaterials />} />
-				<Route path='*' element={<Navigate to='/' />} />
 				<Route path='batches' element={<Batches />} />
+				<Route path='*' element={<Navigate to='/' />} />
 			</Route>
 		</Routes>
 	);
