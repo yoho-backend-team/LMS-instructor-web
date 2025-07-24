@@ -54,7 +54,7 @@ const ProfileCard: React.FC = () => {
             <h2 style={{ ...FONTS.heading_02 }}>Classes</h2>
             <div className="flex flex-row justify-between">
                 <div className='flex flex-row gap-5'>
-                    <img src={StudentData?.image ?? GetImageUrl(StudentData?.image)} alt="" width={62} height={62} className='rounded-xl' />
+                    <img src={GetImageUrl(StudentData?.image) ?? StudentData?.image} alt="" width={62} className='rounded-xl mt-1 h-[53px]' />
                     <div className="flex flex-col w-[215px] h-[53px]">
                         <h3
                             style={{ fontFamily: FONTS.heading_03.fontFamily, fontSize: FONTS.heading_03.fontSize, fontWeight: FONTS.heading_03.fontWeight }}
