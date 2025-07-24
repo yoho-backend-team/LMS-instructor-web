@@ -230,7 +230,7 @@ const Tickets = () => {
       </div>
      
 
-     {totalPages > 1 && (
+     {totalPages >= 1 && (
   <div className="flex justify-center items-center mt-10 gap-2">
    
     <Button
