@@ -21,10 +21,10 @@ function generateendpoints() {
                 class_attendance: "/institutes/attedance/class/",
             },
             course_list: {
-                get: `/institutes/${institute}/branches/${branch}/teaching-staff/courses`
+                get: `/institutes/:instituteid/branches/:branchid/teaching-staff/courses`
             },
             course: {
-                get: `/institutes/${institute}/branches/${branch}/course/`,
+                get: `/institutes/:instituteid/branches/:branchid/course/`,
                 notes: {
                     create: `/institutes/course/note`,
                     update: `/institutes/course/note/update/`,
@@ -34,16 +34,16 @@ function generateendpoints() {
                     index: "/institutes/study-material/",
                 },
                 batches: {
-                    get: `/institutes/${institute}/branches/${branch}/courses/`
+                    get: `/institutes/:instituteid/branches/:branchid/courses/`
                 }
             },
             class: {
-                get: `/institutes/class/${course?.[0]}`,
+                get: `/institutes/class/:courseid`,
                 getwithId: `/institutes/class/course/`,
                 update: `/institutes/class/`,
             },
             community: {
-                get: `/institutes/community/course/${course?.[0]}`,
+                get: `/institutes/community/course/:courseid`,
                 get_messages: `/institutes/community/messages/all/`
             },
             notification: {

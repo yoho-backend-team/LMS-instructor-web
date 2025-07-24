@@ -2,7 +2,7 @@
 import axios from 'axios'
 
 
-const backendurl = 'https://lms-node-backend-v1.onrender.com'
+const backendurl = 'https://lms-node-backend-v1.onrender.com/api'
 const Axios = axios.create({
     baseURL: backendurl,
     timeout: 5000000,

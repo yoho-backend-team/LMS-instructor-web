@@ -147,7 +147,7 @@ class Client {
                 ),
         },
         reports: {
-            get: (params: any) =>
+            get: (params?: any) =>
                 httpClient.get(
                     HTTP_END_POINTS.Instructor.reports.get,
                     params,
