@@ -4,7 +4,6 @@ import { COLORS, FONTS } from '@/constants/uiConstants';
 interface InstituteInfo {
   course: string;
   batch: string;
-  rollNumber: string;
   studentId: string;
 }
 
@@ -14,20 +13,13 @@ interface InstituteInformationProps {
   isEditing?: boolean;
 }
 
-const InstituteInformation: React.FC<InstituteInformationProps> = ({ data, onDataChange, isEditing = false }) => {
-  const [formData, setFormData] = useState<InstituteInfo>(data);
-
-  const handleInputChange = (key: keyof InstituteInfo, value: string) => {
-    const updatedData = { ...formData, [key]: value };
-    setFormData(updatedData);
-    onDataChange?.(updatedData);
-  };
+const InstituteInformation: React.FC<InstituteInformationProps> = ({ data }) => {
+  const [formData] = useState<InstituteInfo>(data);
 
   // All institute fields are read-only (not editable)
   const fields = [
     { label: 'Course', key: 'course' as keyof InstituteInfo, type: 'text', editable: false },
     { label: 'Batch', key: 'batch' as keyof InstituteInfo, type: 'text', editable: false },
-    { label: 'Roll Number', key: 'rollNumber' as keyof InstituteInfo, type: 'text', editable: false },
     { label: 'Student ID', key: 'studentId' as keyof InstituteInfo, type: 'text', editable: false }
   ];
 

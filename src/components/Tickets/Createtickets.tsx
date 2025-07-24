@@ -76,7 +76,7 @@ export const Createtickets = () => {
           onClick={() => navigate('/tickets')}
         />
         <h1 className="text-2xl font-semibold" style={{ ...FONTS.heading_01 }}>
-          Create Ticket For Your Problem
+         Create Ticket For Your Problem
         </h1>
       </div>
 

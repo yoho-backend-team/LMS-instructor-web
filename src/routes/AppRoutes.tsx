@@ -1,5 +1,4 @@
 import AboutCourse from '@/components/courses/AboutCourse';
-import Notes_Materials from '@/components/courses/Notes_Materials';
 import { useAuth } from '@/context/AuthContext/AuthContext';
 import MainLayout from '@/layout/MainLayout';
 import ActivityLogs from '@/pages/ActivityLogs/ActivityLogs';
@@ -24,13 +23,15 @@ import Placement from '@/pages/Placement/Placement';
 import Profile from '@/pages/Profile/Profile';
 import TicketId from '@/pages/TicketId/TicketId';
 import Tickets from '@/pages/Tickets/Tickets';
-import Taskprojects from '@/components/courses/Task_projects';
+
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Createtickets } from '@/components/Tickets/Createtickets';
+import Batches from '@/components/courses/Batches';
+import CourseNotes from '@/components/courses/coursenotes';
 
 const AppRoutes = () => {
-	const { isAuthenticated } = useAuth();
-	// const isAuthenticated = true;
+	const { isAuthenticated, isLoading } = useAuth();
+	if (isLoading) return null;
 
 	const AuthRoutes = () => (
 		<Routes>
@@ -64,10 +65,10 @@ const AppRoutes = () => {
 				<Route path='placement' element={<Placement />} />
 				<Route path='payment' element={<Payment />} />
 				<Route path='about' element={<AboutCourse />} />
-				<Route path='note_materials' element={<NotesMaterials />} />
-				<Route path='task_projects' element={<Taskprojects />} />
+				<Route path='note_materials' element={<CourseNotes />} />
 				<Route path='/about/:course' element={<AboutCourse />} />
-				<Route path='notes_materials' element={<Notes_Materials />} />
+				<Route path='notes_materials' element={<NotesMaterials />} />
+				<Route path='batches' element={<Batches />} />
 				<Route path='*' element={<Navigate to='/' />} />
 			</Route>
 		</Routes>

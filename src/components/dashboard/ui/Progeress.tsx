@@ -30,14 +30,12 @@ const CircularProgress = ({
     strokeWidth,
     circleStrokeWidth = 10,
     progressStrokeWidth = 10,
-    color
+    color,
 }: CircularProgressProps) => {
     const radius = size / 2 - 10;
-    const circumference = Math.ceil(3.14 * radius * 2);
+    const circumference = Math.ceil(Math.PI * radius * 2);
     const percentage = Math.ceil(circumference * ((100 - value) / 100));
-
-    const viewBox = `-${size * 0.125} -${size * 0.125} ${size * 1.25} ${size * 1.25
-        }`;
+    const viewBox = `-${size * 0.125} -${size * 0.125} ${size * 1.25} ${size * 1.25}`;
 
     return (
         <div className="relative">
@@ -46,11 +44,21 @@ const CircularProgress = ({
                 height={size}
                 viewBox={viewBox}
                 version="1.1"
-                xmlns="http://www.w3.org/2000/svg"
                 style={{ transform: "rotate(-90deg)" }}
                 className="relative"
             >
-                {/* Base Circle */}
+                <defs>
+                    <filter id="white-shadow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feDropShadow
+                            dx="0"
+                            dy="2"
+                            stdDeviation="2"
+                            floodColor="white"
+                            floodOpacity="1"
+                        />
+                    </filter>
+                </defs>
+
                 <circle
                     r={radius}
                     cx={size / 2}
@@ -59,10 +67,10 @@ const CircularProgress = ({
                     strokeWidth={strokeWidth ?? circleStrokeWidth}
                     strokeDasharray={circumference}
                     strokeDashoffset="0"
-                    className={cn("stroke-[#BDC2C7]", className)}
+                    filter="url(#white-shadow)"
+                    className={cn("stroke-[#d5dbe0af]", className)}
                 />
 
-                {/* Progress */}
                 <circle
                     r={radius}
                     cx={size / 2}
@@ -75,6 +83,7 @@ const CircularProgress = ({
                     className={cn(color, progressClassName)}
                 />
             </svg>
+
             {showLabel && (
                 <div
                     className={cn(
@@ -89,19 +98,22 @@ const CircularProgress = ({
     );
 };
 
-export const CircularProgressWithLabelDemo: React.FC<{ value: number, color: string }> = ({ value, color }) => {
-    const progress: number[] = [value ?? 0];
+export const CircularProgressWithLabelDemo: React.FC<{ value: number; color: string }> = ({
+    value,
+    color,
+}) => {
+    const progress = [value ?? 0];
 
     return (
         <div className="max-w-xs mx-auto w-full flex flex-col items-center">
             <CircularProgress
                 value={progress[0]}
-                size={80}
-                strokeWidth={10}
+                size={90}
+                strokeWidth={12}
                 showLabel
                 labelClassName="text-xl font-bold"
                 color={color}
             />
         </div>
     );
-}
+};

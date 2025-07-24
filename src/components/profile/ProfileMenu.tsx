@@ -1,5 +1,5 @@
 import React from 'react';
-import { Settings, FileText, CreditCard } from 'lucide-react';
+import { Settings, CreditCard } from 'lucide-react';
 import { COLORS, FONTS } from '@/constants/uiConstants';
 
 interface MenuItem {
@@ -22,12 +22,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ activeItem = 'profile', onMen
       icon: <Settings className="w-4 h-4" />,
       isActive: activeItem === 'profile'
     },
-    {
-      id: 'certificate',
-      label: 'Certificate',
-      icon: <FileText className="w-4 h-4" />,
-      isActive: activeItem === 'certificate'
-    },
+   
     {
       id: 'idcard',
       label: 'ID Card',

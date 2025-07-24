@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ProfileSidebar from './ProfileSidebar';
 import ProfileContent from './ProfileContent';
-import { COLORS, FONTS } from '@/constants/uiConstants';
+import { FONTS } from '@/constants/uiConstants';
 import { useToast } from '@/components/ui/toast';
 import { ConfirmationDialog } from '@/components/ui/confirmation-dialog';
 
@@ -23,16 +23,20 @@ const ProfileInformation: React.FC = () => {
     mailAddress: 'albert.einstein@example.com',
     name: 'Albert Einstein',
     gender: 'Male',
+    qualification: 'Ph.D. in Physics',
     contactNumber: '+1 234 567 8900',
+    alternateNumber: '+1 234 567 8901',
     dateOfBirth: '1879-03-14',
-    pinCode: '12345',
-    address: '123 Physics Street, Princeton, NJ 08544'
+    addressLine1: '123 Physics Street',
+    addressLine2: 'Apartment 4B',
+    city: 'Princeton',
+    state: 'New Jersey',
+    pinCode: '08544'
   });
 
   const [instituteInfo, setInstituteInfo] = useState({
     course: 'Theoretical Physics',
     batch: 'Batch 2024-25',
-    rollNumber: 'PHY001',
     studentId: 'U56TRN241'
   });
 

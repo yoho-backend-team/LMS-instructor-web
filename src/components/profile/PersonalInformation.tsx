@@ -5,10 +5,15 @@ interface PersonalInfo {
   mailAddress: string;
   name: string;
   gender: string;
+  qualification: string;
   contactNumber: string;
+  alternateNumber: string;
   dateOfBirth: string;
+  addressLine1: string;
+  addressLine2: string;
+  city: string;
+  state: string;
   pinCode: string;
-  address: string;
 }
 
 interface PersonalInformationProps {
@@ -26,17 +31,18 @@ const PersonalInformation: React.FC<PersonalInformationProps> = ({ data, onDataC
     onDataChange?.(updatedData);
   };
 
-  // Define which fields are editable
-  const editableFields = ['name', 'contactNumber', 'dateOfBirth', 'pinCode', 'address'];
-
   const fields = [
-    { label: 'Mail Address', key: 'mailAddress' as keyof PersonalInfo, type: 'email', editable: false },
-    { label: 'Name', key: 'name' as keyof PersonalInfo, type: 'text', editable: true },
+    { label: 'Full Name', key: 'name' as keyof PersonalInfo, type: 'text', editable: true },
     { label: 'Gender', key: 'gender' as keyof PersonalInfo, type: 'select', options: ['Male', 'Female', 'Other'], editable: false },
+    { label: 'Qualification', key: 'qualification' as keyof PersonalInfo, type: 'text', editable: true },
     { label: 'Contact Number', key: 'contactNumber' as keyof PersonalInfo, type: 'tel', editable: true },
-    { label: 'Date Of Birth', key: 'dateOfBirth' as keyof PersonalInfo, type: 'date', editable: true },
-    { label: 'Pin Code', key: 'pinCode' as keyof PersonalInfo, type: 'text', editable: true },
-    { label: 'Address', key: 'address' as keyof PersonalInfo, type: 'textarea', fullWidth: true, editable: true }
+    { label: 'Alternate Number', key: 'alternateNumber' as keyof PersonalInfo, type: 'tel', editable: true },
+    { label: 'Email', key: 'mailAddress' as keyof PersonalInfo, type: 'email', editable: false },
+    { label: 'Address Line 1', key: 'addressLine1' as keyof PersonalInfo, type: 'text', editable: true },
+    { label: 'Address Line 2', key: 'addressLine2' as keyof PersonalInfo, type: 'text', editable: true },
+    { label: 'City', key: 'city' as keyof PersonalInfo, type: 'text', editable: true },
+    { label: 'State', key: 'state' as keyof PersonalInfo, type: 'text', editable: true },
+    { label: 'Pin Code', key: 'pinCode' as keyof PersonalInfo, type: 'text', editable: true }
   ];
 
   return (
@@ -46,7 +52,7 @@ const PersonalInformation: React.FC<PersonalInformationProps> = ({ data, onDataC
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 sm:gap-6">
         {fields.map((field) => (
-          <div key={field.key} className={field.fullWidth ? 'sm:col-span-2' : ''}>
+          <div key={field.key}>
             <label className="block font-medium mb-2 text-sm leading-relaxed" style={{ color: COLORS.text_desc, fontFamily: FONTS.para_01.fontFamily }}>
               {field.label}
             </label>
