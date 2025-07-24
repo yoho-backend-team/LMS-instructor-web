@@ -61,15 +61,15 @@ class Client {
 		course_list: {
 			get: (params: any) =>
 				httpClient.get(
-					HTTP_END_POINTS.Instructor.course_list.get,
+					HTTP_END_POINTS.Instructor.course_list.get.replace(":instituteid",params.instituteid).replace(":branchid",params.branchid),
 					params,
 					'instructor'
 				),
 		},
 		course: {
-			get: (params: { course: string }) =>
+			get: (params:any) =>
 				httpClient.get(
-					HTTP_END_POINTS.Instructor.course.get + params.course,
+					HTTP_END_POINTS.Instructor.course.get.replace(":instituteid",params.instituteid).replace(":branchid",params.branchid),
 					params,
 					'instructor'
 				),

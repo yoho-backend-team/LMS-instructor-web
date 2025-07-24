@@ -5,13 +5,17 @@ import classIcon from '../../assets/courses icons/demo human.png';
 import CourseButton from './button';
 import threebox from '../../assets/courses icons/threebox.svg';
 import timer from '../../assets/courses icons/timer.svg';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import navigationicon from '../../assets/courses icons/navigation arrow.svg';
 import { FONTS } from '@/constants/uiConstants';
+
 
 const CourseList: React.FC = () => {
 
   const navigate = useNavigate();
+  const location = useLocation()
+  const {data} = location.state
+  const courseData = data ? data : []
 
   return (
     <div className="p-8">
