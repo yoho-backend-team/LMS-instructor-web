@@ -1,3 +1,8 @@
+import {
+	ClearLocalStorage,
+	GetLocalStorage,
+	StoreLocalStorage,
+} from '@/utils/helper';
 import { createContext, useContext, useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 
@@ -5,21 +10,33 @@ type AuthContextType = {
 	isAuthenticated: boolean;
 	login: (data: string) => void;
 	logout: () => void;
+	isLoading: boolean;
+	user: UserType | null;
+};
+
+type UserType = {
+	id: string;
+	name: string;
+	email: string;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+	const [isLoading, setIsLoading] = useState(true);
+	const [user, setUser] = useState<UserType | null>(null);
 
 	useEffect(() => {
-		const token = localStorage.getItem('authToken');
+		const token = GetLocalStorage('instructorToken');
 		setIsAuthenticated(!!token);
+		setIsLoading(false);
 	}, []);
 
-	const login = (data: string) => {
+	const login = (data: any) => {
 		try {
-			localStorage.setItem('authToken', 'dummy-token');
+			StoreLocalStorage('instructorToken', data?.token);
+			StoreLocalStorage('instructorDetails', data?.user);
 			setIsAuthenticated(true);
 		} catch (error) {
 			console.error('Login failed:', error);
@@ -27,12 +44,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	};
 
 	const logout = () => {
-		localStorage.removeItem('authToken');
+		setUser(null);
+		ClearLocalStorage();
 		setIsAuthenticated(false);
 	};
 
 	return (
-		<AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+		<AuthContext.Provider
+			value={{ isAuthenticated, login, logout, isLoading, user }}
+		>
 			{children}
 		</AuthContext.Provider>
 	);
