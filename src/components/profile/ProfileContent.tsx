@@ -1,7 +1,6 @@
 import React from 'react';
 import PersonalInformation from './PersonalInformation';
 import InstituteInformation from './InstituteInformation';
-import Certificate from './Certificate';
 import IDCard from './IDCard';
 import { COLORS, FONTS } from '@/constants/uiConstants';
 
@@ -9,16 +8,20 @@ interface PersonalInfo {
   mailAddress: string;
   name: string;
   gender: string;
+  qualification: string;
   contactNumber: string;
+  alternateNumber: string;
   dateOfBirth: string;
+  addressLine1: string;
+  addressLine2: string;
+  city: string;
+  state: string;
   pinCode: string;
-  address: string;
 }
 
 interface InstituteInfo {
   course: string;
   batch: string;
-  rollNumber: string;
   studentId: string;
 }
 
@@ -48,12 +51,6 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
   // Render content based on active menu item
   const renderContent = () => {
     switch (activeMenuItem) {
-      case 'certificate':
-        return (
-          <div className="flex-1 w-full">
-            <Certificate />
-          </div>
-        );
       case 'idcard':
         return (
           <div className="flex-1 w-full">

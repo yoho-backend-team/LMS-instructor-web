@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { BsInfoCircle } from 'react-icons/bs';
 import { useAuth } from '@/context/AuthContext/AuthContext';
+import { authInstructorLogin } from '@/features/Authentication/services';
 
 type LoginData = {
 	email: string;
@@ -25,10 +26,12 @@ const Login = () => {
 
 	const onSubmit = async (data: LoginData) => {
 		try {
-			console.log(data, 'login data');
-			if (data.email) {
-				login(data.email);
-				navigate('/');
+			if (data.email && data.password) {
+				const response = await authInstructorLogin(data);
+				if (response) {
+					login(response?.data);
+					navigate('/');
+				}
 			}
 		} catch (error: any) {
 			console.log('error', error);

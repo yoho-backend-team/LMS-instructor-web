@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"
 
 export default function Progress3D() {
     const progress = 30
-    const radius = 90
+    const radius = 80
     const circumference = 2 * Math.PI * radius
     const strokeDashoffset = circumference - (progress / 100) * circumference
 
