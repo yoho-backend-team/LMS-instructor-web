@@ -1,9 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import DashBoardSlice from '../features/Dashboard/reducers/slices'
+import PaymentSlice from '../features/Payment/reducers/PaymentSlice'
+import NotificationSlice from '../features/Notifications/reducers/NotificationSlice'
 
 const store = configureStore({
     reducer: {
-        dashboard: DashBoardSlice
+        dashboard: DashBoardSlice,
+        PaymentSlice:PaymentSlice,
+        NotificationSlice:NotificationSlice
     }
 })
 
