@@ -18,9 +18,9 @@ const InstituteInformation: React.FC<InstituteInformationProps> = ({ data }) => 
 
   // All institute fields are read-only (not editable)
   const fields = [
-    { label: 'Course', key: 'course' as keyof InstituteInfo, type: 'text', editable: false },
-    { label: 'Batch', key: 'batch' as keyof InstituteInfo, type: 'text', editable: false },
-    { label: 'Student ID', key: 'studentId' as keyof InstituteInfo, type: 'text', editable: false }
+    // { label: 'Course', key: 'course' as keyof InstituteInfo, type: 'text', editable: false },
+    // { label: 'Batch', key: 'batch' as keyof InstituteInfo, type: 'text', editable: false },
+    { label: 'Staff ID', key: 'studentId' as keyof InstituteInfo, type: 'text', editable: false }
   ];
 
   return (

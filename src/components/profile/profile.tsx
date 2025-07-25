@@ -1,43 +1,55 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ProfileSidebar from './ProfileSidebar';
 import ProfileContent from './ProfileContent';
 import { FONTS } from '@/constants/uiConstants';
-import { useToast } from '@/components/ui/toast';
+// import { useToast } from '@/components/ui/toast';
 import { ConfirmationDialog } from '@/components/ui/confirmation-dialog';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectProfile } from '@/features/Profile/reducers/selectors';
+import { getStudentProfileThunk } from '@/features/Profile/reducers/thunks';
 
 const ProfileInformation: React.FC = () => {
   const [activeMenuItem, setActiveMenuItem] = useState('profile');
   const [isEditing, setIsEditing] = useState(false);
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const { showToast } = useToast();
+  // const { showToast } = useToast();
 
+
+
+  const dispatch = useDispatch<any>();
+	const profileDetails = useSelector(selectProfile);
+
+	useEffect(() => {
+		dispatch(getStudentProfileThunk());
+		console.log(profileDetails);
+	}, [dispatch]);
   // Sample data - replace with actual data from props or API
   const [profileData, setProfileData] = useState({
-    name: 'Albert Einstein',
-    traineeId: 'U56TRN241',
-    profileImage: 'https://img.freepik.com/premium-photo/character-portrait-albert-einstein-generate-by-ai_978242-594.jpg?w=2000'
+    name: profileDetails?.full_name,
+    traineeId: profileDetails?.userDetail?.staffId,
+    profileImage: profileDetails?.image
   });
 
   const [personalInfo, setPersonalInfo] = useState({
-    mailAddress: 'albert.einstein@example.com',
-    name: 'Albert Einstein',
-    gender: 'Male',
-    qualification: 'Ph.D. in Physics',
-    contactNumber: '+1 234 567 8900',
-    alternateNumber: '+1 234 567 8901',
-    dateOfBirth: '1879-03-14',
-    addressLine1: '123 Physics Street',
-    addressLine2: 'Apartment 4B',
-    city: 'Princeton',
-    state: 'New Jersey',
-    pinCode: '08544'
+    mailAddress: profileDetails?.email,
+    name: profileDetails?.full_name,
+    gender: profileDetails?.gender,
+    qualification: profileDetails?.qualification,
+    contactNumber: profileDetails?.contact_info?.phone_number,
+    alternateNumber: profileDetails?.contact_info?.alternate_phone_number,
+    dateOfBirth: profileDetails?.dob,
+    addressLine1: profileDetails?.contact_info?.address1,
+    addressLine2: profileDetails?.contact_info?.address2,
+    city: profileDetails?.contact_info?.city,
+    state: profileDetails?.contact_info?.state,
+    pinCode: profileDetails?.contact_info?.pincode
   });
 
   const [instituteInfo, setInstituteInfo] = useState({
     course: 'Theoretical Physics',
     batch: 'Batch 2024-25',
-    studentId: 'U56TRN241'
+    studentId: profileDetails?.userDetail?.staffId,
   });
 
   // Store original data to compare changes
@@ -93,7 +105,7 @@ const ProfileInformation: React.FC = () => {
 
   const handleSave = async () => {
     if (!hasChanges()) {
-      showToast('No changes detected to save.', 'info');
+      // showToast('No changes detected to save.', 'info');
       return;
     }
 
@@ -109,11 +121,11 @@ const ProfileInformation: React.FC = () => {
       setOriginalProfileImage(profileData.profileImage);
       
       // Show success message
-      showToast('Profile updated successfully!', 'success');
+      // showToast('Profile updated successfully!', 'success');
       setIsEditing(false);
     } catch (error) {
       // Handle error
-      showToast('Failed to update profile. Please try again.', 'error');
+      // showToast('Failed to update profile. Please try again.', 'error');
     } finally {
       setIsSaving(false);
     }

@@ -64,6 +64,10 @@ function generateendpoints() {
 			index: {
 				get: '/institutes/auth/profile/me/',
 			},
+			profile:{
+				get:'/institutes/auth/profile/me/',
+				put:'/institutes/auth/profile/me/',
+			}
 		},
 	};
 }
