@@ -4,6 +4,8 @@ import TicketSlice from '../features/Tickets/reducer/TicketSlice';
 import ClassSlice from '../features/classes/reducers/slices';
 import ActivityLogsSlice from '../features/activitylog/reduces/ActivitySlice';
 import AttendanceSlice from '../features/attentance/reduces/AttendanceSlice';
+import PaymentSlice from '../features/Payment/reducers/PaymentSlice';
+import NotificationSlice from '../features/Notifications/reducers/NotificationSlice';
 
 const store = configureStore({
 	reducer: {
@@ -12,6 +14,8 @@ const store = configureStore({
 		ClassSlice: ClassSlice,
 		ActivityLogsSlice: ActivityLogsSlice,
 		AttendanceSlice: AttendanceSlice,
+		PaymentSlice: PaymentSlice,
+		NotificationSlice: NotificationSlice,
 	},
 });
 
