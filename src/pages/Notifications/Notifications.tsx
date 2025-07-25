@@ -9,12 +9,15 @@ import {
 	CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import bellImg from '../../assets/icons/notifications/image 90.png';
 import { useNavigate } from 'react-router-dom';
+import { getAllNotificationsThunk } from '@/features/Notifications/reducers/thunks';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectNotifications } from '@/features/Notifications/reducers/selectors';
 
 interface Notification {
 	id: string;
@@ -81,6 +84,15 @@ const Notifications = () => {
 
 	const navigate = useNavigate();
 
+	const dispatch = useDispatch<any>();
+	const Notifications = useSelector(selectNotifications)
+
+
+	useEffect(() => {
+		dispatch(getAllNotificationsThunk({}));
+	}, [dispatch]);
+
+	console.log(Notifications,"Notificatuonssssssss")
 	const handleNotificationClick = (notification: Notification) => {
 		const isUnread = notification.status === 'unread';
 
@@ -148,6 +160,7 @@ const Notifications = () => {
 						/>
 						{searchTerm && (
 							<button
+							title='back'
 								onClick={() => setSearchTerm('')}
 								className='absolute right-3 top-1/2 transform -translate-y-1/2'
 							>

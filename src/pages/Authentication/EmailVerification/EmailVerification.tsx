@@ -4,6 +4,8 @@ import { COLORS, FONTS } from '@/constants/uiConstants';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { IoMdArrowRoundBack } from 'react-icons/io';
+import { authEmailVerification } from '@/features/Authentication/services';
+import { toast } from 'react-toastify';
 
 type EmailData = {
 	email: string;
@@ -20,9 +22,16 @@ const EmailVerification = () => {
 
 	const onSubmit = async (data: EmailData) => {
 		try {
-			if (data) {
-				console.log(data, 'email data');
-				navigate('/otp-verify');
+			if (data.email) {
+				const response = await authEmailVerification(data);
+				if (response) {
+					toast.success('OTP sent to your email address');
+					navigate('/otp-verify', {
+						state: {
+							data: data,
+						},
+					});
+				}
 			}
 		} catch (error: any) {
 			console.log('error', error);

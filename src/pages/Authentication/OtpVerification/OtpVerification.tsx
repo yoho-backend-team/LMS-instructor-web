@@ -1,6 +1,6 @@
 import { Card } from '@/components/ui/card';
 import { COLORS, FONTS } from '@/constants/uiConstants';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useRef, useState } from 'react';
 import Logo from '../../../assets/icons/navbar/icons8-ionic-50.png';
 
@@ -9,6 +9,8 @@ const OtpVerification = () => {
 	const [otpDigits, setOtpDigits] = useState(Array(6).fill(''));
 	const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
 	const [showError, setShowError] = useState(false);
+	const location = useLocation()
+	const {data} = location.state
 
 	const handleOtpChange = (index: number, value: string) => {
 		setShowError(false);
