@@ -118,30 +118,38 @@ const TicketId = () => {
           </CardContent>
 
           <CardFooter className="px-4">
-            <div className="flex items-center w-full gap-3">
-              <div className="p-2 bg-[#ebeff3] rounded-md">
-                <img
-                  src={messageicon}
-                  alt="Message"
-                  className="w-12 h-12 object-contain cursor-pointer"
-                />
-              </div>
-              <div className="flex-1 bg-[#ebeff3] rounded-md shadow-[inset_2px_2px_5px_rgba(189,194,199,0.75),3px_3px_5px_rgba(255,255,255,0.7)] px-3 py-2" style={{ ...FONTS.para_01, fontSize: '15px' }}>
-                <input
-                  type="text"
-                  placeholder="Say Something..."
-                  className="w-[500px] bg-transparent focus:outline-none text-sm !text-gray-800"
-                />
-              </div>
-              <div className="p-2 bg-[#ebeff3] rounded-md">
-                <img
-                  src={sendicon}
-                  alt="Send"
-                  className="w-12 h-12 object-contain cursor-pointer"
-                />
-              </div>
-            </div>
-          </CardFooter>
+  <div className="flex flex-col sm:flex-row items-center w-full gap-3">
+    
+    {/* Message Icon */}
+    <div className="p-2 bg-[#ebeff3] rounded-md flex items-center justify-center w-15 h-15">
+      <img
+        src={messageicon}
+        alt="Message"
+        className="w-20 h-20 object-contain cursor-pointer"
+      />
+    </div>
+
+    {/* Input Box */}
+    <div className="flex-1 w-full bg-[#ebeff3] rounded-md shadow-[inset_2px_2px_5px_rgba(189,194,199,0.75),3px_3px_5px_rgba(255,255,255,0.7)] px-3 py-2">
+      <input
+        type="text"
+        placeholder="Say Something..."
+        className="w-full bg-transparent focus:outline-none text-sm text-gray-800"
+        style={{ ...FONTS.para_01, fontSize: '15px' }}
+      />
+    </div>
+
+    {/* Send Icon */}
+    <div className="p-2 bg-[#ebeff3] rounded-md flex items-center justify-center w-15 h-15">
+      <img
+        src={sendicon}
+        alt="Send"
+        className="w-20 h-20 object-contain cursor-pointer"
+      />
+    </div>
+  </div>
+</CardFooter>
+
         </Card>
 
         <Card className="bg-[#ebeff3] p-4 rounded-xl w-full shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)]">
