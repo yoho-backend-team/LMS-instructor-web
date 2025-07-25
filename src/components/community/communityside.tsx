@@ -6,11 +6,7 @@ import { toast } from 'react-toastify';
 import { getMessage } from '@/features/community/services/communityservices';
 import { GetLocalStorage } from '@/utils/helper';
 import { useInstructorSocket } from '@/context/socketContext';
-import { selectCommunities } from '@/features/community/redux/communitySelector';
-import { useSelector } from 'react-redux';
-import { getAllCommunitiesData } from '@/features/community/redux/commuityThunk';
-import { useAppDispatch } from '@/features/community/redux/hooks';
-
+import bg from '../../assets/gox6.jpg';
 type Community = {
   _id: string;
   group: string;
@@ -50,27 +46,27 @@ type Message = {
   senderId?: string;
 };
 
-const CommunitySide = () => {
+type Props = {
+  communities: { data?: Community[] };
+};
+
+const CommunitySide:React.FC <Props> = ({communities}) => {
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
   const [inputMessage, setInputMessage] = useState('');
   const [filteredCommunities, setFilteredCommunities] = useState<Community[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
-  const socket = useInstructorSocket();
-  const dispatch = useAppDispatch();
-  const communities = useSelector(selectCommunities);
+  const socket = useInstructorSocket()
+  
   const user: any = GetLocalStorage("instructorDetails");
 
-  console.log("Communities", communities)
+  console.log("Communities", communities?.data)
 
-  useEffect(() => {
-    dispatch(getAllCommunitiesData(''));
-  }, [dispatch]);
+  useEffect(() => { 
 
-  useEffect(() => {
-    if (communities) {
+    if (communities?.data) {
       setFilteredCommunities(
-        communities?.filter((group: Community) =>
+        communities.data.filter((group) =>
           group?.batch?.batch_name
             ?.toLowerCase()
             .includes(searchTerm.toLowerCase())
@@ -286,7 +282,12 @@ const CommunitySide = () => {
 
             {/* Messages */}
             <div className='flex-1  bg-[#EBEFF3]  overflow-y-scroll  scroll-smooth relative'>
-              <div className='relative z-10 space-y-3 p-2'>
+              <div className='relative z-10 space-y-3 p-2' style={{
+                  background: `url(${bg})`,
+                  backgroundSize: 'cover',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'center',
+                }}>
                 {messages?.map((message, index) => (
                   <div
                     key={index}
