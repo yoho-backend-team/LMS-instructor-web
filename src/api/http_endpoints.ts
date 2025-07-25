@@ -11,6 +11,7 @@ function generateendpoints() {
 			},
 			auth: {
 				login: '/institutes/auth/teaching-staff/login',
+				forgot_password: '/institutes/auth/profile/forgot-password',
 				verify_otp: '/institutes/auth/teaching-staff/verify-otp',
 				change_password: '/institutes/auth/teaching-staff/change-password',
 				log_out: '/institutes/auth/teaching-staff/logout',

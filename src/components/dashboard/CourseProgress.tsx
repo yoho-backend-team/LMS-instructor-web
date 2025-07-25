@@ -69,7 +69,7 @@ const CourseProgress: React.FC = () => {
                                     </div>
 
                                     <div className="relative self-stretch h-[19px] bg-[linear-gradient(135deg,rgba(123,0,255,1)_0%,rgba(178,0,255,1)_100%)] [-webkit-background-clip:text] bg-clip-text [-webkit-text-fill-color:transparent] [text-fill-color:transparent] [font-family:'Quicksand',Helvetica] font-bold text-transparent text-xl text-center tracking-[0] leading-4 whitespace-nowrap">
-                                        2%
+                                        {progress}%
                                     </div>
                                 </div>
                             </div>

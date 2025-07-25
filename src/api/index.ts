@@ -18,14 +18,20 @@ class Client {
 				params,
 				'instructor'
 			),
-		verifyOtp: (data: any, params: any) =>
+		forgotPassword: (data: any, params?: any) =>
+			httpClient.post(
+				HTTP_END_POINTS.Instructor.auth.forgot_password,
+				data,
+				params
+			),
+		verifyOtp: (data: any, params?: any) =>
 			httpClient.post(
 				HTTP_END_POINTS.Instructor.auth.verify_otp,
 				data,
 				params,
 				'instructor'
 			),
-		changePassword: (data: any, params: any) =>
+		changePassword: (data: any, params?: any) =>
 			httpClient.post(
 				HTTP_END_POINTS.Instructor.auth.change_password,
 				data,
@@ -61,15 +67,15 @@ class Client {
 		course_list: {
 			get: (params: any) =>
 				httpClient.get(
-					HTTP_END_POINTS.Instructor.course_list.get,
+					HTTP_END_POINTS.Instructor.course_list.get.replace(":instituteid",params.instituteid).replace(":branchid",params.branchid),
 					params,
 					'instructor'
 				),
 		},
 		course: {
-			get: (params: { course: string }) =>
+			get: (params:any) =>
 				httpClient.get(
-					HTTP_END_POINTS.Instructor.course.get + params.course,
+					HTTP_END_POINTS.Instructor.course.get.replace(":instituteid",params.instituteid).replace(":branchid",params.branchid),
 					params,
 					'instructor'
 				),

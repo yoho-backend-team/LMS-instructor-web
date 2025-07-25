@@ -1,5 +1,5 @@
 import { COLORS, FONTS } from '@/constants/uiConstants';
-import { useState, type SetStateAction } from 'react';
+import { useEffect, useState, type SetStateAction } from 'react';
 import { startOfMonth, setYear } from 'date-fns';
 import Edit from '../../assets/icons/payments/Edit-alt.png';
 import { Card } from '@/components/ui/card';
@@ -14,8 +14,22 @@ import {
 import PaymentDetails from '@/components/payment/paymentTable';
 import { Button } from '@/components/ui/button';
 import { CustomTabContent, CustomTabs } from '@/components/payment/CustomTabs';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectPayment } from '@/features/Payment/reducers/selectors';
+import { getStudentPaymentThunk } from '@/features/Payment/reducers/thunks';
 
 export const Payment = () => {
+
+
+	const dispatch = useDispatch<any>()
+	const SalaryDetails = useSelector(selectPayment)
+
+	useEffect(() => {
+		dispatch(getStudentPaymentThunk({ }));
+		console.log(SalaryDetails, "Payment Details")
+	}, [dispatch]);
+
+
 	const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 	const [selectedYear, setSelectedYear] = useState<number>(
 		selectedDate.getFullYear()
