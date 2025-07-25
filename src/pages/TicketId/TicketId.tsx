@@ -121,7 +121,7 @@ const TicketId = () => {
   <div className="flex flex-col sm:flex-row items-center w-full gap-3">
     
     {/* Message Icon */}
-    <div className="p-2 bg-[#ebeff3] rounded-md flex items-center justify-center w-12 h-12">
+    <div className="p-2 bg-[#ebeff3] rounded-md flex items-center justify-center w-15 h-15">
       <img
         src={messageicon}
         alt="Message"
@@ -140,7 +140,7 @@ const TicketId = () => {
     </div>
 
     {/* Send Icon */}
-    <div className="p-2 bg-[#ebeff3] rounded-md flex items-center justify-center w-12 h-12">
+    <div className="p-2 bg-[#ebeff3] rounded-md flex items-center justify-center w-15 h-15">
       <img
         src={sendicon}
         alt="Send"
