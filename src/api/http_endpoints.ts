@@ -65,6 +65,9 @@ function generateendpoints() {
 				get: '/institutes/auth/profile/me/',
 			},
 		},
+		notificationSubscription: {
+			post: '/notification/subscribe',
+		},
 	};
 }
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import httpClient from './httpClient';
 import HTTP_END_POINTS from './http_endpoints';
 
@@ -67,15 +68,15 @@ class Client {
 		course_list: {
 			get: (params: any) =>
 				httpClient.get(
-					HTTP_END_POINTS.Instructor.course_list.get.replace(":instituteid",params.instituteid).replace(":branchid",params.branchid),
+					HTTP_END_POINTS.Instructor.course_list.get.replace(":instituteid", params.instituteid).replace(":branchid", params.branchid),
 					params,
 					'instructor'
 				),
 		},
 		course: {
-			get: (params:any) =>
+			get: (params: any) =>
 				httpClient.get(
-					HTTP_END_POINTS.Instructor.course.get.replace(":instituteid",params.instituteid).replace(":branchid",params.branchid),
+					HTTP_END_POINTS.Instructor.course.get.replace(":instituteid", params.instituteid).replace(":branchid", params.branchid),
 					params,
 					'instructor'
 				),
@@ -110,7 +111,7 @@ class Client {
 				update: (data: { materialId: string }) =>
 					httpClient.update(
 						HTTP_END_POINTS.Instructor.course.study_material.index +
-							data.materialId,
+						data.materialId,
 						data,
 						'instructor'
 					),
@@ -124,8 +125,8 @@ class Client {
 				get: (data: { course: string }) =>
 					httpClient.get(
 						HTTP_END_POINTS.Instructor.course.batches.get +
-							data?.course +
-							'/batches/',
+						data?.course +
+						'/batches/',
 						{},
 						'instructor'
 					),
@@ -134,7 +135,7 @@ class Client {
 		class: {
 			get: (params: any) =>
 				httpClient.get(
-					HTTP_END_POINTS.Instructor.class.get.replace(':courseid',params.courseId),
+					HTTP_END_POINTS.Instructor.class.get.replace(':courseid', params.courseId),
 					params,
 					'instructor'
 				),
@@ -238,7 +239,13 @@ class Client {
 					'instructor'
 				),
 		},
+
+
 	};
+
+	notificatinsubscription = {
+		post: (data: any) => httpClient.post(HTTP_END_POINTS.notificationSubscription.post, data)
+	}
 }
 
 export default new Client();
