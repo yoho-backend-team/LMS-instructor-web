@@ -8,6 +8,7 @@ import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { BsInfoCircle } from 'react-icons/bs';
 import { useAuth } from '@/context/AuthContext/AuthContext';
 import { authInstructorLogin } from '@/features/Authentication/services';
+import { toast } from 'react-toastify';
 
 type LoginData = {
 	email: string;
@@ -30,7 +31,10 @@ const Login = () => {
 				const response = await authInstructorLogin(data);
 				if (response) {
 					login(response?.data);
+					toast.success('Login successfully');
 					navigate('/');
+				} else {
+					toast.error('Something went wrong, please try again.');
 				}
 			}
 		} catch (error: any) {
