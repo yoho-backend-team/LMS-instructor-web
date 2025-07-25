@@ -4,13 +4,13 @@ export const TabViewResponsive = () => {
 
     const [TabView, setTabView] = useState<boolean>(() => {
         if (typeof window !== "undefined") {
-            return window.matchMedia("(max-width:1024px)").matches
+            return window.matchMedia("(max-width:900px)").matches
         }
         return false
     });
 
     useEffect(() => {
-        const mediaQuery = window.matchMedia("(max-width:1370px)")
+        const mediaQuery = window.matchMedia("(max-width:900px)")
 
         const handleresize = (event: MediaQueryListEvent) => {
             setTabView(event.matches)

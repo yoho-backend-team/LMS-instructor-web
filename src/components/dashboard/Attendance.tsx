@@ -7,20 +7,21 @@ import { useNavigate } from 'react-router-dom'
 import profile from '../../assets/dashboard/profile.svg'
 import book from '../../assets/dashboard/book.svg'
 import close from '../../assets/dashboard/close.svg'
-// import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 const Attendance: React.FC = () => {
     const navigate = useNavigate()
 
-    // const Attendance = useSelector((state: any) => state.dashboard.data.attendance)
-    const Attendance: any = ''
+    const Attendance = useSelector((state: any) => state.dashboard.data.attendance)
+    const month = new Date().getMonth()
+    const Attendance_data = Attendance?.find((data: any) => data.month === month)
 
     const attendanceBars = React.useMemo(() => {
         if (!Attendance || !Attendance[0]) return [];
 
         return [
             {
-                height: `${Attendance?.[0]?.total?.percentage}%`,
+                height: `${Attendance_data?.total?.percentage}%`,
                 top: "bottom-0",
                 color:
                     "bg-[linear-gradient(90deg,rgba(106,225,183,1)_0%,rgba(106,225,183,0.92)_52%,rgba(106,225,183,1)_100%)]",
@@ -36,7 +37,7 @@ const Attendance: React.FC = () => {
                     "shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40,inset_4px_4px_8px_#34a9b1bf,inset_8px_8px_12px_#34aab140,inset_-4px_-4px_8px_#34aab1bf,inset_-8px_-8px_12px_#34aab140]",
             },
             {
-                height: `${Attendance?.[0]?.total?.percentage - Attendance?.[0]?.present?.percentage}%`,
+                height: `${Attendance_data?.absent?.percentage}%`,
                 top: "bottom-0",
                 color:
                     "bg-[linear-gradient(90deg,rgba(85,133,255,1)_0%,rgba(85,133,255,0.92)_53%,rgba(85,133,255,1)_100%)]",
@@ -44,7 +45,7 @@ const Attendance: React.FC = () => {
                     "shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40,inset_4px_4px_8px_#3358b8bf,inset_8px_8px_12px_#3358b840,inset_-4px_-4px_8px_#3358b8bf,inset_-8px_-8px_12px_#3358b840]",
             },
         ]
-    }, [Attendance]);
+    }, [Attendance, Attendance_data?.absent?.percentage, Attendance_data?.total?.percentage]);
 
 
 
