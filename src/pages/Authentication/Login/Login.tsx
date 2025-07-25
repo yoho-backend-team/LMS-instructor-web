@@ -34,11 +34,11 @@ const Login = () => {
 					toast.success('Login successfully');
 					navigate('/');
 				} else {
-					toast.error('Something went wrong, please try again.');
+					toast.error('Invalid credentials, please try again.');
 				}
 			}
 		} catch (error: any) {
-			console.log('error', error);
+			toast.error('Something went wrong, please try again.');
 		}
 	};
 

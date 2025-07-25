@@ -38,10 +38,11 @@ class Client {
 				params,
 				'instructor'
 			),
-		log_out: (data: any) =>
+		log_out: (data: any, params?: any) =>
 			httpClient.post(
 				HTTP_END_POINTS.Instructor.auth.log_out,
 				data,
+				params,
 				'instructor'
 			),
 		attendance: {
@@ -67,15 +68,19 @@ class Client {
 		course_list: {
 			get: (params: any) =>
 				httpClient.get(
-					HTTP_END_POINTS.Instructor.course_list.get.replace(":instituteid",params.instituteid).replace(":branchid",params.branchid),
+					HTTP_END_POINTS.Instructor.course_list.get
+						.replace(':instituteid', params.instituteid)
+						.replace(':branchid', params.branchid),
 					params,
 					'instructor'
 				),
 		},
 		course: {
-			get: (params:any) =>
+			get: (params: any) =>
 				httpClient.get(
-					HTTP_END_POINTS.Instructor.course.get.replace(":instituteid",params.instituteid).replace(":branchid",params.branchid),
+					HTTP_END_POINTS.Instructor.course.get
+						.replace(':instituteid', params.instituteid)
+						.replace(':branchid', params.branchid),
 					params,
 					'instructor'
 				),
@@ -134,7 +139,10 @@ class Client {
 		class: {
 			get: (params: any) =>
 				httpClient.get(
-					HTTP_END_POINTS.Instructor.class.get.replace(':courseid',params.courseId),
+					HTTP_END_POINTS.Instructor.class.get.replace(
+						':courseid',
+						params.courseId
+					),
 					params,
 					'instructor'
 				),

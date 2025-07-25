@@ -1,4 +1,4 @@
-import {  FONTS } from '@/constants/uiConstants';
+import { FONTS } from '@/constants/uiConstants';
 import backImg from '../../assets/icons/common/back_arrow.png';
 import {
 	Card,
@@ -30,7 +30,8 @@ interface Notification {
 const Notifications = () => {
 	const [filter, setFilter] = useState<'all' | 'read' | 'unread'>('all');
 	const [searchTerm, setSearchTerm] = useState('');
-	const [selectedNotification, setSelectedNotification] = useState<Notification | null>(null);
+	const [selectedNotification, setSelectedNotification] =
+		useState<Notification | null>(null);
 	const [notifications, setNotifications] = useState<Notification[]>([
 		{
 			id: '1',
@@ -85,14 +86,13 @@ const Notifications = () => {
 	const navigate = useNavigate();
 
 	const dispatch = useDispatch<any>();
-	const Notifications = useSelector(selectNotifications)
-
+	const Notifications = useSelector(selectNotifications);
 
 	useEffect(() => {
 		dispatch(getAllNotificationsThunk({}));
 	}, [dispatch]);
 
-	console.log(Notifications,"Notificatuonssssssss")
+	console.log(Notifications, 'Notificatuonssssssss');
 	const handleNotificationClick = (notification: Notification) => {
 		const isUnread = notification.status === 'unread';
 
@@ -108,7 +108,9 @@ const Notifications = () => {
 	};
 
 	const filteredNotifications = notifications
-		.filter((notification) => (filter === 'all' ? true : notification.status === filter))
+		.filter((notification) =>
+			filter === 'all' ? true : notification.status === filter
+		)
 		.filter((notification) =>
 			[notification.title, notification.description, notification.date]
 				.join(' ')
@@ -117,7 +119,9 @@ const Notifications = () => {
 		);
 
 	const totalMessages = notifications.length;
-	const unreadMessages = notifications.filter((n) => n.status === 'unread').length;
+	const unreadMessages = notifications.filter(
+		(n) => n.status === 'unread'
+	).length;
 
 	return (
 		<div className='py-4'>
@@ -134,18 +138,21 @@ const Notifications = () => {
 				</div>
 				<p style={{ ...FONTS.heading_01 }}>Notification</p>
 				<span style={{ ...FONTS.heading_06, marginLeft: 'auto' }}>
-					{totalMessages} Message{totalMessages !== 1 ? 's' : ''} / {unreadMessages} Unread
+					{totalMessages} Message{totalMessages !== 1 ? 's' : ''} /{' '}
+					{unreadMessages} Unread
 				</span>
 			</div>
 
 			<div className='grid md:grid-cols-2 gap-6 w-full mt-4'>
 				{/* Left panel - list */}
-				<Card className='relative bg-[#ebeff3] px-5 h-[510px]'
+				<Card
+					className='relative bg-[#ebeff3] px-5 h-[510px]'
 					style={{
 						boxShadow: `
               rgba(255, 255, 255, 0.7) -4px -4px 4px, 
               rgba(189, 194, 199, 0.75) 5px 5px 4px`,
-					}}>
+					}}
+				>
 					<div className='relative'>
 						<Input
 							type='text'
@@ -160,7 +167,7 @@ const Notifications = () => {
 						/>
 						{searchTerm && (
 							<button
-							title='back'
+								title='back'
 								onClick={() => setSearchTerm('')}
 								className='absolute right-3 top-1/2 transform -translate-y-1/2'
 							>
@@ -169,25 +176,23 @@ const Notifications = () => {
 						)}
 					</div>
 
-					
 					<div className='flex gap-3 mt-2'>
-	                     {['all', 'read', 'unread'].map((label) => (
-		                  <Button
-			                 key={label}
-			                 className={`w-[75px] rounded-lg shadow-md cursor-pointer transition-all duration-200 ${
-				                 filter === label
-				        	      ? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white hover:text-white '
-					              : 'bg-[#ebeff3] text-black '
-		                    	  }`}
-			                    variant='outline'
-			                     onClick={() => setFilter(label as 'all' | 'read' | 'unread')}
-		                      >
-			                     {label.charAt(0).toUpperCase() + label.slice(1)}
-		                  </Button>
-	                   ))}
-                   </div>
+						{['all', 'read', 'unread'].map((label) => (
+							<Button
+								key={label}
+								className={`w-[75px] rounded-lg shadow-md cursor-pointer transition-all duration-200 ${
+									filter === label
+										? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white hover:text-white '
+										: 'bg-[#ebeff3] text-black '
+								}`}
+								variant='outline'
+								onClick={() => setFilter(label as 'all' | 'read' | 'unread')}
+							>
+								{label.charAt(0).toUpperCase() + label.slice(1)}
+							</Button>
+						))}
+					</div>
 
-				
 					<div className='flex flex-col w-full gap-3 px-2 py-3 overflow-y-auto max-h-[400px] scrollbar-hide'>
 						{filteredNotifications.length ? (
 							filteredNotifications.map((notification) => (
@@ -223,7 +228,9 @@ const Notifications = () => {
 										</div>
 									</CardHeader>
 									<CardContent>
-										<p style={{ ...FONTS.heading_07 }}>{notification.description}</p>
+										<p style={{ ...FONTS.heading_07 }}>
+											{notification.description}
+										</p>
 									</CardContent>
 								</Card>
 							))
@@ -235,12 +242,14 @@ const Notifications = () => {
 					</div>
 				</Card>
 
-				<Card className='relative bg-[#ebeff3] h-[510px]'
+				<Card
+					className='relative bg-[#ebeff3] h-[510px]'
 					style={{
 						boxShadow: `
               rgba(255, 255, 255, 0.7) -4px -4px 4px, 
               rgba(189, 194, 199, 0.75) 5px 5px 4px`,
-					}}>
+					}}
+				>
 					<div className='p-4'>
 						{selectedNotification ? (
 							<>
@@ -264,13 +273,17 @@ const Notifications = () => {
 							</>
 						) : filteredNotifications.length ? (
 							<div className='relative'>
-								<p style={{ ...FONTS.para_01 }}>Select a notification to view details</p>
+								<p style={{ ...FONTS.para_01 }}>
+									Select a notification to view details
+								</p>
 								<div className='absolute top-32 left-44'>
 									<img src={bellImg} alt='notifications' />
 								</div>
 							</div>
 						) : (
-							<p style={{ ...FONTS.para_01 }}>No notifications available to display</p>
+							<p style={{ ...FONTS.para_01 }}>
+								No notifications available to display
+							</p>
 						)}
 					</div>
 				</Card>

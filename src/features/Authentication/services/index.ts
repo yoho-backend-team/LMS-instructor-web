@@ -11,6 +11,17 @@ export const authInstructorLogin = async (data: any) => {
 	}
 };
 
+export const authInstructorLogout = async (data: any) => {
+	try {
+		const response = await Client.Instructor.log_out(data);
+		if (response) {
+			return response;
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};
+
 export const authEmailVerification = async (data: any) => {
 	try {
 		const response = await Client.Instructor.forgotPassword(data);
