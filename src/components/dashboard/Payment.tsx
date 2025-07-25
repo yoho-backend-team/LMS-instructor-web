@@ -3,19 +3,20 @@ import React, { useEffect } from 'react'
 import payments from '../../assets/dashboard/payments.png'
 import { FONTS } from '@/constants/uiConstants'
 import { useNavigate } from 'react-router-dom'
-// import { useDispatch, useSelector } from 'react-redux'
-// import { getStudentPaymentThunk } from '@/features/Payment/reducers/thunks'
+import { getStudentPaymentThunk } from '@/features/Payment/reducers/thunks'
+import { useDispatch, useSelector } from 'react-redux'
 
 const Payment: React.FC = () => {
 
-    // const dispatch = useDispatch<any>()
+    const dispatch = useDispatch<any>()
 
-    // useEffect(() => {
-    //     dispatch(getStudentPaymentThunk({ paymentId: '67f3b8feb8d2634300cc8819' }));
-    // }, [dispatch]);
+    useEffect(() => {
+        dispatch(getStudentPaymentThunk({}));
+    }, [dispatch]);
 
-    // const Payments: any = useSelector((state: any) => state.PaymentSlice.data) ?? []
-    const Payments: any[] = []
+    const Payments: any = useSelector((state: any) => state.PaymentSlice.data) ?? []
+    // const Payments: any[] = []
+    console.log(Payments, "payment")
     const navigate = useNavigate()
     return (
         <div className='flex flex-row p-5 gap-10 divshadow w-full h-[300px] rounded-[16px]'>

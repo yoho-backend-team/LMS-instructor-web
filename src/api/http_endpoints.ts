@@ -69,6 +69,9 @@ function generateendpoints() {
 				put:'/institutes/auth/profile/me/',
 			}
 		},
+		notificationSubscription: {
+			post: '/notification/subscribe',
+		},
 	};
 }
 
