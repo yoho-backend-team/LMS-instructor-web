@@ -118,7 +118,7 @@ const PersonalInformation: React.FC<PersonalInformationProps> = ({ data, onDataC
                   color: field.editable && !isEditing ? COLORS.text_desc : COLORS.text_desc,
                   fontSize: FONTS.para_01.fontSize
                 }}>
-                {formData[field.key] || 'Not provided'}
+                {formData[field.key] }
               </div>
             )}
           </div>

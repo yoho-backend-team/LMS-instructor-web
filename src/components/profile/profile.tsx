@@ -20,17 +20,13 @@ const ProfileInformation: React.FC = () => {
   const dispatch = useDispatch<any>();
 	const profileDetails = useSelector(selectProfile);
 
-	useEffect(() => {
-		dispatch(getStudentProfileThunk());
-		console.log(profileDetails);
-	}, [dispatch]);
   // Sample data - replace with actual data from props or API
   const [profileData, setProfileData] = useState({
     name: profileDetails?.full_name,
     traineeId: profileDetails?.userDetail?.staffId,
     profileImage: profileDetails?.image
   });
-
+  
   const [personalInfo, setPersonalInfo] = useState({
     mailAddress: profileDetails?.email,
     name: profileDetails?.full_name,
@@ -45,12 +41,30 @@ const ProfileInformation: React.FC = () => {
     state: profileDetails?.contact_info?.state,
     pinCode: profileDetails?.contact_info?.pincode
   });
-
+  
   const [instituteInfo, setInstituteInfo] = useState({
     course: 'Theoretical Physics',
     batch: 'Batch 2024-25',
     studentId: profileDetails?.userDetail?.staffId,
   });
+  useEffect(() => {
+    dispatch(getStudentProfileThunk());
+    console.log(profileDetails);
+    setPersonalInfo({
+    mailAddress: profileDetails?.email,
+    name: profileDetails?.full_name,
+    gender: profileDetails?.gender,
+    qualification: profileDetails?.qualification,
+    contactNumber: profileDetails?.contact_info?.phone_number,
+    alternateNumber: profileDetails?.contact_info?.alternate_phone_number,
+    dateOfBirth: profileDetails?.dob,
+    addressLine1: profileDetails?.contact_info?.address1,
+    addressLine2: profileDetails?.contact_info?.address2,
+    city: profileDetails?.contact_info?.city,
+    state: profileDetails?.contact_info?.state,
+    pinCode: profileDetails?.contact_info?.pincode
+  })
+  }, [dispatch]);
 
   // Store original data to compare changes
   const [originalPersonalInfo, setOriginalPersonalInfo] = useState(personalInfo);
