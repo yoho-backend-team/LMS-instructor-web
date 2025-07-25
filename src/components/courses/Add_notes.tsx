@@ -1,22 +1,58 @@
 import { useRef, useState } from 'react';
 import fileimg from '../../assets/courses icons/File.jpg';
 import { FONTS } from '@/constants/uiConstants';
+import { toast } from 'react-toastify';
+import { uploadticketfile } from '@/features/Tickets/services/Ticket';
 
 const FileUploadDesign = () => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [selectedFile,setSelectedFile] = useState<any>(null);
+  	const [fileUrl, setFileUrl] = useState<string | null>(null);
+	const [preview, setPreview] = useState<string | null>(null);
 
   const handleClick = () => {
     fileInputRef.current?.click();
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+
+    if (!file) return;
+    
+        const allowedTypes = [
+          'application/pdf',
+          'image/jpeg',
+          'image/png',
+          'image/jpg',
+        ];
+        if (!allowedTypes.includes(file.type)) {
+          toast.error('Only PDF or image files (JPG, PNG) are allowed.');
+          return;
+        }
 
     if (file) {
       setSelectedFile(file)
       console.log('Selected file:', file);
       // Replace with your upload logic
+      
+      if (file.type.startsWith('image/')) {
+              const imageUrl = URL.createObjectURL(file);
+              setPreview(imageUrl);
+            } else {
+              setPreview(null);
+            }
+      
+            const formData = new FormData();
+            formData.append('file', file);
+      
+            const response = await uploadticketfile(formData);
+            const uploadedPath = response?.data?.file;
+
+            			if (!uploadedPath) {
+                  throw new Error('Upload failed: No file path returned from server.');
+                }
+            setFileUrl(uploadedPath);
+            toast.success('File uploaded successfully.'); 
     }
   };
 
