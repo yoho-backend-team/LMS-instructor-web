@@ -86,7 +86,6 @@ export const Createtickets = () => {
 			setIsLoading(true);
 			setFileUploadError(null);
 
-			// Create preview if it's an image
 			if (file.type.startsWith('image/')) {
 				const imageUrl = URL.createObjectURL(file);
 				setPreview(imageUrl);
@@ -96,7 +95,6 @@ export const Createtickets = () => {
 
 			const formData = new FormData();
 			formData.append('file', file);
-
 			const response = await uploadticketfile(formData);
 			const uploadedPath = response?.data?.file;
 
@@ -152,7 +150,6 @@ export const Createtickets = () => {
 				navigate('/tickets');
 			}
 		} catch (error: any) {
-			console.error('Ticket creation error:', error);
 			setTicketCreationError(error?.message || 'Failed to create ticket');
 			toast.error(error?.message || 'Failed to create ticket');
 		} finally {
