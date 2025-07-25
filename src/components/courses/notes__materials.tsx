@@ -10,24 +10,24 @@ import pdfimage from '../../assets/icons/notes/image 59.png'
 import Edit from '../../assets/courses icons/Edit-alt.png';
 import Trash from '../../assets/courses icons/Trash.png';
 import { FONTS } from '@/constants/uiConstants';
+import { useSelector } from 'react-redux';
+import { selectCoursedata } from '@/features/Course/reducers/selector';
+import { GetImageUrl } from '@/utils/helper';
 // import Mainbutton from './button'
 
 const NotesMaterials = () => {
 
+ const courseSelectData = useSelector(selectCoursedata)
 
-
-  const notesData = [
-    { date: '12-06-2025', time: '09.00 AM' },
-    { date: '13-06-2025', time: '10.00 AM' },
-    { date: '14-06-2025', time: '11.00 AM' },
-    { date: '15-06-2025', time: '09.30 AM' },
-    { date: '16-06-2025', time: '10.30 AM' },
-    { date: '17-06-2025', time: '08.00 AM' },
-    { date: '18-06-2025', time: '09.00 AM' },
-    { date: '19-06-2025', time: '10.00 AM' },
-    { date: '20-06-2025', time: '11.00 AM' },
-    { date: '21-06-2025', time: '09.30 AM' },
-  ]
+  const formattedDate = (date:any)=> {
+    const newDate = new Date(date).toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+  });
+  return newDate
+  }
 
   return (
     // <div className="px-4 py-6 ">
@@ -42,23 +42,25 @@ const NotesMaterials = () => {
             <div className="grid grid-cols-4 gap-4">
               <div className="text-center !text-white" style={{ ...FONTS.heading_02 }}>File</div>
               <div className="text-center !text-white" style={{ ...FONTS.heading_02 }}>Name</div>
-              <div className="text-center !text-white" style={{ ...FONTS.heading_02 }}>Chapter</div>
+              <div className="text-center !text-white" style={{ ...FONTS.heading_02 }}>Date</div>
               <div className="text-center !text-white" style={{ ...FONTS.heading_02 }}>Actions</div>
             </div>
           </Card>
 
           <div className="max-h-[500px] overflow-y-auto mx-4 scrollbar-thin scrollbar-thumb-purple-300 scrollbar-track-gray-100" style={{ scrollbarWidth: "none" }}>
-            {notesData.map((note, index) => (
+            {courseSelectData?.notes?.map((note:any, index:any) => (
               <Card
                 key={index}
                 className="bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] text-black p-4 mb-2 hover:shadow-lg transition-shadow duration-300"
               >
                 <div className="grid grid-cols-4 gap-4 items-center">
                   <div className="flex justify-center">
-                    <img src={pdfimage} className="w-10 h-12" alt="PDF icon" />
+                     <a href={GetImageUrl(note?.file) ?? undefined} download target="_blank" rel="noopener noreferrer">
+    <img src={pdfimage} className="w-10 h-12 cursor-pointer" alt="PDF icon" />
+  </a>
                   </div>
-                  <div className="text-center !text-gray-600" style={{ ...FONTS.para_01 }}>{note.date}</div>
-                  <div className="text-center !text-gray-600" >{note.time}</div>
+                  <div className="text-center !text-gray-600" style={{ ...FONTS.heading_07 }}>{note?.title}</div>
+                  <div className="text-center !text-gray-600" style={{ ...FONTS.heading_07 }}>{formattedDate(note?.updatedAt)}</div>
                   <div className="flex justify-center">
                     <Button
                       className="bg-[#EBEFF3] p-2 w-15 h-12 hover:bg-[#EBEFF3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset]"
@@ -69,10 +71,10 @@ const NotesMaterials = () => {
                     </Button>
 
                     <Button
-                      className="bg-[#EBEFF3] w-15 h-12 hover:bg-[#EBEFF3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset]"
+                      className="bg-[#EBEFF3] w-15 h-12 ml-2 hover:bg-[#EBEFF3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset]"
                       variant="outline"
                     >
-                      <img src={Trash} className="w-5 h-6" alt="Download" />
+                      <img src={Trash} className="  w-5 h-6" alt="Download" />
 
                     </Button>
                   </div>

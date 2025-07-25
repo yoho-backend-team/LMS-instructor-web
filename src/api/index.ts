@@ -75,7 +75,7 @@ class Client {
 		course: {
 			get: (params:any) =>
 				httpClient.get(
-					HTTP_END_POINTS.Instructor.course.get.replace(":instituteid",params.instituteid).replace(":branchid",params.branchid),
+					HTTP_END_POINTS.Instructor.course.get.replace(":instituteid",params.instituteid).replace(":branchid",params.branchid).replace(":courseid",params.courseid),
 					params,
 					'instructor'
 				),
@@ -120,12 +120,10 @@ class Client {
 						'instructor'
 					),
 			},
-			bathes: {
-				get: (data: { course: string }) =>
+			batches: {
+				get: (params: any) =>
 					httpClient.get(
-						HTTP_END_POINTS.Instructor.course.batches.get +
-							data?.course +
-							'/batches/',
+						HTTP_END_POINTS.Instructor.course.batches.get.replace(":instituteid",params.instituteid).replace(":branchid",params.branchid).replace(":courseid",params.courseid),
 						{},
 						'instructor'
 					),
