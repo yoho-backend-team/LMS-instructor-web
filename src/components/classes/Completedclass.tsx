@@ -217,7 +217,7 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data,classType }) => {
                 transition-all duration-300 ease-in-out hover:-translate-y-1 
                 hover:shadow-[6px_6px_8px_rgba(0,0,0,0.1),-2px_-2px_6px_rgba(255,255,255,0.8)] cursor-pointer"
             >
-              <div className="grid grid-cols-5 gap-4 items-center" style={{ ...FONTS.heading_06 }}>
+              <div className="flex justify-around items-center py-1" style={{ ...FONTS.heading_06 }}>
                 <div>{item.courseDetails?.course_name || 'N/A'}</div>
                 <div>{(item.start_date || '').slice(0, 10)}</div>
                 <div>{(item.start_time || '').slice(11, 16)}</div>
