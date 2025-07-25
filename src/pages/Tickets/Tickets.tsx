@@ -60,6 +60,7 @@ const Tickets = () => {
   const dispatch = useDispatch<AppDispatch>();
   const ticketData = useSelector(selectTicket);
   
+  
   const memoizedTickets = useMemo(() => {
     return ticketData?.data || [];
   }, [ticketData]);
@@ -112,7 +113,7 @@ const Tickets = () => {
           variant="outline"
           onClick={handleCreate}
         >
-          Create Tickets
+          Create Ticket
         </Button>
       </div>
 
@@ -222,10 +223,10 @@ const Tickets = () => {
             <Button
               key={pageNumber}
               onClick={() => handlePageChange(pageNumber)}
-              className={`rounded-full w-10 h-10 px-0 transition-all duration-200 cursor-pointer
+              className={`rounded-full w-10 h-10 px-0 transition-all duration-200 cursor-pointer 
                 ${
                   currentPage === pageNumber
-                    ? "bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white hover:from-[#7B00FF] hover:to-[#B200FF] hover:text-white"
+                    ? "bg-gradient-to-l from-[#7B00FF] to-[#B200FF] !text-white cursor-pointer shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] py-5"
                     : "bg-[#ebeff3] text-black shadow-[3px_3px_5px_rgba(255,255,255,0.7),_inset_2px_2px_3px_rgba(189,194,199,0.75)]"
                 }`}
               variant="ghost"
