@@ -1,3 +1,4 @@
+import { profile } from 'console';
 import httpClient from './httpClient';
 import HTTP_END_POINTS from './http_endpoints';
 
@@ -238,6 +239,20 @@ class Client {
 					'instructor'
 				),
 		},
+		profile:{
+			get:()=>
+				httpClient.get(
+				HTTP_END_POINTS.Instructor.profile.get,
+				{},
+				'instructor'
+			),
+			update:(data:any)=>
+				httpClient.update(
+					HTTP_END_POINTS.Instructor.profile.put,
+					data,
+					'instructor'
+				)
+		}
 	};
 }
 

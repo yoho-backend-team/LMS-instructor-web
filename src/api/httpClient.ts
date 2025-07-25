@@ -2,7 +2,7 @@
 import { GetLocalStorage } from '@/utils/helper';
 import axios from 'axios';
 
-const backendurl = 'http://localhost:3000/api'
+const backendurl = 'http://192.168.1.14:3000/api'
 // const backendurl = 'https://lms-node-backend-v1.onrender.com/api';
 const Axios = axios.create({
 	baseURL: backendurl,
