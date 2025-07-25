@@ -6,7 +6,7 @@ import ActivityLogsSlice from '../features/activitylog/reduces/ActivitySlice';
 import AttendanceSlice from '../features/attentance/reduces/AttendanceSlice';
 import PaymentSlice from '../features/Payment/reducers/PaymentSlice';
 import NotificationSlice from '../features/Notifications/reducers/NotificationSlice';
-import CourseSlice from "../features/Course/reducers/CourseSlice"
+import CourseSlice from '../features/Course/reducers/CourseSlice';
 
 const store = configureStore({
 	reducer: {
@@ -20,7 +20,6 @@ const store = configureStore({
 		CourseSlice: CourseSlice,
 	},
 });
-
 
 export default store;
 
