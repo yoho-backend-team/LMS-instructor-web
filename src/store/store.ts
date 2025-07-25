@@ -1,7 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import DashBoardSlice from '../features/Dashboard/reducers/slices';
 import TicketSlice from '../features/Tickets/reducer/TicketSlice';
-
 import ClassSlice from '../features/classes/reducers/slices';
 
 const store = configureStore({
