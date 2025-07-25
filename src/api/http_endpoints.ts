@@ -58,6 +58,9 @@ function generateendpoints() {
 				create: '/institutes/staff/ticket',
 				get: '/institutes/staff/ticket/',
 			},
+			faq:{
+				get:'/institutes/faq/all'
+			},
 			reports: {
 				get: '/institutes/reports/users/teaching-staff',
 			},

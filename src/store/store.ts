@@ -7,6 +7,8 @@ import AttendanceSlice from '../features/attentance/reduces/AttendanceSlice';
 import PaymentSlice from '../features/Payment/reducers/PaymentSlice';
 import NotificationSlice from '../features/Notifications/reducers/NotificationSlice';
 import CourseSlice from '../features/Course/reducers/CourseSlice';
+import faqSlice from '../features/faq/reduces/faqSlice'
+
 
 const store = configureStore({
 	reducer: {
@@ -18,6 +20,7 @@ const store = configureStore({
 		PaymentSlice: PaymentSlice,
 		NotificationSlice: NotificationSlice,
 		CourseSlice: CourseSlice,
+		faqSlice:faqSlice,
 	},
 });
 

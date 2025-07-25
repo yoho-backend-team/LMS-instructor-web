@@ -47,7 +47,6 @@ export const Attendance = () => {
   const [showFilters, setShowFilters] = useState<boolean>(false)
 
   const attendancedata = useSelector(selectAttendance)
-  
   // Generate chart data based on attendance data
   const generateChartData = useCallback(() => {
     if (!attendancedata?.data?.formattedAttendance) return [];
@@ -63,7 +62,7 @@ export const Attendance = () => {
 
   const chartData = generateChartData();
 
- 
+ console.log(attendancedata,'attendancec')
   const attendanceCards = [
     {
       label: "Classes Attend",
@@ -73,7 +72,7 @@ export const Attendance = () => {
     },
     {
       label: "Present Days",
-      current: attendancedata?.data?.totalPresentDays || 0,
+      current: attendancedata?.data?.presentDays || 0,
       total: attendancedata?.data?.totalWorkingDays || 0,
       color: COLORS.light_pink,
     },
@@ -82,7 +81,13 @@ export const Attendance = () => {
       current: attendancedata?.data?.totalAbsentDays || 0,
       total: attendancedata?.data?.totalWorkingDays || 0,
       color: COLORS.light_green_02,
-    }
+    },
+       {
+      label: 'Total Days',
+      current: attendancedata?.data?.totalWorkingDays || 0,
+      total: attendancedata?.data?.totalWorkingDays || 0,
+      color: COLORS.light_red,
+    },
   ]
 
   const handleMonthChange = (newMonth: typeof months[number]) => {
@@ -98,7 +103,7 @@ export const Attendance = () => {
     setSelectedYear(numericYear)
     setSelectedDate(updatedDate)
   }
-
+  
   const handleCalendarMonthChange = (newMonth: Date) => {
     setSelectedDate(newMonth)
     setSelectedMonth(months[newMonth.getMonth()])
@@ -110,22 +115,22 @@ export const Attendance = () => {
   const dispatch = useDispatch<any>();
  
  const dashData = useSelector(selectDashBoard)
-
- console.log(dashData,"dash Dataaa")
+ 
  useEffect(() => {
    
    dispatch(getDashBoardReports())
-}, [])
-
-    
-
-useEffect(() => {
-  const timeout = setTimeout(() => {
-    const payload = {
-      userId: dashData.user.uuid,
+  }, [])
+  
+  
+  
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      const payload = {
+      userId: dashData.user?.uuid,
       month: selectedDate.getMonth() + 1,
       year: selectedDate.getFullYear(),
-      instituteId: dashData.institute.uuid,
+      instituteId: dashData.institute?.uuid,
+      
     };
     getattendancedata(payload);
   }, 3000);
@@ -134,6 +139,8 @@ useEffect(() => {
 }, [dashData, selectedDate]);
 
 
+console.log(attendancedata,'aaaaaaaaaaa')
+console.log(dashData,"dash Dataaa")
 
   return (
     <div className="p-4">

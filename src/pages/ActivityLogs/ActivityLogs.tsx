@@ -149,7 +149,8 @@ const ActivityLogs = () => {
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
-                className="rounded-full w-10 h-10 flex items-center justify-center bg-[#ebeff3] text-black shadow-md disabled:opacity-40"
+                className="rounded-full w-10 h-10 flex items-center justify-center bg-[#ebeff3] text-black shadow-md
+                shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] disabled:opacity-40"
               >
                 ‹
               </button>
@@ -157,9 +158,10 @@ const ActivityLogs = () => {
                 <button
                   key={page}
                   onClick={() => setCurrentPage(page)}
-                  className={`rounded-full w-10 h-10 flex items-center justify-center font-semibold text-sm transition-all duration-200 ${
+                  className={`rounded-full w-10 h-10 flex items-center justify-center font-semibold
+                     text-sm transition-all duration-200 ${
                     currentPage === page
-                      ? 'bg-gradient-to-r from-[#7B00FF] to-[#B200FF] text-white shadow-md scale-105'
+                      ? 'bg-gradient-to-r from-[#7B00FF] to-[#B200FF] text-white shadow-md scale-105 shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)]'
                       : 'bg-[#ebeff3] text-black hover:bg-gradient-to-r hover:from-[#7B00FF] hover:to-[#B200FF] hover:text-white'
                   }`}
                 >
@@ -169,7 +171,9 @@ const ActivityLogs = () => {
               <button
                 onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages}
-                className="rounded-full w-10 h-10 flex items-center justify-center bg-[#ebeff3] text-black shadow-md disabled:opacity-40"
+                className="rounded-full w-10 h-10 flex items-center
+                 justify-center bg-[#ebeff3] text-black 
+                 shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] shadow-md disabled:opacity-40"
               >
                 ›
               </button>
