@@ -32,6 +32,8 @@ const Liveclass = ({ showOnlineOnly, data, currentPage, onPageChange }: Liveclas
   // Table headers
   const headers = ['Day', 'Topic', 'Join Link', 'Duration', 'Action'];
 
+  // ...inside your component
+
 return (
   <div>
     <Card style={{ backgroundColor: COLORS.bg_Colour }}>
@@ -50,7 +52,9 @@ return (
 
       {/* ✅ No data available */}
       {filteredClasses.length === 0 ? (
-        <img className="w-[250px] mx-auto my-auto" src={bgImg} alt="" />
+        <p className="text-center text-gray-600 py-6" style={{ ...FONTS.heading_06 }}>
+          No classes available.
+        </p>
       ) : (
         <>
           {/* ✅ Render filtered & paginated class items */}

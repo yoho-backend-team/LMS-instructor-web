@@ -12,23 +12,30 @@ interface ClassItem {
 }
 
 interface UpcomingclassProps {
+  showOnlineOnly: boolean;
   data: ClassItem[];
   currentPage: number;
   onPageChange: (page: number) => void;
 }
 
-const Upcomingclass = ({ data, currentPage, onPageChange }: UpcomingclassProps) => {
-  const headers = ['Day', 'Topic', 'Join Link', 'Duration', 'Action'];
+const Upcomingclass = ({ showOnlineOnly, data, currentPage, onPageChange }: UpcomingclassProps) => {
+  // Filter based on online/offline toggle
+  const filteredClasses = showOnlineOnly
+    ? data.filter(classItem => classItem.classtype === 'online')
+    : data.filter(classItem => classItem.classtype === 'offline');
 
-  // Pagination logic (optional, can be customized)
+  // Optional pagination logic (can be adjusted as needed)
   const itemsPerPage = 5;
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = data.slice(startIndex, startIndex + itemsPerPage);
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const paginatedData = filteredClasses.slice(startIndex, startIndex + itemsPerPage);
+  const totalPages = Math.ceil(filteredClasses.length / itemsPerPage);
+
+  // Table headers
+  const headers = ['Day', 'Topic', 'Join Link', 'Duration', 'Action'];
 
   return (
     <div className='bg-[#ebeff3] min-h-[300px]'>
-      {data.length === 0 ? (
+      {filteredClasses.length === 0 ? (
         <div className="flex justify-center items-center h-full py-20">
           <img className="w-[250px]" src={bgImg} alt="No Classes" />
         </div>

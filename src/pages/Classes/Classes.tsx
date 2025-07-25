@@ -170,6 +170,7 @@ const Classes = () => {
             currentPage={currentPage}
             onPageChange={setCurrentPage}
 			data={classData}
+			classType = {isOn}
           />
         )}
       </div>
