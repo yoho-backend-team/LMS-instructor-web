@@ -6,7 +6,7 @@ export const getStudentPaymentThunk =
         try {
             const response = await getStudentPayment(params);
             dispatch(getPayment(response.data));
-            console.log(response,"ydiuehfuedbjhw")
+            console.log(response.data,"ydiuehfuedbjhw")
         } catch (error) {
             console.log(error);
         }

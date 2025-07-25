@@ -13,7 +13,7 @@ function generateendpoints() {
 				login: '/institutes/auth/teaching-staff/login',
 				forgot_password: '/institutes/auth/profile/forgot-password',
 				verify_otp: '/institutes/auth/teaching-staff/verify-otp',
-				change_password: '/institutes/auth/teaching-staff/change-password',
+				change_password: '/institutes/auth/profile/reset-password',
 				log_out: '/institutes/auth/teaching-staff/logout',
 			},
 			attendance: {
@@ -64,6 +64,10 @@ function generateendpoints() {
 			index: {
 				get: '/institutes/auth/profile/me/',
 			},
+			profile:{
+				get:'/institutes/auth/profile/me/',
+				put:'/institutes/auth/profile/me/',
+			}
 		},
 	};
 }

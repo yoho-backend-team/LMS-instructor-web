@@ -3,14 +3,16 @@ import { COLORS, FONTS } from '@/constants/uiConstants';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useRef, useState } from 'react';
 import Logo from '../../../assets/icons/navbar/icons8-ionic-50.png';
+import { authOtpVerification } from '@/features/Authentication/services';
+import { toast } from 'react-toastify';
 
 const OtpVerification = () => {
 	const navigate = useNavigate();
 	const [otpDigits, setOtpDigits] = useState(Array(6).fill(''));
 	const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
 	const [showError, setShowError] = useState(false);
-	const location = useLocation()
-	const {data} = location.state
+	const location = useLocation();
+	const { data, email } = location?.state;
 
 	const handleOtpChange = (index: number, value: string) => {
 		setShowError(false);
@@ -46,9 +48,24 @@ const OtpVerification = () => {
 			setShowError(true);
 		}
 		try {
-			navigate('/change-password');
+			const params_data = {
+				email,
+				token: data?.token,
+				otp: enteredOtp,
+			};
+			const response = await authOtpVerification(params_data);
+			if (response) {
+				navigate('/change-password', {
+					state: {
+						email,
+					},
+				});
+				toast.success('OTP verified successfully!');
+			} else {
+				toast.error('Invalid OTP, please enter valid OTP.');
+			}
 		} catch (error) {
-			console.error('OTP verify error:', error);
+			toast.error('Something went wrong, please try again.');
 		}
 	};
 
@@ -85,6 +102,11 @@ const OtpVerification = () => {
 						<p style={{ ...FONTS.heading_06 }}>
 							Enter the 6 digit OTP Sent to your Mobile Number
 						</p>
+						<div className='mt-2'>
+							<p style={{ ...FONTS.heading_06, color: COLORS.light_red }}>
+								OTP: {data?.otp}
+							</p>
+						</div>
 						<div className='flex gap-3 justify-center my-3'>
 							{otpDigits.map((digit, idx) => (
 								<input

@@ -37,7 +37,7 @@ class Client {
 
 	async post(url: string, data: any, params?: string, userType?: string) {
 		const response = await Axios.post(url, data, {
-			params: params,
+			params,
 			headers: {
 				'User-Type': userType,
 			},
@@ -47,6 +47,7 @@ class Client {
 
 	async update(url: string, data?: any, params?: any, userType?: string) {
 		const response = await Axios.put(url, data, {
+			params,
 			headers: {
 				'User-Type': userType,
 			},

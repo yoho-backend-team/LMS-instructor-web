@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Download, QrCode } from 'lucide-react';
 import { COLORS, FONTS } from '@/constants/uiConstants';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectProfile } from '@/features/Profile/reducers/selectors';
+import { getStudentProfileThunk } from '@/features/Profile/reducers/thunks';
 
 interface IDCardData {
   staffName: string;
@@ -21,11 +24,20 @@ interface IDCardProps {
 
 const IDCard: React.FC<IDCardProps> = ({ data }) => {
   const [isFlipped, setIsFlipped] = useState(false);
+
+
+  const dispatch = useDispatch<any>();
+	const profileDetails = useSelector(selectProfile);
+
+	useEffect(() => {
+		dispatch(getStudentProfileThunk());
+		console.log(profileDetails);
+	}, [dispatch]);
   
   // Sample data - replace with actual data from props or API
   const idCardData: IDCardData = data || {
-    staffName: 'Albert Einstein',
-    staffId: 'U56TRN241',
+    staffName: profileDetails?.full_name,
+    staffId: profileDetails?.userDetail?.staffId,
     course: 'Theoretical Physics',
     batch: 'Batch 2024-25',
     validFrom: '2024-01-01',

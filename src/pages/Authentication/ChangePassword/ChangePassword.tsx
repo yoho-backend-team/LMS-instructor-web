@@ -3,16 +3,18 @@ import Logo from '../../../assets/icons/navbar/icons8-ionic-50.png';
 import { COLORS, FONTS } from '@/constants/uiConstants';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { IoMdArrowRoundBack } from 'react-icons/io';
+import { toast } from 'react-toastify';
+import { authChangePassword } from '@/features/Authentication/services';
 
 type ChangePassword = {
 	newPassword: string;
 	confirmPassword: string;
 };
 
-const Login = () => {
+const ChangePasswordPage = () => {
 	const {
 		register,
 		handleSubmit,
@@ -20,16 +22,29 @@ const Login = () => {
 	} = useForm<ChangePassword>({});
 	const [showPassword, setShowPassword] = useState(false);
 	const navigate = useNavigate();
+	const location = useLocation();
+	const { email } = location.state;
 
 	const onSubmit = async (data: ChangePassword) => {
 		try {
 			if (data.newPassword === data.confirmPassword) {
-				navigate('/login');
+				const params_data = {
+					email,
+					new_password: data?.newPassword,
+					confirm_password: data?.confirmPassword,
+				};
+				const response = await authChangePassword(params_data);
+				if (response) {
+					navigate('/login');
+					toast.success('Password changed successfully!');
+				} else {
+					toast.error('Failed to change password, please try again.');
+				}
 			} else {
-				console.log('Credentials Not-Matched');
+				toast.error('Credentials Not-Matched');
 			}
 		} catch (error: any) {
-			console.log('error', error);
+			toast.error('Something went wrong, please try again.');
 		}
 	};
 
@@ -160,4 +175,4 @@ const Login = () => {
 	);
 };
 
-export default Login;
+export default ChangePasswordPage;
