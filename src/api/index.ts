@@ -18,14 +18,20 @@ class Client {
 				params,
 				'instructor'
 			),
-		verifyOtp: (data: any, params: any) =>
+		forgotPassword: (data: any, params?: any) =>
+			httpClient.post(
+				HTTP_END_POINTS.Instructor.auth.forgot_password,
+				data,
+				params
+			),
+		verifyOtp: (data: any, params?: any) =>
 			httpClient.post(
 				HTTP_END_POINTS.Instructor.auth.verify_otp,
 				data,
 				params,
 				'instructor'
 			),
-		changePassword: (data: any, params: any) =>
+		changePassword: (data: any, params?: any) =>
 			httpClient.post(
 				HTTP_END_POINTS.Instructor.auth.change_password,
 				data,
