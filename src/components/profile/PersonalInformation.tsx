@@ -1,19 +1,24 @@
-import React, { useState } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useState, useEffect, useRef } from 'react';
 import { COLORS, FONTS } from '@/constants/uiConstants';
+import { useSelector } from 'react-redux';
+import { selectProfile } from '@/features/Profile/reducers/selectors';
 
 interface PersonalInfo {
-  mailAddress: string;
-  name: string;
+  full_name: string;
+  address1: string;
+  address2: string;
+  alternate_phone_number: string;
+  city: string;
+  pincode: number;
+  state: string;
+  phone_number: string;
+  dob: string;
+  email: string;
   gender: string;
   qualification: string;
-  contactNumber: string;
-  alternateNumber: string;
-  dateOfBirth: string;
-  addressLine1: string;
-  addressLine2: string;
-  city: string;
-  state: string;
-  pinCode: string;
+  roll_no: string;
+  image: string;
 }
 
 interface PersonalInformationProps {
@@ -23,7 +28,59 @@ interface PersonalInformationProps {
 }
 
 const PersonalInformation: React.FC<PersonalInformationProps> = ({ data, onDataChange, isEditing = false }) => {
-  const [formData, setFormData] = useState<PersonalInfo>(data);
+  const personalInfo = useSelector(selectProfile);
+
+
+  const fullNameRef = useRef<HTMLInputElement>(null);
+  const address1Ref = useRef<HTMLInputElement>(null);
+  const address2Ref = useRef<HTMLInputElement>(null);
+  const alternatePhoneNumberRef = useRef<HTMLInputElement>(null);
+  const cityRef = useRef<HTMLInputElement>(null);
+  const pincodeRef = useRef<HTMLInputElement>(null);
+  const stateRef = useRef<HTMLInputElement>(null);
+  const phoneNumberRef = useRef<HTMLInputElement>(null);
+  const dobRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const genderRef = useRef<HTMLSelectElement>(null);
+  const qualificationRef = useRef<HTMLInputElement>(null);
+  const rollNoRef = useRef<HTMLInputElement>(null);
+  const imageRef = useRef<HTMLInputElement>(null);
+
+  const [formData, setFormData] = useState<any>({
+    full_name: '',
+    address1: '',
+    address2: '',
+    alternate_phone_number: '',
+    city: '',
+    pincode: '',
+    state: '',
+    phone_number: '',
+    dob: '',
+    email: '',
+    gender: '',
+    qualification: '',
+    roll_no: '',
+    image: '',
+  });
+
+  useEffect(() => {
+    setFormData({
+      full_name: personalInfo?.full_name,
+      address1: personalInfo?.contact_info?.address1,
+      address2: personalInfo?.contact_info?.address2,
+      alternate_phone_number: personalInfo?.contact_info?.alternate_phone_number,
+      city: personalInfo?.contact_info?.city,
+      pincode: personalInfo?.contact_info?.pincode,
+      state: personalInfo?.contact_info?.state,
+      phone_number: personalInfo?.contact_info?.phone_number,
+      dob: personalInfo?.dob,
+      email: personalInfo?.email,
+      gender: personalInfo?.gender,
+      qualification: personalInfo?.qualification,
+      roll_no: personalInfo?.roll_no,
+      image: personalInfo?.image,
+    });
+  }, [personalInfo]);
 
   const handleInputChange = (key: keyof PersonalInfo, value: string) => {
     const updatedData = { ...formData, [key]: value };
@@ -32,43 +89,61 @@ const PersonalInformation: React.FC<PersonalInformationProps> = ({ data, onDataC
   };
 
   const fields = [
-    { label: 'Full Name', key: 'name' as keyof PersonalInfo, type: 'text', editable: true },
-    { label: 'Gender', key: 'gender' as keyof PersonalInfo, type: 'select', options: ['Male', 'Female', 'Other'], editable: false },
-    { label: 'Qualification', key: 'qualification' as keyof PersonalInfo, type: 'text', editable: true },
-    { label: 'Contact Number', key: 'contactNumber' as keyof PersonalInfo, type: 'tel', editable: true },
-    { label: 'Alternate Number', key: 'alternateNumber' as keyof PersonalInfo, type: 'tel', editable: true },
-    { label: 'Email', key: 'mailAddress' as keyof PersonalInfo, type: 'email', editable: false },
-    { label: 'Address Line 1', key: 'addressLine1' as keyof PersonalInfo, type: 'text', editable: true },
-    { label: 'Address Line 2', key: 'addressLine2' as keyof PersonalInfo, type: 'text', editable: true },
-    { label: 'City', key: 'city' as keyof PersonalInfo, type: 'text', editable: true },
-    { label: 'State', key: 'state' as keyof PersonalInfo, type: 'text', editable: true },
-    { label: 'Pin Code', key: 'pinCode' as keyof PersonalInfo, type: 'text', editable: true }
+    { label: 'Full Name', key: 'full_name', type: 'text', editable: true, ref: fullNameRef },
+    { label: 'Gender', key: 'gender', type: 'select', options: ['Male', 'Female', 'Other'], editable: false, ref: genderRef },
+    { label: 'Qualification', key: 'qualification', type: 'text', editable: true, ref: qualificationRef },
+    { label: 'Contact Number', key: 'phone_number', type: 'tel', editable: true, ref: phoneNumberRef },
+    { label: 'Alternate Number', key: 'alternate_phone_number', type: 'tel', editable: true, ref: alternatePhoneNumberRef },
+    { label: 'Email', key: 'email', type: 'email', editable: false, ref: emailRef },
+    { label: 'Address Line 1', key: 'address1', type: 'text', editable: true, ref: address1Ref },
+    { label: 'Address Line 2', key: 'address2', type: 'text', editable: true, ref: address2Ref },
+    { label: 'City', key: 'city', type: 'text', editable: true, ref: cityRef },
+    { label: 'State', key: 'state', type: 'text', editable: true, ref: stateRef },
+    { label: 'Pin Code', key: 'pincode', type: 'text', editable: true, ref: pincodeRef },
+    { label: 'Date of Birth', key: 'dob', type: 'date', editable: true, ref: dobRef },
+    { label: 'Roll No', key: 'roll_no', type: 'text', editable: true, ref: rollNoRef },
+    { label: 'Image URL', key: 'image', type: 'text', editable: true, ref: imageRef },
   ];
 
   return (
     <div className="mb-8">
-      <h2 className="font-bold mb-6 text-2xl leading-none" style={{ color: COLORS.text_title, fontFamily: FONTS.heading_01.fontFamily, fontWeight: FONTS.heading_01.fontWeight }}>
+      <h2
+        className="font-bold mb-6 text-2xl"
+        style={{
+          color: COLORS.text_title,
+          fontFamily: FONTS.heading_01.fontFamily,
+          fontWeight: FONTS.heading_01.fontWeight,
+        }}
+      >
         Personal Information
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 sm:gap-6">
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {fields.map((field) => (
           <div key={field.key}>
-            <label className="block font-medium mb-2 text-sm leading-relaxed" style={{ color: COLORS.text_desc, fontFamily: FONTS.para_01.fontFamily }}>
+            <label
+              className="block font-medium mb-2 text-sm"
+              style={{
+                color: COLORS.text_desc,
+                fontFamily: FONTS.para_01.fontFamily,
+              }}
+            >
               {field.label}
             </label>
+
             {isEditing && field.editable ? (
-              // Editable fields with colored border to indicate editability
               field.type === 'select' ? (
                 <select
-                  value={formData[field.key]}
+                  ref={field.ref}
+                  value={formData[field.key] || ''}
                   onChange={(e) => handleInputChange(field.key, e.target.value)}
-                  className="w-full rounded-lg px-4 py-3 text-sm leading-relaxed shadow-[inset_2px_2px_4px_rgba(189,194,199,0.75),inset_-2px_-2px_4px_rgba(255,255,255,0.7)] border-2 focus:outline-none focus:shadow-[inset_3px_3px_6px_rgba(189,194,199,0.8),inset_-3px_-3px_6px_rgba(255,255,255,0.8)] transition-all duration-200 min-h-[44px]"
+                  className="w-full rounded-lg px-4 py-3 text-sm border-2"
                   style={{
                     backgroundColor: COLORS.bg_Colour,
                     color: COLORS.text_desc,
                     fontFamily: FONTS.para_01.fontFamily,
                     borderColor: `${COLORS.light_blue}33`,
-                    fontSize: FONTS.para_01.fontSize
+                    fontSize: FONTS.para_01.fontSize,
                   }}
                 >
                   <option value="">Select {field.label}</option>
@@ -78,46 +153,33 @@ const PersonalInformation: React.FC<PersonalInformationProps> = ({ data, onDataC
                     </option>
                   ))}
                 </select>
-              ) : field.type === 'textarea' ? (
-                <textarea
-                  value={formData[field.key]}
-                  onChange={(e) => handleInputChange(field.key, e.target.value)}
-                  rows={3}
-                  className="w-full rounded-lg px-4 py-3 text-sm leading-relaxed shadow-[inset_2px_2px_4px_rgba(189,194,199,0.75),inset_-2px_-2px_4px_rgba(255,255,255,0.7)] border-2 focus:outline-none focus:shadow-[inset_3px_3px_6px_rgba(189,194,199,0.8),inset_-3px_-3px_6px_rgba(255,255,255,0.8)] transition-all duration-200 resize-none"
-                  style={{
-                    backgroundColor: COLORS.bg_Colour,
-                    color: COLORS.text_desc,
-                    fontFamily: FONTS.para_01.fontFamily,
-                    borderColor: `${COLORS.light_blue}33`,
-                    fontSize: FONTS.para_01.fontSize
-                  }}
-                  placeholder={`Enter ${field.label.toLowerCase()}`}
-                />
               ) : (
                 <input
+                  ref={field.ref}
                   type={field.type}
-                  value={formData[field.key]}
+                  value={formData[field.key] || ''}
                   onChange={(e) => handleInputChange(field.key, e.target.value)}
-                  className="w-full rounded-lg px-4 py-3 text-sm leading-relaxed shadow-[inset_2px_2px_4px_rgba(189,194,199,0.75),inset_-2px_-2px_4px_rgba(255,255,255,0.7)] border-2 focus:outline-none focus:shadow-[inset_3px_3px_6px_rgba(189,194,199,0.8),inset_-3px_-3px_6px_rgba(255,255,255,0.8)] transition-all duration-200 min-h-[44px]"
+                  className="w-full rounded-lg px-4 py-3 text-sm border-2"
                   style={{
                     backgroundColor: COLORS.bg_Colour,
                     color: COLORS.text_desc,
                     fontFamily: FONTS.para_01.fontFamily,
                     borderColor: `${COLORS.light_blue}33`,
-                    fontSize: FONTS.para_01.fontSize
+                    fontSize: FONTS.para_01.fontSize,
                   }}
                   placeholder={`Enter ${field.label.toLowerCase()}`}
                 />
               )
             ) : (
-              // Read-only display
-              <div className="relative rounded-lg px-4 py-3 text-sm leading-relaxed shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] min-h-[44px] flex items-center"
+              <div
+                className="relative rounded-lg px-4 py-3 text-sm shadow-inner min-h-[44px] flex items-center"
                 style={{
                   backgroundColor: COLORS.bg_Colour,
                   fontFamily: FONTS.para_01.fontFamily,
-                  color: field.editable && !isEditing ? COLORS.text_desc : COLORS.text_desc,
-                  fontSize: FONTS.para_01.fontSize
-                }}>
+                  color: COLORS.text_desc,
+                  fontSize: FONTS.para_01.fontSize,
+                }}
+              >
                 {formData[field.key] || 'Not provided'}
               </div>
             )}

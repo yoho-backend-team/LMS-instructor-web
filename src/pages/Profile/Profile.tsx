@@ -11,8 +11,8 @@ const Profile = () => {
 
 	useEffect(() => {
 		dispatch(getStudentProfileThunk());
-		console.log(profileDetails);
-	}, []);
+	}, [dispatch]);
+
 	return <PersonalInformation />;
 };
 
