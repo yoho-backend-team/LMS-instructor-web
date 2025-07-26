@@ -225,6 +225,9 @@ class Client {
 					'instructor'
 				),
 		},
+		faq:{
+         get:(params:any)=> httpClient.get(HTTP_END_POINTS.Instructor.faq.get,params,'instructor')
+		},
 		index: {
 			get: (params: any) =>
 				httpClient.get(
