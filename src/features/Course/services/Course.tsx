@@ -20,9 +20,9 @@ export const getCourseData = async () => {
 	}
 };
 
-export const getAllBatches = async () => {
+export const getAllBatches = async (data: any) => {
 	try {
-		const response = await Client.Instructor.course.batches.get();
+		const response = await Client.Instructor.course.batches.get(data);
 		return response;
 	} catch (error) {
 		console.error('Error in getallbatches:', error);

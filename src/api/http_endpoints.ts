@@ -46,7 +46,7 @@ function generateendpoints() {
 					delete: '/institutes/study-material/:materialId',
 				},
 				batches: {
-					get: `/institutes/${institute?.uuid}/branches/${branch?.uuid}/courses/${courseId}/batches/`,
+					get: `/institutes/${institute?.uuid}/branches/${branch?.uuid}/courses/:courseId/batches/`,
 				},
 			},
 			class: {

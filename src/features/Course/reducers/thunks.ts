@@ -27,9 +27,9 @@ export const getInstructorcourseData = () => async (dispatch: any) => {
 	}
 };
 
-export const getBatchesData = () => async (dispatch: any) => {
+export const getBatchesData = (data: any) => async (dispatch: any) => {
 	try {
-		const response = await getAllBatches();
+		const response = await getAllBatches(data);
 		dispatch(getBatches(response?.data));
 		return response?.data;
 	} catch (error) {

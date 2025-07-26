@@ -133,9 +133,9 @@ class Client {
 					),
 			},
 			batches: {
-				get: () =>
+				get: (data: any) =>
 					httpClient.get(
-						HTTP_END_POINTS.Instructor.course.batches.get,
+						HTTP_END_POINTS.Instructor.course.batches.get.replace(":courseId", data?.uuid),
 						{},
 						'instructor'
 					),
