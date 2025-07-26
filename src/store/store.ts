@@ -9,12 +9,14 @@ import NotificationSlice from '../features/Notifications/reducers/NotificationSl
 import CourseSlice from '../features/Course/reducers/CourseSlice';
 import communityReducer from '../features/community/redux/communitySlice'
 import ProfileSlice from '../features/Profile/reducers/ProfileSlice'
+import ClassIdSlice from '../features/classId/services/reducers/classidslice'
 
 const store = configureStore({
 	reducer: {
 		dashboard: DashBoardSlice,
 		TicketSlice: TicketSlice,
 		ClassSlice: ClassSlice,
+        ClassIdSlice: ClassIdSlice,
 		ActivityLogsSlice: ActivityLogsSlice,
 		AttendanceSlice: AttendanceSlice,
 		PaymentSlice: PaymentSlice,

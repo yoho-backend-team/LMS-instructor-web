@@ -47,7 +47,7 @@ const AppRoutes = () => {
 			<Route path='/' element={<MainLayout />}>
 				<Route index element={<Dashboard />} />
 				<Route path='classes' element={<Classes />} />
-				<Route path='class/:id' element={<ClassId />} />
+				<Route path='class/:classType/:id' element={<ClassId />} />
 				<Route path='courses' element={<Courses />} />
 				<Route path='course/:id' element={<CourseId />} />
 				<Route path='activity-logs' element={<ActivityLogs />} />
