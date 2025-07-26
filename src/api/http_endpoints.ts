@@ -1,4 +1,14 @@
+import {
+	getInstructorBranchDetails,
+	getInstructorCourseId,
+	getInstructorInstituteDetails,
+} from '@/hooks/TabViewResponce/common';
+
 function generateendpoints() {
+	const branch = getInstructorBranchDetails();
+	const institute = getInstructorInstituteDetails();
+	const courseId = getInstructorCourseId();
+
 	return {
 		common: {
 			file: {
@@ -21,29 +31,31 @@ function generateendpoints() {
 				class_attendance: '/institutes/attedance/class/',
 			},
 			course_list: {
-				get: `/institutes/:instituteid/branches/:branchid/teaching-staff/courses`,
+				get: `/institutes/${institute?.uuid}/branches/${branch?.uuid}/teaching-staff/courses`,
 			},
 			course: {
-				get: `/institutes/:instituteid/branches/:branchid/course/:courseid`,
+				get: `/institutes/${institute?.uuid}/branches/${branch?.uuid}/course/${courseId}`,
 				notes: {
 					create: `/institutes/course/note`,
-					update: `/institutes/course/note/update/`,
-					delete: `/institutes/course/note/`,
+					update: `/institutes/course/note/update/:noteId`,
+					delete: `/institutes/course/note/:noteId`,
 				},
 				study_material: {
-					index: '/institutes/study-material/',
+					create: '/institutes/study-material/',
+					update: '/institutes/study-material/:materialId',
+					delete: '/institutes/study-material/:materialId',
 				},
 				batches: {
-					get: `/institutes/:instituteid/branches/:branchid/courses/:courseid/batches/`,
+					get: `/institutes/${institute?.uuid}/branches/${branch?.uuid}/courses/${courseId}/batches/`,
 				},
 			},
 			class: {
-				get: `/institutes/class/:courseid`,
+				get: `/institutes/class/${courseId}`,
 				getwithId: `/institutes/class/course/`,
 				update: `/institutes/class/`,
 			},
 			community: {
-				get: `/institutes/community/course/:courseid`,
+				get: `/institutes/community/course/${courseId}`,
 				get_messages: `/institutes/community/messages/all/`,
 			},
 			notification: {
@@ -58,8 +70,8 @@ function generateendpoints() {
 				create: '/institutes/staff/ticket',
 				get: '/institutes/staff/ticket/',
 			},
-			faq:{
-				get:'/institutes/faq/all'
+			faq: {
+				get: '/institutes/faq/all',
 			},
 			reports: {
 				get: '/institutes/reports/users/teaching-staff',
@@ -67,10 +79,10 @@ function generateendpoints() {
 			index: {
 				get: '/institutes/auth/profile/me/',
 			},
-			profile:{
-				get:'/institutes/auth/profile/me/',
-				put:'/institutes/auth/profile/me/',
-			}
+			profile: {
+				get: '/institutes/auth/profile/me/',
+				put: '/institutes/auth/profile/me/',
+			},
 		},
 		notificationSubscription: {
 			post: '/notification/subscribe',

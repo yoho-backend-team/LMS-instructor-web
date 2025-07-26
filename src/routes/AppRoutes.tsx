@@ -65,7 +65,10 @@ const AppRoutes = () => {
 				<Route path='payment' element={<Payment />} />
 				<Route path='note_materials' element={<CourseNotes />} />
 				<Route path='about/:course' element={<AboutCourse />} />
-				<Route path='notes_materials' element={<NotesMaterials />} />
+				<Route
+					path='notes_materials'
+					element={<NotesMaterials setselectedNotes={() => {}} />}
+				/>
 				<Route path='batches' element={<Batches />} />
 				<Route path='*' element={<Navigate to='/' />} />
 			</Route>

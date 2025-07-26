@@ -46,7 +46,7 @@ class Client {
 		return response.data;
 	}
 
-	async update(url: string, data?: any, params?: any, userType?: string) {
+	async update(url: string, data: any, params?: any, userType?: string) {
 		const response = await Axios.put(url, data, {
 			params,
 			headers: {
