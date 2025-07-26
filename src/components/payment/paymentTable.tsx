@@ -7,6 +7,12 @@ import { Button } from '../ui/button';
 import { useDispatch, useSelector } from 'react-redux';
 import { getStudentPaymentThunk } from '@/features/Payment/reducers/thunks';
 import { selectPayment } from '@/features/Payment/reducers/selectors';
+import { getDashBoardReports } from '@/features/Dashboard/reducers/thunks';
+import { getInstructorAttendance } from '@/features/attentance/reduces/thunks';
+import { selectDashBoard } from '@/features/Dashboard/reducers/selectors';
+import { selectAttendance } from '@/features/attentance/reduces/selectors';
+import { useCallback } from "react";
+
 
 interface PaymentTable {
 	Month: string;
@@ -107,6 +113,70 @@ const PaymentTable = () => {
 	];
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
+
+
+	const dashData = useSelector(selectDashBoard);
+	const attendancedata = useSelector(selectAttendance);
+
+
+	useEffect(() => {
+		dispatch(getDashBoardReports());
+	}, [dispatch]);
+
+
+
+	const funct = useCallback(
+		async (month: any) => {
+			try {
+				const payload = {
+					userId: dashData?.user?.uuid,
+					month: month,
+					// year: selectedDate.getFullYear(),
+					// instituteId: dashData?.institute?.uuid,
+				};
+
+				const response = await dispatch(getInstructorAttendance(payload));
+				console.log(response, "gdjeydedgejhhjfyhj");
+				return response?.data?.totalWorkingDays;
+			} catch (error) {
+				console.log(error);
+			}
+		},
+		[dispatch] // 👈 add dependencies here
+	);
+
+
+	// funct("June")
+	// funct(pay?.month)
+
+	// useEffect(() => {
+	// 	try {
+	// 		const payload = {
+	// 			userId: dashData?.user?.uuid,
+	// 			month: months(),
+	// 			year: selectedDate.getFullYear(),
+	// 			instituteId: dashData?.institute.uuid,
+	// 		};
+	// 		dispatch(getInstructorAttendance(payload));
+	// 	} catch (error) {
+	// 		console.log(error);
+	// 	}
+
+	// }, [dispatch]);
+
+	console.log(attendancedata, 'attendance data');
+
+
+
+	const months = () => SalaryDetails.map((month: any) => {
+		return new Date(month.payment_date).toLocaleString('en-US', { month: 'long' })
+	})
+
+	console.log(months())
+
+	console.log(SalaryDetails, "Salaryyyyyyyyyyyy")
+
+
 	return (
 		<div className='p-4 custom-inset-shadow grid gap-4'>
 			<section
@@ -119,7 +189,7 @@ const PaymentTable = () => {
 			</section>
 
 			<section>
-				{SalaryDetails.map((PaymentTable:any,index:any) => (
+				{SalaryDetails.map((PaymentTable: any, index: any) => (
 					<div
 						className='grid grid-cols-8 justify-center items-center my-5 text-center bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] text-black p-3 rounded-lg
                         transition-all duration-300 ease-in-out
@@ -131,7 +201,7 @@ const PaymentTable = () => {
 					>
 						<p>{new Date(PaymentTable.payment_date).toLocaleString('en-US', { month: 'long' })}</p>
 						<p>{PaymentTable.salary_amount}</p>
-						<p>{PaymentTable.workingDays}</p>
+						<p>{new Date(PaymentTable.payment_date).toLocaleString('en-US', { month: 'long' })}</p>
 						<p>{PaymentTable.presentDays}</p>
 						<p>{PaymentTable.absentDays}</p>
 						<p>{PaymentTable.deductions}</p>
@@ -143,7 +213,7 @@ const PaymentTable = () => {
       										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
 							}}
 						>
-							{PaymentTable.status ? 'Paid' : 'Pending'}
+							{PaymentTable.status}
 						</button>
 						<p className='flex justify-center items-center gap-4'>
 							<button
@@ -315,14 +385,13 @@ const PaymentTable = () => {
 						<p style={{ ...FONTS.heading_04 }}>Status</p>
 						<Button
 							className={`p-2 px-8 rounded-lg mt-4 
-                        ${
-													selectedDetail.status
-														? 'bg-gradient-to-r from-green-400 to-green-500 text-white hover:from-green-500 hover:to-green-600 shadow-[0px_3px_4px_0px_rgba(255,255,255,0.75)_inset,3px_-3px_3px_0px_rgba(255,255,255,0.25)_inset,-4px_8px_23px_0px_#3ABE65_inset,-8px_-8px_12px_0px_#3ABE65_inset,2px_3px_3px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-1px_-1px_6px_0px_rgba(255,255,255,0.75),-1px_-1px_6px_1px_rgba(255,255,255,0.25)]'
-														: 'bg-gradient-to-r from-red-500 to-red-600 text-white  shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_red_inset,-4px_-8px_10px_0px_#B20_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white'
-												}"
+                        ${selectedDetail.status
+									? 'bg-gradient-to-r from-green-400 to-green-500 text-white hover:from-green-500 hover:to-green-600 shadow-[0px_3px_4px_0px_rgba(255,255,255,0.75)_inset,3px_-3px_3px_0px_rgba(255,255,255,0.25)_inset,-4px_8px_23px_0px_#3ABE65_inset,-8px_-8px_12px_0px_#3ABE65_inset,2px_3px_3px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-1px_-1px_6px_0px_rgba(255,255,255,0.75),-1px_-1px_6px_1px_rgba(255,255,255,0.25)]'
+									: 'bg-gradient-to-r from-red-500 to-red-600 text-white  shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_red_inset,-4px_-8px_10px_0px_#B20_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white'
+								}"
                              `}
 						>
-							{selectedDetail.status ? 'Paid' : 'Pending'}
+							{selectedDetail.status}
 						</Button>
 					</section>
 				</div>
