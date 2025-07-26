@@ -22,7 +22,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getDashBoardReports } from '@/features/Dashboard/reducers/thunks';
 import { selectDashBoard } from '@/features/Dashboard/reducers/selectors';
 import { selectAttendance } from '@/features/attentance/reduces/selectors';
-import { getattendancedata } from '@/features/attentance/services/Attendance';
 import type { AppDispatch } from '@/store/store';
 import { getInstructorAttendance } from '@/features/attentance/reduces/thunks';
 
