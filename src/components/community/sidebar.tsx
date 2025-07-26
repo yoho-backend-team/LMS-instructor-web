@@ -47,13 +47,17 @@ const Sidebar: React.FC<Props> = ({
         </div>
       </div>
 
-      <div className="p-4 h-[calc(500px-80px)] overflow-y-scroll relative bg-[#EBEFF3]">
+      <div className="p-4 h-[calc(500px-80px)] relative bg-[#EBEFF3] overflow-y-auto
+  [&::-webkit-scrollbar]:w-2
+  [&::-webkit-scrollbar-track]:bg-gray-100
+  [&::-webkit-scrollbar-thumb]:bg-gray-300
+  dark:[&::-webkit-scrollbar-track]:bg-neutral-700
+  dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
         {communities.map((chat) => (
           <div
             key={chat._id}
-            className={`relative z-10 flex items-center justify-between p-3 bg-[#EBEFF3] rounded-lg overflow-hidden shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] transition-all ${
-              selectedChat?._id === chat._id ? 'bg-gray-200' : ''
-            }`}
+            className={`relative z-10 flex items-center justify-between p-3 bg-[#EBEFF3] rounded-lg overflow-hidden shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] transition-all ${selectedChat?._id === chat._id ? 'bg-gray-200' : ''
+              }`}
             onClick={() => onSelectChat(chat)}
           >
             <div className="flex items-center space-x-3">
