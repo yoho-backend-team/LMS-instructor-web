@@ -32,7 +32,7 @@ const Sidebar: React.FC<Props> = ({
             className="w-full sticky p-3 h-10 pl-10 bg-[#EBEFF3] rounded-md shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
           />
           <svg
-            className="absolute left-3 top-3.5 h-5 w-5 text-gray-500"
+            className="absolute left-3 top-3 h-5 w-5 text-gray-500"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
