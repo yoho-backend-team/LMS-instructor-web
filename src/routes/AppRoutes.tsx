@@ -47,7 +47,7 @@ const AppRoutes = () => {
 			<Route path='/' element={<MainLayout />}>
 				<Route index element={<Dashboard />} />
 				<Route path='classes' element={<Classes />} />
-				<Route path='class/:id' element={<ClassId />} />
+				<Route path='class/:classType/:id' element={<ClassId />} />
 				<Route path='courses' element={<Courses />} />
 				<Route path='course/:id' element={<CourseId />} />
 				<Route path='activity-logs' element={<ActivityLogs />} />
@@ -63,9 +63,8 @@ const AppRoutes = () => {
 				<Route path='attendance' element={<Attendance />} />
 				<Route path='placement' element={<Placement />} />
 				<Route path='payment' element={<Payment />} />
-				<Route path='about' element={<AboutCourse />} />
 				<Route path='note_materials' element={<CourseNotes />} />
-				<Route path='/about/:course' element={<AboutCourse />} />
+				<Route path='about/:course' element={<AboutCourse />} />
 				<Route path='notes_materials' element={<NotesMaterials />} />
 				<Route path='batches' element={<Batches />} />
 				<Route path='*' element={<Navigate to='/' />} />

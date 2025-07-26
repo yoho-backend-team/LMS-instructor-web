@@ -24,7 +24,7 @@ function generateendpoints() {
 				get: `/institutes/:instituteid/branches/:branchid/teaching-staff/courses`,
 			},
 			course: {
-				get: `/institutes/:instituteid/branches/:branchid/course/`,
+				get: `/institutes/:instituteid/branches/:branchid/course/:courseid`,
 				notes: {
 					create: `/institutes/course/note`,
 					update: `/institutes/course/note/update/`,
@@ -34,7 +34,7 @@ function generateendpoints() {
 					index: '/institutes/study-material/',
 				},
 				batches: {
-					get: `/institutes/:instituteid/branches/:branchid/courses/`,
+					get: `/institutes/:instituteid/branches/:branchid/courses/:courseid/batches/`,
 				},
 			},
 			class: {
@@ -57,6 +57,9 @@ function generateendpoints() {
 			ticket: {
 				create: '/institutes/staff/ticket',
 				get: '/institutes/staff/ticket/',
+			},
+			faq:{
+				get:'/institutes/faq/all'
 			},
 			reports: {
 				get: '/institutes/reports/users/teaching-staff',
