@@ -1,17 +1,31 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import Logo from '../../assets/icons/navbar/icons8-ionic-50.png';
 import { Card } from '../ui/card';
 import { NavbarIcons } from '@/assets/icons/navbar';
 import { COLORS, FONTS } from '@/constants/uiConstants';
 import { Button } from '../ui/button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext/AuthContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectDashBoard } from '@/features/Dashboard/reducers/selectors';
+import { GetImageUrl } from '@/utils/helper';
+import { toast } from 'react-toastify';
+import { authInstructorLogout } from '@/features/Authentication/services';
+import LogoutConfirmationModal from './LogoutConfirmationModal';
+import type { AppDispatch } from '@/store/store';
+import { getDashBoardReports } from '@/features/Dashboard/reducers/thunks';
 
 const Navbar = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const [showProfileSection, setshowProfileSection] = useState(false);
 	const { logout } = useAuth();
+	const dashData = useSelector(selectDashBoard);
+	const [showModal, setShowModal] = useState(false);
+	const dispatch = useDispatch<AppDispatch>();
+
+	useEffect(() => {
+		dispatch(getDashBoardReports());
+	}, [dispatch]);
 
 	const navItems = [
 		{
@@ -52,6 +66,21 @@ const Navbar = () => {
 		},
 	];
 
+	const handleLogout = async () => {
+		try {
+			const response = await authInstructorLogout({});
+			if (response) {
+				setshowProfileSection(false);
+				logout();
+				toast.success('Logout successfully!');
+				navigate('/login');
+				setShowModal(false);
+			}
+		} catch (error) {
+			toast.error('Something went wrong, please try again.');
+		}
+	};
+
 	return (
 		<nav>
 			<div className='flex justify-between gap-3 px-6'>
@@ -68,7 +97,12 @@ const Navbar = () => {
 						setshowProfileSection(false);
 					}}
 				>
-					<img src={Logo} alt='logo' />
+					<img
+						src={GetImageUrl(dashData?.institute?.logo) ?? undefined}
+						alt={dashData?.institute?.institute_name}
+						title={dashData?.institute?.institute_name}
+						className='w-12 h-12 rounded-full'
+					/>
 				</Card>
 
 				<div className='flex lg:gap-10 md:gap-5'>
@@ -125,7 +159,12 @@ const Navbar = () => {
 						className='cursor-pointer'
 						onClick={() => setshowProfileSection(!showProfileSection)}
 					>
-						<img src={NavbarIcons.UserProfile} alt='profile-image' />
+						<img
+							src={GetImageUrl(dashData?.user?.image) ?? undefined}
+							alt={dashData?.user?.full_name}
+							title={dashData?.user?.full_name}
+							className='w-12 h-12 object-cover rounded-full'
+						/>
 					</div>
 
 					{showProfileSection && (
@@ -159,14 +198,7 @@ const Navbar = () => {
 									  shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)]
 									'
 							>
-								<div
-									className='flex gap-2'
-									onClick={() => {
-										setshowProfileSection(false);
-										logout();
-										navigate('/login');
-									}}
-								>
+								<div className='flex gap-2' onClick={() => setShowModal(true)}>
 									<img
 										src={NavbarIcons.LoginImg}
 										alt='profile-icon'
@@ -180,6 +212,11 @@ const Navbar = () => {
 						</Card>
 					)}
 				</div>
+				<LogoutConfirmationModal
+					isOpen={showModal}
+					onClose={() => setShowModal(false)}
+					onConfirm={handleLogout}
+				/>
 			</div>
 		</nav>
 	);

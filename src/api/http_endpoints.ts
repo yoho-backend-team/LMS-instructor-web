@@ -13,7 +13,7 @@ function generateendpoints() {
 				login: '/institutes/auth/teaching-staff/login',
 				forgot_password: '/institutes/auth/profile/forgot-password',
 				verify_otp: '/institutes/auth/teaching-staff/verify-otp',
-				change_password: '/institutes/auth/teaching-staff/change-password',
+				change_password: '/institutes/auth/profile/reset-password',
 				log_out: '/institutes/auth/teaching-staff/logout',
 			},
 			attendance: {
@@ -24,7 +24,7 @@ function generateendpoints() {
 				get: `/institutes/:instituteid/branches/:branchid/teaching-staff/courses`,
 			},
 			course: {
-				get: `/institutes/:instituteid/branches/:branchid/course/`,
+				get: `/institutes/:instituteid/branches/:branchid/course/:courseid`,
 				notes: {
 					create: `/institutes/course/note`,
 					update: `/institutes/course/note/update/`,
@@ -34,7 +34,7 @@ function generateendpoints() {
 					index: '/institutes/study-material/',
 				},
 				batches: {
-					get: `/institutes/:instituteid/branches/:branchid/courses/`,
+					get: `/institutes/:instituteid/branches/:branchid/courses/:courseid/batches/`,
 				},
 			},
 			class: {
@@ -58,6 +58,9 @@ function generateendpoints() {
 				create: '/institutes/staff/ticket',
 				get: '/institutes/staff/ticket/',
 			},
+			faq:{
+				get:'/institutes/faq/all'
+			},
 			reports: {
 				get: '/institutes/reports/users/teaching-staff',
 			},
@@ -68,6 +71,9 @@ function generateendpoints() {
 				get:'/institutes/auth/profile/me/',
 				put:'/institutes/auth/profile/me/',
 			}
+		},
+		notificationSubscription: {
+			post: '/notification/subscribe',
 		},
 	};
 }

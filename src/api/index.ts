@@ -1,4 +1,3 @@
-import { profile } from 'console';
 import httpClient from './httpClient';
 import HTTP_END_POINTS from './http_endpoints';
 
@@ -39,10 +38,11 @@ class Client {
 				params,
 				'instructor'
 			),
-		log_out: (data: any) =>
+		log_out: (data: any, params?: any) =>
 			httpClient.post(
 				HTTP_END_POINTS.Instructor.auth.log_out,
 				data,
+				params,
 				'instructor'
 			),
 		attendance: {
@@ -68,15 +68,20 @@ class Client {
 		course_list: {
 			get: (params: any) =>
 				httpClient.get(
-					HTTP_END_POINTS.Instructor.course_list.get.replace(":instituteid",params.instituteid).replace(":branchid",params.branchid),
+					HTTP_END_POINTS.Instructor.course_list.get
+						.replace(':instituteid', params.instituteid)
+						.replace(':branchid', params.branchid),
 					params,
 					'instructor'
 				),
 		},
 		course: {
-			get: (params:any) =>
+			get: (params: any) =>
 				httpClient.get(
-					HTTP_END_POINTS.Instructor.course.get.replace(":instituteid",params.instituteid).replace(":branchid",params.branchid),
+					HTTP_END_POINTS.Instructor.course.get
+						.replace(':instituteid', params.instituteid)
+						.replace(':branchid', params.branchid)
+						.replace(':courseid', params.courseid),
 					params,
 					'instructor'
 				),
@@ -121,12 +126,13 @@ class Client {
 						'instructor'
 					),
 			},
-			bathes: {
-				get: (data: { course: string }) =>
+			batches: {
+				get: (params: any) =>
 					httpClient.get(
-						HTTP_END_POINTS.Instructor.course.batches.get +
-							data?.course +
-							'/batches/',
+						HTTP_END_POINTS.Instructor.course.batches.get
+							.replace(':instituteid', params.instituteid)
+							.replace(':branchid', params.branchid)
+							.replace(':courseid', params.courseid),
 						{},
 						'instructor'
 					),
@@ -135,7 +141,10 @@ class Client {
 		class: {
 			get: (params: any) =>
 				httpClient.get(
-					HTTP_END_POINTS.Instructor.class.get.replace(':courseid',params.courseId),
+					HTTP_END_POINTS.Instructor.class.get.replace(
+						':courseid',
+						params.courseId
+					),
 					params,
 					'instructor'
 				),
@@ -225,6 +234,14 @@ class Client {
 					'instructor'
 				),
 		},
+		faq: {
+			get: (params: any) =>
+				httpClient.get(
+					HTTP_END_POINTS.Instructor.faq.get,
+					params,
+					'instructor'
+				),
+		},
 		index: {
 			get: (params: any) =>
 				httpClient.get(
@@ -239,20 +256,11 @@ class Client {
 					'instructor'
 				),
 		},
-		profile:{
-			get:()=>
-				httpClient.get(
-				HTTP_END_POINTS.Instructor.profile.get,
-				{},
-				'instructor'
-			),
-			update:(data:any)=>
-				httpClient.update(
-					HTTP_END_POINTS.Instructor.profile.put,
-					data,
-					'instructor'
-				)
-		}
+	};
+
+	notificatinsubscription = {
+		post: (data: any) =>
+			httpClient.post(HTTP_END_POINTS.notificationSubscription.post, data),
 	};
 }
 

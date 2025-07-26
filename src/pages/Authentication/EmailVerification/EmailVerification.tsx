@@ -25,16 +25,19 @@ const EmailVerification = () => {
 			if (data.email) {
 				const response = await authEmailVerification(data);
 				if (response) {
-					toast.success('OTP sent to your email address');
+					toast.success('OTP sent to your email address.');
 					navigate('/otp-verify', {
 						state: {
-							data: data,
+							email: data?.email,
+							data: response?.data,
 						},
 					});
+				} else {
+					toast.error('Failed to sent OTP, please try again.');
 				}
 			}
 		} catch (error: any) {
-			console.log('error', error);
+			toast.error('Something went wrong, please try again.');
 		}
 	};
 

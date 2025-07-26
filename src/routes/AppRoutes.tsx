@@ -3,7 +3,6 @@ import { useAuth } from '@/context/AuthContext/AuthContext';
 import MainLayout from '@/layout/MainLayout';
 import ActivityLogs from '@/pages/ActivityLogs/ActivityLogs';
 import Attendance from '@/pages/Attendance/Attendance';
-import ChangePassword from '@/pages/Authentication/ChangePassword/ChangePassword';
 import EmailVerification from '@/pages/Authentication/EmailVerification/EmailVerification';
 import Login from '@/pages/Authentication/Login/Login';
 import OtpVerification from '@/pages/Authentication/OtpVerification/OtpVerification';
@@ -23,11 +22,11 @@ import Placement from '@/pages/Placement/Placement';
 import Profile from '@/pages/Profile/Profile';
 import TicketId from '@/pages/TicketId/TicketId';
 import Tickets from '@/pages/Tickets/Tickets';
-
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Createtickets } from '@/components/Tickets/Createtickets';
 import Batches from '@/components/courses/Batches';
 import CourseNotes from '@/components/courses/coursenotes';
+import ChangePasswordPage from '@/pages/Authentication/ChangePassword/ChangePassword';
 
 const AppRoutes = () => {
 	const { isAuthenticated, isLoading } = useAuth();
@@ -38,7 +37,7 @@ const AppRoutes = () => {
 			<Route path='login' element={<Login />} />
 			<Route path='forgot-password' element={<EmailVerification />} />
 			<Route path='otp-verify' element={<OtpVerification />} />
-			<Route path='change-password' element={<ChangePassword />} />
+			<Route path='change-password' element={<ChangePasswordPage />} />
 			<Route path='*' element={<Navigate to='/login' />} />
 		</Routes>
 	);
@@ -48,7 +47,7 @@ const AppRoutes = () => {
 			<Route path='/' element={<MainLayout />}>
 				<Route index element={<Dashboard />} />
 				<Route path='classes' element={<Classes />} />
-				<Route path='class/:id' element={<ClassId />} />
+				<Route path='class/:classType/:id' element={<ClassId />} />
 				<Route path='courses' element={<Courses />} />
 				<Route path='course/:id' element={<CourseId />} />
 				<Route path='activity-logs' element={<ActivityLogs />} />
@@ -64,9 +63,8 @@ const AppRoutes = () => {
 				<Route path='attendance' element={<Attendance />} />
 				<Route path='placement' element={<Placement />} />
 				<Route path='payment' element={<Payment />} />
-				<Route path='about' element={<AboutCourse />} />
 				<Route path='note_materials' element={<CourseNotes />} />
-				<Route path='/about/:course' element={<AboutCourse />} />
+				<Route path='about/:course' element={<AboutCourse />} />
 				<Route path='notes_materials' element={<NotesMaterials />} />
 				<Route path='batches' element={<Batches />} />
 				<Route path='*' element={<Navigate to='/' />} />

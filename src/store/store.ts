@@ -7,19 +7,25 @@ import AttendanceSlice from '../features/attentance/reduces/AttendanceSlice';
 import PaymentSlice from '../features/Payment/reducers/PaymentSlice';
 import NotificationSlice from '../features/Notifications/reducers/NotificationSlice';
 import CourseSlice from '../features/Course/reducers/CourseSlice';
-import ProfileSlice from '../features/Profile/reducers/ProfileSlice'
+import communityReducer from '../features/community/redux/communitySlice';
+import ProfileSlice from '../features/Profile/reducers/ProfileSlice';
+import ClassIdSlice from '../features/classId/services/reducers/classidslice';
+import faqSlice from '../features/faq/reduces/faqSlice';
 
 const store = configureStore({
 	reducer: {
 		dashboard: DashBoardSlice,
 		TicketSlice: TicketSlice,
 		ClassSlice: ClassSlice,
+		ClassIdSlice: ClassIdSlice,
 		ActivityLogsSlice: ActivityLogsSlice,
 		AttendanceSlice: AttendanceSlice,
 		PaymentSlice: PaymentSlice,
 		NotificationSlice: NotificationSlice,
 		CourseSlice: CourseSlice,
-		ProfileSlice:ProfileSlice,
+		community: communityReducer,
+		ProfileSlice: ProfileSlice,
+		faqSlice: faqSlice,
 	},
 });
 

@@ -22,11 +22,7 @@ const MainCourse = () => {
               image={course?.image}
               modules={course?.coursemodules.length}
               duration={course?.duration}
-              onClick={() => navigate("/about/mernstack", {
-                state: {
-                  data: course
-                }
-              })}
+              onClick={() => navigate("/about/mernstack")}
             />
           </div>
         ))}
