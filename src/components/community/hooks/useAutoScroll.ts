@@ -1,4 +1,3 @@
-// src/components/community/CommunitySide/hooks/useAutoScroll.ts
 import { useEffect, useRef } from 'react';
 
 export function useAutoScroll<T extends HTMLElement>(deps: any[]) {
