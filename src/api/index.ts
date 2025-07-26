@@ -116,7 +116,7 @@ class Client {
 				update: (data: { materialId: string }) =>
 					httpClient.update(
 						HTTP_END_POINTS.Instructor.course.study_material.index +
-							data.materialId,
+						data.materialId,
 						data,
 						'instructor'
 					),
@@ -243,15 +243,15 @@ class Client {
 				),
 		},
 		index: {
-			get: (params: any) =>
+			get: (params?: any) =>
 				httpClient.get(
 					HTTP_END_POINTS.Instructor.index.get,
 					params,
 					'instructor'
 				),
-			update: (data: any) =>
+			update: (data?: any) =>
 				httpClient.update(
-					HTTP_END_POINTS.Instructor.index.get,
+					HTTP_END_POINTS.Instructor.index.put,
 					data,
 					'instructor'
 				),

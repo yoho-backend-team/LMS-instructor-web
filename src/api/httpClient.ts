@@ -2,8 +2,8 @@
 import { GetLocalStorage } from '@/utils/helper';
 import axios from 'axios';
 
-// const backendurl = 'http://192.168.1.14:3000/api'
-const backendurl = 'https://lms-node-backend-v1.onrender.com/api';
+const backendurl = 'http://localhost:3001/api'
+// const backendurl = 'https://lms-node-backend-v1.onrender.com/api';
 const Axios = axios.create({
 	baseURL: backendurl,
 	timeout: 5000000,
@@ -46,7 +46,7 @@ class Client {
 		return response.data;
 	}
 
-	async update(url: string, data?: any, params?: any, userType?: string) {
+	async update(url: string, data: any, params?: any, userType?: string) {
 		const response = await Axios.put(url, data, {
 			params,
 			headers: {

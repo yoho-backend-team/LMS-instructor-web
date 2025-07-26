@@ -58,18 +58,18 @@ function generateendpoints() {
 				create: '/institutes/staff/ticket',
 				get: '/institutes/staff/ticket/',
 			},
-			faq:{
-				get:'/institutes/faq/all'
+			faq: {
+				get: '/institutes/faq/all'
 			},
 			reports: {
 				get: '/institutes/reports/users/teaching-staff',
 			},
 			index: {
 				get: '/institutes/auth/profile/me/',
+				put: '/institutes/auth/profile/me/',
 			},
-			profile:{
-				get:'/institutes/auth/profile/me/',
-				put:'/institutes/auth/profile/me/',
+			profile: {
+				get: '/institutes/auth/profile/me/',
 			}
 		},
 		notificationSubscription: {
