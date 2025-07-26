@@ -133,7 +133,7 @@ const MessageList: React.FC<Props> = ({
                                             </span>
                                         ) : null}
 
-                                        <p>{message?.message || message.content}</p>
+                                        <p className='max-w-xs break-words'>{message?.message || message.content}</p>
 
                                         <p className="text-[10px] text-gray-500 text-right">
                                             {formatMessageDate(message?.timestamp || message.time)}
