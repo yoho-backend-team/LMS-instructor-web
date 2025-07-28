@@ -24,12 +24,22 @@ export const Payment = () => {
 		selectedDate.getFullYear()
 	);
 	const years = Array.from({ length: 36 }, (_, i) => 2000 + i);
-	const status = ['All', 'Paid', 'Pending'];
+	const status = ['All', 'Completed', 'Pending'];
 	const [showSelect, setShowSelect] = useState(false);
 	const [selectedStatus, setSelectedStatus] = useState<string>();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [activeTab, setActiveTab] = useState('staff');
 	const [isEditing, setIsEditing] = useState(false);
+
+	const dispatch = useDispatch<any>();
+	const SalaryDetails = useSelector(selectPayment);
+
+	useEffect(() => {
+		dispatch(getStudentPaymentThunk({}));
+	}, [dispatch]);
+
+	const staffDetail = SalaryDetails[0]?.staff;
+	const bankDetail = SalaryDetails[0]?.staff?.Bank_Details;
 
 	const [staffDetails, setStaffDetails] = useState({
 		name: 'John Doe',
@@ -194,7 +204,7 @@ export const Payment = () => {
 			</div>
 
 			<div className='mt-8 custom-inset-shadow'>
-				<PaymentDetails />
+				<PaymentDetails selectedStatus={selectedStatus ?? 'All'} />
 			</div>
 
 			{/* Modal */}
@@ -245,7 +255,7 @@ export const Payment = () => {
 											<input
 												type='text'
 												name='name'
-												value={staffDetails.name}
+												value={staffDetail?.username}
 												onChange={handleStaffDetailChange}
 												disabled={!isEditing}
 												className='p-4 rounded-lg mb-2 w-full'
@@ -267,7 +277,7 @@ export const Payment = () => {
 											<input
 												type='text'
 												name='designation'
-												value={staffDetails.designation}
+												value={staffDetail?.designation}
 												onChange={handleStaffDetailChange}
 												disabled={!isEditing}
 												className='p-4 rounded-lg mb-2 w-full'
@@ -289,7 +299,7 @@ export const Payment = () => {
 											<input
 												type='text'
 												name='staffId'
-												value={staffDetails.staffId}
+												value={staffDetail?.staffId}
 												onChange={handleStaffDetailChange}
 												disabled={!isEditing}
 												className='p-4 rounded-lg mb-2 w-full'
@@ -311,7 +321,10 @@ export const Payment = () => {
 											<input
 												type='text'
 												name='address'
-												value={staffDetails.address}
+												value={
+													staffDetail?.institute_id?.contact_info?.address
+														?.address1
+												}
 												onChange={handleStaffDetailChange}
 												disabled={!isEditing}
 												className='p-4 rounded-lg mb-2 w-full'
@@ -324,7 +337,7 @@ export const Payment = () => {
 											/>
 										</div>
 									</div>
-									<div className='flex justify-end space-x-4 mt-4'>
+									{/* <div className='flex justify-end space-x-4 mt-4'>
 										{isEditing ? (
 											<>
 												<Button
@@ -348,7 +361,7 @@ export const Payment = () => {
 												Edit
 											</Button>
 										)}
-									</div>
+									</div> */}
 								</CustomTabContent>
 
 								{/* Bank Details Tab */}
@@ -363,7 +376,7 @@ export const Payment = () => {
 											</label>
 											<input
 												type='text'
-												value={bankDetails.accountNumber}
+												value={bankDetail?.Account_Number}
 												disabled
 												className='p-4 rounded-lg mb-2 w-full'
 												style={{
@@ -383,7 +396,7 @@ export const Payment = () => {
 											</label>
 											<input
 												type='text'
-												value={bankDetails.bankBranch}
+												value={bankDetail?.Branch}
 												disabled
 												className='p-4 rounded-lg mb-2 w-full'
 												style={{
@@ -403,7 +416,7 @@ export const Payment = () => {
 											</label>
 											<input
 												type='text'
-												value={bankDetails.ifscCode}
+												value={bankDetail?.IFSC}
 												disabled
 												className='p-4 rounded-lg mb-2 w-full'
 												style={{
@@ -418,17 +431,17 @@ export const Payment = () => {
 									<div className='flex justify-end space-x-4 mt-6'>
 										<Button
 											onClick={() => setIsModalOpen(false)}
-											disabled
+											// disabled
 											className='cursor-pointer bg-gradient-to-r from-red-500 to-red-600 text-white  shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_red_inset,-4px_-8px_10px_0px_#B20_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white'
 										>
-											Cancel
+											Request Edit
 										</Button>
-										<Button
+										{/* <Button
 											disabled
 											className='cursor-pointer bg-gradient-to-r from-green-400 to-green-500 text-white hover:from-green-500 hover:to-green-600 shadow-[0px_3px_4px_0px_rgba(255,255,255,0.75)_inset,3px_-3px_3px_0px_rgba(255,255,255,0.25)_inset,-4px_8px_23px_0px_#3ABE65_inset,-8px_-8px_12px_0px_#3ABE65_inset,2px_3px_3px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-1px_-1px_6px_0px_rgba(255,255,255,0.75),-1px_-1px_6px_1px_rgba(255,255,255,0.25)]'
 										>
 											Save
-										</Button>
+										</Button> */}
 									</div>
 								</CustomTabContent>
 
@@ -536,7 +549,7 @@ export const Payment = () => {
 											/>
 										</div>
 									</div>
-									<div className='flex justify-end space-x-4 mt-6'>
+									{/* <div className='flex justify-end space-x-4 mt-6'>
 										<Button
 											onClick={() => setIsModalOpen(false)}
 											disabled
@@ -550,7 +563,7 @@ export const Payment = () => {
 										>
 											Save
 										</Button>
-									</div>
+									</div> */}
 								</CustomTabContent>
 							</CustomTabs>
 						</div>

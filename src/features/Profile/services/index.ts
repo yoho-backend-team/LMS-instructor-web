@@ -9,7 +9,7 @@ export const getStudentProfile = async () => {
 
 
 export const updateStudentProfile = async (data: any) => {
-    const response = await Client.Instructor.index.update(data);
+    const response = await Client.Instructor.index.update(data)
     if (response) {
         return response;
     }

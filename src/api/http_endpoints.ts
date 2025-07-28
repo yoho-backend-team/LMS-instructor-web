@@ -73,12 +73,15 @@ function generateendpoints() {
 			faq: {
 				get: '/institutes/faq/all',
 			},
+			help: {
+			get: `/helpcenter`,
+		},
 			reports: {
 				get: '/institutes/reports/users/teaching-staff',
 			},
 			index: {
-				get: '/institutes/auth/profile/me/',
-				put: '/institutes/auth/profile/me/',
+				get: '/institutes/auth/profile/me',
+				put: '/institutes/auth/profile/me',
 			},
 			profile: {
 				get: '/institutes/auth/profile/me/',

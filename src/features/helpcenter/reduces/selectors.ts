@@ -1,0 +1,1 @@
+export const selectHelpCenter= (state:any)=>state.helpSlice.data;

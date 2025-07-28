@@ -4,6 +4,7 @@ import { COLORS, FONTS } from '@/constants/uiConstants';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectProfile } from '@/features/Profile/reducers/selectors';
 import { getStudentProfileThunk } from '@/features/Profile/reducers/thunks';
+import InstituteInformation from './InstituteInformation';
 
 interface PersonalInfo {
 	full_name: string;
@@ -193,6 +194,7 @@ const PersonalInformation: React.FC<PersonalInformationProps> = ({
 		},
 	];
 
+
 	return (
 		<div className='mb-8'>
 			<h2
@@ -274,6 +276,12 @@ const PersonalInformation: React.FC<PersonalInformationProps> = ({
 					</div>
 				))}
 			</div>
+
+			<InstituteInformation
+				data={personalInfo?.userDetail}
+				onDataChange={onDataChange}
+				isEditing={isEditing}
+			/>
 		</div>
 	);
 };
