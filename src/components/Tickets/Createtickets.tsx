@@ -157,7 +157,7 @@ export const Createtickets = () => {
 		}
 	};
 
-	return (
+	return ( 
 		<div className='p-6'>
 			<div className='flex items-center gap-2 mb-6'>
 				<img
@@ -166,7 +166,7 @@ export const Createtickets = () => {
 					className='cursor-pointer mt-2'
 					onClick={() => navigate('/tickets')}
 				/>
-				<h1 className='text-2xl font-semibold' style={{ ...FONTS.heading_01 }}>
+			  	<h1 className='text-2xl font-semibold' style={{ ...FONTS.heading_01 }}>
 					Create Ticket For Your Problem
 				</h1>
 			</div>
@@ -182,7 +182,6 @@ export const Createtickets = () => {
 					{ticketCreationError}
 				</div>
 			)}
-
 			<div className='flex flex-col md:flex-row gap-6'>
 				<Card className='w-full md:w-1/2 bg-[#ebeff3] shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)]'>
 					<CardHeader>
@@ -228,7 +227,7 @@ export const Createtickets = () => {
 								</SelectItem>
 							</SelectContent>
 						</Select>
-						{errors.problem && (
+			 			{errors.problem && (
 							<p className='text-red-500 text-sm'>{errors.problem}</p>
 						)}
 

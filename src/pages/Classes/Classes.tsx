@@ -82,7 +82,7 @@ const Classes = () => {
 									className='text-white'
 								>
 									ONLINE
-								</span>
+								</span> 
 							) : (
 								<span
 									style={{ fontFamily: FONTS.heading_01.fontFamily }}
