@@ -22,6 +22,7 @@ const Navbar = () => {
 	const dashData = useSelector(selectDashBoard);
 	const [showModal, setShowModal] = useState(false);
 	const dispatch = useDispatch<AppDispatch>();
+	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
 		dispatch(getDashBoardReports());
@@ -68,10 +69,12 @@ const Navbar = () => {
 
 	const handleLogout = async () => {
 		try {
+			setIsLoading(true);
 			const response = await authInstructorLogout({});
 			if (response) {
 				setshowProfileSection(false);
 				logout();
+				setIsLoading(false);
 				toast.success('Logout successfully!');
 				navigate('/login');
 				setShowModal(false);
@@ -80,6 +83,8 @@ const Navbar = () => {
 			}
 		} catch (error) {
 			toast.error('Something went wrong, please try again.');
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -216,6 +221,7 @@ const Navbar = () => {
 				</div>
 				<LogoutConfirmationModal
 					isOpen={showModal}
+					isLoading={isLoading}
 					onClose={() => setShowModal(false)}
 					onConfirm={handleLogout}
 				/>

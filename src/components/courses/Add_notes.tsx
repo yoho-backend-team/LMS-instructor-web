@@ -43,18 +43,12 @@ const FileUploadDesign = ({
 	const reports = useSelector(selectDashBoard);
 	const courseSelectData = useSelector(selectCoursedata);
 	const [isLoading, setIsLoading] = useState(false);
-	const courseData = useSelector(selectCourse);
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const params = {
-					instituteid: reports?.institute?.uuid,
-					branchid: reports?.branch?.uuid,
-					courseid: courseData[0]?._id,
-				};
 				await dispatch(getDashBoardReports());
-				await dispatch(getInstructorcourseData(params));
+				await dispatch(getInstructorcourseData());
 			} catch (error) {
 				console.log(error);
 			}
