@@ -46,6 +46,7 @@ const FileUploadDesign = ({
 		const fetchData = async () => {
 			try {
 				await dispatch(getDashBoardReports());
+				await dispatch(getInstructorcourseData());
 			} catch (error) {
 				console.log(error);
 			}

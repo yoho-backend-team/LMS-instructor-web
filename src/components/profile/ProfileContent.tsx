@@ -37,10 +37,10 @@ interface ProfileContentProps {
   isSaving?: boolean;
 }
 
-const ProfileContent: React.FC<ProfileContentProps> = ({ 
-  personalInfo, 
-  instituteInfo, 
-  onPersonalInfoChange, 
+const ProfileContent: React.FC<ProfileContentProps> = ({
+  personalInfo,
+  instituteInfo,
+  onPersonalInfoChange,
   onInstituteInfoChange,
   isEditing = false,
   onSave,
@@ -62,12 +62,12 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
         return (
           <div className="flex-1 w-full px-2 sm:px-0">
             <div className="rounded-lg shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] flex flex-col"
-            style={{ 
-              width: '100%',
-              marginTop: '1rem',
-              height: '75vh',
-              fontFamily: FONTS.para_01.fontFamily
-             }}>
+              style={{
+                width: '100%',
+                marginTop: '1rem',
+                height: '75vh',
+                fontFamily: FONTS.para_01.fontFamily
+              }}>
               {/* Header with Save/Cancel buttons */}
               {isEditing && (
                 <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 p-3 sm:p-4 border-b border-gray-200 flex-shrink-0">
@@ -102,18 +102,14 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
                   </button>
                 </div>
               )}
-              
+
               <div className="p-4 sm:p-6 overflow-y-auto flex-1 scrollbar-hide">
-                <PersonalInformation 
-                  data={personalInfo} 
+                <PersonalInformation
+                  data={personalInfo}
                   onDataChange={onPersonalInfoChange}
                   isEditing={isEditing}
                 />
-                <InstituteInformation 
-                  data={instituteInfo} 
-                  onDataChange={onInstituteInfoChange}
-                  isEditing={isEditing}
-                />
+
               </div>
             </div>
           </div>

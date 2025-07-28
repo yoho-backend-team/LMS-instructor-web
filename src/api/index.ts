@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import httpClient from './httpClient';
 import HTTP_END_POINTS from './http_endpoints';
 
@@ -245,6 +246,10 @@ class Client {
 					'instructor'
 				),
 		},
+		help:{
+			get:(params:any)=>
+				 httpClient.get(HTTP_END_POINTS.Instructor.help.get, params,'instructor')
+		},
 		index: {
 			get: (params?: any) =>
 				httpClient.get(
@@ -252,10 +257,11 @@ class Client {
 					params,
 					'instructor'
 				),
-			update: (data?: any) =>
+			update: (data: any) =>
 				httpClient.update(
-					HTTP_END_POINTS.Instructor.index.put,
+					HTTP_END_POINTS.Instructor.profile.put,
 					data,
+					'',
 					'instructor'
 				),
 		},

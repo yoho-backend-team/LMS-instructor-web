@@ -254,7 +254,7 @@ const IDCard: React.FC<IDCardProps> = ({ data }) => {
                   Blood Group
                 </label>
                 <div className="rounded-lg px-4 py-3 text-sm leading-relaxed shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] min-h-[44px] flex items-center" style={{ backgroundColor: COLORS.bg_Colour, fontFamily: FONTS.para_01.fontFamily, color: COLORS.text_desc }}>
-                  {idCardData.bloodGroup || 'Not provided'}
+                  {idCardData.bloodGroup}
                 </div>
               </div>
 
@@ -274,7 +274,7 @@ const IDCard: React.FC<IDCardProps> = ({ data }) => {
                   Emergency Contact
                 </label>
                 <div className="rounded-lg px-4 py-3 text-sm leading-relaxed shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] min-h-[44px] flex items-center" style={{ backgroundColor: COLORS.bg_Colour, fontFamily: FONTS.para_01.fontFamily, color: COLORS.text_desc }}>
-                  {idCardData.emergencyContact || 'Not provided'}
+                  {idCardData.emergencyContact}
                 </div>
               </div>
             </div>

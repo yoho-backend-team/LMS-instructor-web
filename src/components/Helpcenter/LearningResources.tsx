@@ -2,9 +2,18 @@ import React from 'react';
 import { ArrowLeft, Play } from 'lucide-react';
 import { FONTS, COLORS } from '@/constants/uiConstants';
 import type { LearningResourcesProps } from './types.ts';
-import learningVideo from '../../assets/helpcenters/video/learning.mp4';
+// import learningVideo from '../../assets/helpcenters/video/learning.mp4';
 
-const LearningResources: React.FC<LearningResourcesProps> = ({ onBack }) => {
+const LearningResources: React.FC<LearningResourcesProps> = ({ onBack, data }) => {
+
+
+  function extractYouTubeId(url: string) {
+    const regExp = /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^?&]+)/;
+    const match = url.match(regExp);
+    return match?.[1] || '';
+  }
+
+
   return (
     <div className="min-h-screen  py-4 sm:py-8">
       <div className="px-4 sm:px-6 max-w-7xl mx-auto">
@@ -31,19 +40,19 @@ const LearningResources: React.FC<LearningResourcesProps> = ({ onBack }) => {
             >
               <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: COLORS.text_desc }} />
             </div>
-            <h1 
+            <h1
               className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl"
               style={{
                 ...FONTS.heading_01,
                 color: COLORS.text_title,
               }}
             >
-              Learning Resources
+              {data?.title}
             </h1>
           </div>
 
           <div className="mb-4 sm:mb-6">
-            <h2 
+            {/* <h2 
               className="mb-3 text-lg sm:text-xl lg:text-2xl"
               style={{
                 ...FONTS.heading_02,
@@ -51,15 +60,15 @@ const LearningResources: React.FC<LearningResourcesProps> = ({ onBack }) => {
               }}
             >
               Additional Information
-            </h2>
-            <p 
+            </h2> */}
+            <p
               className="leading-relaxed text-sm sm:text-base"
               style={{
                 ...FONTS.para_02,
                 color: COLORS.text_desc,
               }}
             >
-              This section contains some dummy content. You can replace this with any relevant information you want to display above the video link. You can replace this with any relevant information you want to display above the video link.
+              {data?.description}
             </p>
           </div>
         </div>
@@ -75,7 +84,7 @@ const LearningResources: React.FC<LearningResourcesProps> = ({ onBack }) => {
           }}
         >
           <div className="relative">
-            <div 
+            <div
               className="relative rounded-lg overflow-hidden aspect-video w-full"
               style={{
                 boxShadow: `
@@ -85,17 +94,31 @@ const LearningResources: React.FC<LearningResourcesProps> = ({ onBack }) => {
               }}
             >
               {/* Local Video */}
-              <video
-                src={learningVideo}
-                title="Educational Video"
-                className="w-full h-full object-cover"
-                controls
-                preload="metadata"
-              />
-              
+              {data?.video?.includes('youtube') || data?.video?.includes('youtu.be') ? (
+                <iframe
+                  width="100%"
+                  height="100%"
+                  src={`https://www.youtube.com/embed/${extractYouTubeId(data.video)}`}
+                  title="Educational Video"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="w-full h-full"
+                />
+              ) : (
+                <video
+                  src={data?.video}
+                  title="Educational Video"
+                  className="w-full h-full object-cover"
+                  controls
+                  preload="metadata"
+                />
+              )}
+
+
               {/* Play Button Overlay - Optional for styling */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 hover:opacity-100 transition-opacity duration-200">
-                <div 
+                <div
                   className="rounded-full p-3 sm:p-4 bg-[#ebeff3]"
                   style={{
                     boxShadow: `
@@ -104,10 +127,10 @@ const LearningResources: React.FC<LearningResourcesProps> = ({ onBack }) => {
                     `,
                   }}
                 >
-                  <Play 
-                    className="w-6 h-6 sm:w-8 sm:h-8 ml-1" 
-                    style={{ color: COLORS.light_blue }} 
-                    fill={COLORS.light_blue} 
+                  <Play
+                    className="w-6 h-6 sm:w-8 sm:h-8 ml-1"
+                    style={{ color: COLORS.light_blue }}
+                    fill={COLORS.light_blue}
                   />
                 </div>
               </div>
