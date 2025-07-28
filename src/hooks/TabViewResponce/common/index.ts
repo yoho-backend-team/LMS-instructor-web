@@ -6,16 +6,16 @@ export const getInstructorDetails = () => {
 };
 
 export const getInstructorBranchDetails = () => {
-	const user: any = getInstructorDetails();
+	const user: any = GetLocalStorage('instructorDetails');
 	return user?.branch_id;
 };
 
 export const getInstructorInstituteDetails = () => {
-	const user: any = getInstructorDetails();
+	const user: any = GetLocalStorage('instructorDetails');
 	return user?.institute_id;
 };
 
 export const getInstructorCourseId = () => {
-	const user: any = getInstructorDetails();
+	const user: any = GetLocalStorage('instructorDetails');
 	return user?.userDetail?.course[0];
 };

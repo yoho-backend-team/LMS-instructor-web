@@ -12,8 +12,6 @@ const MainCourse = () => {
 	const coursedata = useSelector(selectCourse);
 	const dispatch = useDispatch<AppDispatch>();
 
-	console.log(coursedata, 'course data');
-
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
