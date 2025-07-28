@@ -137,8 +137,6 @@ export const Attendance = () => {
 		}
 	}, [dispatch, selectedDate]);
 
-	console.log(attendancedata, 'attendance data');
-
 	return (
 		<div className='p-4'>
 			{/* Header */}
