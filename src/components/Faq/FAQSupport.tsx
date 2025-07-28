@@ -32,7 +32,7 @@ const FAQSupport: React.FC<FAQSupportProps> = ({ onContactSupport }) => {
       </p>
       <button
         onClick={onContactSupport}
-        className="px-8 py-3 rounded-md font-medium transition-all duration-200 hover:opacity-90 active:opacity-80"
+        className="px-8  cursor-pointer py-3 rounded-md font-medium transition-all duration-200 hover:opacity-90 active:opacity-80"
         style={{
           backgroundColor: COLORS.bg_Colour,
           color: COLORS.text_title,

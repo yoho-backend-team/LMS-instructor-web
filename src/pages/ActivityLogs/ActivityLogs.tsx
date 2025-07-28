@@ -191,7 +191,7 @@ const ActivityLogs = () => {
                 <div>
                   <p style={{ ...FONTS.heading_07 }}>From</p>
                   <button
-                    className="p-2 rounded-lg"
+                    className=" cursor-pointer p-2 rounded-lg"
                     onClick={() => {
                       setShowFromCalendar(!showFromCalendar);
                       setShowToCalendar(false);
@@ -221,7 +221,7 @@ const ActivityLogs = () => {
                 <div>
                   <p style={{ ...FONTS.heading_07 }}>To</p>
                   <button
-                    className="p-2 rounded-lg"
+                    className="p-2 cursor-pointer rounded-lg"
                     onClick={() => {
                       setShowToCalendar(!showToCalendar);
                       setShowFromCalendar(false);

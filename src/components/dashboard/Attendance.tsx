@@ -78,7 +78,7 @@ const Attendance: React.FC = () => {
 
                         <Button style={{ ...FONTS.heading_06 }}
                             onClick={() => navigate('/attendance')}
-                            className=" btnshadow btnhovershadow hover:!text-white bg-gray-100 flex w-[104px] h-[42px] items-center justify-center gap-2.5 px-3 py-2 relative rounded-lg " >
+                            className="cursor-pointer btnshadow btnhovershadow hover:!text-white bg-gray-100 flex w-[104px] h-[42px] items-center justify-center gap-2.5 px-3 py-2 relative rounded-lg " >
                             <span className="">
                                 Over All
                             </span>

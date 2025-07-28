@@ -21,11 +21,13 @@ const ChangePasswordPage = () => {
 		formState: { errors },
 	} = useForm<ChangePassword>({});
 	const [showPassword, setShowPassword] = useState(false);
+	const [isLoading, setIsLoading] = useState(false); // ✅ Missing piece added
 	const navigate = useNavigate();
 	const location = useLocation();
 	const { email } = location.state;
 
 	const onSubmit = async (data: ChangePassword) => {
+		setIsLoading(true);
 		try {
 			if (data.newPassword === data.confirmPassword) {
 				const params_data = {
@@ -45,6 +47,8 @@ const ChangePasswordPage = () => {
 			}
 		} catch (error: any) {
 			toast.error('Something went wrong, please try again.');
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -55,9 +59,9 @@ const ChangePasswordPage = () => {
 					className='bg-[#ebeff3] w-full h-full rounded-md flex px-4 justify-center cursor-pointer'
 					style={{
 						boxShadow: `
-					  rgba(255, 255, 255, 0.7) -4px -4px 4px,
-					  rgba(189, 194, 199, 0.75) 5px 5px 4px
-					`,
+							rgba(255, 255, 255, 0.7) -4px -4px 4px,
+							rgba(189, 194, 199, 0.75) 5px 5px 4px
+						`,
 					}}
 				>
 					<div className='flex flex-col items-center'>
@@ -65,9 +69,9 @@ const ChangePasswordPage = () => {
 							className='bg-[#ebeff3] w-[50px] h-[50px] rounded-full flex items-center justify-center cursor-pointer'
 							style={{
 								boxShadow: `
-					  rgba(255, 255, 255, 0.7) -4px -4px 4px,
-					  rgba(189, 194, 199, 0.75) 5px 5px 4px
-					`,
+									rgba(255, 255, 255, 0.7) -4px -4px 4px,
+									rgba(189, 194, 199, 0.75) 5px 5px 4px
+								`,
 							}}
 						>
 							<img src={Logo} alt='logo' style={{ width: 20, height: 20 }} />
@@ -108,8 +112,7 @@ const ChangePasswordPage = () => {
 								)}
 							</div>
 
-							{/* Confirm Password  */}
-
+							{/* Confirm Password */}
 							<div className='flex flex-col space-y-2'>
 								<label style={{ ...FONTS.heading_04 }}>Confirm Password</label>
 								<div className='relative'>
@@ -139,14 +142,21 @@ const ChangePasswordPage = () => {
 								)}
 							</div>
 
-							{/* Submit */}
+							{/* Submit Button */}
 							<button
 								type='submit'
-								className={`w-full my-6 mt-8 bg-gradient-to-r from-[#7B00FF] to-[#B200FF] py-2 rounded-md transition cursor-pointer`}
+								disabled={isLoading}
+								className={`w-full my-6 mt-8 bg-gradient-to-r from-[#7B00FF] to-[#B200FF] py-2 rounded-md flex justify-center items-center gap-2 transition ${
+									isLoading ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'
+								}`}
 								style={{ ...FONTS.heading_04, color: COLORS.white }}
 							>
-								Submit
+								{isLoading && (
+									<div className='w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin'></div>
+								)}
+								{isLoading ? 'Submitting...' : 'Submit'}
 							</button>
+
 							<div
 								className='flex items-center gap-2 justify-center'
 								onClick={() => navigate('/login')}
@@ -160,14 +170,15 @@ const ChangePasswordPage = () => {
 					</div>
 				</Card>
 			</div>
+
 			<div className='w-1/2 h-full'>
 				<Card
 					className='bg-gradient-to-l from-[#B200FF] to-[#7B00FF] w-full h-full rounded-md flex items-center justify-center cursor-pointer'
 					style={{
 						boxShadow: `
-					  rgba(255, 255, 255, 0.7) -4px -4px 4px,
-					  rgba(189, 194, 199, 0.75) 5px 5px 4px
-					`,
+							rgba(255, 255, 255, 0.7) -4px -4px 4px,
+							rgba(189, 194, 199, 0.75) 5px 5px 4px
+						`,
 					}}
 				></Card>
 			</div>

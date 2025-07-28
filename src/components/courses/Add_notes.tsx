@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import fileimg from '../../assets/courses icons/File.jpg';
-import { COLORS, FONTS } from '@/constants/uiConstants';
+import {  FONTS } from '@/constants/uiConstants';
 import { toast } from 'react-toastify';
 import { uploadticketfile } from '@/features/Tickets/services/Ticket';
 import {
@@ -318,13 +318,19 @@ const FileUploadDesign = ({
 					Cancel
 				</button>
 				<button
-					className='px-4 py-2 bg-gradient-to-r from-[#7B00FF] to-[#B200FF] rounded-md btnshadow cursor-pointer'
-					style={{ ...FONTS.heading_07, color: COLORS.white }}
+					className={`px-4 py-2 bg-gradient-to-r from-[#7B00FF] to-[#B200FF] rounded-md btnshadow flex items-center justify-center gap-2 !text-white transition-all duration-200 ${
+						isLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+					}`}
+					style={{ ...FONTS.heading_07 }}
 					onClick={handleUploadNotes}
 					disabled={isLoading}
-				>
+					>
+					{isLoading && (
+						<div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+					)}
 					{isLoading ? 'Uploading...' : 'Upload Note'}
-				</button>
+					</button>
+
 			</div>
 		</div>
 	);

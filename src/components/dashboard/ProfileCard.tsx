@@ -63,11 +63,18 @@ const ProfileCard: React.FC = () => {
                         <p style={{ ...FONTS.para_01 }}>Trainer ID: {StudentData?.id}</p>
                     </div>
                 </div>
-                <button type="button"
-                    onClick={() => navigate('/profile')}
-                    style={{ fontFamily: FONTS.heading_06.fontFamily, fontWeight: FONTS.heading_06.fontWeight }}
-                    className='items-center w-[104px] h-[48px] rounded-xl btnshadow text-[#716F6F] text-[14px] hover:text-white btnhovershadow'
-                >View Profile</button>
+                    <button
+                        type="button"
+                        onClick={() => navigate('/profile')}
+                        style={{
+                            fontFamily: FONTS.heading_06.fontFamily,
+                            fontWeight: FONTS.heading_06.fontWeight,
+                        }}
+                        className="cursor-pointer items-center w-[104px] h-[48px] rounded-xl btnshadow text-[#716F6F] text-[14px] hover:text-white btnhovershadow"
+                        >
+                        View Profile
+                   </button>
+
             </div>
             <div className="grid grid-cols-3 gap-5">
                 {
