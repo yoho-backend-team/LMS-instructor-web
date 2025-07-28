@@ -75,6 +75,8 @@ const Navbar = () => {
 				toast.success('Logout successfully!');
 				navigate('/login');
 				setShowModal(false);
+			} else {
+				toast.error('Failed to logout, please try again.');
 			}
 		} catch (error) {
 			toast.error('Something went wrong, please try again.');
