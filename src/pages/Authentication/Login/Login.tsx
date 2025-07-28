@@ -30,9 +30,19 @@ const Login = () => {
 			if (data.email && data.password) {
 				const response = await authInstructorLogin(data);
 				if (response) {
-					login(response?.data);
-					toast.success('Login successfully');
-					navigate('/');
+					if (response?.data?.token) {
+						toast.error('Session expired, please verify the otp.');
+						navigate('/otp-verify', {
+							state: {
+								email: data?.email,
+								data: response?.data,
+							},
+						});
+					} else {
+						login(response?.data);
+						toast.success('Login successfully');
+						navigate('/');
+					}
 				} else {
 					toast.error('Invalid credentials, please try again.');
 				}
