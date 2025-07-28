@@ -59,25 +59,6 @@ const ProfileInformation: React.FC = () => {
   const handlePersonalInfoChange = async (data: any) => {
     setPersonalInfo(data);
 
-    const thunk = {
-      contact_info: {
-        address1: data?.address1,
-        address2: data?.address2,
-        city: data?.city,
-        state: data?.state,
-        pincode: data?.pincode,
-        phone_number: data?.phone_number,
-        alternate_phone_number: data?.alternate_phone_number,
-      },
-      roll_no: data?.roll_no,
-      qualification: data?.qualification,
-      gender: data?.gender,
-      email: data?.email,
-      dob: data?.dob,
-      full_name: data?.full_name,
-    };
-    dispatch(UpdateInstructorThunk(thunk));
-
     if (data.name !== profileData.name) {
       setProfileData((prev) => ({ ...prev, name: data.name }));
     }
@@ -157,7 +138,7 @@ const ProfileInformation: React.FC = () => {
     setProfileData((prev) => ({
       ...prev,
       profileImage: originalProfileImage,
-      name: originalPersonalInfo.name,
+      name: originalPersonalInfo?.name,
     }));
 
     setIsEditing(false);
@@ -201,7 +182,7 @@ const ProfileInformation: React.FC = () => {
       {/* Confirmation Dialog */}
       <ConfirmationDialog
         isOpen={showCancelDialog}
-        onClose={() => setShowCancelDialog(false)}
+        onClose={() => {setShowCancelDialog(false), dispatch(getStudentProfileThunk());}} 
         onConfirm={confirmCancel}
         title='Discard Changes'
         description='You have unsaved changes. Are you sure you want to discard them?'

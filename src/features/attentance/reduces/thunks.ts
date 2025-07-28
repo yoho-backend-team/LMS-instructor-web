@@ -6,6 +6,7 @@ export const getInstructorAttendance =
 		try {
 			const response = await getattendancedata(params);
 			dispatch(getattendancedetails(response));
+			return response
 		} catch (error) {
 			console.log(error);
 		}
