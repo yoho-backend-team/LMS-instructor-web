@@ -24,26 +24,22 @@ export const Payment = () => {
 		selectedDate.getFullYear()
 	);
 	const years = Array.from({ length: 36 }, (_, i) => 2000 + i);
-	const status = ['All', 'Paid', 'Pending'];
+	const status = ['All', 'Completed', 'Pending'];
 	const [showSelect, setShowSelect] = useState(false);
 	const [selectedStatus, setSelectedStatus] = useState<string>();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [activeTab, setActiveTab] = useState('staff');
 	const [isEditing, setIsEditing] = useState(false);
 
+	const dispatch = useDispatch<any>();
+	const SalaryDetails = useSelector(selectPayment);
 
-	const dispatch = useDispatch<any>()
-		const SalaryDetails = useSelector(selectPayment)
-	
-		useEffect(() => {
-			dispatch(getStudentPaymentThunk({}));
-			console.log(SalaryDetails, "Payment Details")
-		}, [dispatch]);
+	useEffect(() => {
+		dispatch(getStudentPaymentThunk({}));
+	}, [dispatch]);
 
-
-		const staffDetail = SalaryDetails[0]?.staff
-		const bankDetail = SalaryDetails[0]?.staff?.Bank_Details
-
+	const staffDetail = SalaryDetails[0]?.staff;
+	const bankDetail = SalaryDetails[0]?.staff?.Bank_Details;
 
 	const [staffDetails, setStaffDetails] = useState({
 		name: 'John Doe',
@@ -208,7 +204,7 @@ export const Payment = () => {
 			</div>
 
 			<div className='mt-8 custom-inset-shadow'>
-				<PaymentDetails />
+				<PaymentDetails selectedStatus={selectedStatus ?? 'All'} />
 			</div>
 
 			{/* Modal */}
@@ -325,7 +321,10 @@ export const Payment = () => {
 											<input
 												type='text'
 												name='address'
-												value={staffDetail?.institute_id?.contact_info?.address?.address1}
+												value={
+													staffDetail?.institute_id?.contact_info?.address
+														?.address1
+												}
 												onChange={handleStaffDetailChange}
 												disabled={!isEditing}
 												className='p-4 rounded-lg mb-2 w-full'
