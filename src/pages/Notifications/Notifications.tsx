@@ -23,6 +23,7 @@ import {
 	updateNotificationStatus,
 } from '@/features/Notifications/services';
 import updatedimg from '../../assets/dashboard/notification.png';
+import { toast } from 'react-toastify';
 
 interface Notification {
 	id: string;
@@ -52,7 +53,6 @@ const Notifications = () => {
 				uuid: notification?.uuid,
 				status: 'read',
 			});
-			console.log(response, 'Response from update notification status');
 			if (response) {
 				dispatch(getAllNotificationsThunk({}));
 			}
@@ -66,17 +66,17 @@ const Notifications = () => {
 			const response = await deleteNotification({
 				uuid: notification?.uuid,
 			});
-			console.log(response, 'Response from delete notification');
 			setSelectedNotification(null);
 			if (response) {
 				dispatch(getAllNotificationsThunk({}));
+				toast.success('Notification deleted');
 			}
 		} catch (error) {
 			console.error('Error deleting notification:', error);
 		}
 	};
 
-	const filteredNotifications = Notifications.filter((notification: any) =>
+	const filteredNotifications = Notifications?.filter((notification: any) =>
 		filter === 'all' ? true : notification.status === filter
 	).filter((notification: any) =>
 		[notification.title, notification.description, notification.date]
@@ -85,8 +85,8 @@ const Notifications = () => {
 			.includes(searchTerm.toLowerCase())
 	);
 
-	const totalMessages = Notifications.length;
-	const unreadMessages = Notifications.filter(
+	const totalMessages = Notifications?.length;
+	const unreadMessages = Notifications?.filter(
 		(n: any) => n.status === 'unread'
 	).length;
 
@@ -170,8 +170,8 @@ const Notifications = () => {
 					</div>
 
 					<div className='flex flex-col w-full gap-3 px-2 py-3 overflow-y-auto max-h-[400px] scrollbar-hide'>
-						{filteredNotifications.length ? (
-							filteredNotifications.map((notification: any) => (
+						{filteredNotifications?.length ? (
+							filteredNotifications?.map((notification: any) => (
 								<Card
 									key={notification.id}
 									className={`relative bg-[#ebeff3] lg:h-[165px] cursor-pointer shadow-md ${
@@ -211,7 +211,7 @@ const Notifications = () => {
 											style={{ ...FONTS.heading_07 }}
 											className='break-words whitespace-normal'
 										>
-											{notification.body}
+											{notification?.body}
 										</p>
 									</CardContent>
 								</Card>
