@@ -61,6 +61,9 @@ function generateendpoints() {
 			faq:{
 				get:'/institutes/faq/all'
 			},
+			help: {
+			get: `/helpcenter/`,
+		},
 			reports: {
 				get: '/institutes/reports/users/teaching-staff',
 			},
