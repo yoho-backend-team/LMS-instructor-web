@@ -22,8 +22,6 @@ const Batches = () => {
 	const coursedata = useSelector(selectCourse);
 	const dispatch = useDispatch<AppDispatch>();
 
-	console.log(coursedata, 'course data');
-
 	const fetchData = async () => {
 		try {
 			await dispatch(getInstructorcourse());
