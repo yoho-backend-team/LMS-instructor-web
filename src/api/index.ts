@@ -135,15 +135,22 @@ class Client {
 			batches: {
 				get: (data: any) =>
 					httpClient.get(
-						HTTP_END_POINTS.Instructor.course.batches.get.replace(":courseId", data?.uuid),
+						HTTP_END_POINTS.Instructor.course.batches.get.replace(
+							':courseId',
+							data?.uuid
+						),
 						{},
 						'instructor'
 					),
 			},
 		},
 		class: {
-			get: () =>
-				httpClient.get(HTTP_END_POINTS.Instructor.class.get, {}, 'instructor'),
+			get: (params: any) =>
+				httpClient.get(
+					HTTP_END_POINTS.Instructor.class.get,
+					params,
+					'instructor'
+				),
 			getWithId: (params: { course: string }) =>
 				httpClient.get(
 					HTTP_END_POINTS.Instructor.class.getwithId + params.course,

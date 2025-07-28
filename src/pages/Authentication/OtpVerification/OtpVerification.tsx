@@ -5,6 +5,7 @@ import { useRef, useState } from 'react';
 import Logo from '../../../assets/icons/navbar/icons8-ionic-50.png';
 import { authOtpVerification } from '@/features/Authentication/services';
 import { toast } from 'react-toastify';
+import { useAuth } from '@/context/AuthContext/AuthContext';
 
 const OtpVerification = () => {
 	const navigate = useNavigate();
@@ -13,6 +14,7 @@ const OtpVerification = () => {
 	const [showError, setShowError] = useState(false);
 	const location = useLocation();
 	const { data, email } = location?.state;
+	const { login } = useAuth();
 
 	const handleOtpChange = (index: number, value: string) => {
 		setShowError(false);
@@ -55,12 +57,18 @@ const OtpVerification = () => {
 			};
 			const response = await authOtpVerification(params_data);
 			if (response) {
-				navigate('/change-password', {
-					state: {
-						email,
-					},
-				});
-				toast.success('OTP verified successfully!');
+				if (data?.step === 'otp') {
+					login(response?.data);
+					toast.success('Login successfully');
+					navigate('/');
+				} else {
+					navigate('/change-password', {
+						state: {
+							email,
+						},
+					});
+					toast.success('OTP verified successfully!');
+				}
 			} else {
 				toast.error('Invalid OTP, please enter valid OTP.');
 			}

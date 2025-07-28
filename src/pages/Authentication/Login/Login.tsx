@@ -24,21 +24,37 @@ const Login = () => {
 	const [showPassword, setShowPassword] = useState(false);
 	const navigate = useNavigate();
 	const { login } = useAuth();
+	const [isLoading, setIsLoading] = useState(false);
 
 	const onSubmit = async (data: LoginData) => {
 		try {
 			if (data.email && data.password) {
+				setIsLoading(true);
 				const response = await authInstructorLogin(data);
 				if (response) {
-					login(response?.data);
-					toast.success('Login successfully');
-					navigate('/');
+					if (response?.data?.step === 'otp') {
+						toast.error('Session expired, please verify the otp.');
+						setIsLoading(false);
+						navigate('/otp-verify', {
+							state: {
+								email: data?.email,
+								data: response?.data,
+							},
+						});
+					} else {
+						login(response?.data);
+						setIsLoading(false);
+						toast.success('Login successfully');
+						navigate('/');
+					}
 				} else {
 					toast.error('Invalid credentials, please try again.');
 				}
 			}
 		} catch (error: any) {
 			toast.error('Something went wrong, please try again.');
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -132,7 +148,7 @@ const Login = () => {
 								className={`w-full my-6 mt-8 bg-gradient-to-r from-[#7B00FF] to-[#B200FF] py-2 rounded-md transition cursor-pointer`}
 								style={{ ...FONTS.heading_04, color: COLORS.white }}
 							>
-								Sign In
+								{isLoading ? 'Sign In...' : 'Sign In'}
 							</button>
 							<div className='flex items-center justify-center gap-2'>
 								<BsInfoCircle color={COLORS.text_desc} />
