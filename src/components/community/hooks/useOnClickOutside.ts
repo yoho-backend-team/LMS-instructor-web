@@ -1,4 +1,3 @@
-// src/components/community/CommunitySide/hooks/useOnClickOutside.ts
 import { useEffect } from 'react';
 
 export function useOnClickOutside<T extends HTMLElement>(
