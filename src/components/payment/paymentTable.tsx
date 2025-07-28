@@ -145,6 +145,17 @@ const PaymentTable = () => {
 		[dispatch] // 👈 add dependencies here
 	);
 
+const formatDateTime = (isoString?: string): string => {
+    if (!isoString) return 'No date provided';
+    
+    const dateObj = new Date(isoString);
+    if (isNaN(dateObj.getTime())) return 'Invalid date';
+
+    const date = dateObj.toISOString().split("T")[0];
+    const time = dateObj.toTimeString().split(" ")[0];
+
+    return `${date}  &  ${time}`;
+}
 
 	// funct("June")
 	// funct(pay?.month)
@@ -174,7 +185,7 @@ const PaymentTable = () => {
 
 	console.log(months())
 
-	console.log(SalaryDetails, "Salaryyyyyyyyyyyy")
+	console.log(selectedDetail, "Selected Detail.....")
 
 
 	return (
@@ -273,7 +284,7 @@ const PaymentTable = () => {
       										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
 							}}
 						>
-							{selectedDetail.Month}
+							{new Date(selectedDetail?.payment_date).toLocaleString('en-US', { month: 'long' })}
 						</p>
 					</section>
 
@@ -288,7 +299,7 @@ const PaymentTable = () => {
       										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
 							}}
 						>
-							{selectedDetail.Date || 'DD/MM/YYYY'}
+							{formatDateTime(selectedDetail?.payment_date)}
 						</p>
 					</section>
 
@@ -303,7 +314,7 @@ const PaymentTable = () => {
       										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
 							}}
 						>
-							{selectedDetail.workingDays}
+							{selectedDetail?.attendance_details?.totalWorkingDays}
 						</p>
 					</section>
 					<section>
@@ -317,7 +328,7 @@ const PaymentTable = () => {
       										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
 							}}
 						>
-							{selectedDetail.Payment}
+							{selectedDetail?.salary_amount}
 						</p>
 					</section>
 
@@ -332,7 +343,7 @@ const PaymentTable = () => {
       										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
 							}}
 						>
-							{selectedDetail.absentDays}
+							{selectedDetail?.attendance_details?.absentDays}
 						</p>
 					</section>
 
@@ -347,7 +358,7 @@ const PaymentTable = () => {
       										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
 							}}
 						>
-							{selectedDetail.presentDays}
+							{selectedDetail?.attendance_details?.presentDays}
 						</p>
 					</section>
 
@@ -377,7 +388,7 @@ const PaymentTable = () => {
       										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
 							}}
 						>
-							{selectedDetail.deductions}
+							{selectedDetail.deductions|| "NIL"}
 						</p>
 					</section>
 
