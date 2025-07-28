@@ -14,10 +14,8 @@ import type { AppDispatch } from '@/store/store';
 import { getDashBoardReports } from '@/features/Dashboard/reducers/thunks';
 import { selectDashBoard } from '@/features/Dashboard/reducers/selectors';
 import {
-	selectCourse,
 	selectCoursedata,
 } from '@/features/Course/reducers/selector';
-import { getInstructorcourseData } from '@/features/Course/reducers/thunks';
 
 interface FileUploadDesignProps {
 	selectedNotes: {
@@ -43,18 +41,11 @@ const FileUploadDesign = ({
 	const reports = useSelector(selectDashBoard);
 	const courseSelectData = useSelector(selectCoursedata);
 	const [isLoading, setIsLoading] = useState(false);
-	const courseData = useSelector(selectCourse);
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const params = {
-					instituteid: reports?.institute?.uuid,
-					branchid: reports?.branch?.uuid,
-					courseid: courseData[0]?._id,
-				};
 				await dispatch(getDashBoardReports());
-				await dispatch(getInstructorcourseData(params));
 			} catch (error) {
 				console.log(error);
 			}
