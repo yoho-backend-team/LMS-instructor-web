@@ -31,19 +31,16 @@ export const Payment = () => {
 	const [activeTab, setActiveTab] = useState('staff');
 	const [isEditing, setIsEditing] = useState(false);
 
+	const dispatch = useDispatch<any>();
+	const SalaryDetails = useSelector(selectPayment);
 
-	const dispatch = useDispatch<any>()
-		const SalaryDetails = useSelector(selectPayment)
-	
-		useEffect(() => {
-			dispatch(getStudentPaymentThunk({}));
-			console.log(SalaryDetails, "Payment Details")
-		}, [dispatch]);
+	useEffect(() => {
+		dispatch(getStudentPaymentThunk({}));
+		console.log(SalaryDetails, 'Payment Details');
+	}, [dispatch]);
 
-
-		const staffDetail = SalaryDetails[0]?.staff
-		const bankDetail = SalaryDetails[0]?.staff?.Bank_Details
-
+	const staffDetail = SalaryDetails[0]?.staff;
+	const bankDetail = SalaryDetails[0]?.staff?.Bank_Details;
 
 	const [staffDetails, setStaffDetails] = useState({
 		name: 'John Doe',
@@ -325,7 +322,10 @@ export const Payment = () => {
 											<input
 												type='text'
 												name='address'
-												value={staffDetail?.institute_id?.contact_info?.address?.address1}
+												value={
+													staffDetail?.institute_id?.contact_info?.address
+														?.address1
+												}
 												onChange={handleStaffDetailChange}
 												disabled={!isEditing}
 												className='p-4 rounded-lg mb-2 w-full'
