@@ -107,7 +107,7 @@ const PaymentTable = () => {
 		'workingDays',
 		'present',
 		'absent',
-		'deductions',
+		// 'deductions',
 		'status',
 		'Actions',
 	];
@@ -180,7 +180,7 @@ const PaymentTable = () => {
 	return (
 		<div className='p-4 custom-inset-shadow grid gap-4'>
 			<section
-				className='grid grid-cols-8 text-center bg-gradient-to-r from-[#7B00FF] to-[#B200FF] !text-white p-4 rounded-lg'
+				className='grid grid-cols-7 text-center bg-gradient-to-r from-[#7B00FF] to-[#B200FF] !text-white p-4 rounded-lg'
 				style={{ ...FONTS.heading_03 }}
 			>
 				{headers.map((header, index) => (
@@ -191,7 +191,7 @@ const PaymentTable = () => {
 			<section>
 				{SalaryDetails.map((PaymentTable: any, index: any) => (
 					<div
-						className='grid grid-cols-8 justify-center items-center my-5 text-center bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] text-black p-3 rounded-lg
+						className='grid grid-cols-7 justify-center items-center my-5 text-center bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] text-black p-3 rounded-lg
                         transition-all duration-300 ease-in-out
                         hover:-translate-y-1 
                         hover:shadow-[6px_6px_8px_rgba(0,0,0,0.1),-2px_-2px_6px_rgba(255,255,255,0.8)]
@@ -201,10 +201,10 @@ const PaymentTable = () => {
 					>
 						<p>{new Date(PaymentTable.payment_date).toLocaleString('en-US', { month: 'long' })}</p>
 						<p>{PaymentTable.salary_amount}</p>
-						<p>{new Date(PaymentTable.payment_date).toLocaleString('en-US', { month: 'long' })}</p>
-						<p>{PaymentTable.presentDays}</p>
-						<p>{PaymentTable.absentDays}</p>
-						<p>{PaymentTable.deductions}</p>
+						<p>{PaymentTable?.attendance_details?.totalWorkingDays}</p>
+						<p>{PaymentTable?.attendance_details?.presentDays}</p>
+						<p>{PaymentTable?.attendance_details?.absentDays}</p>
+						{/* <p>{PaymentTable.deductions}</p> */}
 						<button
 							className='p-2 px-4 rounded-lg cursor-pointer w-[100px] m-auto'
 							style={{
