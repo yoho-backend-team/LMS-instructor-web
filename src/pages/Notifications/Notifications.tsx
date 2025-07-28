@@ -19,6 +19,7 @@ import { getAllNotificationsThunk } from '@/features/Notifications/reducers/thun
 import { useDispatch, useSelector } from 'react-redux';
 import { selectNotifications } from '@/features/Notifications/reducers/selectors';
 import { deleteNotification, updateNotificationStatus } from '@/features/Notifications/services';
+import updatedimg from '../../assets/dashboard/notification.png';
 
 interface Notification {
 	id: string;
@@ -208,8 +209,8 @@ const Notifications = () => {
 								key={label}
 								className={`w-[75px] rounded-lg shadow-md cursor-pointer transition-all duration-200 ${
 									filter === label
-										? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white hover:text-white '
-										: 'bg-[#ebeff3] text-black '
+										? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white hover:text-white shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)]'
+										: 'bg-[#ebeff3] text-black shadow-[3px_3px_5px_rgba(255,255,255,0.7),_inset_2px_2px_3px_rgba(189,194,199,0.75)]'
 								}`}
 								variant='outline'
 								onClick={() => setFilter(label as 'all' | 'read' | 'unread')}
@@ -260,6 +261,7 @@ const Notifications = () => {
 							))
 						) : (
 							<div className='text-center py-8' style={{ ...FONTS.para_01 }}>
+								<img src={updatedimg} alt=""  className='h-[250px] w-[550px]'/>
 								No notifications found
 							</div>
 						)}

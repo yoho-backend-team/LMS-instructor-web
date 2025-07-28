@@ -10,21 +10,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getStudentProfileThunk } from '@/features/Profile/reducers/thunks.ts';
 import { selectHelpCenter } from '@/features/helpcenter/reduces/selectors.ts';
 import { getHelpThunk } from '@/features/helpcenter/reduces/thunks.ts';
+import { GetLocalStorage } from '@/utils/helper.ts';
 
 
 const HelpCenterMain: React.FC = () => {
   const [activeTab, setActiveTab] = useState('All');
-  const [currentView, setCurrentView] = useState('main'); // 'main', 'learning'
+  const [currentView, setCurrentView] = useState('main'); 
   const [searchQuery, setSearchQuery] = useState('');
   const [vedioData, setvedioData] = useState(null);
 
   const dispatch = useDispatch<any>();
   const HelpDetails = useSelector(selectHelpCenter)
-  const userDetail = JSON.parse(localStorage.getItem('user') || '{}');
+  const instituteId :any = GetLocalStorage('instructorDetails')
 
   useEffect(() => {
-    dispatch(getStudentProfileThunk({}));
-    dispatch(getHelpThunk({ instituteid: userDetail?.institute_id?.uuid }));
+    dispatch(getStudentProfileThunk());
+    dispatch(getHelpThunk({ instituteid: instituteId?._id }));
   }, [dispatch]);
   
   console.log(HelpDetails, "Help MAin")
