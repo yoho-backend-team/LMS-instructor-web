@@ -94,7 +94,7 @@ const Notifications = () => {
 		const date = new Date(isoString);
 
 		const day = String(date.getUTCDate()).padStart(2, '0');
-		const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are 0-based
+		const month = String(date.getUTCMonth() + 1).padStart(2, '0');
 		const year = date.getUTCFullYear();
 
 		return `${day}-${month}-${year}`;
@@ -193,8 +193,11 @@ const Notifications = () => {
 												<Dialog>
 													<DialogTrigger asChild>
 														<Button
-															className='bg-[#ebeff3] shadow'
+															className='bg-[#ebeff3] shadow rgba(255,255,255,0.7) 5px 5px 4px, rgba(189,194,199,0.75) 2px 2px 3px inset'
 															variant='outline'
+															style={{
+																boxShadow: `rgba(255,255,255,0.7) 5px 5px 4px, rgba(189,194,199,0.75) 2px 2px 3px inset`,
+															}}
 														>
 															{formatDateToNormal(notification?.createdAt)}
 														</Button>
@@ -204,7 +207,12 @@ const Notifications = () => {
 										</div>
 									</CardHeader>
 									<CardContent>
-										<p style={{ ...FONTS.heading_07 }}>{notification.body}</p>
+										<p
+											style={{ ...FONTS.heading_07 }}
+											className='break-words whitespace-normal'
+										>
+											{notification.body}
+										</p>
 									</CardContent>
 								</Card>
 							))
@@ -232,11 +240,20 @@ const Notifications = () => {
 									<h4 style={{ ...FONTS.heading_02 }} className='mb-2'>
 										{selectedNotification.title}
 									</h4>
-									<Button variant='outline'>
+									<Button
+										className='bg-[#ebeff3] shadow rgba(255,255,255,0.7) 5px 5px 4px, rgba(189,194,199,0.75) 2px 2px 3px inset'
+										variant='outline'
+										style={{
+											boxShadow: `rgba(255,255,255,0.7) 5px 5px 4px, rgba(189,194,199,0.75) 2px 2px 3px inset`,
+										}}
+									>
 										{formatDateToNormal(selectedNotification?.createdAt)}
 									</Button>
 								</div>
-								<p className='my-3' style={{ ...FONTS.heading_06 }}>
+								<p
+									className='my-3 break-words whitespace-normal'
+									style={{ ...FONTS.heading_06 }}
+								>
 									{selectedNotification.body}
 								</p>
 								<div className='flex justify-end mt-5'>

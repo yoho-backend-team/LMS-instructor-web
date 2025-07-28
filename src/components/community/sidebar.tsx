@@ -56,12 +56,12 @@ const Sidebar: React.FC<Props> = ({
         {communities.map((chat) => (
           <div
             key={chat._id}
-            className={`relative z-10 flex items-center justify-between p-3 bg-[#EBEFF3] rounded-lg overflow-hidden shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] transition-all ${selectedChat?._id === chat._id ? 'bg-gray-200' : ''
+            className={`relative z-10 flex items-center justify-between p-3 my-3 bg-[#EBEFF3] rounded-lg overflow-hidden shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] transition-all ${selectedChat?._id === chat._id ? 'bg-gray-200' : ''
               }`}
             onClick={() => onSelectChat(chat)}
           >
             <div className="flex items-center space-x-3">
-              <div className="bg-gray-900 text-white rounded-full h-12 w-12 flex items-center justify-center overflow-hidden">
+              <div className="bg-gray-900 text-white rounded-full h-12  w-12 flex items-center justify-center overflow-hidden">
                 {chat.batch?.groupImage ? (
                   <img
                     src={chat.batch.groupImage}
