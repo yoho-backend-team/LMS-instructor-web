@@ -80,58 +80,66 @@ const StudyMaterials = ({ setselectedNotes }: StudyMaterialsProps) => {
 						className='max-h-[475px] overflow-y-auto mx-4 scrollbar-thin scrollbar-thumb-purple-300 scrollbar-track-gray-100'
 						style={{ scrollbarWidth: 'none' }}
 					>
-						{courseSelectData?.studymaterials?.map(
-							(material: any, index: number) => (
-								<Card
-									key={index}
-									className='bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] text-black p-4 mb-2 hover:shadow-lg transition-shadow duration-300'
-								>
-									<div className='grid grid-cols-4 gap-4 items-center'>
-										<div className='flex justify-center'>
-											<a
-												href={GetImageUrl(material?.file) ?? undefined}
-												download
-												target='_blank'
-												rel='noopener noreferrer'
+						{courseSelectData?.studymaterials?.length ? (
+							courseSelectData?.studymaterials?.map(
+								(material: any, index: number) => (
+									<Card
+										key={index}
+										className='bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] text-black p-4 mb-2 hover:shadow-lg transition-shadow duration-300'
+									>
+										<div className='grid grid-cols-4 gap-4 items-center'>
+											<div className='flex justify-center'>
+												<a
+													href={GetImageUrl(material?.file) ?? undefined}
+													download
+													target='_blank'
+													rel='noopener noreferrer'
+												>
+													<img
+														src={pdfimage}
+														className='w-10 h-12 cursor-pointer'
+														alt='PDF icon'
+													/>
+												</a>
+											</div>
+											<div
+												className='text-center !text-gray-600'
+												style={{ ...FONTS.heading_07 }}
 											>
-												<img
-													src={pdfimage}
-													className='w-10 h-12 cursor-pointer'
-													alt='PDF icon'
-												/>
-											</a>
-										</div>
-										<div
-											className='text-center !text-gray-600'
-											style={{ ...FONTS.heading_07 }}
-										>
-											{material?.title}
-										</div>
-										<div
-											className='text-center !text-gray-600'
-											style={{ ...FONTS.heading_07 }}
-										>
-											{formattedDate(material?.updatedAt)}
-										</div>
-										<div className='flex justify-center'>
-											<Button
-												className='bg-[#EBEFF3] p-2 w-12 h-10 hover:bg-[#EBEFF3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] cursor-pointer'
-												variant='outline'
-												onClick={() => setselectedNotes(material)}
+												{material?.title}
+											</div>
+											<div
+												className='text-center !text-gray-600'
+												style={{ ...FONTS.heading_07 }}
 											>
-												<img src={Edit} className='w-5 h-5' alt='Edit' />
-											</Button>
-											<Button
-												className='bg-[#EBEFF3] w-12 h-10 ml-2 hover:bg-[#EBEFF3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] cursor-pointer'
-												variant='outline'
-												onClick={() => handleDeleteNotes(material)}
-											>
-												<img src={Trash} className='w-5 h-5' alt='Delete' />
-											</Button>
+												{formattedDate(material?.updatedAt)}
+											</div>
+											<div className='flex justify-center'>
+												<Button
+													className='bg-[#EBEFF3] p-2 w-12 h-10 hover:bg-[#EBEFF3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] cursor-pointer'
+													variant='outline'
+													onClick={() => setselectedNotes(material)}
+												>
+													<img src={Edit} className='w-5 h-5' alt='Edit' />
+												</Button>
+												<Button
+													className='bg-[#EBEFF3] w-12 h-10 ml-2 hover:bg-[#EBEFF3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] cursor-pointer'
+													variant='outline'
+													onClick={() => handleDeleteNotes(material)}
+												>
+													<img src={Trash} className='w-5 h-5' alt='Delete' />
+												</Button>
+											</div>
 										</div>
-									</div>
-								</Card>
+									</Card>
+								)
 							)
+						) : (
+							<div className='flex justify-center mt-3'>
+								<p style={{ ...FONTS.heading_06 }}>
+									No study materials available
+								</p>
+							</div>
 						)}
 					</div>
 				</div>
