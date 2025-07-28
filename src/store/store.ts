@@ -11,6 +11,8 @@ import communityReducer from '../features/community/redux/communitySlice';
 import ProfileSlice from '../features/Profile/reducers/ProfileSlice';
 import ClassIdSlice from '../features/classId/services/reducers/classidslice';
 import faqSlice from '../features/faq/reduces/faqSlice';
+import helpSlice from '../features/helpcenter/reduces/helpSlice'
+
 
 const store = configureStore({
 	reducer: {
@@ -26,6 +28,7 @@ const store = configureStore({
 		community: communityReducer,
 		ProfileSlice: ProfileSlice,
 		faqSlice: faqSlice,
+		helpSlice:helpSlice,
 	},
 });
 
