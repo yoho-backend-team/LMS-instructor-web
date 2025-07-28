@@ -20,7 +20,11 @@ interface PaymentTable {
 	actions: any;
 }
 
-const PaymentTable = () => {
+interface PaymentTableProps {
+	selectedStatus: string;
+}
+
+const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
 	const [selectedDetail, setSelectedDetail] = useState<any>([]);
 	const dispatch = useDispatch<any>();
 	const SalaryDetails = useSelector(selectPayment);
@@ -57,6 +61,13 @@ const PaymentTable = () => {
 		return `${date}  &  ${time}`;
 	};
 
+	const filteredPayments =
+		selectedStatus.toLowerCase() === 'all'
+			? SalaryDetails
+			: SalaryDetails?.filter(
+					(payment: any) =>
+						payment?.status.toLowerCase() === selectedStatus.toLowerCase()
+			  );
 	return (
 		<div className='p-4 custom-inset-shadow grid gap-4'>
 			<section
@@ -69,8 +80,8 @@ const PaymentTable = () => {
 			</section>
 
 			<section>
-				{SalaryDetails?.length ? (
-					SalaryDetails?.map((PaymentTable: any, index: any) => (
+				{filteredPayments?.length ? (
+					filteredPayments?.map((PaymentTable: any, index: any) => (
 						<div
 							className='grid grid-cols-7 justify-center items-center my-5 text-center bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] text-black p-3 rounded-lg
                         transition-all duration-300 ease-in-out

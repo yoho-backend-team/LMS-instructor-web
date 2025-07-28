@@ -24,7 +24,7 @@ export const Payment = () => {
 		selectedDate.getFullYear()
 	);
 	const years = Array.from({ length: 36 }, (_, i) => 2000 + i);
-	const status = ['All', 'Paid', 'Pending'];
+	const status = ['All', 'Completed', 'Pending'];
 	const [showSelect, setShowSelect] = useState(false);
 	const [selectedStatus, setSelectedStatus] = useState<string>();
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,7 +36,6 @@ export const Payment = () => {
 
 	useEffect(() => {
 		dispatch(getStudentPaymentThunk({}));
-		console.log(SalaryDetails, 'Payment Details');
 	}, [dispatch]);
 
 	const staffDetail = SalaryDetails[0]?.staff;
@@ -205,7 +204,7 @@ export const Payment = () => {
 			</div>
 
 			<div className='mt-8 custom-inset-shadow'>
-				<PaymentDetails />
+				<PaymentDetails selectedStatus={selectedStatus ?? 'All'} />
 			</div>
 
 			{/* Modal */}
