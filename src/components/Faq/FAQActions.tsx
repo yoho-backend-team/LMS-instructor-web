@@ -28,7 +28,7 @@ const FAQActions: React.FC<FAQActionsProps> = ({
       <div className="flex gap-3">
         <button
           onClick={onExpandAll}
-          className="px-6 py-2 rounded-lg font-medium transition-all duration-200 hover:opacity-90 active:opacity-80"
+          className="px-6 py-2 cursor-pointer rounded-lg font-medium transition-all duration-200 hover:opacity-90 active:opacity-80"
           style={{
             backgroundColor: COLORS.bg_Colour,
             color: COLORS.text_title,
@@ -48,7 +48,7 @@ const FAQActions: React.FC<FAQActionsProps> = ({
         
         <button
           onClick={onCollapseAll}
-          className="px-6 py-2 rounded-lg font-medium transition-all duration-200 hover:opacity-90 active:opacity-80"
+          className="px-6 py-2 cursor-pointer rounded-lg font-medium transition-all duration-200 hover:opacity-90 active:opacity-80"
           style={{
             backgroundColor: COLORS.bg_Colour,
             color: COLORS.text_title,

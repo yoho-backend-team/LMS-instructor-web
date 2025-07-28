@@ -40,13 +40,24 @@ const LogoutConfirmationModal: React.FC<LogoutConfirmationModalProps> = ({
 						Cancel
 					</button>
 					<button
-						onClick={onConfirm}
-						className='cursor-pointer px-4 py-2 text-sm rounded bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)]'
-						style={{ ...FONTS.heading_06, color: COLORS.white }}
-						disabled={isLoading}
-					>
-						{isLoading ? 'Logout...' : 'Logout'}
-					</button>
+	onClick={onConfirm}
+	disabled={isLoading}
+	className={`cursor-pointer px-4 py-2 text-sm rounded flex items-center justify-center gap-2
+		bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white
+		shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)]
+		${isLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
+	style={{ ...FONTS.heading_06, color: COLORS.white }}
+>
+	{isLoading ? (
+		<>
+			<div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+			Logging out...
+		</>
+	) : (
+		'Logout'
+	)}
+</button>
+
 				</div>
 			</div>
 		</div>
