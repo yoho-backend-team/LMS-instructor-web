@@ -9,12 +9,14 @@ type UseCommunityChatArgs = {
   userId?: string;
   communities?: Community[];
   receiveEventName?: string;
+  userName?: string;
 };
 
 export function useCommunityChat({
   socket,
   userId,
   communities,
+  userName,
   receiveEventName = 'receiveMessage',
 }: UseCommunityChatArgs) {
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
@@ -72,7 +74,7 @@ export function useCommunityChat({
       content: text,
       groupId: selectedChat._id,
       senderId: userId,
-      name: '', // add if needed
+      name: userName, 
       time: new Date().toISOString(),
     };
 

@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { getStudentProfile } from '../services';
-import { getProfile } from './ProfileSlice';
+import { getProfile, updateProfile } from './ProfileSlice';
 
 export const getStudentProfileThunk =
 	() => async (dispatch: any) => {
@@ -10,3 +11,11 @@ export const getStudentProfileThunk =
 			console.log(error);
 		}
 	};
+
+export const UpdateInstructorThunk = (data: any) => async (dispatch: any) => {
+	try {
+		dispatch(updateProfile(data))
+	} catch (error) {
+		console.log(error)
+	}
+}

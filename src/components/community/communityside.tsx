@@ -29,8 +29,9 @@ const CommunitySide: React.FC<Props> = ({ communities }) => {
   } = useCommunityChat({
     socket,
     userId: user?._id,
+    userName: user?.full_name,
     communities: communities.data,
-    receiveEventName: 'receiveMessage', // adjust if your backend emits a different event
+    receiveEventName: 'sendMessage'
   });
 
   const bottomRef = useAutoScroll<HTMLDivElement>([messages]);

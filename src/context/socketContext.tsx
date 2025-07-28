@@ -15,12 +15,12 @@ export const InstructorSocketProvider = ({
 }) => {
 	const [socket, setSocket] = useState<Socket | null>(null);
 
-	const user:any = GetLocalStorage("instructorDetails");
-    console.log("user", user)
+	const user: any = GetLocalStorage('instructorDetails');
+	console.log('user', user);
 
 	useEffect(() => {
-		// const url = 'https://lms-node-backend-v1.onrender.com';
-		const url = "http://localhost:3000";
+		const url = 'https://lms-node-backend-v1.onrender.com';
+		// const url = 'http://localhost:3000';
 
 		const socketIO = io(url, {
 			query: { userId: user?._id },

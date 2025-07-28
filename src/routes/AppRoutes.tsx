@@ -63,10 +63,12 @@ const AppRoutes = () => {
 				<Route path='attendance' element={<Attendance />} />
 				<Route path='placement' element={<Placement />} />
 				<Route path='payment' element={<Payment />} />
-				<Route path='about' element={<AboutCourse />} />
 				<Route path='note_materials' element={<CourseNotes />} />
-				<Route path='/about/:course' element={<AboutCourse />} />
-				<Route path='notes_materials' element={<NotesMaterials />} />
+				<Route path='about/:course' element={<AboutCourse />} />
+				<Route
+					path='notes_materials'
+					element={<NotesMaterials setselectedNotes={() => {}} />}
+				/>
 				<Route path='batches' element={<Batches />} />
 				<Route path='*' element={<Navigate to='/' />} />
 			</Route>
