@@ -110,7 +110,7 @@ const CommunitySide: React.FC<Props> = ({ communities }) => {
             <ChatInputWithEmojiPicker onSend={sendMessage} />
           </>
         ) : (
-          <div className="flex-1 min-w-0 bg-[#EBEFF3] rounded-xl shadow flex items-center justify-center">
+          <div className="flex-1 min-w-0 bg-[#EBEFF3] rounded-xl shadow flex items-center justify-center ">
             <img
               src={msgframe}
               alt="Message frame"

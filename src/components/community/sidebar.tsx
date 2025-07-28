@@ -20,6 +20,16 @@ const Sidebar: React.FC<Props> = ({
   setSearchTerm,
   formatMessageDate,
 }) => {
+  // Filter communities based on search term
+  const filteredCommunities = communities.filter(community => 
+    community.batch?.batch_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    community.group?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleClearSearch = () => {
+    setSearchTerm('');
+  };
+
   return (
     <div className="w-full lg:w-[400px] xl:w-[500px] h-[490px] bg-[#EBEFF3] rounded-xl shadow-2xl">
       <div className="relative p-2 bg-[#EBEFF3]">
@@ -44,6 +54,22 @@ const Sidebar: React.FC<Props> = ({
               d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
             />
           </svg>
+          {searchTerm && (
+            <svg
+              onClick={handleClearSearch}
+              className="absolute right-3 top-3 h-5 w-5 text-gray-500 cursor-pointer hover:text-gray-700"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          )}
         </div>
       </div>
 
@@ -53,49 +79,57 @@ const Sidebar: React.FC<Props> = ({
   [&::-webkit-scrollbar-thumb]:bg-gray-300
   dark:[&::-webkit-scrollbar-track]:bg-neutral-700
   dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
-        {communities.map((chat) => (
-          <div
-            key={chat._id}
-            className={`relative z-10 flex items-center justify-between p-3 bg-[#EBEFF3] rounded-lg overflow-hidden shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] transition-all ${selectedChat?._id === chat._id ? 'bg-gray-200' : ''
-              }`}
-            onClick={() => onSelectChat(chat)}
-          >
-            <div className="flex items-center space-x-3">
-              <div className="bg-gray-900 text-white rounded-full h-12 w-12 flex items-center justify-center overflow-hidden">
-                {chat.batch?.groupImage ? (
-                  <img
-                    src={chat.batch.groupImage}
-                    alt={chat.batch.batch_name}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <span className="text-lg font-bold">
-                    {chat.batch?.batch_name?.charAt(0).toUpperCase()}
-                  </span>
-                )}
+        {filteredCommunities.length > 0 ? (
+          filteredCommunities.map((chat) => (
+            <div
+              key={chat._id}
+              className={`relative z-10 flex items-center justify-between p-3 bg-[#EBEFF3] rounded-lg overflow-hidden shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] transition-all ${selectedChat?._id === chat._id ? 'bg-gray-200' : ''
+                }`}
+              onClick={() => onSelectChat(chat)}
+            >
+              <div className="flex items-center space-x-3">
+                <div className="bg-gray-900 text-white rounded-full h-12 w-12 flex items-center justify-center overflow-hidden">
+                  {chat.batch?.groupImage ? (
+                    <img
+                      src={chat.batch.groupImage}
+                      alt={chat.batch.batch_name}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-lg font-bold">
+                      {chat.batch?.batch_name?.charAt(0).toUpperCase()}
+                    </span>
+                  )}
+                </div>
+                <div>
+                  <h3 className="font-bold text-gray-900">
+                    {chat.batch?.batch_name || chat.group}
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    {chat.last_message?.message}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-bold text-gray-900">
-                  {chat.batch?.batch_name || chat.group}
-                </h3>
-                <p className="text-sm text-gray-600">
-                  {chat.last_message?.message}
+              <div className="flex flex-col items-end">
+                <p className="text-xs text-gray-500">
+                  {chat.last_message?.timestamp &&
+                    formatMessageDate(chat.last_message.timestamp)}
                 </p>
+                <img
+                  src={doubleicon}
+                  className="mt-1 w-4 h-4 opacity-70"
+                  alt="Read receipt"
+                />
               </div>
             </div>
-            <div className="flex flex-col items-end">
-              <p className="text-xs text-gray-500">
-                {chat.last_message?.timestamp &&
-                  formatMessageDate(chat.last_message.timestamp)}
-              </p>
-              <img
-                src={doubleicon}
-                className="mt-1 w-4 h-4 opacity-70"
-                alt="Read receipt"
-              />
+          ))
+        ) : (
+          <div className="flex flex-col items-center justify-center h-full">
+            <div className="text-gray-500 text-lg font-medium">
+              No communities found
             </div>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
