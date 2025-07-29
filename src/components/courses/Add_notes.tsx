@@ -16,6 +16,7 @@ import { selectDashBoard } from '@/features/Dashboard/reducers/selectors';
 import {
 	selectCoursedata,
 } from '@/features/Course/reducers/selector';
+import { getInstructorcourseData } from '@/features/Course/reducers/thunks';
 
 interface FileUploadDesignProps {
 	selectedNotes: {
