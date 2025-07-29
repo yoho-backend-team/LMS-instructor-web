@@ -48,11 +48,11 @@ export const Payment = () => {
 		address: '123 Main St, City, Country',
 	});
 
-	const [bankDetails, setBankDetails] = useState({
-		accountNumber: '1234567890',
-		bankBranch: 'Main Branch',
-		ifscCode: 'ABCD0123456',
-	});
+	// const [bankDetails, setBankDetails] = useState({
+	// 	accountNumber: '1234567890',
+	// 	bankBranch: 'Main Branch',
+	// 	ifscCode: 'ABCD0123456',
+	// });
 
 	const [salaryStructure, setSalaryStructure] = useState({
 		basic: '30,000',
@@ -85,9 +85,9 @@ export const Payment = () => {
 		}));
 	};
 
-	const handleSaveStaffDetails = () => {
-		setIsEditing(false);
-	};
+	// const handleSaveStaffDetails = () => {
+	// 	setIsEditing(false);
+	// };
 
 	return (
 		<div className='py-4'>
