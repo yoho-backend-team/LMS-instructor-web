@@ -39,7 +39,7 @@ const NotesMaterials = ({ setselectedNotes }: NotesMaterialsProps) => {
 			const response = await deleteNotes({
 				noteId: note?.uuid,
 			});
-			console.log(response, 'deleted response');
+		
 			if (response) {
 				toast.success(`${note?.title} deleted`);
 			} else {
