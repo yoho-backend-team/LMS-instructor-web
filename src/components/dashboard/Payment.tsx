@@ -16,7 +16,7 @@ const Payment: React.FC = () => {
 
     const Payments: any = useSelector((state: any) => state.PaymentSlice.data) ?? []
     // const Payments: any[] = []
-    console.log(Payments, "payment")
+  
     const navigate = useNavigate()
     return (
         <div className='flex flex-row p-5 gap-10 divshadow w-full h-[300px] rounded-[16px]'>
