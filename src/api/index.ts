@@ -186,13 +186,14 @@ class Client {
 					params,
 					'instructor'
 				),
-			put: (params: { uuid: string }) =>
+			put: (data: any, params?: any) =>
 				httpClient.update(
-					HTTP_END_POINTS.Instructor.notification.put + params?.uuid,
-					{},
+					HTTP_END_POINTS.Instructor.notification.put + data?.uuid,
+					data,
+					params,
 					'instructor'
 				),
-			delete: (params: { uuid: string }) =>
+			delete: (params?: any) =>
 				httpClient.delete(
 					HTTP_END_POINTS.Instructor.notification.delete + params?.uuid,
 					{},
@@ -246,9 +247,13 @@ class Client {
 					'instructor'
 				),
 		},
-		help:{
-			get:(params:any)=>
-				 httpClient.get(HTTP_END_POINTS.Instructor.help.get, params,'instructor')
+		help: {
+			get: (params: any) =>
+				httpClient.get(
+					HTTP_END_POINTS.Instructor.help.get,
+					params,
+					'instructor'
+				),
 		},
 		index: {
 			get: (params?: any) =>

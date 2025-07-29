@@ -114,7 +114,7 @@ const Tickets = () => {
         >
           Create Ticket
         </Button>
-      </div>+
+      </div>
 
       <div className="flex flex-wrap gap-3 mb-8">
         {["all", "open", "closed"].map((label) => (

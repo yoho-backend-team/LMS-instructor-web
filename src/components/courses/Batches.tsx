@@ -109,29 +109,35 @@ const Batches = () => {
 						</div>
 					</Card>
 
-					<div className='min-h-[400px] overflow-y-auto mx-4'>
-						{SelectBatches?.map((item: any, index: any) => (
-							<Card
-								key={index}
-								className='bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] text-black p-4 mb-2 hover:shadow-md rounded-lg'
-							>
-								<div className='grid grid-cols-5 gap-4 text-center items-center'>
-									<div style={{ ...FONTS.para_01 }}>{item?.batch_name}</div>
-									<div style={{ ...FONTS.para_01 }}>
-										{item?.student?.length}
+					<div className='overflow-y-auto mx-4'>
+						{SelectBatches?.length ? (
+							SelectBatches?.map((item: any, index: any) => (
+								<Card
+									key={index}
+									className='bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] text-black p-4 mb-2 hover:shadow-md rounded-lg'
+								>
+									<div className='grid grid-cols-5 gap-4 text-center items-center'>
+										<div style={{ ...FONTS.para_01 }}>{item?.batch_name}</div>
+										<div style={{ ...FONTS.para_01 }}>
+											{item?.student?.length}
+										</div>
+										<div style={{ ...FONTS.para_01 }}>
+											{item?.classes?.length}
+										</div>
+										<div style={{ ...FONTS.para_01 }}>
+											{formattedDate(item?.start_date)}
+										</div>
+										<div style={{ ...FONTS.para_01 }}>
+											{formattedDate(item?.end_date)}
+										</div>
 									</div>
-									<div style={{ ...FONTS.para_01 }}>
-										{item?.classes?.length}
-									</div>
-									<div style={{ ...FONTS.para_01 }}>
-										{formattedDate(item?.start_date)}
-									</div>
-									<div style={{ ...FONTS.para_01 }}>
-										{formattedDate(item?.end_date)}
-									</div>
-								</div>
-							</Card>
-						))}
+								</Card>
+							))
+						) : (
+							<div className='flex justify-center mt-3'>
+								<p style={{ ...FONTS.heading_06 }}>No batches available</p>
+							</div>
+						)}
 					</div>
 				</div>
 			</Card>
