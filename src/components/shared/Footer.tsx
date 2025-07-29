@@ -9,45 +9,61 @@ const Footer = () => {
 		<>
 			<footer className='flex justify-between px-6 py-3'>
 				<div className='flex gap-4'>
-					<div className='flex justify-center items-center gap-3'>
-						<img
-							src={questionImg}
-							alt='question'
-							style={{ height: 25, width: 25 }}
-						/>
-						<Link to='help-center' style={{ ...FONTS.heading_03 }}>
+					<div>
+						<Link
+							to='help-center'
+							style={{ ...FONTS.heading_03 }}
+							className='flex justify-center items-center gap-3'
+						>
+							<img
+								src={questionImg}
+								alt='question'
+								style={{ height: 25, width: 25 }}
+							/>
 							Help Center
 						</Link>
 					</div>
-					<div className='flex justify-center items-center gap-3'>
-						<img
-							src={questionImg}
-							alt='faq'
-							style={{ height: 25, width: 25 }}
-						/>
-						<Link to='faqs' style={{ ...FONTS.heading_03 }}>
+					<div>
+						<Link
+							to='faqs'
+							style={{ ...FONTS.heading_03 }}
+							className='flex justify-center items-center gap-3'
+						>
+							<img
+								src={questionImg}
+								alt='faq'
+								style={{ height: 25, width: 25 }}
+							/>
 							FAQ
 						</Link>
 					</div>
 				</div>
 				<div className='flex gap-4'>
-					<div className='flex justify-center items-center gap-3'>
-						<img
-							src={refreshImg}
-							alt='activity'
-							style={{ height: 25, width: 25 }}
-						/>
-						<Link to='activity-logs' style={{ ...FONTS.heading_03 }}>
+					<div>
+						<Link
+							to='activity-logs'
+							style={{ ...FONTS.heading_03 }}
+							className='flex justify-center items-center gap-3'
+						>
+							<img
+								src={refreshImg}
+								alt='activity'
+								style={{ height: 25, width: 25 }}
+							/>
 							Activity Log
 						</Link>
 					</div>
-					<div className='flex justify-center items-center gap-3'>
-						<img
-							src={ticketImg}
-							alt='ticket'
-							style={{ height: 25, width: 25 }}
-						/>
-						<Link to='tickets' style={{ ...FONTS.heading_03 }}>
+					<div>
+						<Link
+							to='tickets'
+							style={{ ...FONTS.heading_03 }}
+							className='flex justify-center items-center gap-3'
+						>
+							<img
+								src={ticketImg}
+								alt='ticket'
+								style={{ height: 25, width: 25 }}
+							/>
 							Ticket
 						</Link>
 					</div>
