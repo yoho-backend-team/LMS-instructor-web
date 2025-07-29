@@ -142,13 +142,13 @@ const CourseList: React.FC = () => {
 								<div key={index} className='flex justify-between items-start'>
 									<div className='space-y-2'>
 										<h3 style={{ ...FONTS.heading_02 }}>{chapter?.title}</h3>
-										<video
-											src={chapter?.video}
-											className='w-full h-40 object-contain rounded-md'
-											controls
-											preload='metadata'
-										/>
-
+										<iframe
+											className='w-full h-40 rounded-md'
+											src='https://www.youtube.com/embed/HcOc7P5BMi4'
+											title={chapter?.title}
+											allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+											allowFullScreen
+										></iframe>
 										<p style={{ ...FONTS.para_03 }}>{chapter?.description}</p>
 									</div>
 
