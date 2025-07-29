@@ -192,7 +192,7 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data,classType }) => {
       {/* Filtered Data Cards */}
       {filteredData.length === 0 ? (
         <div className="text-center py-8">
-          <Card className="p-6 bg-[#ebeff3] inline-block">
+          
             <p style={{ ...FONTS.heading_04 }} className="text-gray-600">
               {hasActiveFilters 
                 ? 'No classes match your filters'
@@ -206,7 +206,7 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data,classType }) => {
                 Clear Filters
               </Button>
             )}
-          </Card>
+          
         </div>
       ) : (
         <div className="space-y-2 mx-2 mt-2">
