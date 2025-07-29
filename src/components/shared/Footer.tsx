@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import questionImg from '../../assets/icons/footer/question.png';
+import helpcenterImg from '../../assets/helpcenters/Help Center (1).png'
 import ticketImg from '../../assets/icons/footer/ticket.png';
 import refreshImg from '../../assets/icons/footer/refresh.png';
 import { FONTS } from '@/constants/uiConstants';
@@ -11,7 +12,7 @@ const Footer = () => {
 				<div className='flex gap-4'>
 					<div className='flex justify-center items-center gap-3'>
 						<img
-							src={questionImg}
+							src={helpcenterImg}
 							alt='question'
 							style={{ height: 25, width: 25 }}
 						/>
