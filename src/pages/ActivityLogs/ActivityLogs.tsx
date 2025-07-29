@@ -11,6 +11,7 @@ import type { AppDispatch } from '@/store/store';
 import updatesimg from '../../assets/dashboard/updates.png';
 import { getAllActivityLogs } from '@/features/activitylog/reduces/thunks';
 import { selectActivityLogs } from '@/features/activitylog/reduces/selectors';
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const ActivityLogs = () => {
   const [handleFilter, setHandleFilter] = useState(false);
@@ -149,10 +150,10 @@ const ActivityLogs = () => {
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
-                className="rounded-full w-10 h-10 flex items-center justify-center bg-[#ebeff3] text-black shadow-md
+                className="rounded-full w-10 h-10 flex items-center justify-center bg-[#ebeff3] text-black
                shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
               >
-                ‹
+                <ChevronLeft size={20} />
               </button>
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                 <button
@@ -175,7 +176,7 @@ const ActivityLogs = () => {
                  justify-center bg-[#ebeff3] text-black 
                  shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
               >
-                ›
+                <ChevronRight size={20} />
               </button>
             </div>
           )}
