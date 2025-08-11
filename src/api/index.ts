@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import httpClient from './httpClient';
 import HTTP_END_POINTS from './http_endpoints';
 
@@ -66,73 +67,79 @@ class Client {
 				),
 		},
 		course_list: {
-			get: (params: any) =>
+			get: () =>
 				httpClient.get(
-					HTTP_END_POINTS.Instructor.course_list.get
-						.replace(':instituteid', params.instituteid)
-						.replace(':branchid', params.branchid),
-					params,
+					HTTP_END_POINTS.Instructor.course_list.get,
+					{},
 					'instructor'
 				),
 		},
 		course: {
-			get: (params: any) =>
-				httpClient.get(
-					HTTP_END_POINTS.Instructor.course.get
-						.replace(':instituteid', params.instituteid)
-						.replace(':branchid', params.branchid)
-						.replace(':courseid', params.courseid),
-					params,
-					'instructor'
-				),
+			get: () =>
+				httpClient.get(HTTP_END_POINTS.Instructor.course.get, {}, 'instructor'),
 			notes: {
-				create: (data: any, params: any) =>
+				create: (data: any, params?: any) =>
 					httpClient.post(
 						HTTP_END_POINTS.Instructor.course.notes.create,
 						data,
 						params,
 						'instructor'
 					),
-				update: (data: { NoteId: string }) =>
+				update: (data: any, params?: any) =>
 					httpClient.update(
-						HTTP_END_POINTS.Instructor.course.notes.update + data.NoteId,
-						data,
-						'instructor'
-					),
-				delete: (data: { id: string }) =>
-					httpClient.delete(
-						HTTP_END_POINTS.Instructor.course.notes.delete + data.id,
-						'instructor'
-					),
-			},
-			study_material: {
-				create: (data: any, params: any) =>
-					httpClient.post(
-						HTTP_END_POINTS.Instructor.course.study_material.index,
+						HTTP_END_POINTS.Instructor.course.notes.update.replace(
+							':noteId',
+							data?.noteId
+						),
 						data,
 						params,
 						'instructor'
 					),
-				update: (data: { materialId: string }) =>
-					httpClient.update(
-						HTTP_END_POINTS.Instructor.course.study_material.index +
-							data.materialId,
-						data,
+				delete: (params: any) =>
+					httpClient.delete(
+						HTTP_END_POINTS.Instructor.course.notes.delete.replace(
+							':noteId',
+							params?.noteId
+						),
+						params,
 						'instructor'
 					),
-				delete: (data: { id: string }) =>
+			},
+			study_material: {
+				create: (data: any, params?: any) =>
+					httpClient.post(
+						HTTP_END_POINTS.Instructor.course.study_material.create,
+						data,
+						params,
+						'instructor'
+					),
+				update: (data: any, params?: any) =>
+					httpClient.update(
+						HTTP_END_POINTS.Instructor.course.study_material.update.replace(
+							':materialId',
+							data?.materialId
+						),
+						data,
+						params,
+						'instructor'
+					),
+				delete: (params: any) =>
 					httpClient.delete(
-						HTTP_END_POINTS.Instructor.course.study_material.index + data?.id,
+						HTTP_END_POINTS.Instructor.course.study_material.delete.replace(
+							':materialId',
+							params?.materialId
+						),
+						params,
 						'instructor'
 					),
 			},
 			batches: {
-				get: (params: any) =>
+				get: (data: any) =>
 					httpClient.get(
-						HTTP_END_POINTS.Instructor.course.batches.get
-							.replace(':instituteid', params.instituteid)
-							.replace(':branchid', params.branchid)
-							.replace(':courseid', params.courseid),
+						HTTP_END_POINTS.Instructor.course.batches.get.replace(
+							':courseId',
+							data?.uuid
+						),
 						{},
 						'instructor'
 					),
@@ -141,10 +148,7 @@ class Client {
 		class: {
 			get: (params: any) =>
 				httpClient.get(
-					HTTP_END_POINTS.Instructor.class.get.replace(
-						':courseid',
-						params.courseId
-					),
+					HTTP_END_POINTS.Instructor.class.get,
 					params,
 					'instructor'
 				),
@@ -182,13 +186,14 @@ class Client {
 					params,
 					'instructor'
 				),
-			put: (params: { uuid: string }) =>
+			put: (data: any, params?: any) =>
 				httpClient.update(
-					HTTP_END_POINTS.Instructor.notification.put + params?.uuid,
-					{},
+					HTTP_END_POINTS.Instructor.notification.put + data?.uuid,
+					data,
+					params,
 					'instructor'
 				),
-			delete: (params: { uuid: string }) =>
+			delete: (params?: any) =>
 				httpClient.delete(
 					HTTP_END_POINTS.Instructor.notification.delete + params?.uuid,
 					{},
@@ -242,8 +247,16 @@ class Client {
 					'instructor'
 				),
 		},
-		index: {
+		help: {
 			get: (params: any) =>
+				httpClient.get(
+					HTTP_END_POINTS.Instructor.help.get,
+					params,
+					'instructor'
+				),
+		},
+		index: {
+			get: (params?: any) =>
 				httpClient.get(
 					HTTP_END_POINTS.Instructor.index.get,
 					params,
@@ -251,8 +264,9 @@ class Client {
 				),
 			update: (data: any) =>
 				httpClient.update(
-					HTTP_END_POINTS.Instructor.index.get,
+					HTTP_END_POINTS.Instructor.profile.put,
 					data,
+					'',
 					'instructor'
 				),
 		},

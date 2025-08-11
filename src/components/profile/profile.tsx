@@ -1,63 +1,51 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
 import ProfileSidebar from './ProfileSidebar';
 import ProfileContent from './ProfileContent';
 import { FONTS } from '@/constants/uiConstants';
-// import { useToast } from '@/components/ui/toast';
 import { ConfirmationDialog } from '@/components/ui/confirmation-dialog';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectProfile } from '@/features/Profile/reducers/selectors';
-import { getStudentProfileThunk } from '@/features/Profile/reducers/thunks';
+import {
+  getStudentProfileThunk,
+  UpdateInstructorThunk,
+} from '@/features/Profile/reducers/thunks';
+import { updateStudentProfile } from '@/features/Profile/services';
+import { useNavigate } from 'react-router-dom';
 
 const ProfileInformation: React.FC = () => {
   const [activeMenuItem, setActiveMenuItem] = useState('profile');
   const [isEditing, setIsEditing] = useState(false);
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  // const { showToast } = useToast();
-
-
-
   const dispatch = useDispatch<any>();
-	const profileDetails = useSelector(selectProfile);
+  const profileDetails = useSelector(selectProfile);
+  const navigate = useNavigate();
 
-	useEffect(() => {
-		dispatch(getStudentProfileThunk());
-		console.log(profileDetails);
-	}, [dispatch]);
-  // Sample data - replace with actual data from props or API
+  useEffect(() => {
+    dispatch(getStudentProfileThunk());
+  }, [dispatch]);
+
   const [profileData, setProfileData] = useState({
     name: profileDetails?.full_name,
     traineeId: profileDetails?.userDetail?.staffId,
-    profileImage: profileDetails?.image
+    profileImage: profileDetails?.image,
   });
 
-  const [personalInfo, setPersonalInfo] = useState({
-    mailAddress: profileDetails?.email,
-    name: profileDetails?.full_name,
-    gender: profileDetails?.gender,
-    qualification: profileDetails?.qualification,
-    contactNumber: profileDetails?.contact_info?.phone_number,
-    alternateNumber: profileDetails?.contact_info?.alternate_phone_number,
-    dateOfBirth: profileDetails?.dob,
-    addressLine1: profileDetails?.contact_info?.address1,
-    addressLine2: profileDetails?.contact_info?.address2,
-    city: profileDetails?.contact_info?.city,
-    state: profileDetails?.contact_info?.state,
-    pinCode: profileDetails?.contact_info?.pincode
-  });
-
+  const [personalInfo, setPersonalInfo] = useState<any | null>(null);
   const [instituteInfo, setInstituteInfo] = useState({
     course: 'Theoretical Physics',
     batch: 'Batch 2024-25',
     studentId: profileDetails?.userDetail?.staffId,
   });
 
-  // Store original data to compare changes
-  const [originalPersonalInfo, setOriginalPersonalInfo] = useState(personalInfo);
-  const [originalProfileImage, setOriginalProfileImage] = useState(profileData.profileImage);
+  const [originalPersonalInfo, setOriginalPersonalInfo] =
+    useState(personalInfo);
+  const [originalProfileImage, setOriginalProfileImage] = useState(
+    profileData.profileImage
+  );
 
   const handleMenuItemClick = (itemId: string) => {
-    // If switching away from profile section while editing, exit edit mode
     if (isEditing && itemId !== 'profile') {
       setIsEditing(false);
     }
@@ -65,13 +53,14 @@ const ProfileInformation: React.FC = () => {
   };
 
   const handleGoBack = () => {
+    navigate(-1);
   };
 
-  const handlePersonalInfoChange = (data: typeof personalInfo) => {
+  const handlePersonalInfoChange = async (data: any) => {
     setPersonalInfo(data);
-    // Here you can also update the profile name if needed
+
     if (data.name !== profileData.name) {
-      setProfileData(prev => ({ ...prev, name: data.name }));
+      setProfileData((prev) => ({ ...prev, name: data.name }));
     }
   };
 
@@ -81,7 +70,6 @@ const ProfileInformation: React.FC = () => {
 
   const handleEditClick = () => {
     if (!isEditing) {
-      // Store original data when starting to edit
       setOriginalPersonalInfo(personalInfo);
       setOriginalProfileImage(profileData.profileImage);
     }
@@ -89,43 +77,48 @@ const ProfileInformation: React.FC = () => {
   };
 
   const handleImageChange = (imageFile: File) => {
-    // Handle image upload
     const imageUrl = URL.createObjectURL(imageFile);
-    setProfileData(prev => ({ ...prev, profileImage: imageUrl }));
-    
-    // Here you would typically upload the image to your server
+    setProfileData((prev) => ({ ...prev, profileImage: imageUrl }));
   };
 
   // Check if there are any changes
   const hasChanges = () => {
-    const personalInfoChanged = JSON.stringify(personalInfo) !== JSON.stringify(originalPersonalInfo);
+    const personalInfoChanged =
+      JSON.stringify(personalInfo) !== JSON.stringify(originalPersonalInfo);
     const imageChanged = profileData.profileImage !== originalProfileImage;
     return personalInfoChanged || imageChanged;
   };
 
   const handleSave = async () => {
     if (!hasChanges()) {
-      // showToast('No changes detected to save.', 'info');
       return;
     }
-
     setIsSaving(true);
-    
+
     try {
-      // Here you would typically save all data to your backend
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Update original data after successful save
-      setOriginalPersonalInfo(personalInfo);
-      setOriginalProfileImage(profileData.profileImage);
-      
-      // Show success message
-      // showToast('Profile updated successfully!', 'success');
+      const data = {
+        contact_info: {
+          address1: personalInfo?.address1,
+          address2: personalInfo?.address2,
+          city: personalInfo?.city,
+          state: personalInfo?.state,
+          pincode: personalInfo?.pincode,
+          phone_number: personalInfo?.phone_number,
+          alternate_phone_number: personalInfo?.alternate_phone_number,
+        },
+        roll_no: personalInfo?.roll_no,
+        qualification: personalInfo?.qualification,
+        gender: personalInfo?.gender,
+        email: personalInfo?.email,
+        dob: personalInfo?.dob,
+        full_name: personalInfo?.full_name,
+      };
+
+      dispatch(UpdateInstructorThunk(data));
+      await updateStudentProfile({ ...data });
       setIsEditing(false);
     } catch (error) {
-      // Handle error
-      // showToast('Failed to update profile. Please try again.', 'error');
+      console.log(error);
     } finally {
       setIsSaving(false);
     }
@@ -136,27 +129,27 @@ const ProfileInformation: React.FC = () => {
       setShowCancelDialog(true);
       return;
     }
-    
+
     setIsEditing(false);
   };
 
   const confirmCancel = () => {
-    // Restore original data
     setPersonalInfo(originalPersonalInfo);
-    setProfileData(prev => ({ ...prev, 
+    setProfileData((prev) => ({
+      ...prev,
       profileImage: originalProfileImage,
-      name: originalPersonalInfo.name 
+      name: originalPersonalInfo?.name,
     }));
-    
+
     setIsEditing(false);
     setShowCancelDialog(false);
   };
 
   return (
-    <div className="min-h-fit" style={{ fontFamily: FONTS.para_01.fontFamily }}>
-      <div className="flex flex-col xl:flex-row gap-4 p-2 sm:p-4 max-w-[1400px] mx-auto">
+    <div className='min-h-fit' style={{ fontFamily: FONTS.para_01.fontFamily }}>
+      <div className='flex flex-col xl:flex-row gap-4 p-2 sm:p-4 max-w-[1400px] mx-auto'>
         {/* Sidebar - Responsive width */}
-        <div className="w-full xl:w-[320px] 2xl:w-[380px] flex-shrink-0">
+        <div className='w-full xl:w-[320px] 2xl:w-[380px] flex-shrink-0'>
           <ProfileSidebar
             name={profileData.name}
             traineeId={profileData.traineeId}
@@ -169,9 +162,9 @@ const ProfileInformation: React.FC = () => {
             isEditing={isEditing}
           />
         </div>
-        
+
         {/* Content - Takes remaining space */}
-        <div className="flex-1 min-w-0">
+        <div className='flex-1 min-w-0'>
           <ProfileContent
             personalInfo={personalInfo}
             instituteInfo={instituteInfo}
@@ -189,13 +182,13 @@ const ProfileInformation: React.FC = () => {
       {/* Confirmation Dialog */}
       <ConfirmationDialog
         isOpen={showCancelDialog}
-        onClose={() => setShowCancelDialog(false)}
+        onClose={() => {setShowCancelDialog(false), dispatch(getStudentProfileThunk());}} 
         onConfirm={confirmCancel}
-        title="Discard Changes"
-        description="You have unsaved changes. Are you sure you want to discard them?"
-        confirmText="Discard"
-        cancelText="Keep Editing"
-        type="warning"
+        title='Discard Changes'
+        description='You have unsaved changes. Are you sure you want to discard them?'
+        confirmText='Discard'
+        cancelText='Keep Editing'
+        type='warning'
       />
     </div>
   );

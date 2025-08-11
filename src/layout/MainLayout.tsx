@@ -2,10 +2,9 @@
 import Footer from '@/components/shared/Footer';
 import Navbar from '@/components/shared/Navbar';
 import { Outlet } from 'react-router-dom';
-import Client from '../api/index'
+import Client from '../api/index';
 
 const MainLayout = () => {
-
 	const publicVapidKey = import.meta.env.VITE_PUBLIC_VAPI_KEY;
 
 	function urlBase64ToUint8Array(base64String: string) {
@@ -18,11 +17,14 @@ const MainLayout = () => {
 		return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
 	}
 
-
 	if ('serviceWorker' in navigator) {
-		navigator.serviceWorker.register('/Service-Worker.js')
+		navigator.serviceWorker
+			.register('/Service-Worker.js')
 			.then((registration) => {
-				console.log('Service Worker registered with scope:', registration.scope);
+				console.log(
+					'Service Worker registered with scope:',
+					registration.scope
+				);
 			})
 			.catch((error) => {
 				console.error('Service Worker registration failed:', error);
@@ -33,13 +35,16 @@ const MainLayout = () => {
 		navigator.serviceWorker
 			.register('/Service-Worker.js')
 			.then(async (register: any) => {
-				const user: any = localStorage.getItem('user')
+				const user: any = localStorage.getItem('user');
 				const sub = await register.pushManager.subscribe({
 					userVisibleOnly: true,
 					applicationServerKey: urlBase64ToUint8Array(publicVapidKey),
 				});
 
-				await Client.notificatinsubscription.post({ subscription: sub, user: user._id });
+				await Client.notificatinsubscription.post({
+					subscription: sub,
+					user: user._id,
+				});
 			});
 	}
 

@@ -55,7 +55,7 @@ const HelpTopicCard: React.FC<HelpTopicCardProps> = ({
 
       {showViewButton && onViewDetails && (
         <button
-          onClick={onViewDetails}
+          onClick={() => onViewDetails(topic)}
           className="mt-4 px-3 sm:px-4 py-2 rounded-md bg-[#ebeff3] transition-colors duration-200 hover:opacity-90 self-start text-sm sm:text-base"
           style={{
             boxShadow: `

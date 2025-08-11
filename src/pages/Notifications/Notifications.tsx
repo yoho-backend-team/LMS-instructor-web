@@ -1,4 +1,4 @@
-import {  COLORS, FONTS } from '@/constants/uiConstants';
+import { COLORS, FONTS } from '@/constants/uiConstants';
 import backImg from '../../assets/icons/common/back_arrow.png';
 import {
 	Card,
@@ -18,7 +18,12 @@ import { useNavigate } from 'react-router-dom';
 import { getAllNotificationsThunk } from '@/features/Notifications/reducers/thunks';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectNotifications } from '@/features/Notifications/reducers/selectors';
-import { deleteNotification, updateNotificationStatus } from '@/features/Notifications/services';
+import {
+	deleteNotification,
+	updateNotificationStatus,
+} from '@/features/Notifications/services';
+import updatedimg from '../../assets/dashboard/notification.png';
+import { toast } from 'react-toastify';
 
 interface Notification {
 	id: string;
@@ -33,118 +38,63 @@ const Notifications = () => {
 	const [searchTerm, setSearchTerm] = useState('');
 	const [selectedNotification, setSelectedNotification] =
 		useState<Notification | null>(null);
-	const [notifications, setNotifications] = useState<Notification[]>([
-		// {
-		// 	id: '1',
-		// 	// date: '27 April',
-		// 	title: 'Assignment Submitted',
-		// 	description:
-		// 		'Student John Doe has submitted Assignment 2 for review in "Web Development Basics".',
-		// 	status: 'read',
-		// },
-		// {
-		// 	id: '2',
-		// 	date: '30 June',
-		// 	title: 'New Course Review',
-		// 	description:
-		// 		'You’ve received a new course rating for "JavaScript Essentials" – check it out!',
-		// 	status: 'unread',
-		// },
-		// {
-		// 	id: '3',
-		// 	date: '5 July',
-		// 	title: 'Live Session Scheduled',
-		// 	description:
-		// 		'A new live Q&A session has been scheduled for "React Fundamentals" on 5 July at 6:00 PM.',
-		// 	status: 'unread',
-		// },
-		// {
-		// 	id: '4',
-		// 	date: '15 July',
-		// 	title: 'Student Question Posted',
-		// 	description:
-		// 		'A student asked a question in the discussion board of "Node.js Mastery".',
-		// 	status: 'read',
-		// },
-		// {
-		// 	id: '5',
-		// 	date: '19 July',
-		// 	title: 'Grading Deadline Reminder',
-		// 	description:
-		// 		'Reminder: Grade all pending submissions in "Advanced CSS" by 16 July.',
-		// 	status: 'read',
-		// },
-		// {
-		// 	id: '6',
-		// 	date: '21 July',
-		// 	title: 'New Enrollment',
-		// 	description:
-		// 		'A new student has enrolled in your course "Python for Beginners".',
-		// 	status: 'read',
-		// },
-	]);
-
 	const navigate = useNavigate();
-
 	const dispatch = useDispatch<any>();
 	const Notifications = useSelector(selectNotifications);
 
 	useEffect(() => {
 		dispatch(getAllNotificationsThunk({}));
-	}, [dispatch,selectedNotification]);
+	}, [dispatch, selectedNotification]);
 
-	console.log(Notifications,"Notificatuonssssssss")
 	const handleNotificationClick = async (notification: any) => {
 		setSelectedNotification(notification);
 		try {
 			const response = await updateNotificationStatus({
-				uuid: notification?.uuid, status: 'read'
-			})
-			console.log(response, "Response from update notification status")
-			if(response){
+				uuid: notification?.uuid,
+				status: 'read',
+			});
+			if (response) {
 				dispatch(getAllNotificationsThunk({}));
 			}
-		}
-		catch (error) {
+		} catch (error) {
 			console.error('Error updating notification status:', error);
 		}
 	};
 
-
-
 	const handleDeleteNotification = async (notification: any) => {
 		try {
 			const response = await deleteNotification({
-				uuid: notification?.uuid
-			})
-			console.log(response, "Response from delete notification")
+				uuid: notification?.uuid,
+			});
 			setSelectedNotification(null);
-			if(response){
+			if (response) {
 				dispatch(getAllNotificationsThunk({}));
+				toast.success('Notification deleted');
 			}
-		}
-		catch (error) {
+		} catch (error) {
 			console.error('Error deleting notification:', error);
 		}
-	}
+	};
 
-	const filteredNotifications = Notifications
-		.filter((notification:any) => (filter === 'all' ? true : notification.status === filter))
-		.filter((notification:any) =>
-			[notification.title, notification.description, notification.date]
-				.join(' ')
-				.toLowerCase()
-				.includes(searchTerm.toLowerCase())
-		);
+	const filteredNotifications = Notifications?.filter((notification: any) =>
+		filter === 'all' ? true : notification.status === filter
+	).filter((notification: any) =>
+		[notification.title, notification.description, notification.date]
+			.join(' ')
+			.toLowerCase()
+			.includes(searchTerm.toLowerCase())
+	);
 
-	const totalMessages = Notifications.length;
-	const unreadMessages = Notifications.filter((n:any) => n.status === 'unread').length;
+	const totalMessages = Notifications?.length;
+	const unreadMessages = Notifications?.filter(
+		(n: any) => n.status === 'unread'
+	).length;
 
 	function formatDateToNormal(isoString: any) {
 		const date = new Date(isoString);
 
 		const day = String(date.getUTCDate()).padStart(2, '0');
-		const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are 0-based
+		const month = String(date.getUTCMonth() + 1).padStart(2, '0');
 		const year = date.getUTCFullYear();
 
 		return `${day}-${month}-${year}`;
@@ -208,8 +158,8 @@ const Notifications = () => {
 								key={label}
 								className={`w-[75px] rounded-lg shadow-md cursor-pointer transition-all duration-200 ${
 									filter === label
-										? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white hover:text-white '
-										: 'bg-[#ebeff3] text-black '
+										? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white hover:text-white shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)]'
+										: 'bg-[#ebeff3] text-black shadow-[3px_3px_5px_rgba(255,255,255,0.7),_inset_2px_2px_3px_rgba(189,194,199,0.75)]'
 								}`}
 								variant='outline'
 								onClick={() => setFilter(label as 'all' | 'read' | 'unread')}
@@ -220,8 +170,8 @@ const Notifications = () => {
 					</div>
 
 					<div className='flex flex-col w-full gap-3 px-2 py-3 overflow-y-auto max-h-[400px] scrollbar-hide'>
-						{filteredNotifications.length ? (
-							filteredNotifications.map((notification:any) => (
+						{filteredNotifications?.length ? (
+							filteredNotifications?.map((notification: any) => (
 								<Card
 									key={notification.id}
 									className={`relative bg-[#ebeff3] lg:h-[165px] cursor-pointer shadow-md ${
@@ -243,8 +193,11 @@ const Notifications = () => {
 												<Dialog>
 													<DialogTrigger asChild>
 														<Button
-															className='bg-[#ebeff3] shadow'
+															className='bg-[#ebeff3] shadow rgba(255,255,255,0.7) 5px 5px 4px, rgba(189,194,199,0.75) 2px 2px 3px inset'
 															variant='outline'
+															style={{
+																boxShadow: `rgba(255,255,255,0.7) 5px 5px 4px, rgba(189,194,199,0.75) 2px 2px 3px inset`,
+															}}
 														>
 															{formatDateToNormal(notification?.createdAt)}
 														</Button>
@@ -254,12 +207,18 @@ const Notifications = () => {
 										</div>
 									</CardHeader>
 									<CardContent>
-										<p style={{ ...FONTS.heading_07 }}>{notification.body}</p>
+										<p
+											style={{ ...FONTS.heading_07 }}
+											className='break-words whitespace-normal'
+										>
+											{notification?.body}
+										</p>
 									</CardContent>
 								</Card>
 							))
 						) : (
 							<div className='text-center py-8' style={{ ...FONTS.para_01 }}>
+								<img src={updatedimg} alt='' className='h-[250px] w-[550px]' />
 								No notifications found
 							</div>
 						)}
@@ -281,9 +240,20 @@ const Notifications = () => {
 									<h4 style={{ ...FONTS.heading_02 }} className='mb-2'>
 										{selectedNotification.title}
 									</h4>
-									<Button variant='outline'>{formatDateToNormal(selectedNotification?.createdAt)}</Button>
+									<Button
+										className='bg-[#ebeff3] shadow rgba(255,255,255,0.7) 5px 5px 4px, rgba(189,194,199,0.75) 2px 2px 3px inset'
+										variant='outline'
+										style={{
+											boxShadow: `rgba(255,255,255,0.7) 5px 5px 4px, rgba(189,194,199,0.75) 2px 2px 3px inset`,
+										}}
+									>
+										{formatDateToNormal(selectedNotification?.createdAt)}
+									</Button>
 								</div>
-								<p className='my-3' style={{ ...FONTS.heading_06 }}>
+								<p
+									className='my-3 break-words whitespace-normal'
+									style={{ ...FONTS.heading_06 }}
+								>
 									{selectedNotification.body}
 								</p>
 								<div className='flex justify-end mt-5'>
@@ -291,7 +261,9 @@ const Notifications = () => {
 										className='bg-gradient-to-l from-[#ff0000] to-[#ff3300] text-white rounded-lg shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#ff0000_inset,-4px_-8px_10px_0px_#ff0000_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white cursor-pointer'
 										variant='outline'
 										style={{ color: COLORS.white }}
-										onClick={() => handleDeleteNotification(selectedNotification)}
+										onClick={() =>
+											handleDeleteNotification(selectedNotification)
+										}
 									>
 										Delete
 									</Button>

@@ -5,14 +5,17 @@ import { useRef, useState } from 'react';
 import Logo from '../../../assets/icons/navbar/icons8-ionic-50.png';
 import { authOtpVerification } from '@/features/Authentication/services';
 import { toast } from 'react-toastify';
+import { useAuth } from '@/context/AuthContext/AuthContext';
 
 const OtpVerification = () => {
 	const navigate = useNavigate();
 	const [otpDigits, setOtpDigits] = useState(Array(6).fill(''));
 	const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
 	const [showError, setShowError] = useState(false);
+	const [isVerifying, setIsVerifying] = useState(false);
 	const location = useLocation();
 	const { data, email } = location?.state;
+	const { login } = useAuth();
 
 	const handleOtpChange = (index: number, value: string) => {
 		setShowError(false);
@@ -46,7 +49,9 @@ const OtpVerification = () => {
 		const enteredOtp = otpDigits.join('');
 		if (!enteredOtp.length) {
 			setShowError(true);
+			return;
 		}
+		setIsVerifying(true);
 		try {
 			const params_data = {
 				email,
@@ -55,17 +60,25 @@ const OtpVerification = () => {
 			};
 			const response = await authOtpVerification(params_data);
 			if (response) {
-				navigate('/change-password', {
-					state: {
-						email,
-					},
-				});
-				toast.success('OTP verified successfully!');
+				if (data?.step === 'otp') {
+					login(response?.data);
+					toast.success('Login successfully');
+					navigate('/');
+				} else {
+					navigate('/change-password', {
+						state: {
+							email,
+						},
+					});
+					toast.success('OTP verified successfully!');
+				}
 			} else {
 				toast.error('Invalid OTP, please enter valid OTP.');
 			}
 		} catch (error) {
 			toast.error('Something went wrong, please try again.');
+		} finally {
+			setIsVerifying(false);
 		}
 	};
 
@@ -136,13 +149,21 @@ const OtpVerification = () => {
 
 						{/* Submit */}
 						<button
-							type='submit'
-							className={`w-full my-6 mt-8 bg-gradient-to-r from-[#7B00FF] to-[#B200FF] py-2 rounded-md transition cursor-pointer`}
-							style={{ ...FONTS.heading_04, color: COLORS.white }}
-							onClick={handleOtpVerify}
-						>
-							Verify
-						</button>
+									type="submit"
+									onClick={handleOtpVerify}
+									disabled={isVerifying}
+									className={`w-full my-6 mt-8 py-2 rounded-md flex justify-center items-center gap-2 transition
+										bg-gradient-to-r from-[#7B00FF] to-[#B200FF]
+										${isVerifying ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}`}
+									style={{ ...FONTS.heading_04, color: COLORS.white }}
+								>
+									{isVerifying && (
+										<div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+									)}
+									{isVerifying ? 'Verifying...' : 'Verify'}
+								</button>
+
+
 						<div className='flex justify-center'>
 							<p
 								style={{ ...FONTS.heading_06, color: COLORS.blue_02 }}
@@ -159,8 +180,8 @@ const OtpVerification = () => {
 					className='bg-gradient-to-l from-[#B200FF] to-[#7B00FF] w-full h-full rounded-md flex items-center justify-center cursor-pointer'
 					style={{
 						boxShadow: `
-					  rgba(255, 255, 255, 0.7) -4px -4px 4px,
-					  rgba(189, 194, 199, 0.75) 5px 5px 4px
+				  rgba(255, 255, 255, 0.7) -4px -4px 4px,
+				  rgba(189, 194, 199, 0.75) 5px 5px 4px
 					`,
 					}}
 				></Card>

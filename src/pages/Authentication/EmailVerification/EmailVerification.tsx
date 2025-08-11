@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import Logo from '../../../assets/icons/navbar/icons8-ionic-50.png';
 import { COLORS, FONTS } from '@/constants/uiConstants';
@@ -19,8 +20,10 @@ const EmailVerification = () => {
 	} = useForm<EmailData>({});
 
 	const navigate = useNavigate();
+	const [isLoading, setIsLoading] = useState(false);
 
 	const onSubmit = async (data: EmailData) => {
+		setIsLoading(true);
 		try {
 			if (data.email) {
 				const response = await authEmailVerification(data);
@@ -33,11 +36,13 @@ const EmailVerification = () => {
 						},
 					});
 				} else {
-					toast.error('Failed to sent OTP, please try again.');
+					toast.error('Failed to send OTP, please try again.');
 				}
 			}
 		} catch (error: any) {
 			toast.error('Something went wrong, please try again.');
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -48,9 +53,9 @@ const EmailVerification = () => {
 					className='bg-[#ebeff3] w-full h-full rounded-md px-4 flex justify-center cursor-pointer'
 					style={{
 						boxShadow: `
-					  rgba(255, 255, 255, 0.7) -4px -4px 4px,
-					  rgba(189, 194, 199, 0.75) 5px 5px 4px
-					`,
+							rgba(255, 255, 255, 0.7) -4px -4px 4px,
+							rgba(189, 194, 199, 0.75) 5px 5px 4px
+						`,
 					}}
 				>
 					<div className='flex flex-col items-center'>
@@ -58,17 +63,14 @@ const EmailVerification = () => {
 							className='bg-[#ebeff3] w-[50px] h-[50px] rounded-full flex items-center justify-center cursor-pointer'
 							style={{
 								boxShadow: `
-					  rgba(255, 255, 255, 0.7) -4px -4px 4px,
-					  rgba(189, 194, 199, 0.75) 5px 5px 4px
-					`,
+									rgba(255, 255, 255, 0.7) -4px -4px 4px,
+									rgba(189, 194, 199, 0.75) 5px 5px 4px
+								`,
 							}}
 						>
 							<img src={Logo} alt='logo' style={{ width: 20, height: 20 }} />
 						</Card>
-						<p
-							className='text-center my-3 mb-10'
-							style={{ ...FONTS.heading_02 }}
-						>
+						<p className='text-center my-3 mb-10' style={{ ...FONTS.heading_02 }}>
 							Email Verification
 						</p>
 						<form onSubmit={handleSubmit(onSubmit)} className='w-full my-4'>
@@ -90,12 +92,19 @@ const EmailVerification = () => {
 
 							{/* Submit */}
 							<button
-								type='submit'
-								className={`w-full my-6 mt-8 bg-gradient-to-r from-[#7B00FF] to-[#B200FF] py-2 rounded-md transition cursor-pointer`}
+								type="submit"
+								disabled={isLoading}
+								className={`w-full my-6 mt-8 py-2 rounded-md flex justify-center items-center gap-2 transition
+									bg-gradient-to-r from-[#7B00FF] to-[#B200FF]
+									${isLoading ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}`}
 								style={{ ...FONTS.heading_04, color: COLORS.white }}
 							>
-								Verify
+								{isLoading && (
+									<div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+								)}
+								{isLoading ? 'Verifying...' : 'Verify'}
 							</button>
+
 							<div
 								className='flex items-center gap-2 justify-center'
 								onClick={() => navigate('/login')}
@@ -109,14 +118,15 @@ const EmailVerification = () => {
 					</div>
 				</Card>
 			</div>
+
 			<div className='w-1/2 h-full'>
 				<Card
 					className='bg-gradient-to-l from-[#B200FF] to-[#7B00FF] w-full h-full rounded-md flex items-center justify-center cursor-pointer'
 					style={{
 						boxShadow: `
-					  rgba(255, 255, 255, 0.7) -4px -4px 4px,
-					  rgba(189, 194, 199, 0.75) 5px 5px 4px
-					`,
+							rgba(255, 255, 255, 0.7) -4px -4px 4px,
+							rgba(189, 194, 199, 0.75) 5px 5px 4px
+						`,
 					}}
 				></Card>
 			</div>

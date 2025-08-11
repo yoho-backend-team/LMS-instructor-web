@@ -24,21 +24,37 @@ const Login = () => {
 	const [showPassword, setShowPassword] = useState(false);
 	const navigate = useNavigate();
 	const { login } = useAuth();
+	const [isLoading, setIsLoading] = useState(false);
 
 	const onSubmit = async (data: LoginData) => {
 		try {
 			if (data.email && data.password) {
+				setIsLoading(true);
 				const response = await authInstructorLogin(data);
 				if (response) {
-					login(response?.data);
-					toast.success('Login successfully');
-					navigate('/');
+					if (response?.data?.step === 'otp') {
+						toast.error('Session expired, please verify the otp.');
+						setIsLoading(false);
+						navigate('/otp-verify', {
+							state: {
+								email: data?.email,
+								data: response?.data,
+							},
+						});
+					} else {
+						login(response?.data);
+						setIsLoading(false);
+						toast.success('Login successfully');
+						navigate('/');
+					}
 				} else {
 					toast.error('Invalid credentials, please try again.');
 				}
 			}
 		} catch (error: any) {
 			toast.error('Something went wrong, please try again.');
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -128,12 +144,24 @@ const Login = () => {
 
 							{/* Submit */}
 							<button
-								type='submit'
-								className={`w-full my-6 mt-8 bg-gradient-to-r from-[#7B00FF] to-[#B200FF] py-2 rounded-md transition cursor-pointer`}
-								style={{ ...FONTS.heading_04, color: COLORS.white }}
-							>
-								Sign In
-							</button>
+									type="submit"
+									onClick={handleSubmit(onSubmit)}
+									disabled={isLoading}
+									className="w-full my-6 mt-8 py-2 rounded-md transition cursor-pointer flex items-center justify-center gap-2 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] hover:shadow-[inset_3px_3px_5px_rgba(123,0,255,0.3),inset_-3px_-3px_5px_rgba(255,255,255,0.7)] disabled:opacity-50 disabled:cursor-not-allowed"
+									style={{
+										...FONTS.heading_04,
+										color: COLORS.white,
+										backgroundColor: COLORS.light_blue,
+										fontFamily: FONTS.para_01.fontFamily,
+										fontSize: FONTS.para_01.fontSize,
+									}}
+									>
+									{isLoading && (
+										<div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+									)}
+									{isLoading ? 'Signing In...' : 'Sign In'}
+								</button>
+
 							<div className='flex items-center justify-center gap-2'>
 								<BsInfoCircle color={COLORS.text_desc} />
 								<p style={FONTS.heading_07}>

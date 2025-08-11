@@ -13,6 +13,12 @@ import { authInstructorLogout } from '@/features/Authentication/services';
 import LogoutConfirmationModal from './LogoutConfirmationModal';
 import type { AppDispatch } from '@/store/store';
 import { getDashBoardReports } from '@/features/Dashboard/reducers/thunks';
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from '../ui/tooltip';
 
 const Navbar = () => {
 	const navigate = useNavigate();
@@ -22,6 +28,7 @@ const Navbar = () => {
 	const dashData = useSelector(selectDashBoard);
 	const [showModal, setShowModal] = useState(false);
 	const dispatch = useDispatch<AppDispatch>();
+	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
 		dispatch(getDashBoardReports());
@@ -68,118 +75,172 @@ const Navbar = () => {
 
 	const handleLogout = async () => {
 		try {
+			setIsLoading(true);
 			const response = await authInstructorLogout({});
 			if (response) {
 				setshowProfileSection(false);
 				logout();
+				setIsLoading(false);
 				toast.success('Logout successfully!');
 				navigate('/login');
 				setShowModal(false);
+			} else {
+				toast.error('Failed to logout, please try again.');
 			}
 		} catch (error) {
 			toast.error('Something went wrong, please try again.');
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
 	return (
 		<nav>
 			<div className='flex justify-between gap-3 px-6'>
-				<Card
-					className='bg-[#ebeff3] min-w-[48px] h-[48px] rounded-full flex items-center justify-center cursor-pointer'
-					style={{
-						boxShadow: `
-					  rgba(255, 255, 255, 0.7) -4px -4px 4px,
-					  rgba(189, 194, 199, 0.75) 5px 5px 4px
-					`,
-					}}
-					onClick={() => {
-						navigate('/');
-						setshowProfileSection(false);
-					}}
-				>
-					<img
-						src={GetImageUrl(dashData?.institute?.logo) ?? undefined}
-						alt={dashData?.institute?.institute_name}
-						title={dashData?.institute?.institute_name}
-						className='w-12 h-12 rounded-full'
-					/>
-				</Card>
-
-				<div className='flex lg:gap-10 md:gap-5'>
-					{navItems.map((item) => (
-						<Link to={item.path} onClick={() => setshowProfileSection(false)}>
+				<TooltipProvider>
+					<Tooltip>
+						<TooltipTrigger asChild>
 							<Card
-								key={item.path}
-								className='bg-[#ebeff3] w-[48px] h-[48px] flex items-center justify-center shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]'
+								className='bg-[#ebeff3] min-w-[48px] h-[48px] rounded-full flex items-center justify-center cursor-pointer'
 								style={{
-									boxShadow:
-										location.pathname === `/${item.path}`
-											? `
-					  rgba(255, 255, 255, 0.7) -4px -4px 4px,
-					  rgba(189, 194, 199, 0.75) 5px 5px 4px
-					`
-											: undefined,
+									boxShadow: `
+                  rgba(255, 255, 255, 0.7) -4px -4px 4px,
+                  rgba(189, 194, 199, 0.75) 5px 5px 4px
+                  `,
+								}}
+								onClick={() => {
+									navigate('/');
+									setshowProfileSection(false);
 								}}
 							>
 								<img
-									src={
-										location.pathname === `/${item.path}`
-											? item.iconActive
-											: item.iconInactive
-									}
-									alt='nav-icon'
-									title={item.name}
-									style={{ width: 24, height: 24 }}
+									src={GetImageUrl(dashData?.institute?.logo) ?? undefined}
+									alt={dashData?.institute?.institute_name}
+									className='w-12 h-12 rounded-full'
 								/>
 							</Card>
-						</Link>
+						</TooltipTrigger>
+						<TooltipContent
+							side='bottom'
+							className='bg-[#B200FF] text-white px-3 py-2 rounded-md'
+						>
+							<p>Home</p>
+						</TooltipContent>
+					</Tooltip>
+				</TooltipProvider>
+
+				<div className='flex lg:gap-10 md:gap-5'>
+					{navItems.map((item) => (
+						<TooltipProvider key={item.path}>
+							<Tooltip>
+								<TooltipTrigger asChild>
+									<Link
+										to={item.path}
+										onClick={() => setshowProfileSection(false)}
+									>
+										<Card
+											className='bg-[#ebeff3] w-[48px] h-[48px] flex items-center justify-center shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]'
+											style={{
+												boxShadow:
+													location.pathname === `/${item.path}`
+														? `
+                          rgba(255, 255, 255, 0.7) -4px -4px 4px,
+                          rgba(189, 194, 199, 0.75) 5px 5px 4px
+                          `
+														: undefined,
+											}}
+										>
+											<img
+												src={
+													location.pathname === `/${item.path}`
+														? item.iconActive
+														: item.iconInactive
+												}
+												alt='nav-icon'
+												style={{ width: 24, height: 24 }}
+											/>
+										</Card>
+									</Link>
+								</TooltipTrigger>
+								<TooltipContent
+									side='bottom'
+									className='bg-[#B200FF] text-white px-3 py-2 rounded-md'
+								>
+									<p>{item.name}</p>
+								</TooltipContent>
+							</Tooltip>
+						</TooltipProvider>
 					))}
 				</div>
 
 				<div className='flex gap-6'>
-					<Link to='notifications'>
+					<TooltipProvider>
+						<Tooltip>
+							<TooltipTrigger asChild>
+								<Link to='notifications'>
+									<Card
+										className='bg-[#ebeff3] w-[48px] h-[48px] rounded-full flex items-center justify-center'
+										style={{
+											boxShadow: `
+                      rgba(255, 255, 255, 0.7) -4px -4px 4px, 
+                      rgba(189, 194, 199, 0.75) 5px 5px 4px
+                      `,
+										}}
+									>
+										<img
+											src={NavbarIcons.NotificationImg}
+											alt='notification-bell'
+											className='cursor-pointer'
+											style={{ width: 24, height: 24 }}
+										/>
+									</Card>
+								</Link>
+							</TooltipTrigger>
+							<TooltipContent
+								side='bottom'
+								className='bg-[#B200FF] text-white px-3 py-2 rounded-md'
+							>
+								<p>Notifications</p>
+							</TooltipContent>
+						</Tooltip>
+					</TooltipProvider>
+
+					<TooltipProvider>
+						<Tooltip>
+							<TooltipTrigger asChild>
+								<div
+									className='cursor-pointer'
+									onClick={() => setshowProfileSection(!showProfileSection)}
+								>
+									<img
+										src={GetImageUrl(dashData?.user?.image) ?? undefined}
+										alt={dashData?.user?.full_name}
+										className='w-12 h-12 object-cover rounded-full'
+									/>
+								</div>
+							</TooltipTrigger>
+							<TooltipContent
+								side='bottom'
+								className='bg-[#B200FF] text-white px-3 py-2 rounded-md'
+							>
+								<p>Profile</p>
+							</TooltipContent>
+						</Tooltip>
+					</TooltipProvider>
+
+					{showProfileSection && (
 						<Card
-							className='bg-[#ebeff3] w-[48px] h-[48px] rounded-full flex items-center justify-center'
+							className='absolute z-50 right-6 top-20 bg-[#ebeff3] px-5 w-[200px] h-[156px]'
 							style={{
 								boxShadow: `
                 rgba(255, 255, 255, 0.7) -4px -4px 4px, 
                 rgba(189, 194, 199, 0.75) 5px 5px 4px
-              `,
-							}}
-						>
-							<img
-								src={NavbarIcons.NotificationImg}
-								alt='notification-bell'
-								className='cursor-pointer'
-								style={{ width: 24, height: 24 }}
-							/>
-						</Card>
-					</Link>
-					<div
-						className='cursor-pointer'
-						onClick={() => setshowProfileSection(!showProfileSection)}
-					>
-						<img
-							src={GetImageUrl(dashData?.user?.image) ?? undefined}
-							alt={dashData?.user?.full_name}
-							title={dashData?.user?.full_name}
-							className='w-12 h-12 object-cover rounded-full'
-						/>
-					</div>
-
-					{showProfileSection && (
-						<Card
-							className='absolute z-50 right-6 top-20 bg-[#ebeff3] px-5 w-[200px] h-[156px] '
-							style={{
-								boxShadow: `
-              rgba(255, 255, 255, 0.7) -4px -4px 4px, 
-              rgba(189, 194, 199, 0.75) 5px 5px 4px
-            `,
+                `,
 							}}
 						>
 							<Card className='bg-[#ebeff3] shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] h-[48px] w-[160px] cursor-pointer flex gap-2 justify-center'>
 								<Link
-									className=' flex justify-center gap-2'
+									className='flex justify-center gap-2'
 									to='profile'
 									onClick={() => setshowProfileSection(false)}
 								>
@@ -193,10 +254,10 @@ const Navbar = () => {
 							</Card>
 							<Button
 								className='h-[48px] w-[160px] flex justify-center cursor-pointer
-									  bg-gradient-to-l from-[#7B00FF] to-[#B200FF]
-									  rounded-xl  
-									  shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)]
-									'
+                          bg-gradient-to-l from-[#7B00FF] to-[#B200FF]
+                          rounded-xl  
+                          shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)]
+                        '
 							>
 								<div className='flex gap-2' onClick={() => setShowModal(true)}>
 									<img
@@ -214,6 +275,7 @@ const Navbar = () => {
 				</div>
 				<LogoutConfirmationModal
 					isOpen={showModal}
+					isLoading={isLoading}
 					onClose={() => setShowModal(false)}
 					onConfirm={handleLogout}
 				/>
