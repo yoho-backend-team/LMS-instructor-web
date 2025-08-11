@@ -78,12 +78,32 @@ const CourseProgress: React.FC = () => {
                 </div>
 
                 <div className="flex items-center left-6 justify-between relative self-stretch w-full flex-[0_0_auto]">
-                    <div className="relative w-fit mt-[-1.00px] [font-family:'Quicksand',Helvetica] font-bold text-[#706f6f] text-sm tracking-[0] leading-[normal]">
-                        Total Classes
-                    </div>
+                   <div className="relative w-fit mt-[-1px]">
+  <select
+    className="appearance-none bg-transparent border-none p-0 m-0 font-bold text-[#7B00FF] text-sm font-['Quicksand'] focus:outline-none cursor-pointer pr-6"
+    defaultValue="5"
+  >
+    <option value="5">Batch A</option>
+    
+  </select>
+
+  {/* Custom dropdown arrow */}
+  <svg
+    className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7B00FF] pointer-events-none"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    viewBox="0 0 24 24"
+  >
+    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+  </svg>
+</div>
+
+
+
 
                     <div className="relative w-[67px] mt-[-1.00px] [font-family:'Quicksand',Helvetica] font-bold text-[#706f6f] text-sm text-right tracking-[0] leading-[normal]">
-                        {CourseProgress?.[0]?.total} Classes
+                        {CourseProgress?.[0]?.total} Register
                     </div>
                 </div>
             </CardContent>
