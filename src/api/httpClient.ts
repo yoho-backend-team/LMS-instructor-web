@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { GetLocalStorage } from '@/utils/helper';
+import { ClearLocalStorage, GetLocalStorage } from '@/utils/helper';
 import axios from 'axios';
 
 //const backendurl = 'http://192.168.1.14:3000/api'
@@ -21,6 +21,16 @@ Axios.interceptors.request.use((config) => {
 	}
 	return config;
 });
+
+Axios.interceptors.response.use(
+	(response) => response,
+	(error) => {
+		if (error?.response && error?.response?.status === 401 && error?.response?.data?.status === "session_expired") {
+			ClearLocalStorage()
+		}
+		return Promise.reject(error)
+	}
+)
 
 class Client {
 	async get(
