@@ -5,7 +5,7 @@ import InstituteDetails from '@/components/dashboard/InstituteDetails';
 import ProfileCard from '@/components/dashboard/ProfileCard';
 import CourseProgress from '@/components/dashboard/CourseProgress';
 import Attendance from '@/components/dashboard/Attendance';
-import Payment from '@/components/dashboard/Paymentt';
+import Payment from '@/components/dashboard/Payment';
 import Assesments from '@/components/dashboard/Assesments';
 import Updates from '@/components/dashboard/Updates';
 import { FONTS } from '@/constants/uiConstants';
