@@ -1,4 +1,4 @@
-// src/components/community/CommunitySide/CommunitySide.tsx
+
 import React, { useMemo, useState } from 'react';
 import msgframe from '@/assets/icons/community/Frame 5185.png';
 import { GetLocalStorage } from '@/utils/helper';
@@ -55,7 +55,7 @@ const CommunitySide: React.FC<Props> = ({ communities }) => {
     const isSameDay = (d1: Date, d2: Date): boolean =>
       d1.getFullYear() === d2.getFullYear() &&
       d1.getMonth() === d2.getMonth() &&
-      d1.getDate() === d2.getDate();
+      d1.getDate() === d2.getDate()    
 
     const formatTime = (d: Date): string =>
       d.toLocaleTimeString('en-US', {
