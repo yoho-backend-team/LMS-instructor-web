@@ -60,7 +60,7 @@ export const SalarySlip = forwardRef<HTMLDivElement, SalarySlipProps>(({ data },
           year: "numeric",
         })
     }
-    return dateString
+    return dateString.split('T') ? dateString.split('T')[0] : dateString
   }
 
   const styles = {
