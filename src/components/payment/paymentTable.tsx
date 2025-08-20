@@ -8,6 +8,52 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getStudentPaymentThunk } from '@/features/Payment/reducers/thunks';
 import { selectPayment } from '@/features/Payment/reducers/selectors';
 import { getDashBoardReports } from '@/features/Dashboard/reducers/thunks';
+import jsPDF from "jspdf";
+import "jspdf-autotable"; // optional for tables
+
+const generateSalarySlip = (salaryData: any) => {
+  const doc = new jsPDF();
+
+  // Header
+  doc.setFontSize(16);
+  doc.text("Salary Slip", 105, 15, { align: "center" });
+
+  // Staff Info
+  doc.setFontSize(12);
+  doc.text(`Name: ${salaryData?.staff?.username || "N/A"}`, 14, 30);
+  doc.text(`Staff ID: ${salaryData?.staff?.staffId || "N/A"}`, 14, 38);
+  doc.text(`Designation: ${salaryData?.staff?.designation || "N/A"}`, 14, 46);
+  doc.text(`Payment Date: ${salaryData?.payment_date || "N/A"}`, 14, 54);
+
+  // Bank Details
+  doc.text("Bank Details:", 14, 70);
+  doc.text(`Bank: ${salaryData?.staff?.Bank_Details?.Bank || "N/A"}`, 20, 78);
+  doc.text(`Branch: ${salaryData?.staff?.Bank_Details?.Branch || "N/A"}`, 20, 86);
+  doc.text(`Account No: ${salaryData?.staff?.Bank_Details?.Account_Number || "N/A"}`, 20, 94);
+  doc.text(`IFSC: ${salaryData?.staff?.Bank_Details?.IFSC || "N/A"}`, 20, 102);
+
+  // Salary Structure Table
+  const salaryTable = [
+    ["Basic", salaryData?.salary_amount || "0"],
+    ["HRA", "12,000"],
+    ["Conveyance", "2,000"],
+    ["Travel Allowance", "3,000"],
+    ["Home Allowance", "5,000"],
+    ["Net Salary", `${salaryData?.salary_amount || "0"}`],
+  ];
+
+  (doc as any).autoTable({
+    startY: 120,
+    head: [["Component", "Amount"]],
+    body: salaryTable,
+  });
+
+  doc.text("This is a system generated salary slip.", 105, doc.internal.pageSize.height - 20, {
+    align: "center",
+  });
+  doc.save(`SalarySlip_${salaryData?.staff?.staffId || "Staff"}.pdf`);
+};
+
 
 interface PaymentTable {
 	Month: string;
@@ -120,6 +166,7 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
 							</button>
 							<p className='flex justify-center items-center gap-4'>
 								<button
+								onClick={() => generateSalarySlip(SalaryDetails[0])}
 									className='bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] p-2 rounded-lg cursor-pointer'
 									title='Download'
 								>
