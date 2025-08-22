@@ -47,7 +47,7 @@ const TicketId = () => {
   };
   
 
-  console.log(ticket.file,"ticket");
+ 
   
 
   return (

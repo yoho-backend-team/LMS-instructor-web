@@ -28,7 +28,7 @@ const HelpCenterMain: React.FC = () => {
     dispatch(getHelpThunk({ instituteid: instituteId?._id }));
   }, [dispatch]);
   
-  console.log(HelpDetails, "Help MAin")
+  //console.log(HelpDetails, "Help MAin")
   // const tabs: Tab[] = [
   //   { id: 'All', label: 'All', count: 5 },
   //   { id: 'Profile', label: 'Profile', count: 5 },

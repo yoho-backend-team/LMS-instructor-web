@@ -56,10 +56,10 @@ const Payment: React.FC = () => {
     return (
         <Card className="flex w-full h-[365px] items-start justify-between p-5 bg-[#ebeff3] rounded-2xl shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40]">
             <div className="flex flex-col gap-2 w-[30%] pl-4">
-               <div className="relative self-stretch mt-[-1.00px] [font-family:'Quicksand',Helvetica] font-bold text-dark text-xl tracking-[0] leading-[normal]">
-                               Tickets
-                            </div>
-               <div className="relative w-full [font-family:'Quicksand',Helvetica] font-bold text-[#706f6f] text-sm whitespace-nowrap mb-4">Total 9 Tickets Raised</div>
+                <div className="relative self-stretch mt-[-1.00px] [font-family:'Quicksand',Helvetica] font-bold text-dark text-xl tracking-[0] leading-[normal]">
+                    Tickets
+                </div>
+                <div className="relative w-full [font-family:'Quicksand',Helvetica] font-bold text-[#706f6f] text-sm whitespace-nowrap mb-4">Total 9 Tickets Raised</div>
             </div>
             <CardContent className="flex flex-row items-center gap-10 p-0">
                 <Circle title="" value={progress} strokeDashoffset={strokeDashoffsetProgress} />

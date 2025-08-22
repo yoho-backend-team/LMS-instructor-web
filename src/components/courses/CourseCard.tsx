@@ -31,7 +31,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
 					<img
 						src={GetImageUrl(image) ?? undefined}
 						alt='Course Icon'
-						className='w-full h-[150px] '
+						className='w-full h-[150px]'
 					/>
 				</div>
 			</div>

@@ -51,7 +51,7 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data,classType }) => {
     }));
   }, [data]);
 
-  console.log(data,"fillter Data");
+  
 
   const filterGroups: FilterGroup[] = [
     { title: 'Month', options: months },
