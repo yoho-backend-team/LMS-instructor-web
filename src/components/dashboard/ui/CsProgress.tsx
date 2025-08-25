@@ -114,6 +114,10 @@ const CsProgress: React.FC<CourseProgressProps> = ({ progress = 2, totalClasses 
                     <div className="text-sm font-medium text-gray-600">Total Classes</div>
                     <div className="text-sm font-medium text-gray-600">{totalClasses} Classes</div>
                 </div>
+                            <div className="flex items-center justify-between w-full">
+            <div className="text-sm font-medium text-gray-600">Completed</div>
+            <div className="text-sm font-medium text-gray-600">{completedClasses} Classes</div>
+            </div>
             </CardContent>
         </Card>
     )

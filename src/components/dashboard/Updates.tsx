@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useState } from 'react'
+import React, {  useState } from 'react'
 import { FONTS } from '@/constants/uiConstants'
 import updatesimg from '../../assets/dashboard/updates.png'
 import { Button } from '../ui/button';

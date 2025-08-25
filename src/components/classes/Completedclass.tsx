@@ -20,6 +20,9 @@ interface FilterGroup {
 interface CompletedclassProps {
   data?: any[];
   classType?: boolean;
+  showOnlineOnly?: boolean;
+  currentPage?: number;
+  onPageChange?: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
@@ -41,7 +44,7 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
   // Get unique courses from data
   const courses = useMemo(() => {
     const courseSet = new Set<string>();
-    data.forEach(item => {
+    (data || []).forEach(item => {
       if (item.courseDetails?.course_name) {
         courseSet.add(item.courseDetails.course_name);
       }
@@ -83,7 +86,7 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
   };
 
   const filteredData = useMemo(() => {
-    return data.filter(item => {
+    return (data || []).filter(item => {
       const date = item.start_date || '';
       const month = date.slice(5, 7);
       const year = date.slice(0, 4);
@@ -181,7 +184,7 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
       <Card className="bg-gradient-to-r from-[#7B00FF] to-[#B200FF] text-white mx-2 p-4 mt-2">
         <table className="w-full">
           <thead>
-            <tr className="flex justify-around items-center !text-white" style={{ ...FONTS.heading_03 }}>
+            <tr className="flex justify-around items-center !text-black" style={{ ...FONTS.heading_03 }}>
               {headers.map((title, index) => (
                 <th key={index}>{title}</th>
               ))}
@@ -226,7 +229,7 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
                 <div className="flex justify-center">
                   <Button
                     onClick={() => handleClassDetailPage(item.uuid)}
-                    className="cursor-pointer bg-gradient-to-r from-green-400 to-green-500 text-white hover:from-green-500 hover:to-green-600
+                    className="cursor-pointer bg-gradient-to-r from-green-400 to-green-500 text-black hover:from-green-500 hover:to-green-600
                       shadow-[0px_3px_4px_0px_rgba(255,255,255,0.75)_inset,3px_-3px_3px_0px_rgba(255,255,255,0.25)_inset,
                       -4px_8px_23px_0px_#3ABE65_inset,-8px_-8px_12px_0px_#3ABE65_inset,2px_3px_3px_0px_rgba(189,194,199,0.75),
                       8px_8px_12px_0px_rgba(189,194,199,0.25),-1px_-1px_6px_0px_rgba(255,255,255,0.75),

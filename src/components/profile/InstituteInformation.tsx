@@ -10,7 +10,7 @@ interface InstituteInfo {
 
 interface InstituteInformationProps {
 	data?: InstituteInfo;
-	onDataChange?: (data: InstituteInfo) => void;
+	onDataChange?: (data:any) => void;
 	isEditing?: boolean;
 }
 

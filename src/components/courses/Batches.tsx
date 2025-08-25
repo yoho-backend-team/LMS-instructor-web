@@ -91,19 +91,19 @@ const Batches = () => {
 				<div className='flex flex-col'>
 					<Card className='bg-gradient-to-r from-[#7B00FF] to-[#B200FF] !text-white p-4 mx-4 rounded-md sticky top-0 z-10 mb-4'>
 						<div className='grid grid-cols-5 gap-4  text-center !text-white'>
-							<div style={{ ...FONTS.heading_02, color: COLORS.white }}>
+							<div style={{ ...FONTS.heading_02, color: COLORS.black }}>
 								Batches
 							</div>
-							<div style={{ ...FONTS.heading_02, color: COLORS.white }}>
+							<div style={{ ...FONTS.heading_02, color: COLORS.black }}>
 								Total Students
 							</div>
-							<div style={{ ...FONTS.heading_02, color: COLORS.white }}>
+							<div style={{ ...FONTS.heading_02, color: COLORS.black }}>
 								Total Classes
 							</div>
-							<div style={{ ...FONTS.heading_02, color: COLORS.white }}>
+							<div style={{ ...FONTS.heading_02, color: COLORS.black }}>
 								Start Date
 							</div>
-							<div style={{ ...FONTS.heading_02, color: COLORS.white }}>
+							<div style={{ ...FONTS.heading_02, color: COLORS.black }}>
 								End Date
 							</div>
 						</div>

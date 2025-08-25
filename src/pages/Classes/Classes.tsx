@@ -165,11 +165,11 @@ const Classes = () => {
 				)}
 				{activeTab === 'completed' && (
 					<Completedclass
-						showOnlineOnly={isOn}
+						showOnlineOnly={true}
 						currentPage={currentPage}
 						onPageChange={setCurrentPage}
 						data={classData}
-						classType={isOn}
+						classType={true}
 					/>
 				)}
 			</div>

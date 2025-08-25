@@ -38,7 +38,7 @@ export const Payment = () => {
   const bankDetail = SalaryDetails[0]?.staff?.Bank_Details
 
   const [staffDetails, setStaffDetails] = useState({
-    name: "John Doe",
+    username: "John Doe",
     designation: "Teacher",
     staffId: "STF-001",
     address: "123 Main St, City, Country",
@@ -233,7 +233,7 @@ export const Payment = () => {
                       <input
                         type="text"
                         name="name"
-                        value={staffDetail?.username}
+                        value={staffDetails?.username}
                         onChange={handleStaffDetailChange}
                         disabled={!isEditing}
                         className="p-4 rounded-lg mb-2 w-full"
@@ -406,12 +406,15 @@ export const Payment = () => {
                 <CustomTabContent value="salary">
                   <div className="">
                     <div>
-                      <label className="block mb-1" style={{ ...FONTS.heading_05 }}>
+                      <label className="block  mb-1" style={{ ...FONTS.heading_05 }}>
                         Monthly Basic
                       </label>
                       <input
                         type="text"
                         value={salaryStructure.basic}
+                        onChange={(e) =>
+    setSalaryStructure((prev) => ({ ...prev, basic: e.target.value }))
+  }
                         disabled
                         className="p-4 rounded-lg mb-2 w-full"
                         style={{
