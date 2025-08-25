@@ -6,6 +6,6 @@ export const getClassDetails = (params: any) => async (dispatch: any) => {
 		const response = await getLiveClassDetails(params);
 		dispatch(getclassdetails(response));
 	} catch (error) {
-		console.log(error);
+	  console.log(error);
 	}
 };

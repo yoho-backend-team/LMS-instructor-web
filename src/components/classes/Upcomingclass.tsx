@@ -12,7 +12,7 @@ interface ClassItem {
 }
 
 interface UpcomingclassProps {
-  showOnlineOnly: boolean;
+  showOnlineOnly?: boolean;
   data: ClassItem[];
   currentPage: number;
   onPageChange: (page: number) => void;

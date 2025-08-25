@@ -31,7 +31,7 @@ const IDCard: React.FC<IDCardProps> = ({ data }) => {
 
 	useEffect(() => {
 		dispatch(getStudentProfileThunk());
-		console.log(profileDetails);
+		
 	}, [dispatch]);
   
   // Sample data - replace with actual data from props or API

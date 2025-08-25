@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import fileimg from '../../assets/courses icons/File.jpg';
-import {  FONTS } from '@/constants/uiConstants';
+import { FONTS } from '@/constants/uiConstants';
 import { toast } from 'react-toastify';
 import { uploadticketfile } from '@/features/Tickets/services/Ticket';
 import {
@@ -16,6 +16,7 @@ import { selectDashBoard } from '@/features/Dashboard/reducers/selectors';
 import {
 	selectCoursedata,
 } from '@/features/Course/reducers/selector';
+import { getInstructorcourseData } from '@/features/Course/reducers/thunks';
 
 interface FileUploadDesignProps {
 	selectedNotes: {
@@ -41,6 +42,7 @@ const FileUploadDesign = ({
 	const reports = useSelector(selectDashBoard);
 	const courseSelectData = useSelector(selectCoursedata);
 	const [isLoading, setIsLoading] = useState(false);
+	console.log(preview)
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -316,18 +318,17 @@ const FileUploadDesign = ({
 					Cancel
 				</button>
 				<button
-					className={`px-4 py-2 bg-gradient-to-r from-[#7B00FF] to-[#B200FF] rounded-md btnshadow flex items-center justify-center gap-2 !text-white transition-all duration-200 ${
-						isLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
-					}`}
+					className={`px-4 py-2 bg-gradient-to-r from-[#7B00FF] to-[#B200FF] rounded-md btnshadow flex items-center justify-center gap-2 !text-white transition-all duration-200 ${isLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+						}`}
 					style={{ ...FONTS.heading_07 }}
 					onClick={handleUploadNotes}
 					disabled={isLoading}
-					>
+				>
 					{isLoading && (
 						<div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
 					)}
 					{isLoading ? 'Uploading...' : 'Upload Note'}
-					</button>
+				</button>
 
 			</div>
 		</div>

@@ -2,6 +2,7 @@
 import React from 'react';
 import doubleicon from '@/assets/icons/community/Group 210.png';
 import type { Chat, Community } from './type';
+import { FONTS } from '@/constants/uiConstants';
 
 type Props = {
 	communities: Community[];
@@ -20,7 +21,6 @@ const Sidebar: React.FC<Props> = ({
 	setSearchTerm,
 	formatMessageDate,
 }) => {
-	// Filter communities based on search term
 	const filteredCommunities = communities?.filter(
 		(community) =>
 			community?.batch?.batch_name
@@ -85,41 +85,44 @@ const Sidebar: React.FC<Props> = ({
   dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500'
 			>
 				{filteredCommunities?.length > 0 ? (
-					filteredCommunities?.map((chat) => (
+					filteredCommunities?.map((chat: any) => (
 						<div
 							key={chat._id}
-							className={`relative z-10 flex items-center justify-between p-3 bg-[#EBEFF3] rounded-lg overflow-hidden shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] transition-all ${
-								selectedChat?._id === chat._id ? 'bg-gray-200' : ''
+							className={`relative mb-2 z-10 flex items-center justify-between p-3 bg-[#EBEFF3] rounded-lg overflow-hidden shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] transition-all cursor-pointer ${
+								selectedChat?._id === chat?._id ? 'bg-gray-200' : ''
 							}`}
 							onClick={() => onSelectChat(chat)}
 						>
 							<div className='flex items-center space-x-3'>
 								<div className='bg-gray-900 text-white rounded-full h-12 w-12 flex items-center justify-center overflow-hidden'>
-									{chat.batch?.groupImage ? (
+									{chat?.batch?.groupImage ? (
 										<img
-											src={chat.batch.groupImage}
-											alt={chat.batch.batch_name}
+											src={chat?.batch?.groupImage}
+											alt={chat?.batch?.batch_name}
 											className='h-full w-full object-cover'
 										/>
 									) : (
-										<span className='text-lg font-bold'>
-											{chat.batch?.batch_name?.charAt(0).toUpperCase()}
+										<span
+											className='!text-white'
+											style={{ ...FONTS.heading_03 }}
+										>
+											{chat?.batch?.batch_name?.charAt(0).toUpperCase()}
 										</span>
 									)}
 								</div>
 								<div>
-									<h3 className='font-bold text-gray-900'>
-										{chat.batch?.batch_name || chat.group}
+									<h3 style={{ ...FONTS.heading_05 }}>
+										{chat?.batch?.batch_name || chat?.group}
 									</h3>
-									<p className='text-sm text-gray-600'>
-										{chat.last_message?.message}
+									<p style={{ ...FONTS.heading_07 }}>
+										{chat?.last_message?.message}
 									</p>
 								</div>
 							</div>
 							<div className='flex flex-col items-end'>
-								<p className='text-xs text-gray-500'>
-									{chat.last_message?.timestamp &&
-										formatMessageDate(chat.last_message.timestamp)}
+								<p style={{ ...FONTS.para_02 }}>
+									{chat?.last_message?.timestamp &&
+										formatMessageDate(chat?.last_message?.timestamp)}
 								</p>
 								<img
 									src={doubleicon}
@@ -132,7 +135,7 @@ const Sidebar: React.FC<Props> = ({
 				) : (
 					<div className='flex flex-col items-center justify-center h-full'>
 						<div className='text-gray-500 text-lg font-medium'>
-							No communities found
+							<p style={{ ...FONTS.heading_03 }}>No communities found</p>
 						</div>
 					</div>
 				)}

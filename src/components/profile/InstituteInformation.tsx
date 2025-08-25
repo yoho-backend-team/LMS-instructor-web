@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { COLORS, FONTS } from '@/constants/uiConstants';
 
 interface InstituteInfo {
@@ -9,16 +9,16 @@ interface InstituteInfo {
 }
 
 interface InstituteInformationProps {
-	data: InstituteInfo;
+	data?: InstituteInfo;
 	onDataChange?: (data: InstituteInfo) => void;
 	isEditing?: boolean;
 }
 
 const InstituteInformation: React.FC<InstituteInformationProps> = ({
 	data,
-	onDataChange
+	// onDataChange
 }) => {
-	const [formData] = useState<InstituteInfo>(data);
+	// const [formData] = useState<InstituteInfo>(data);
 
 	// All institute fields are read-only (not editable)
 	const fields =

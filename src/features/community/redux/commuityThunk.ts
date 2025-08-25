@@ -5,7 +5,7 @@ import { setCommunities, setMessage } from './communitySlice';
 export const getAllCommunitiesData = (params:any) => async  (dispatch:any) => {
   try {
     const response = await getAllCommunities(params);
-    console.log("Thunk Response", response)
+    
     dispatch(setCommunities(response));
   } catch (error) {
     console.error(error);
@@ -19,7 +19,7 @@ export const getAllCommunitiesData = (params:any) => async  (dispatch:any) => {
 export const getMessages = (params:any) => async (dispatch : any) => {
   try{
     const response = await getMessage(params);
-    console.log("Chat Response", response)
+   
     dispatch(setMessage(response));
 
   }
@@ -36,7 +36,7 @@ export const getMessages = (params:any) => async (dispatch : any) => {
 //   async (searchParam: string, thunkAPI) => {
 //     try {
 //       const data = await fetchCommunitiesService(searchParam);
-//       console.log('thunks data:',data);
+//      
 //       return data;
 //     } catch (err: any) {
 //       return thunkAPI.rejectWithValue(err.response?.data || err.message);
