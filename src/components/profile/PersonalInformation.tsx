@@ -24,7 +24,7 @@ interface PersonalInfo {
 }
 
 interface PersonalInformationProps {
-	data: PersonalInfo;
+	data?: PersonalInfo;
 	onDataChange?: (data: PersonalInfo) => void;
 	isEditing?: boolean;
 }

@@ -12,7 +12,7 @@ type Props = {
 const ChatInputWithEmojiPicker: React.FC<Props> = ({ onSend }) => {
   const [inputMessage, setInputMessage] = useState('');
   const [showPicker, setShowPicker] = useState(false);
-  const pickerRef = useRef<HTMLDivElement>(null);
+  const pickerRef: any = useRef<HTMLDivElement>(null);
 
   useOnClickOutside(pickerRef, () => setShowPicker(false));
 
