@@ -60,7 +60,7 @@ const CourseList: React.FC = () => {
 							<img
 								src={GetImageUrl(courseSelectData?.image) ?? undefined}
 								alt='Course Icon'
-								className='w-35 h-35 object-contain'
+								className='w-40 h-40'
 							/>
 						</div>
 

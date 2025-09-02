@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { Edit, Camera } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { COLORS, FONTS } from '@/constants/uiConstants';
@@ -18,8 +18,8 @@ interface ProfileHeaderProps {
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 	name,
-	traineeId,
-	profileImage,
+	// traineeId,
+	// profileImage,
 	onEditClick,
 	onImageChange,
 	isEditing = false,
@@ -113,23 +113,22 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 					{showEditButton && (
 						<div className='flex-shrink-0'>
 							<button
-						onClick={onEditClick}
-						className={`cursor-pointer border-none rounded-md px-2 py-2 flex items-center gap-1 text-xs font-medium transition-all duration-200 ${
-							isEditing
-								? 'shadow-[inset_3px_3px_5px_rgba(189,194,199,0.75),inset_-3px_-3px_5px_rgba(255,255,255,0.7)]'
-								: 'shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] hover:shadow-[inset_3px_3px_5px_rgba(189,194,199,0.75),inset_-3px_-3px_5px_rgba(255,255,255,0.7)]'
-						}`}
-						style={{
-							backgroundColor: COLORS.bg_Colour,
-							fontFamily: FONTS.para_01.fontFamily,
-							color: isEditing ? COLORS.light_blue : COLORS.text_desc,
-						}}
-					>
-						<Edit className='w-3 h-3' />
-						<span className='hidden lg:inline'>
-							{isEditing ? 'Close' : 'Edit'}
-						</span>
-					</button>
+								onClick={onEditClick}
+								className={`cursor-pointer border-none rounded-md px-2 py-2 flex items-center gap-1 text-xs font-medium transition-all duration-200 ${isEditing
+									? 'shadow-[inset_3px_3px_5px_rgba(189,194,199,0.75),inset_-3px_-3px_5px_rgba(255,255,255,0.7)]'
+									: 'shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] hover:shadow-[inset_3px_3px_5px_rgba(189,194,199,0.75),inset_-3px_-3px_5px_rgba(255,255,255,0.7)]'
+									}`}
+								style={{
+									backgroundColor: COLORS.bg_Colour,
+									fontFamily: FONTS.para_01.fontFamily,
+									color: isEditing ? COLORS.light_blue : COLORS.text_desc,
+								}}
+							>
+								<Edit className='w-3 h-3' />
+								<span className='hidden lg:inline'>
+									{isEditing ? 'Close' : 'Edit'}
+								</span>
+							</button>
 
 						</div>
 					)}

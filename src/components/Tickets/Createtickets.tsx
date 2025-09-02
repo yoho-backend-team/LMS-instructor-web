@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -54,13 +55,13 @@ export const Createtickets = () => {
 	}, [dispatch]);
 	const userid: any = GetLocalStorage('instructorDetails');
 
-	const [myData, setMyData] = useState(null);
+	// const [myData, setMyData] = useState(null);
 
 	useEffect(() => {
-		const storedData = localStorage.getItem('user');
-		if (storedData) {
-			setMyData(JSON.parse(storedData));
-		}
+		// const storedData = localStorage.getItem('user');
+		// if (storedData) {
+		// setMyData(JSON.parse(storedData));
+		// }
 	}, []);
 
 	const handleUploadClick = () => {
