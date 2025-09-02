@@ -12,6 +12,7 @@ import updatesimg from '../../assets/dashboard/updates.png';
 import { getAllActivityLogs } from '@/features/activitylog/reduces/thunks';
 import { selectActivityLogs } from '@/features/activitylog/reduces/selectors';
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { GetLocalStorage } from '@/utils/helper';
 
 const ActivityLogs = () => {
   const [handleFilter, setHandleFilter] = useState(false);
@@ -20,13 +21,14 @@ const ActivityLogs = () => {
   const [showFromCalendar, setShowFromCalendar] = useState(false);
   const [showToCalendar, setShowToCalendar] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const staff:any = GetLocalStorage('instructorDetails')
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const activityLogs1 = useSelector(selectActivityLogs);
 
   useEffect(() => {
-    dispatch(getAllActivityLogs({ page: currentPage }));
+    dispatch(getAllActivityLogs({ staffId: staff?._id,page: currentPage }));
   }, [dispatch, currentPage]);
 
   const formatFullDate = (dateStr: string) => {
@@ -50,9 +52,9 @@ const ActivityLogs = () => {
     return `${day}/${month}/${year}`;
   };
 
-  const allLogs = activityLogs1?.data ?? [];
+  const allLogs = activityLogs1?.data?.logs ?? [];
 
-  const filteredLogs = allLogs.filter((log: any) => {
+  const filteredLogs = allLogs?.filter((log: any) => {
     const logDate = new Date(log.createdAt);
     if (fromDate && logDate < fromDate) return false;
     if (toDate && logDate > toDate) return false;

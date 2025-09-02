@@ -2,13 +2,16 @@ import { Card } from '../ui/card';
 import { Button } from '../ui/button';
 import { COLORS, FONTS } from '@/constants/uiConstants';
 import bgImg from '../../assets/classes/Group 197.png';
+import dayjs from 'dayjs'
 
 interface ClassItem {
-  day: string;
-  topic: string;
-  joinLink: string;
+  start_date: string;
+  class_name: string;
+  video_url: string;
   duration: string;
-  classtype: string;
+  courseDetails: {
+    class_type: string;
+  }
 }
 
 interface UpcomingclassProps {
@@ -21,14 +24,18 @@ interface UpcomingclassProps {
 const Upcomingclass = ({ showOnlineOnly, data, currentPage, onPageChange }: UpcomingclassProps) => {
   // Filter based on online/offline toggle
   const filteredClasses = showOnlineOnly
-    ? data.filter(classItem => classItem.classtype === 'online')
-    : data.filter(classItem => classItem.classtype === 'offline');
+    ? data.filter(classItem => classItem.courseDetails.class_type?.[0] === 'online')
+    : data.filter(classItem => classItem.courseDetails.class_type?.[0] === 'offline');
+
+      console.log("Dataaa", filteredClasses)
+      console.log("Dataaa1", showOnlineOnly)
 
   // Optional pagination logic (can be adjusted as needed)
   const itemsPerPage = 5;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedData = filteredClasses.slice(startIndex, startIndex + itemsPerPage);
   const totalPages = Math.ceil(filteredClasses.length / itemsPerPage);
+
 
   // Table headers
   const headers = ['Day', 'Topic', 'Join Link', 'Duration', 'Action'];
@@ -45,7 +52,7 @@ const Upcomingclass = ({ showOnlineOnly, data, currentPage, onPageChange }: Upco
           <Card className='bg-gradient-to-r from-[#7B00FF] to-[#B200FF] !text-white mx-4 p-4'>
             <table className="w-full">
               <thead>
-                <tr className='flex justify-around items-center !text-white' style={{ ...FONTS.heading_03 }}>
+                <tr className='grid grid-cols-5 text-center items-center !text-white' style={{ ...FONTS.heading_03 }}>
                   {headers.map((header, index) => (
                     <td key={index}>{header}</td>
                   ))}
@@ -66,12 +73,12 @@ const Upcomingclass = ({ showOnlineOnly, data, currentPage, onPageChange }: Upco
             >
               <table className="w-full">
                 <tbody>
-                  <tr className='flex justify-around items-center' style={{ ...FONTS.heading_06 }}>
-                    <td>{classItem.day}</td>
-                    <td>{classItem.topic}</td>
+                  <tr className='grid grid-cols-5 items-center text-center' style={{ ...FONTS.heading_06 }}>
+                    <td>{dayjs(classItem.start_date).format('DD-MMM-YYYY')}</td>
+                    <td>{classItem.class_name}</td>
                     <td>
-                      <a className='!text-[#0400ff]' href={classItem.joinLink} target="_blank" rel="noopener noreferrer">
-                        {classItem.joinLink}
+                      <a className='!text-[#0400ff]' href={classItem.video_url} target="_blank" rel="noopener noreferrer">
+                        {classItem.video_url}
                       </a>
                     </td>
                     <td>{classItem.duration}</td>

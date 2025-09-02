@@ -17,7 +17,7 @@ function generateendpoints() {
 		},
 		Instructor: {
 			activity: {
-				get: '/institutes/user/activity',
+				get: '/institutes/user/activity/staff/',
 			},
 			auth: {
 				login: '/institutes/auth/teaching-staff/login',

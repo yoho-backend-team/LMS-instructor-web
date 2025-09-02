@@ -15,6 +15,7 @@ import {
 	getBatchesData,
 	getInstructorcourse,
 } from '@/features/Course/reducers/thunks';
+import dayjs from 'dayjs';
 
 const Batches = () => {
 	const navigate = useNavigate();
@@ -47,16 +48,6 @@ const Batches = () => {
 			fetchCourseData();
 		}, 8000);
 	}, [dispatch]);
-
-	const formattedDate = (date: any) => {
-		const newDate = new Date(date).toLocaleString('en-IN', {
-			timeZone: 'Asia/Kolkata',
-			year: 'numeric',
-			month: 'numeric',
-			day: 'numeric',
-		});
-		return newDate;
-	};
 
 	return (
 		<div className='w-full mx-auto p-4'>
@@ -125,10 +116,10 @@ const Batches = () => {
 											{item?.classes?.length}
 										</div>
 										<div style={{ ...FONTS.para_01 }}>
-											{formattedDate(item?.start_date)}
+											{dayjs(item?.start_date).format('DD-MMM-YYYY')}
 										</div>
 										<div style={{ ...FONTS.para_01 }}>
-											{formattedDate(item?.end_date)}
+											{dayjs(item?.end_date).format('DD-MMM-YYYY')}
 										</div>
 									</div>
 								</Card>

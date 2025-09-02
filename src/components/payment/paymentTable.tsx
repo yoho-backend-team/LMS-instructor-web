@@ -27,21 +27,25 @@ interface PaymentTable {
 
 interface PaymentTableProps {
   selectedStatus: string
+  selectedYear: number
 }
 
-const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
+const PaymentTable = ({ selectedStatus, selectedYear }: PaymentTableProps) => {
   const [selectedDetail, setSelectedDetail] = useState<any>([])
   const salarySlipRef = useRef<HTMLDivElement>(null)
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
   const [pdfPaymentData, setPdfPaymentData] = useState<any>(null)
   const [isModalOpen, setIsModalOpen] = useState(false) // Declare isModalOpen variable
 
+  console.log("Yearr", selectedYear)
+
   const dispatch = useDispatch<any>()
   const SalaryDetails = useSelector(selectPayment)
+  console.log("Salary", SalaryDetails)
 
   useEffect(() => {
-    dispatch(getStudentPaymentThunk({}))
-  }, [dispatch])
+    dispatch(getStudentPaymentThunk({year: selectedYear}))
+  }, [dispatch, selectedYear])
 
   useEffect(() => {
     dispatch(getDashBoardReports())
@@ -158,10 +162,10 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
                   month: "long",
                 })}
               </p>
-              <p>{PaymentTable?.salary_amount}</p>
-              <p>{PaymentTable?.attendance_details?.totalWorkingDays}</p>
-              <p>{PaymentTable?.attendance_details?.presentDays}</p>
-              <p>{PaymentTable?.attendance_details?.absentDays}</p>
+              <p>{PaymentTable?.salary_amount || "N/A"}</p>
+              <p>{PaymentTable?.attendance_details?.totalWorkingDays || "N/A"}</p>
+              <p>{PaymentTable?.attendance_details?.presentDays || "N/A"}</p>
+              <p>{PaymentTable?.attendance_details?.absentDays || "N/A"}</p>
               <button
                 style={{
                   boxShadow: `
@@ -169,11 +173,10 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
       										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
                 }}
                 className={`p-2 rounded-lg w-[100px] m-auto
-                        ${
-                          PaymentTable?.status !== "pending"
-                            ? "bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-500 hover:to-green-600 shadow-[0px_3px_4px_0px_rgba(255,255,255,0.75)_inset,3px_-3px_3px_0px_rgba(255,255,255,0.25)_inset,-4px_8px_23px_0px_#3ABE65_inset,-8px_-8px_12px_0px_#3ABE65_inset,2px_3px_3px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-1px_-1px_6px_0px_rgba(255,255,255,0.75),-1px_-1px_6px_1px_rgba(255,255,255,0.25)]"
-                            : "bg-gradient-to-r from-red-500 to-red-600 text-white  shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_red_inset,-4px_-8px_10px_0px_#B20_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white"
-                        }`}
+                        ${PaymentTable?.status !== "pending"
+                    ? "bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-500 hover:to-green-600 shadow-[0px_3px_4px_0px_rgba(255,255,255,0.75)_inset,3px_-3px_3px_0px_rgba(255,255,255,0.25)_inset,-4px_8px_23px_0px_#3ABE65_inset,-8px_-8px_12px_0px_#3ABE65_inset,2px_3px_3px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-1px_-1px_6px_0px_rgba(255,255,255,0.75),-1px_-1px_6px_1px_rgba(255,255,255,0.25)]"
+                    : "bg-gradient-to-r from-red-500 to-red-600 text-white  shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_red_inset,-4px_-8px_10px_0px_#B20_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white"
+                  }`}
               >
                 {PaymentTable?.status === "pending" ? "Pending" : "Paid"}
               </button>
@@ -350,11 +353,10 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
             <p style={{ ...FONTS.heading_04 }}>Status</p>
             <Button
               className={`p-2 px-8 rounded-lg mt-4 
-                        ${
-                          selectedDetail.status !== "pending"
-                            ? "bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-500 hover:to-green-600 shadow-[0px_3px_4px_0px_rgba(255,255,255,0.75)_inset,3px_-3px_3px_0px_rgba(255,255,255,0.25)_inset,-4px_8px_23px_0px_#3ABE65_inset,-8px_-8px_12px_0px_#3ABE65_inset,2px_3px_3px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-1px_-1px_6px_0px_rgba(255,255,255,0.75),-1px_-1px_6px_1px_rgba(255,255,255,0.25)]"
-                            : "bg-gradient-to-r from-red-500 to-red-600 text-white  shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_red_inset,-4px_-8px_10px_0px_#B20_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white"
-                        }`}
+                        ${selectedDetail.status !== "pending"
+                  ? "bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-500 hover:to-green-600 shadow-[0px_3px_4px_0px_rgba(255,255,255,0.75)_inset,3px_-3px_3px_0px_rgba(255,255,255,0.25)_inset,-4px_8px_23px_0px_#3ABE65_inset,-8px_-8px_12px_0px_#3ABE65_inset,2px_3px_3px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-1px_-1px_6px_0px_rgba(255,255,255,0.75),-1px_-1px_6px_1px_rgba(255,255,255,0.25)]"
+                  : "bg-gradient-to-r from-red-500 to-red-600 text-white  shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_red_inset,-4px_-8px_10px_0px_#B20_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white"
+                }`}
             >
               {selectedDetail?.status === "pending" ? "Pending" : "Paid"}
             </Button>

@@ -1,5 +1,3 @@
-"use client"
-
 import type React from "react"
 
 import { COLORS, FONTS } from "@/constants/uiConstants"
@@ -31,7 +29,7 @@ export const Payment = () => {
   const SalaryDetails = useSelector(selectPayment)
 
   useEffect(() => {
-    dispatch(getStudentPaymentThunk({}))
+    dispatch(getStudentPaymentThunk({year: selectedYear}))
   }, [dispatch])
 
   const staffDetail = SalaryDetails[0]?.staff
@@ -188,7 +186,7 @@ export const Payment = () => {
       </div>
 
       <div className="mt-8 custom-inset-shadow">
-        <PaymentDetails selectedStatus={selectedStatus ?? "All"} />
+        <PaymentDetails selectedStatus={selectedStatus ?? "All"} selectedYear={selectedYear}/>
       </div>
 
       {/* Modal */}

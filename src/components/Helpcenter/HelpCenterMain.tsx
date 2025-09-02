@@ -25,7 +25,7 @@ const HelpCenterMain: React.FC = () => {
 
   useEffect(() => {
     dispatch(getStudentProfileThunk());
-    dispatch(getHelpThunk({ instituteid: instituteId?._id }));
+    dispatch(getHelpThunk({ instituteid: instituteId?.institute_id?.uuid }));
   }, [dispatch]);
 
   //console.log(HelpDetails, "Help MAin")

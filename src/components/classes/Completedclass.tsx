@@ -6,6 +6,7 @@ import { COLORS, FONTS } from '@/constants/uiConstants';
 import filterImg from '../../assets/classes/filter.png';
 import { useNavigate } from 'react-router-dom';
 import { ChevronDown, X } from 'lucide-react';
+import dayjs from 'dayjs';
 
 interface DropdownOption {
   value: string;
@@ -18,11 +19,12 @@ interface FilterGroup {
 }
 
 interface CompletedclassProps {
-  data?: any[];
+  data?: any;
   classType?: boolean;
 }
 
 const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
+  console.log("Props Data",data)
   const navigate = useNavigate();
   const headers = ['Title', 'Start Date', 'Start Time', 'Duration', 'Action'];
 
@@ -41,7 +43,7 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
   // Get unique courses from data
   const courses = useMemo(() => {
     const courseSet = new Set<string>();
-    data.forEach(item => {
+    data.forEach((item:any) => {
       if (item.courseDetails?.course_name) {
         courseSet.add(item.courseDetails.course_name);
       }
@@ -83,7 +85,7 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
   };
 
   const filteredData = useMemo(() => {
-    return data.filter(item => {
+    return data.filter((item:any) => {
       const date = item.start_date || '';
       const month = date.slice(5, 7);
       const year = date.slice(0, 4);
@@ -181,7 +183,7 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
       <Card className="bg-gradient-to-r from-[#7B00FF] to-[#B200FF] text-white mx-2 p-4 mt-2">
         <table className="w-full">
           <thead>
-            <tr className="flex justify-around items-center !text-white" style={{ ...FONTS.heading_03 }}>
+            <tr className="grid grid-cols-5 items-center !text-white" style={{ ...FONTS.heading_03 }}>
               {headers.map((title, index) => (
                 <th key={index}>{title}</th>
               ))}
@@ -211,18 +213,18 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
         </div>
       ) : (
         <div className="space-y-2 mx-2 mt-2">
-          {filteredData.map((item) => (
+          {filteredData.map((item:any) => (
             <Card
               key={item.uuid}
               className="bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] text-black p-4
                 transition-all duration-300 ease-in-out hover:-translate-y-1 
                 hover:shadow-[6px_6px_8px_rgba(0,0,0,0.1),-2px_-2px_6px_rgba(255,255,255,0.8)] cursor-pointer"
             >
-              <div className="flex justify-around items-center py-1" style={{ ...FONTS.heading_06 }}>
-                <div>{item.courseDetails?.course_name || 'N/A'}</div>
-                <div>{(item.start_date || '').slice(0, 10)}</div>
-                <div>{(item.start_time || '').slice(11, 16)}</div>
-                <div>{item.duration} Min</div>
+              <div className="grid grid-cols-5 items-center  py-1" style={{ ...FONTS.heading_06 }}>
+                <div className='flex items-center justify-center'><p className=''>{item?.class_name || 'N/A'}</p></div>
+                <div className='flex items-center justify-center text-left'>{dayjs((item.start_date || '').slice(0, 10)).format('DD-MMM-YYYY')}</div>
+                <div className='flex items-center justify-center text-left'>{(item.start_time || '').slice(11, 16)}</div>
+                <div className='flex items-center justify-center text-left'>{item.duration} Min</div>
                 <div className="flex justify-center">
                   <Button
                     onClick={() => handleClassDetailPage(item.uuid)}

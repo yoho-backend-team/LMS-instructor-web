@@ -234,7 +234,7 @@ class Client {
 		activity: {
 			get: (params: any) =>
 				httpClient.get(
-					HTTP_END_POINTS.Instructor.activity.get,
+					HTTP_END_POINTS.Instructor.activity.get+params.staffId,
 					params,
 					'instructor'
 				),
