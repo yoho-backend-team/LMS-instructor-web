@@ -37,14 +37,14 @@ export const Payment = () => {
   const staffDetail = SalaryDetails[0]?.staff
   const bankDetail = SalaryDetails[0]?.staff?.Bank_Details
 
-  const [staffDetails, setStaffDetails] = useState({
+  const [, setStaffDetails] = useState({
     name: "John Doe",
     designation: "Teacher",
     staffId: "STF-001",
     address: "123 Main St, City, Country",
   })
 
-  const [salaryStructure, setSalaryStructure] = useState({
+  const [salaryStructure] = useState({
     basic: "30,000",
     hra: "12,000",
     conveyance: "2,000",

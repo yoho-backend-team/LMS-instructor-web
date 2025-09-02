@@ -41,7 +41,7 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
   // Get unique courses from data
   const courses = useMemo(() => {
     const courseSet = new Set<string>();
-    data.forEach(item => {
+    (data ?? []).forEach(item => {
       if (item.courseDetails?.course_name) {
         courseSet.add(item.courseDetails.course_name);
       }
@@ -83,7 +83,7 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
   };
 
   const filteredData = useMemo(() => {
-    return data.filter(item => {
+    return (data ?? []).filter(item => {
       const date = item.start_date || '';
       const month = date.slice(5, 7);
       const year = date.slice(0, 4);

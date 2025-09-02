@@ -279,7 +279,7 @@ const PersonalInformation: React.FC<PersonalInformationProps> = ({
 
 			<InstituteInformation
 				data={personalInfo?.userDetail}
-				onDataChange={onDataChange}
+				onDataChange={undefined}
 				isEditing={isEditing}
 			/>
 		</div>

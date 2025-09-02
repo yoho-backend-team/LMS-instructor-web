@@ -165,9 +165,6 @@ const Classes = () => {
 				)}
 				{activeTab === 'completed' && (
 					<Completedclass
-						showOnlineOnly={isOn}
-						currentPage={currentPage}
-						onPageChange={setCurrentPage}
 						data={classData}
 						classType={isOn}
 					/>

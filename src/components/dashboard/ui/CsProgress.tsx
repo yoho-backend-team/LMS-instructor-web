@@ -7,7 +7,7 @@ interface CourseProgressProps {
     completedClasses?: number
 }
 
-const CsProgress: React.FC<CourseProgressProps> = ({ progress = 2, totalClasses = 2, completedClasses = 0 }) => {
+const CsProgress: React.FC<CourseProgressProps> = ({ progress = 2, totalClasses = 2 }) => {
     const radius = 85
     const strokeWidth = 12
     const normalizedRadius = radius - strokeWidth * 2
