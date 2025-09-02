@@ -9,6 +9,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch } from '@/store/store';
 import { getClassDetails } from '@/features/classes/reducers/thunks';
 import { selectClass } from '@/features/classes/reducers/selectors';
+import { useLoader } from '@/context/LoadingContext/Loader';
+import Loader from '@/components/Loader/Loader';
+import { getDashBoardReports } from '@/features/Dashboard/reducers/thunks';
+
 
 const Classes = () => {
 	const [activeTab, setActiveTab] = useState<'live' | 'upcoming' | 'completed'>(
@@ -19,6 +23,8 @@ const Classes = () => {
 
 	const dispatch = useDispatch<AppDispatch>();
 	const classData = useSelector(selectClass)?.data || [];
+	const { showLoader, hideLoader, IsLoading } = useLoader();
+	
 
 	const fetchClassData = (
 		tab: 'live' | 'upcoming' | 'completed',
@@ -45,6 +51,22 @@ const Classes = () => {
 	const toggleSwitch = () => {
 		setIsOn((prev) => !prev);
 	};
+		useEffect(() => {
+			(async () => {
+				try {
+					showLoader();
+					const timeoutId = setTimeout(() => {
+						hideLoader();
+					}, 8000);
+					const response = await dispatch(getDashBoardReports());
+					if (response) {
+						clearTimeout(timeoutId);
+					}
+				} finally {
+					hideLoader();
+				}
+			})();
+		}, [dispatch, hideLoader, showLoader]);
 
 	return (
 		<div className='h-screen flex flex-col'>
@@ -53,6 +75,11 @@ const Classes = () => {
 				<h1 style={{ ...FONTS.heading_01 }} className='mb-4'>
 					Classes
 				</h1>
+				{IsLoading && (
+					<div className='w-full h-[100vh] absolute z-10 bg-transparent backdrop-blur-sm'>
+						<Loader />
+					</div>
+				)}
 
 				<Card style={{ backgroundColor: COLORS.bg_Colour }}>
 					<h2 style={{ ...FONTS.heading_02 }} className='ml-6'>
