@@ -7,7 +7,7 @@ interface CourseProgressProps {
     completedClasses?: number
 }
 
-const CsProgress: React.FC<CourseProgressProps> = ({ progress = 2, totalClasses = 2, completedClasses = 0 }) => {
+const CsProgress: React.FC<CourseProgressProps> = ({ progress = 2, totalClasses = 2 }) => {
     const radius = 85
     const strokeWidth = 12
     const normalizedRadius = radius - strokeWidth * 2
@@ -114,10 +114,10 @@ const CsProgress: React.FC<CourseProgressProps> = ({ progress = 2, totalClasses 
                     <div className="text-sm font-medium text-gray-600">Total Classes</div>
                     <div className="text-sm font-medium text-gray-600">{totalClasses} Classes</div>
                 </div>
-                            <div className="flex items-center justify-between w-full">
-            <div className="text-sm font-medium text-gray-600">Completed</div>
-            <div className="text-sm font-medium text-gray-600">{completedClasses} Classes</div>
-            </div>
+                <div className="flex items-center justify-between w-full">
+                    <div className="text-sm font-medium text-gray-600">Completed</div>
+                    {/* <div className="text-sm font-medium text-gray-600">{completedClasses} Classes</div> */}
+                </div>
             </CardContent>
         </Card>
     )

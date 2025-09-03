@@ -44,7 +44,7 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
   // Get unique courses from data
   const courses = useMemo(() => {
     const courseSet = new Set<string>();
-    (data || []).forEach(item => {
+    data?.forEach(item => {
       if (item.courseDetails?.course_name) {
         courseSet.add(item.courseDetails.course_name);
       }
@@ -86,7 +86,7 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
   };
 
   const filteredData = useMemo(() => {
-    return (data || []).filter(item => {
+    return data?.filter(item => {
       const date = item.start_date || '';
       const month = date.slice(5, 7);
       const year = date.slice(0, 4);
@@ -194,7 +194,7 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
       </Card>
 
       {/* Filtered Data Cards */}
-      {filteredData.length === 0 ? (
+      {filteredData?.length === 0 ? (
         <div className="text-center py-8">
 
           <p style={{ ...FONTS.heading_04 }} className="text-gray-600">
@@ -214,7 +214,7 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
         </div>
       ) : (
         <div className="space-y-2 mx-2 mt-2">
-          {filteredData.map((item) => (
+          {filteredData?.map((item) => (
             <Card
               key={item.uuid}
               className="bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] text-black p-4

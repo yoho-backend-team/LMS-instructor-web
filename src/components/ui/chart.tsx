@@ -103,6 +103,28 @@ ${colorConfig
 
 const ChartTooltip = RechartsPrimitive.Tooltip
 
+// interface ChartTooltipContentProps extends React.ComponentProps<"div"> {
+//   active?: boolean;
+//   payload?: any[];
+//   className?: string;
+//   indicator?: "line" | "dot" | "dashed";
+//   hideLabel?: boolean;
+//   hideIndicator?: boolean;
+//   label?: React.ReactNode;
+//   labelFormatter?: (label: any, payload?: any[]) => React.ReactNode;
+//   labelClassName?: string;
+//   formatter?: (
+//     value: any,
+//     name: any,
+//     item: any,
+//     index: number,
+//     payload: any
+//   ) => React.ReactNode;
+//   color?: string;
+//   nameKey?: string;
+//   labelKey?: string;
+// }
+
 function ChartTooltipContent({
   active,
   payload,
@@ -250,12 +272,12 @@ function ChartTooltipContent({
 const ChartLegend = RechartsPrimitive.Legend
 
 // Define proper types for the legend content props
-interface ChartLegendContentProps extends React.ComponentProps<"div"> {
-  hideIcon?: boolean
-  payload?: any[]
-  verticalAlign?: "top" | "middle" | "bottom"
-  nameKey?: string
-}
+// interface ChartLegendContentProps extends React.ComponentProps<"div"> {
+//   hideIcon?: boolean
+//   payload?: any[]
+//   verticalAlign?: "top" | "middle" | "bottom"
+//   nameKey?: string
+// }
 
 function ChartLegendContent({
   className,
@@ -263,10 +285,14 @@ function ChartLegendContent({
   payload,
   verticalAlign = "bottom",
   nameKey,
-}: ChartLegendContentProps) {
+}: React.ComponentProps<"div"> &
+  Pick<RechartsPrimitive.LegendProps, any> & {
+    hideIcon?: boolean
+    nameKey?: string
+  }) {
   const { config } = useChart()
 
-  if (!payload?.length) {
+  if (!Array.isArray(payload) || !payload.length) {
     return null
   }
 

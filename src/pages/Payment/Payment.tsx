@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import type React from "react"
@@ -37,8 +38,8 @@ export const Payment = () => {
   const staffDetail = SalaryDetails[0]?.staff
   const bankDetail = SalaryDetails[0]?.staff?.Bank_Details
 
-  const [staffDetails, setStaffDetails] = useState({
-    username: "John Doe",
+  const [staffDetails, setStaffDetails] = useState<any>({
+    name: "John Doe",
     designation: "Teacher",
     staffId: "STF-001",
     address: "123 Main St, City, Country",
@@ -69,7 +70,7 @@ export const Payment = () => {
 
   const handleStaffDetailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    setStaffDetails((prev) => ({
+    setStaffDetails((prev: any) => ({
       ...prev,
       [name]: value,
     }))
@@ -413,8 +414,8 @@ export const Payment = () => {
                         type="text"
                         value={salaryStructure.basic}
                         onChange={(e) =>
-    setSalaryStructure((prev) => ({ ...prev, basic: e.target.value }))
-  }
+                          setSalaryStructure((prev: any) => ({ ...prev, basic: e.target.value }))
+                        }
                         disabled
                         className="p-4 rounded-lg mb-2 w-full"
                         style={{
