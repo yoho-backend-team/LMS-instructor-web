@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useNavigate, useParams } from 'react-router-dom';
 import ticketicon from '../../assets/icons/Tickets/back.png';
 import messageicon from '../../assets/icons/Tickets/Frame 301.png';
@@ -12,13 +13,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { GetImageUrl } from '@/utils/helper';
+import { GetImageUrl, GetLocalStorage } from '@/utils/helper';
+import { socketConnect } from '../../socket/socket'
+import socket from '../../socket/socket'
+import { useEffect, useRef, useState } from 'react';
 
 const TicketId = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const ticket = location.state;
+  const [Messages, setMessages] = useState<any[]>(ticket?.messages);
+  const inputValue = useRef<HTMLInputElement | null>(null)
+  const instructor: any = GetLocalStorage("instructorDetails")
 
   const handleBack = () => {
     navigate(-1);
@@ -46,8 +53,32 @@ const TicketId = () => {
     }
   };
 
+  useEffect(() => {
+    socketConnect()
+    socket.on("connect", () => {
+      socket.emit("joinTicket", ticket?.uuid)
+    })
+    const handleMessage = (message: any) => {
+      setMessages((prev: any) => [message, ...prev])
+    }
+    socket.on("receiveTeacherTicketMessage", handleMessage)
+    return () => {
+      socket.off("receiveTeacherTicketMessage", handleMessage)
+    };
+  }, [ticket?.uuid]);
 
+  const handelsend = () => {
+    if (!inputValue.current?.value) return;
 
+    const newMessage: any = {
+      ticket_id: ticket?.uuid,
+      text: inputValue.current?.value,
+      senderType: "Instituteuserlist",
+      user: instructor?._id
+    };
+    socket.emit("sendTeacherTicketMessage", newMessage)
+    inputValue.current.value = ""
+  }
 
 
   return (
@@ -77,12 +108,12 @@ const TicketId = () => {
 
           <CardContent className="overflow-y-auto h-[500px] pb-4 scrollbar-hide">
             <div className="flex flex-col-reverse gap-4">
-              {ticket?.messages?.map((message: any) => (
+              {Messages?.map((message: any) => (
                 <Card
                   key={message._id}
                   className={`w-[250px] h-auto ${message.senderType === "InstituteAdmin"
-                      ? "self-start ml-10"
-                      : "self-end mr-10"
+                    ? "self-start ml-10"
+                    : "self-end mr-10"
                     } bg-[#ebeff3] shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)]`}
                 >
                   <CardContent className="pb-3 ">
@@ -133,13 +164,14 @@ const TicketId = () => {
                 <input
                   type="text"
                   placeholder="Say Something..."
+                  ref={inputValue}
                   className="w-full bg-transparent focus:outline-none text-sm text-gray-800"
                   style={{ ...FONTS.para_01, fontSize: '15px' }}
                 />
               </div>
 
               {/* Send Icon */}
-              <div className="p-2 bg-[#ebeff3] rounded-md flex items-center justify-center w-15 h-15">
+              <div className="p-2 bg-[#ebeff3] rounded-md flex items-center justify-center w-15 h-15 cursor-pointer" onClick={handelsend}>
                 <img
                   src={sendicon}
                   alt="Send"
