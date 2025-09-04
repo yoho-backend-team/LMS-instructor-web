@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
 	getCoursesListData,
 	getCourseData,
@@ -16,9 +17,9 @@ export const getInstructorcourse = () => async (dispatch: any) => {
 	}
 };
 
-export const getInstructorcourseData = () => async (dispatch: any) => {
+export const getInstructorcourseData = (course: string) => async (dispatch: any) => {
 	try {
-		const response = await getCourseData();
+		const response = await getCourseData(course);
 		dispatch(getCoursedata(response?.data));
 		return response?.data;
 	} catch (error) {
