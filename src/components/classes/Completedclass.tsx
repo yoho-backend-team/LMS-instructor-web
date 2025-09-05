@@ -184,7 +184,7 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
       <Card className="bg-gradient-to-r from-[#7B00FF] to-[#B200FF] text-white mx-2 p-4 mt-2">
         <table className="w-full">
           <thead>
-            <tr className="flex justify-around items-center !text-black" style={{ ...FONTS.heading_03 }}>
+            <tr className="flex justify-around items-center !text-white" style={{ ...FONTS.heading_03 }}>
               {headers.map((title, index) => (
                 <th key={index}>{title}</th>
               ))}

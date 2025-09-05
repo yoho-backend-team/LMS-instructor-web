@@ -47,8 +47,8 @@ export const Payment = () => {
 
   const [salaryStructure, setSalaryStructure] = useState({
     basic: "30,000",
-    hra: "12,000",
-    conveyance: "2,000",
+    // hra: "12,000",
+    // conveyance: "2,000",
     travelAllowance: "3,000",
     homeAllowance: "5,000",
   })
@@ -234,7 +234,7 @@ export const Payment = () => {
                       <input
                         type="text"
                         name="name"
-                        value={staffDetails?.username}
+                        value={staffDetail?.username}
                         onChange={handleStaffDetailChange}
                         disabled={!isEditing}
                         className="p-4 rounded-lg mb-2 w-full"
@@ -426,7 +426,7 @@ export const Payment = () => {
                         }}
                       />
                     </div>
-                    <div>
+                    {/* <div>
                       <label className="block mb-1" style={{ ...FONTS.heading_05 }}>
                         HRA
                       </label>
@@ -442,8 +442,8 @@ export const Payment = () => {
       										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
                         }}
                       />
-                    </div>
-                    <div>
+                    </div> */}
+                    {/* <div>
                       <label className="block mb-1" style={{ ...FONTS.heading_05 }}>
                         Conveyance
                       </label>
@@ -459,7 +459,7 @@ export const Payment = () => {
       										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
                         }}
                       />
-                    </div>
+                    </div> */}
                     <div>
                       <label className="block mb-1" style={{ ...FONTS.heading_05 }}>
                         Travel Allowance

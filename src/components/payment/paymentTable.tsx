@@ -133,7 +133,7 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
   return (
     <div className="p-4 custom-inset-shadow grid gap-4">
       <section
-        className="grid grid-cols-7 text-center bg-gradient-to-r from-[#7B00FF] to-[#B200FF] !text-black p-4 rounded-lg"
+        className="grid grid-cols-7 text-center bg-gradient-to-r from-[#7B00FF] to-[#B200FF] !text-white p-4 rounded-lg"
         style={{ ...FONTS.heading_03 }}
       >
         {headers.map((header, index) => (
