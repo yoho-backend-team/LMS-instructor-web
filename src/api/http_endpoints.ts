@@ -22,6 +22,7 @@ function generateendpoints() {
 			attendance: {
 				get: '/institutes/attedance/staff/',
 				class_attendance: '/institutes/attedance/class/',
+				class_by_day: '/institutes/attedance/staff/:staffId/daily',
 			},
 			course_list: {
 				get: `/institutes/:instituteid/branches/:branchid/teaching-staff/courses`,

@@ -71,6 +71,7 @@ class Client {
 					data,
 					'instructor'
 				),
+			getByDaily: (params: string, data: any) => httpClient.get(HTTP_END_POINTS.Instructor.attendance.class_by_day.replace(":staffId", params), data)
 		},
 		course_list: {
 			get: () =>
@@ -154,7 +155,7 @@ class Client {
 		class: {
 			get: (params: any) =>
 				httpClient.get(
-					HTTP_END_POINTS.Instructor.class.get.replace(":courseid", getInstructorCourseId()?.uuid),
+					HTTP_END_POINTS.Instructor.class.get.replace(":courseid", params?.users),
 					params,
 					'instructor'
 				),

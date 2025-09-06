@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React, { useMemo, useState } from 'react';
 import msgframe from '@/assets/icons/community/Frame 5185.png';
@@ -47,10 +48,10 @@ const CommunitySide: React.FC<Props> = ({ communities }) => {
 		const yesterday = new Date();
 		yesterday.setDate(today.getDate() - 1);
 
-    const isSameDay = (d1: Date, d2: Date): boolean =>
-      d1.getFullYear() === d2.getFullYear() &&
-      d1.getMonth() === d2.getMonth() &&
-      d1.getDate() === d2.getDate()    
+		const isSameDay = (d1: Date, d2: Date): boolean =>
+			d1.getFullYear() === d2.getFullYear() &&
+			d1.getMonth() === d2.getMonth() &&
+			d1.getDate() === d2.getDate()
 
 		const formatTime = (d: Date): string =>
 			d.toLocaleTimeString('en-US', {
@@ -95,7 +96,7 @@ const CommunitySide: React.FC<Props> = ({ communities }) => {
 			/>
 
 			{/* Chat Area */}
-			<div className='w-full lg:w-2/3 flex flex-col h-[490px] position-sticky'>
+			<div className='w-full lg:w-2/3 flex flex-col h-[75vh] position-sticky'>
 				{selectedChat ? (
 					<>
 						<ChatHeader chat={selectedChat} />
