@@ -88,6 +88,7 @@ const Navbar = () => {
 				toast.error('Failed to logout, please try again.');
 			}
 		} catch (error) {
+			console.log(error)
 			toast.error('Something went wrong, please try again.');
 		} finally {
 			setIsLoading(false);
