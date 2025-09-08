@@ -12,7 +12,7 @@ type Props = {
 const ChatInputWithEmojiPicker: React.FC<Props> = ({ onSend }) => {
   const [inputMessage, setInputMessage] = useState('');
   const [showPicker, setShowPicker] = useState(false);
-  const pickerRef = useRef<HTMLDivElement>(null);
+  const pickerRef: any = useRef<HTMLDivElement>(null);
 
   useOnClickOutside(pickerRef, () => setShowPicker(false));
 
@@ -36,7 +36,7 @@ const ChatInputWithEmojiPicker: React.FC<Props> = ({ onSend }) => {
       <button
         type="button"
         onClick={() => setShowPicker((s) => !s)}
-        className="p-2 rounded-full bg-gray-300 hover:bg-gray-500 transition"
+        className="p-2 rounded-full bg-gray-300  transition cursor-pointer"
       >
         <RiEmojiStickerLine className="text-xl" />
       </button>
@@ -50,14 +50,14 @@ const ChatInputWithEmojiPicker: React.FC<Props> = ({ onSend }) => {
       <input
         type="text"
         placeholder="Type a Message"
-        className="flex-1 border border-[#F4F7F9] rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-200"
+        className="flex-1 border border-[#F4F7F9] rounded-lg py-2 px-4 focus:outline-none shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
         value={inputMessage}
         onChange={(e) => setInputMessage(e.target.value)}
         onKeyDown={handleKeyPress}
       />
 
       <button
-        className="  bg-gray-300 hover:bg-gray-500 ml-2 text-white rounded-md p-2 transition"
+        className="  bg-gray-300  ml-2 text-white rounded-md p-2 transition cursor-pointer"
         onClick={handleSend}
         type="button"
       >

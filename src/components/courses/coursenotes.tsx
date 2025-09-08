@@ -18,7 +18,7 @@ function CourseNotes() {
 		<>
 			<div className='flex items-center gap-3 mb-6'>
 				<Button
-					onClick={() => navigate(-1)}
+					onClick={() => navigate('/courses')}
 					className='bg-[#EBEFF3] text-[#333] hover:bg-[#e0e0e0] px-1 py-1 mt-5 rounded-md shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]'
 				>
 					<img src={navigationicon} />

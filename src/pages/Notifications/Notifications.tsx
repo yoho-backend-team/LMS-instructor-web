@@ -1,4 +1,4 @@
-import {  COLORS, FONTS } from '@/constants/uiConstants';
+import { COLORS, FONTS } from '@/constants/uiConstants';
 import backImg from '../../assets/icons/common/back_arrow.png';
 import {
 	Card,
@@ -19,6 +19,7 @@ import { getAllNotificationsThunk } from '@/features/Notifications/reducers/thun
 import { useDispatch, useSelector } from 'react-redux';
 import { selectNotifications } from '@/features/Notifications/reducers/selectors';
 import { deleteNotification, updateNotificationStatus } from '@/features/Notifications/services';
+import updatedimg from '../../assets/dashboard/notification.png';
 
 interface Notification {
 	id: string;
@@ -33,56 +34,7 @@ const Notifications = () => {
 	const [searchTerm, setSearchTerm] = useState('');
 	const [selectedNotification, setSelectedNotification] =
 		useState<Notification | null>(null);
-	const [notifications, setNotifications] = useState<Notification[]>([
-		// {
-		// 	id: '1',
-		// 	// date: '27 April',
-		// 	title: 'Assignment Submitted',
-		// 	description:
-		// 		'Student John Doe has submitted Assignment 2 for review in "Web Development Basics".',
-		// 	status: 'read',
-		// },
-		// {
-		// 	id: '2',
-		// 	date: '30 June',
-		// 	title: 'New Course Review',
-		// 	description:
-		// 		'You’ve received a new course rating for "JavaScript Essentials" – check it out!',
-		// 	status: 'unread',
-		// },
-		// {
-		// 	id: '3',
-		// 	date: '5 July',
-		// 	title: 'Live Session Scheduled',
-		// 	description:
-		// 		'A new live Q&A session has been scheduled for "React Fundamentals" on 5 July at 6:00 PM.',
-		// 	status: 'unread',
-		// },
-		// {
-		// 	id: '4',
-		// 	date: '15 July',
-		// 	title: 'Student Question Posted',
-		// 	description:
-		// 		'A student asked a question in the discussion board of "Node.js Mastery".',
-		// 	status: 'read',
-		// },
-		// {
-		// 	id: '5',
-		// 	date: '19 July',
-		// 	title: 'Grading Deadline Reminder',
-		// 	description:
-		// 		'Reminder: Grade all pending submissions in "Advanced CSS" by 16 July.',
-		// 	status: 'read',
-		// },
-		// {
-		// 	id: '6',
-		// 	date: '21 July',
-		// 	title: 'New Enrollment',
-		// 	description:
-		// 		'A new student has enrolled in your course "Python for Beginners".',
-		// 	status: 'read',
-		// },
-	]);
+	// const [notifications, setNotifications] = useState<Notification[]>([]);
 
 	const navigate = useNavigate();
 
@@ -91,9 +43,9 @@ const Notifications = () => {
 
 	useEffect(() => {
 		dispatch(getAllNotificationsThunk({}));
-	}, [dispatch,selectedNotification]);
+	}, [dispatch, selectedNotification]);
 
-	console.log(Notifications,"Notificatuonssssssss")
+	console.log(Notifications, "Notificatuonssssssss")
 	const handleNotificationClick = async (notification: any) => {
 		setSelectedNotification(notification);
 		try {
@@ -101,7 +53,7 @@ const Notifications = () => {
 				uuid: notification?.uuid, status: 'read'
 			})
 			console.log(response, "Response from update notification status")
-			if(response){
+			if (response) {
 				dispatch(getAllNotificationsThunk({}));
 			}
 		}
@@ -119,7 +71,7 @@ const Notifications = () => {
 			})
 			console.log(response, "Response from delete notification")
 			setSelectedNotification(null);
-			if(response){
+			if (response) {
 				dispatch(getAllNotificationsThunk({}));
 			}
 		}
@@ -129,8 +81,8 @@ const Notifications = () => {
 	}
 
 	const filteredNotifications = Notifications
-		.filter((notification:any) => (filter === 'all' ? true : notification.status === filter))
-		.filter((notification:any) =>
+		.filter((notification: any) => (filter === 'all' ? true : notification.status === filter))
+		.filter((notification: any) =>
 			[notification.title, notification.description, notification.date]
 				.join(' ')
 				.toLowerCase()
@@ -138,7 +90,7 @@ const Notifications = () => {
 		);
 
 	const totalMessages = Notifications.length;
-	const unreadMessages = Notifications.filter((n:any) => n.status === 'unread').length;
+	const unreadMessages = Notifications.filter((n: any) => n.status === 'unread').length;
 
 	function formatDateToNormal(isoString: any) {
 		const date = new Date(isoString);
@@ -206,11 +158,10 @@ const Notifications = () => {
 						{['all', 'read', 'unread'].map((label) => (
 							<Button
 								key={label}
-								className={`w-[75px] rounded-lg shadow-md cursor-pointer transition-all duration-200 ${
-									filter === label
-										? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white hover:text-white '
-										: 'bg-[#ebeff3] text-black '
-								}`}
+								className={`w-[75px] rounded-lg shadow-md cursor-pointer transition-all duration-200 ${filter === label
+										? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white hover:text-white shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)]'
+										: 'bg-[#ebeff3] text-black shadow-[3px_3px_5px_rgba(255,255,255,0.7),_inset_2px_2px_3px_rgba(189,194,199,0.75)]'
+									}`}
 								variant='outline'
 								onClick={() => setFilter(label as 'all' | 'read' | 'unread')}
 							>
@@ -221,14 +172,13 @@ const Notifications = () => {
 
 					<div className='flex flex-col w-full gap-3 px-2 py-3 overflow-y-auto max-h-[400px] scrollbar-hide'>
 						{filteredNotifications.length ? (
-							filteredNotifications.map((notification:any) => (
+							filteredNotifications.map((notification: any) => (
 								<Card
 									key={notification.id}
-									className={`relative bg-[#ebeff3] lg:h-[165px] cursor-pointer shadow-md ${
-										notification.status === 'unread'
+									className={`relative bg-[#ebeff3] lg:h-[165px] cursor-pointer shadow-md ${notification.status === 'unread'
 											? 'border-l-4 border-[#7b00ff]'
 											: 'border-l-4 border-[#ebeff3]'
-									}`}
+										}`}
 									onClick={() => handleNotificationClick(notification)}
 								>
 									<CardHeader>
@@ -260,6 +210,7 @@ const Notifications = () => {
 							))
 						) : (
 							<div className='text-center py-8' style={{ ...FONTS.para_01 }}>
+								<img src={updatedimg} alt="" className='h-[250px] w-[550px]' />
 								No notifications found
 							</div>
 						)}

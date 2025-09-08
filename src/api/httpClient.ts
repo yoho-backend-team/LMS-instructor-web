@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { GetLocalStorage } from '@/utils/helper';
+import { ClearLocalStorage, GetLocalStorage } from '@/utils/helper';
 import axios from 'axios';
 
-// const backendurl = 'http://localhost:3001/api'
-const backendurl = 'https://lms-node-backend-v1.onrender.com/api';
+//const backendurl = 'http://192.168.1.14:3000/api'
+const backendurl = import.meta.env.VITE_PUBLIC_url;
+// const backendurl = 'https://lms-node-backend-v1.onrender.com/api';
+
 const Axios = axios.create({
 	baseURL: backendurl,
 	timeout: 5000000,
@@ -20,6 +22,16 @@ Axios.interceptors.request.use((config) => {
 	}
 	return config;
 });
+
+Axios.interceptors.response.use(
+	(response) => response,
+	(error) => {
+		if (error?.response && error?.response?.status === 401 && error?.response?.data?.status === "session_expired") {
+			ClearLocalStorage()
+		}
+		return Promise.reject(error)
+	}
+)
 
 class Client {
 	async get(

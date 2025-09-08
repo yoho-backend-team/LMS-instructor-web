@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from '@/components/ui/button';
 import CourseButton from './button';
 import threebox from '../../assets/courses icons/threebox.svg';
 import timer from '../../assets/courses icons/timer.svg';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import navigationicon from '../../assets/courses icons/navigation arrow.svg';
 import { FONTS } from '@/constants/uiConstants';
 import { GetImageUrl } from '@/utils/helper';
@@ -15,19 +16,20 @@ import { selectCoursedata } from '@/features/Course/reducers/selector';
 
 const CourseList: React.FC = () => {
 	const navigate = useNavigate();
+	const { course } = useParams()
 	const courseSelectData = useSelector(selectCoursedata);
 	const dispatch = useDispatch<AppDispatch>();
 
 	useEffect(() => {
 		const fetchCourseData = async () => {
 			try {
-				await dispatch(getInstructorcourseData());
+				await dispatch(getInstructorcourseData(course ?? ""));
 			} catch (error) {
 				console.error('Course fetch error:', error);
 			}
 		};
 		fetchCourseData();
-	}, [dispatch]);
+	}, [course, dispatch]);
 
 	const rating = Math.round(courseSelectData?.rating || 0);
 
@@ -35,7 +37,7 @@ const CourseList: React.FC = () => {
 		<div className='p-8'>
 			<div className='flex items-center gap-3 mb-6'>
 				<Button
-					onClick={() => navigate(-1)}
+					onClick={() => navigate('/courses')}
 					className='bg-[#EBEFF3] text-[#333] hover:bg-[#e0e0e0] px-1 py-1 rounded-md shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]'
 				>
 					<img src={navigationicon} />
@@ -60,7 +62,7 @@ const CourseList: React.FC = () => {
 							<img
 								src={GetImageUrl(courseSelectData?.image) ?? undefined}
 								alt='Course Icon'
-								className='w-35 h-35 object-contain'
+								className='w-40 h-40'
 							/>
 						</div>
 

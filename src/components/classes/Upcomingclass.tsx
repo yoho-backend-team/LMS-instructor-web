@@ -12,7 +12,7 @@ interface ClassItem {
 }
 
 interface UpcomingclassProps {
-  showOnlineOnly: boolean;
+  showOnlineOnly?: boolean;
   data: ClassItem[];
   currentPage: number;
   onPageChange: (page: number) => void;
@@ -45,7 +45,7 @@ const Upcomingclass = ({ showOnlineOnly, data, currentPage, onPageChange }: Upco
           <Card className='bg-gradient-to-r from-[#7B00FF] to-[#B200FF] !text-white mx-4 p-4'>
             <table className="w-full">
               <thead>
-                <tr className='flex justify-around items-center !text-white' style={{ ...FONTS.heading_03 }}>
+                <tr className='flex justify-around items-center !text-black' style={{ ...FONTS.heading_03 }}>
                   {headers.map((header, index) => (
                     <td key={index}>{header}</td>
                   ))}

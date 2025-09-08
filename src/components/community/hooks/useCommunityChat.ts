@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/components/community/CommunitySide/hooks/useCommunityChat.ts
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { getMessage } from '@/features/community/services/communityservices';
 import type { Chat, Community, Message } from '../type';
@@ -15,7 +16,7 @@ type UseCommunityChatArgs = {
 export function useCommunityChat({
   socket,
   userId,
-  communities,
+  // communities,
   userName,
   receiveEventName = 'receiveMessage',
 }: UseCommunityChatArgs) {
@@ -74,7 +75,7 @@ export function useCommunityChat({
       content: text,
       groupId: selectedChat._id,
       senderId: userId,
-      name: userName, 
+      name: userName,
       time: new Date().toISOString(),
     };
 

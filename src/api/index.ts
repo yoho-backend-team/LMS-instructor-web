@@ -1,5 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import httpClient from './httpClient';
 import HTTP_END_POINTS from './http_endpoints';
+
+import {
+	getInstructorBranchDetails,
+	getInstructorCourseId,
+	getInstructorInstituteDetails,
+} from '@/hooks/TabViewResponce/common';
 
 class Client {
 	common = {
@@ -64,18 +71,19 @@ class Client {
 					data,
 					'instructor'
 				),
+			getByDaily: (params: string, data: any) => httpClient.get(HTTP_END_POINTS.Instructor.attendance.class_by_day.replace(":staffId", params), data)
 		},
 		course_list: {
 			get: () =>
 				httpClient.get(
-					HTTP_END_POINTS.Instructor.course_list.get,
+					HTTP_END_POINTS.Instructor.course_list.get.replace(":instituteid", getInstructorInstituteDetails()?.uuid).replace(":branchid", getInstructorBranchDetails()?.uuid),
 					{},
 					'instructor'
 				),
 		},
 		course: {
-			get: () =>
-				httpClient.get(HTTP_END_POINTS.Instructor.course.get, {}, 'instructor'),
+			get: (params: string) =>
+				httpClient.get(HTTP_END_POINTS.Instructor.course.get.replace(":instituteid", getInstructorInstituteDetails()?.uuid).replace(":branchid", getInstructorBranchDetails()?.uuid).replace(":courseid", params), {}, 'instructor'),
 			notes: {
 				create: (data: any, params?: any) =>
 					httpClient.post(
@@ -138,7 +146,7 @@ class Client {
 						HTTP_END_POINTS.Instructor.course.batches.get.replace(
 							':courseId',
 							data?.uuid
-						),
+						).replace(":instituteid", getInstructorInstituteDetails()?.uuid).replace(":branchid", getInstructorBranchDetails()?.uuid),
 						{},
 						'instructor'
 					),
@@ -147,7 +155,7 @@ class Client {
 		class: {
 			get: (params: any) =>
 				httpClient.get(
-					HTTP_END_POINTS.Instructor.class.get,
+					HTTP_END_POINTS.Instructor.class.get.replace(":courseid", params?.users),
 					params,
 					'instructor'
 				),
@@ -167,7 +175,7 @@ class Client {
 		community: {
 			get: (params: any) =>
 				httpClient.get(
-					HTTP_END_POINTS.Instructor.community.get,
+					HTTP_END_POINTS.Instructor.community.get.replace(":courseid", getInstructorCourseId()?.uuid),
 					params,
 					'instructor'
 				),
@@ -185,13 +193,14 @@ class Client {
 					params,
 					'instructor'
 				),
-			put: (params: { uuid: string }) =>
+			put: (data: any, params?: any) =>
 				httpClient.update(
-					HTTP_END_POINTS.Instructor.notification.put + params?.uuid,
-					{},
+					HTTP_END_POINTS.Instructor.notification.put + data?.uuid,
+					data,
+					params,
 					'instructor'
 				),
-			delete: (params: { uuid: string }) =>
+			delete: (params?: any) =>
 				httpClient.delete(
 					HTTP_END_POINTS.Instructor.notification.delete + params?.uuid,
 					{},
@@ -245,6 +254,14 @@ class Client {
 					'instructor'
 				),
 		},
+		help: {
+			get: (params: any) =>
+				httpClient.get(
+					HTTP_END_POINTS.Instructor.help.get,
+					params,
+					'instructor'
+				),
+		},
 		index: {
 			get: (params?: any) =>
 				httpClient.get(
@@ -252,10 +269,11 @@ class Client {
 					params,
 					'instructor'
 				),
-			update: (data?: any) =>
+			update: (data: any) =>
 				httpClient.update(
-					HTTP_END_POINTS.Instructor.index.put,
+					HTTP_END_POINTS.Instructor.profile.put,
 					data,
+					'',
 					'instructor'
 				),
 		},
