@@ -112,6 +112,16 @@ class Client {
 						'instructor'
 					),
 			},
+			 task: {
+        create:  (data: any, params:any) =>httpClient.post(HTTP_END_POINTS.Instructor.course.task.create, data, params, 'instructor')
+        ,
+        get:  (params: any) =>  httpClient.get(HTTP_END_POINTS.Instructor.course.task.get.replace(":course",params.course), params, 'instructor')
+      ,
+        update: (params:any, data:any) => httpClient.patch(HTTP_END_POINTS.Instructor.course.task.update + params?.id,
+            data,
+            {},
+            'instructor')
+      },
 			study_material: {
 				create: (data: any, params?: any) =>
 					httpClient.post(

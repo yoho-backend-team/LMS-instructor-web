@@ -23,3 +23,16 @@ export const RemoveLocalStorage = (key: string) => {
 export const ClearLocalStorage = () => {
 	secureStorage.clear();
 };
+
+// utils/dateFormatter.ts
+export const formatDate = (isoDate: string | Date): string => {
+  if (!isoDate) return "";
+
+  const date = new Date(isoDate);
+
+  const day = ("0" + date.getDate()).slice(-2);
+  const month = ("0" + (date.getMonth() + 1)).slice(-2);
+  const year = date.getFullYear();
+
+  return `${day}-${month}-${year}`;
+};

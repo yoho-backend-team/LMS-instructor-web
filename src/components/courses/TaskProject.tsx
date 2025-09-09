@@ -1,75 +1,60 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllTaskData } from "@/features/Course/reducers/thunks";
+import { selectTasks } from "@/features/Course/reducers/selector";
+import { formatDate } from "@/utils/helper";
+import type { RootState } from "@/store/store";
 import type { Task } from "./tasks/TaskTable";
 import TaskTable from "./tasks/TaskTable";
 
-
 const Taskprojects = () => {
-  const initialTasks: Task[] = [
-    { 
-      id: "1",
-      name: "Raji sukla", 
-      type: "task", 
-      task: "Larum ipsum", 
-      deadline: "26.08.2025", 
-      status: "completed",
-      instructor: "Dr. Smith",
-      taskName: "Research Paper",
-      question: "Analyze the impact of AI on education",
-      score: "95",
-      studentAttachmentName: "research_paper.pdf",
-      remark: "Excellent work with thorough analysis"
-    },
-    { 
-      id: "2",
-      name: "thamo", 
-      type: "task", 
-      task: "Lorem ipsum", 
-      deadline: "12-06-2025", 
-      status: "pending",
-      instructor: "Prof. Johnson",
-      taskName: "Case Study",
-      question: "Evaluate market trends in 2024",
-      score: "",
-      studentAttachmentName: "case_study.docx",
-      remark: "Awaiting submission"
-    },
-    { 
-      id: "3",
-      name: "Dhinesh", 
-      type: "project", 
-      task: "Lorem ipsum", 
-      deadline: "21-09-2025", 
-      status: "pending",
-      instructor: "Dr. Williams",
-      taskName: "Final Project",
-      question: "Develop a full-stack application",
-      score: "",
-      studentAttachmentName: "project_proposal.pdf",
-      remark: "Project proposal approved"
-    },
-    { 
-      id: "4",
-      name: "M S Dhoni", 
-      type: "task", 
-      task: "Lorem ipsum", 
-      deadline: "21-09-2025", 
-      status: "completed",
-      instructor: "Prof. Davis",
-      taskName: "Quiz Assignment",
-      question: "Answer all questions from chapter 5",
-      score: "88",
-      studentAttachmentName: "quiz_answers.pdf",
-      remark: "Good effort but missed some key points"
-    },
-  ];
+  const dispatch = useDispatch<any>();
+  const taskData = useSelector(selectTasks);
+  const selectCourse: any = useSelector((state: RootState) => state?.CourseSlice?.courseData);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
-  const [tasks, setTasks] = useState<Task[]>(initialTasks);
+  useEffect(() => {
+    if (taskData) {
+      const response: Task[] = taskData?.map((item: { id: any; _id: any; instructor: { full_name: any; }; task_type: any; module: any; deadline: string | Date; status: any; task_name: any; question: any; answers: any; }) => ({
+        id: item?.id || item?._id,
+        name: item?.instructor?.full_name,
+        type: item?.task_type,
+        task: item?.module?.description || "No module specified",
+        deadline: formatDate(item?.deadline),
+        status: item?.status || "pending",
+        instructor: item?.instructor?.full_name,
+        taskName: item?.task_name,
+        question: item?.question,
+        score: "0",
+        studentAttachmentName: "quiz_answers.pdf",
+        remark: "",
+        // Map answers from backend
+        answers: item?.answers || []
+      }));
+      setTasks(response);
+    }
+  }, [taskData]);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      if (selectCourse?._id) {
+        await dispatch(
+          getAllTaskData({
+            course: selectCourse?._id,
+          })
+        );
+      }
+    };
+    fetchTasks();
+  }, [dispatch, selectCourse]);
 
   const handleTaskUpdate = (updatedTasks: Task[]) => {
     setTasks(updatedTasks);
   };
 
-  return <TaskTable tasks={tasks} onTaskUpdate={handleTaskUpdate} />;
+  return <div>
+     <TaskTable tasks={tasks} onTaskUpdate={handleTaskUpdate} course={selectCourse} />;
+  </div>
 };
 
 export default Taskprojects;
