@@ -39,9 +39,15 @@ function generateendpoints() {
 					update: '/institutes/study-material/:materialId',
 					delete: '/institutes/study-material/:materialId',
 				},
+				task:{
+        		  create: '/task-project',
+        		  get: '/task-project/get/:course',
+        		  update: '/task-project/update/',
+						},
 				batches: {
 					get: `/institutes/:instituteid/branches/:branchid/courses/:courseId/batches/`,
 				},
+				
 			},
 			class: {
 				get: `/institutes/class/:courseid`,

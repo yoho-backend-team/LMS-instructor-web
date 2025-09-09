@@ -11,6 +11,7 @@ import { GetImageUrl } from '@/utils/helper';
 import { toast } from 'react-toastify';
 import { authInstructorLogout } from '@/features/Authentication/services';
 import LogoutConfirmationModal from './LogoutConfirmationModal';
+
 import type { AppDispatch } from '@/store/store';
 import { getDashBoardReports } from '@/features/Dashboard/reducers/thunks';
 import {
@@ -130,6 +131,7 @@ const Navbar = () => {
 					</Tooltip>
 				</TooltipProvider>
 
+				{/* Navigation Items with Tooltips */}
 				<div className='flex lg:gap-10 md:gap-5'>
 					{navItems.map((item) => (
 						<TooltipProvider key={item.path}>
@@ -229,6 +231,7 @@ const Navbar = () => {
 						</Tooltip>
 					</TooltipProvider>
 
+					{/* Profile Dropdown */}
 					{showProfileSection && (
 						<Card
 							className='absolute z-50 right-6 top-20 bg-[#ebeff3] px-5 w-[200px] h-[156px]'
