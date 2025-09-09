@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from 'react';
 import fileimg from '../../assets/courses icons/File.jpg';
 import { FONTS } from '@/constants/uiConstants';
@@ -48,7 +49,7 @@ const FileUploadDesign = ({
 		const fetchData = async () => {
 			try {
 				await dispatch(getDashBoardReports());
-				await dispatch(getInstructorcourseData());
+				await dispatch(getInstructorcourseData(""));
 			} catch (error) {
 				console.log(error);
 			}
@@ -146,6 +147,7 @@ const FileUploadDesign = ({
 						toast.error('Failed to upload note, please try again.');
 					}
 				} catch (error) {
+					console.warn(error)
 					toast.error('Something went wrong, please try again.');
 				} finally {
 					setIsLoading(false);
@@ -172,6 +174,7 @@ const FileUploadDesign = ({
 						toast.error('Failed to update the note, please try again.');
 					}
 				} catch (error) {
+					console.warn(error)
 					toast.error('Something went wrong, please try again.');
 				} finally {
 					setIsLoading(false);
@@ -202,6 +205,7 @@ const FileUploadDesign = ({
 						toast.error('Failed to upload notes, please try again.');
 					}
 				} catch (error) {
+					console.warn(error)
 					toast.error('Something went wrong, please try again.');
 				} finally {
 					setIsLoading(false);
@@ -228,6 +232,7 @@ const FileUploadDesign = ({
 						toast.error('Failed to update the note, please try again.');
 					}
 				} catch (error) {
+					console.warn(error)
 					toast.error('Something went wrong, please try again.');
 				} finally {
 					setIsLoading(false);

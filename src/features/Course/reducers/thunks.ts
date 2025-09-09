@@ -40,14 +40,14 @@ export const getBatchesData = (data: any) => async (dispatch: any) => {
 	}
 };
 
-export const getAllTaskData = (params:any) => async (dispatch:any)=>{
-    try {
+export const getAllTaskData = (params: any) => async (dispatch: any) => {
+	try {
 		const response = await getTaskDeatails(params);
 		console.log("thunk res", response);
 		dispatch(getTaskData(response))
 		return response;
-    } catch (error) {
-        console.log('error in getting course data:', error);
-        throw error;
-    }
+	} catch (error) {
+		console.log('error in getting course data:', error);
+		throw error;
+	}
 }

@@ -22,7 +22,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { getDashBoardReports } from '@/features/Dashboard/reducers/thunks';
 import { selectDashBoard } from '@/features/Dashboard/reducers/selectors';
-import { selectAttendance, selectAttendanceDaily } from '@/features/attentance/reduces/selectors';
+import { selectAttendance } from '@/features/attentance/reduces/selectors';
 import type { AppDispatch } from '@/store/store';
 import { getInstructorAttendance, getAttendanceDailyThunk } from '@/features/attentance/reduces/thunks';
 
@@ -60,7 +60,7 @@ export const Attendance = () => {
 	const dispatch = useDispatch<AppDispatch>();
 	const dashData = useSelector(selectDashBoard);
 	const attendancedata: any = useSelector(selectAttendance);
-	const AttendanceDaily: any = useSelector(selectAttendanceDaily);
+	// const AttendanceDaily: any = useSelector(selectAttendanceDaily);
 
 	const generateChartData = useCallback(() => {
 		if (!attendancedata?.data?.formattedAttendance) return [];
