@@ -27,6 +27,7 @@ import { Createtickets } from '@/components/Tickets/Createtickets';
 import Batches from '@/components/courses/Batches';
 import CourseNotes from '@/components/courses/coursenotes';
 import ChangePasswordPage from '@/pages/Authentication/ChangePassword/ChangePassword';
+import Taskprojects from '@/components/courses/TaskProject';
 
 const AppRoutes = () => {
 	const { isAuthenticated, isLoading } = useAuth();
@@ -70,6 +71,7 @@ const AppRoutes = () => {
 					element={<NotesMaterials setselectedNotes={() => {}} />}
 				/>
 				<Route path='batches' element={<Batches />} />
+				<Route path='task' element={<Taskprojects />} />
 				<Route path='*' element={<Navigate to='/' />} />
 			</Route>
 		</Routes>

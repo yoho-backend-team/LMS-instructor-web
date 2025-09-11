@@ -6,6 +6,7 @@ const CourseSlice = createSlice({
 		data: [],
 		courseData: [],
 		batches: [],
+		taskData:[],
 	},
 	reducers: {
 		getcoursedetails: (state, action) => {
@@ -17,9 +18,12 @@ const CourseSlice = createSlice({
 		getBatches: (state, action) => {
 			state.batches = action.payload;
 		},
+		 getTaskData:(state,action) => {
+                state.taskData = action.payload
+            }
 	},
 });
 
-export const { getcoursedetails, getCoursedata, getBatches } =
+export const { getcoursedetails, getCoursedata, getBatches,getTaskData } =
 	CourseSlice.actions;
 export default CourseSlice.reducer;

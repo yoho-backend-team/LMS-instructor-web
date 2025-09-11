@@ -22,6 +22,7 @@ function generateendpoints() {
 			attendance: {
 				get: '/institutes/attedance/staff/',
 				class_attendance: '/institutes/attedance/class/',
+				class_by_day: '/institutes/attedance/staff/:staffId/daily',
 			},
 			course_list: {
 				get: `/institutes/:instituteid/branches/:branchid/teaching-staff/courses`,
@@ -38,9 +39,15 @@ function generateendpoints() {
 					update: '/institutes/study-material/:materialId',
 					delete: '/institutes/study-material/:materialId',
 				},
+				task:{
+        		  create: '/task-project',
+        		  get: '/task-project/get/:course',
+        		  update: '/task-project/update/',
+						},
 				batches: {
 					get: `/institutes/:instituteid/branches/:branchid/courses/:courseId/batches/`,
 				},
+				
 			},
 			class: {
 				get: `/institutes/class/:courseid`,

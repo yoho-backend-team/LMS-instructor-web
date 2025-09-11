@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Client from '../../../api/index';
 
 export const getattendancedata = async (params: any) => {
@@ -6,3 +7,8 @@ export const getattendancedata = async (params: any) => {
 		return response;
 	}
 };
+
+export const getAttendanceByDaily = async (params: string, data: any) => {
+	const response = await Client.Instructor.attendance.getByDaily(params, data)
+	return response
+}
