@@ -1,13 +1,6 @@
-import {
-	getInstructorBranchDetails,
-	getInstructorCourseId,
-	getInstructorInstituteDetails,
-} from '@/hooks/TabViewResponce/common';
+
 
 function generateendpoints() {
-	const branch = getInstructorBranchDetails();
-	const institute = getInstructorInstituteDetails();
-	const courseId = getInstructorCourseId();
 
 	return {
 		common: {
@@ -29,12 +22,13 @@ function generateendpoints() {
 			attendance: {
 				get: '/institutes/attedance/staff/',
 				class_attendance: '/institutes/attedance/class/',
+				class_by_day: '/institutes/attedance/staff/:staffId/daily',
 			},
 			course_list: {
-				get: `/institutes/${institute?.uuid}/branches/${branch?.uuid}/teaching-staff/courses`,
+				get: `/institutes/:instituteid/branches/:branchid/teaching-staff/courses`,
 			},
 			course: {
-				get: `/institutes/${institute?.uuid}/branches/${branch?.uuid}/course/${courseId}`,
+				get: `/institutes/:instituteid/branches/:branchid/course/:courseid`,
 				notes: {
 					create: `/institutes/course/note`,
 					update: `/institutes/course/note/update/:noteId`,
@@ -45,17 +39,23 @@ function generateendpoints() {
 					update: '/institutes/study-material/:materialId',
 					delete: '/institutes/study-material/:materialId',
 				},
+				task:{
+        		  create: '/task-project',
+        		  get: '/task-project/get/:course',
+        		  update: '/task-project/update/',
+						},
 				batches: {
-					get: `/institutes/${institute?.uuid}/branches/${branch?.uuid}/courses/:courseId/batches/`,
+					get: `/institutes/:instituteid/branches/:branchid/courses/:courseId/batches/`,
 				},
+				
 			},
 			class: {
-				get: `/institutes/class/${courseId}`,
+				get: `/institutes/class/:courseid`,
 				getwithId: `/institutes/class/course/`,
 				update: `/institutes/class/`,
 			},
 			community: {
-				get: `/institutes/community/course/${courseId}`,
+				get: `/institutes/community/course/:courseid`,
 				get_messages: `/institutes/community/messages/all/`,
 			},
 			notification: {

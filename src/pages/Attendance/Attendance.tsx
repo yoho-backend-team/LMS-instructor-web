@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { COLORS, FONTS } from '@/constants/uiConstants';
 import { Line, LineChart, XAxis } from 'recharts';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -23,7 +24,7 @@ import { getDashBoardReports } from '@/features/Dashboard/reducers/thunks';
 import { selectDashBoard } from '@/features/Dashboard/reducers/selectors';
 import { selectAttendance } from '@/features/attentance/reduces/selectors';
 import type { AppDispatch } from '@/store/store';
-import { getInstructorAttendance } from '@/features/attentance/reduces/thunks';
+import { getInstructorAttendance, getAttendanceDailyThunk } from '@/features/attentance/reduces/thunks';
 
 const chartConfig = {
 	desktop: {
@@ -58,7 +59,8 @@ export const Attendance = () => {
 	const [showFilters, setShowFilters] = useState<boolean>(false);
 	const dispatch = useDispatch<AppDispatch>();
 	const dashData = useSelector(selectDashBoard);
-	const attendancedata = useSelector(selectAttendance);
+	const attendancedata: any = useSelector(selectAttendance);
+	// const AttendanceDaily: any = useSelector(selectAttendanceDaily);
 
 	const generateChartData = useCallback(() => {
 		if (!attendancedata?.data?.formattedAttendance) return [];
@@ -72,6 +74,15 @@ export const Attendance = () => {
 			}
 		);
 	}, [attendancedata]);
+
+	useEffect(() => {
+		if (selectedDate?.toISOString().split('T')[0] == new Date().toISOString().split('T')[0]) {
+			dispatch(getAttendanceDailyThunk({ date: selectedDate?.toISOString().split('T')[0] }));
+		} else {
+			const nextDay = new Date(selectedDate).setDate(selectedDate.getDate() + 1)
+			dispatch(getAttendanceDailyThunk({ date: new Date(nextDay).toISOString().split('T')[0] }));
+		}
+	}, [dispatch, selectedDate])
 
 	const chartData = generateChartData();
 	const attendanceCards = [
@@ -135,7 +146,7 @@ export const Attendance = () => {
 		} catch (error) {
 			console.log(error);
 		}
-	}, [dispatch, selectedDate]);
+	}, [dashData?.institute.uuid, dashData?.user?.uuid, dispatch, selectedDate]);
 
 	return (
 		<div className='p-4'>

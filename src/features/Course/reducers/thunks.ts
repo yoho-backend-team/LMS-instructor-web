@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
 	getCoursesListData,
 	getCourseData,
 	getAllBatches,
+	getTaskDeatails,
 } from '../services/Course';
-import { getBatches, getCoursedata, getcoursedetails } from './CourseSlice';
+import { getBatches, getCoursedata, getcoursedetails, getTaskData } from './CourseSlice';
 
 export const getInstructorcourse = () => async (dispatch: any) => {
 	try {
@@ -16,9 +18,9 @@ export const getInstructorcourse = () => async (dispatch: any) => {
 	}
 };
 
-export const getInstructorcourseData = () => async (dispatch: any) => {
+export const getInstructorcourseData = (course: string) => async (dispatch: any) => {
 	try {
-		const response = await getCourseData();
+		const response = await getCourseData(course);
 		dispatch(getCoursedata(response?.data));
 		return response?.data;
 	} catch (error) {
@@ -37,3 +39,15 @@ export const getBatchesData = (data: any) => async (dispatch: any) => {
 		throw error;
 	}
 };
+
+export const getAllTaskData = (params: any) => async (dispatch: any) => {
+	try {
+		const response = await getTaskDeatails(params);
+		console.log("thunk res", response);
+		dispatch(getTaskData(response))
+		return response;
+	} catch (error) {
+		console.log('error in getting course data:', error);
+		throw error;
+	}
+}

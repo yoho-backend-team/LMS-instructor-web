@@ -5,7 +5,7 @@ import HelpCenterSearch from './HelpCenterSearch.tsx';
 import HelpTopicCard from './HelpTopicCard.tsx';
 import LearningResources from './LearningResources.tsx';
 import HelpCenterEmptyState from './HelpCenterEmptyState.tsx';
-import type { Tab, HelpTopic } from './types.ts';
+import type { HelpTopic } from './types.ts';
 import { useDispatch, useSelector } from 'react-redux';
 import { getStudentProfileThunk } from '@/features/Profile/reducers/thunks.ts';
 import { selectHelpCenter } from '@/features/helpcenter/reduces/selectors.ts';
@@ -15,20 +15,20 @@ import { GetLocalStorage } from '@/utils/helper.ts';
 
 const HelpCenterMain: React.FC = () => {
   const [activeTab, setActiveTab] = useState('All');
-  const [currentView, setCurrentView] = useState('main'); 
+  const [currentView, setCurrentView] = useState('main');
   const [searchQuery, setSearchQuery] = useState('');
   const [vedioData, setvedioData] = useState(null);
 
   const dispatch = useDispatch<any>();
   const HelpDetails = useSelector(selectHelpCenter)
-  const instituteId :any = GetLocalStorage('instructorDetails')
+  const instituteId: any = GetLocalStorage('instructorDetails')
 
   useEffect(() => {
     dispatch(getStudentProfileThunk());
     dispatch(getHelpThunk({ instituteid: instituteId?._id }));
   }, [dispatch]);
-  
-  console.log(HelpDetails, "Help MAin")
+
+  //console.log(HelpDetails, "Help MAin")
   // const tabs: Tab[] = [
   //   { id: 'All', label: 'All', count: 5 },
   //   { id: 'Profile', label: 'Profile', count: 5 },
@@ -187,7 +187,7 @@ const HelpCenterMain: React.FC = () => {
             Help Centre
           </h2>
 
-          {currentTopics.length > 0 ? (
+          {currentTopics?.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
               {currentTopics.map((topic, index) => (
                 <HelpTopicCard

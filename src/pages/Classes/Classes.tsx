@@ -9,6 +9,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch } from '@/store/store';
 import { getClassDetails } from '@/features/classes/reducers/thunks';
 import { selectClass } from '@/features/classes/reducers/selectors';
+import { useLoader } from '@/context/LoadingContext/Loader';
+import Loader from '@/components/Loader/Loader';
+import { getDashBoardReports } from '@/features/Dashboard/reducers/thunks';
+
 
 const Classes = () => {
 	const [activeTab, setActiveTab] = useState<'live' | 'upcoming' | 'completed'>(
@@ -19,23 +23,24 @@ const Classes = () => {
 
 	const dispatch = useDispatch<AppDispatch>();
 	const classData = useSelector(selectClass)?.data || [];
+	const { showLoader, hideLoader, IsLoading } = useLoader();
 
-	const fetchClassData = (
-		tab: 'live' | 'upcoming' | 'completed',
-		page: number = 1
-	) => {
-		dispatch(
-			getClassDetails({
-				userType: isOn ? 'online' : 'offline',
-				classType: tab,
-				page: page,
-			})
-		);
-	};
+
 
 	useEffect(() => {
-		fetchClassData(activeTab, currentPage);
-	}, [activeTab, isOn, currentPage]);
+		((
+			tab: 'live' | 'upcoming' | 'completed',
+			page: number = 1
+		) => {
+			dispatch(
+				getClassDetails({
+					userType: isOn ? 'online' : 'offline',
+					classType: tab,
+					page: page,
+				})
+			);
+		})(activeTab, currentPage)
+	}, [activeTab, isOn, currentPage, dispatch]);
 
 	const handleTabChange = (tab: 'live' | 'upcoming' | 'completed') => {
 		setActiveTab(tab);
@@ -45,6 +50,22 @@ const Classes = () => {
 	const toggleSwitch = () => {
 		setIsOn((prev) => !prev);
 	};
+	useEffect(() => {
+		(async () => {
+			try {
+				showLoader();
+				const timeoutId = setTimeout(() => {
+					hideLoader();
+				}, 8000);
+				const response = await dispatch(getDashBoardReports());
+				if (response) {
+					clearTimeout(timeoutId);
+				}
+			} finally {
+				hideLoader();
+			}
+		})();
+	}, [dispatch, hideLoader, showLoader]);
 
 	return (
 		<div className='h-screen flex flex-col'>
@@ -53,6 +74,11 @@ const Classes = () => {
 				<h1 style={{ ...FONTS.heading_01 }} className='mb-4'>
 					Classes
 				</h1>
+				{IsLoading && (
+					<div className='w-full h-[100vh] absolute z-10 bg-transparent backdrop-blur-sm'>
+						<Loader />
+					</div>
+				)}
 
 				<Card style={{ backgroundColor: COLORS.bg_Colour }}>
 					<h2 style={{ ...FONTS.heading_02 }} className='ml-6'>
@@ -69,10 +95,9 @@ const Classes = () => {
 						<div
 							className={`relative w-25 h-8 rounded-full flex items-center justify-between px-2 text-sm font-bold
                 transition-colors duration-300
-                ${
-									isOn
-										? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF]'
-										: 'bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset]'
+                ${isOn
+									? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF]'
+									: 'bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset]'
 								}
               `}
 						>
@@ -82,7 +107,7 @@ const Classes = () => {
 									className='text-white'
 								>
 									ONLINE
-								</span>
+								</span> 
 							) : (
 								<span
 									style={{ fontFamily: FONTS.heading_01.fontFamily }}
@@ -107,11 +132,10 @@ const Classes = () => {
 								color: activeTab === 'live' ? COLORS.white : undefined,
 							}}
 							onClick={() => handleTabChange('live')}
-							className={`px-2 min-w-[155px] rounded-[6px] cursor-pointer ${
-								activeTab === 'live'
-									? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)]'
-									: 'bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset]'
-							}`}
+							className={`px-2 min-w-[155px] rounded-[6px] cursor-pointer ${activeTab === 'live'
+								? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)]'
+								: 'bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset]'
+								}`}
 							variant={activeTab === 'live' ? 'default' : 'outline'}
 						>
 							Live Class
@@ -122,11 +146,10 @@ const Classes = () => {
 								color: activeTab === 'upcoming' ? COLORS.white : undefined,
 							}}
 							onClick={() => handleTabChange('upcoming')}
-							className={`px-2 min-w-[155px] cursor-pointer ${
-								activeTab === 'upcoming'
-									? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)]'
-									: 'bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset]'
-							}`}
+							className={`px-2 min-w-[155px] cursor-pointer ${activeTab === 'upcoming'
+								? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)]'
+								: 'bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset]'
+								}`}
 							variant={activeTab === 'upcoming' ? 'default' : 'outline'}
 						>
 							Upcoming Classes
@@ -137,11 +160,10 @@ const Classes = () => {
 								color: activeTab === 'completed' ? COLORS.white : undefined,
 							}}
 							onClick={() => handleTabChange('completed')}
-							className={`px-2 min-w-[155px] cursor-pointer ${
-								activeTab === 'completed'
-									? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)]'
-									: 'bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset]'
-							}`}
+							className={`px-2 min-w-[155px] cursor-pointer ${activeTab === 'completed'
+								? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)]'
+								: 'bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset]'
+								}`}
 							variant={activeTab === 'completed' ? 'default' : 'outline'}
 						>
 							Completed Classes
@@ -169,11 +191,8 @@ const Classes = () => {
 				)}
 				{activeTab === 'completed' && (
 					<Completedclass
-						showOnlineOnly={isOn}
-						currentPage={currentPage}
-						onPageChange={setCurrentPage}
 						data={classData}
-						classType={isOn}
+						classType={true}
 					/>
 				)}
 			</div>

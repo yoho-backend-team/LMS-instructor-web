@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useMemo, useRef, useCallback } from 'react';
 import type { Message } from './type';
 import bg from '@/assets/gox6.jpg';
@@ -72,7 +73,7 @@ const MessageList: React.FC<Props> = ({
     }, []);
 
     return (
-        <div className="flex-1 bg-[#EBEFF3] scroll-smooth relative max-h-100 overflow-y-auto
+        <div className="flex-1 bg-[#EBEFF3] scroll-smooth relative overflow-y-auto
   [&::-webkit-scrollbar]:w-2
   [&::-webkit-scrollbar-track]:rounded-full
   [&::-webkit-scrollbar-track]:bg-gray-100

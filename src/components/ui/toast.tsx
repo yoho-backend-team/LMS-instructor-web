@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback } from 'react';
 import { COLORS, FONTS } from '@/constants/uiConstants';
 
 interface Toast {
@@ -32,7 +32,7 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
   const showToast = useCallback((message: string, type: Toast['type'], duration = 3000) => {
     const id = Math.random().toString(36).substr(2, 9);
     const newToast: Toast = { id, message, type, duration };
-    
+
     setToasts(prev => [...prev, newToast]);
 
     if (duration > 0) {
@@ -101,7 +101,7 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
   return (
     <ToastContext.Provider value={{ showToast }}>
       {children}
-      
+
       {/* Toast Container */}
       <div className="fixed top-4 right-4 z-50 space-y-2">
         {toasts.map((toast) => (

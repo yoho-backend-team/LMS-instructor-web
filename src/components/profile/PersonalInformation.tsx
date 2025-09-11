@@ -24,7 +24,7 @@ interface PersonalInfo {
 }
 
 interface PersonalInformationProps {
-	data: PersonalInfo;
+	data?: PersonalInfo;
 	onDataChange?: (data: PersonalInfo) => void;
 	isEditing?: boolean;
 }
@@ -279,7 +279,7 @@ const PersonalInformation: React.FC<PersonalInformationProps> = ({
 
 			<InstituteInformation
 				data={personalInfo?.userDetail}
-				onDataChange={onDataChange}
+				onDataChange={undefined}
 				isEditing={isEditing}
 			/>
 		</div>
