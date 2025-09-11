@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { ReactNode } from "react";
+
 export interface Tab {
   id: string;
   label: string;
@@ -8,6 +9,7 @@ export interface Tab {
 }
 
 export interface HelpTopic {
+  count: ReactNode;
   title: string;
   category?: string;
   description?: string;
@@ -35,3 +37,12 @@ export interface LearningResourcesProps {
   onBack: () => void;
   data: any
 }
+
+
+
+export interface HelpCenterTab {
+  category: string;
+  count: number;
+}
+
+

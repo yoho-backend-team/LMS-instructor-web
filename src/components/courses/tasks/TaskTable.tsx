@@ -79,6 +79,8 @@ const TaskTable = ({ tasks, onTaskUpdate, course }: TaskTableProps) => {
     setSelectedTask(null);
   };
 
+console.log(tasks, 'tasksss')
+
   return (
     <div className='w-full mx-auto p-4'>
       {/* Top Navigation & Title */}
@@ -127,7 +129,7 @@ const TaskTable = ({ tasks, onTaskUpdate, course }: TaskTableProps) => {
                 <p style={{ ...FONTS?.heading_06 }}>No tasks available</p>
               </div>
             ) : (
-              tasks?.map((task) => (
+              tasks?.map((task: any) => (
                 <Card
                   key={task?.id}
                   onClick={() => handleRowClick(task)}
@@ -141,12 +143,12 @@ const TaskTable = ({ tasks, onTaskUpdate, course }: TaskTableProps) => {
                     <div>
                       <Button
                         className={`cursor-pointer px-4 py-1 w-25 rounded-lg text-sm font-medium ${
-                          task?.status === "completed"
+                          task?.is_active === true
                             ? "bg-green-500 text-white"
                             : "bg-gradient-to-l from-[#7B00FF] to-[#B200FF] !text-white"
                         }`}
                       >
-                        {task?.status}
+                        {task?.is_active === true ? "Completed" : "Pending"}
                       </Button>
                     </div>
                   </div>

@@ -11,7 +11,7 @@ import {
 import { useEffect, useState, useCallback } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import filter from '../../assets/icons/common/Mask group.png';
-import { startOfMonth, setMonth, setYear } from 'date-fns';
+import { startOfMonth, setMonth, setYear, format } from 'date-fns';
 import {
 	Select,
 	SelectContent,
@@ -25,6 +25,7 @@ import { selectDashBoard } from '@/features/Dashboard/reducers/selectors';
 import { selectAttendance } from '@/features/attentance/reduces/selectors';
 import type { AppDispatch } from '@/store/store';
 import { getInstructorAttendance, getAttendanceDailyThunk } from '@/features/attentance/reduces/thunks';
+import {  ResponsiveContainer } from 'recharts';
 
 const chartConfig = {
 	desktop: {
@@ -60,19 +61,35 @@ export const Attendance = () => {
 	const dispatch = useDispatch<AppDispatch>();
 	const dashData = useSelector(selectDashBoard);
 	const attendancedata: any = useSelector(selectAttendance);
-	// const AttendanceDaily: any = useSelector(selectAttendanceDaily);
 
 	const generateChartData = useCallback(() => {
-		if (!attendancedata?.data?.formattedAttendance) return [];
-		return Object.entries(attendancedata.data.formattedAttendance).map(
-			([month, attendance]) => {
-				const att = attendance as { presentDays?: number };
-				return {
-					month,
-					desktop: att.presentDays || 0,
-				};
+		// Fixed: Check for the correct data structure from your API
+		if (!attendancedata?.data?.data) return [];
+		
+		// Group attendance data by month from the 'data' array
+		const monthlyData: { [key: string]: { present: number; absent: number; total: number } } = {};
+		
+		attendancedata.data.data.forEach((record: any) => {
+			const date = new Date(record.date);
+			const monthName = format(date, 'MMM');
+			
+			if (!monthlyData[monthName]) {
+				monthlyData[monthName] = { present: 0, absent: 0, total: 0 };
 			}
-		);
+			
+			monthlyData[monthName].total += 1;
+			if (record.status === 'present') {
+				monthlyData[monthName].present += 1;
+			} else {
+				monthlyData[monthName].absent += 1;
+			}
+		});
+
+		// Convert to chart format
+		return Object.entries(monthlyData).map(([month, data]) => ({
+			month,
+			desktop: data.present,
+		}));
 	}, [attendancedata]);
 
 	useEffect(() => {
@@ -85,6 +102,7 @@ export const Attendance = () => {
 	}, [dispatch, selectedDate])
 
 	const chartData = generateChartData();
+	
 	const attendanceCards = [
 		{
 			label: 'Classes Attend',
@@ -130,6 +148,28 @@ export const Attendance = () => {
 		(_, i) => new Date().getFullYear() - 2 + i
 	);
 
+	// Helper function to get status for selected date
+	const getSelectedDateStatus = () => {
+		if (!attendancedata?.data?.workingDays) return null;
+		
+		const selectedDateStr = selectedDate.toISOString().split('T')[0];
+		return attendancedata.data.workingDays.find((day: any) => 
+			day.date === selectedDateStr
+		);
+	};
+
+	// Calculate classes for selected date (simplified calculation)
+	const getSelectedDateStats = () => {
+		const dateStatus = getSelectedDateStatus();
+		const totalClasses = attendancedata?.data?.total_class || 1; // Default to 1 if 0
+		
+		return {
+			scheduled: totalClasses,
+			attended: dateStatus?.status === 'present' ? 1 : 0,
+			absent: dateStatus?.status === 'absent' ? 1 : 0,
+		};
+	};
+
 	useEffect(() => {
 		dispatch(getDashBoardReports());
 	}, [dispatch]);
@@ -147,6 +187,8 @@ export const Attendance = () => {
 			console.log(error);
 		}
 	}, [dashData?.institute.uuid, dashData?.user?.uuid, dispatch, selectedDate]);
+
+	const selectedDateStats = getSelectedDateStats();
 
 	return (
 		<div className='p-4'>
@@ -248,59 +290,69 @@ export const Attendance = () => {
 
 			<div className='flex flex-row gap-4 justify-center pt-6'>
 				{attendanceCards.map((card) => (
-					<Card
-						key={card.label}
-						className='
-              relative 
-              w-full 
-              md:max-w-full
-              md:h-[150px]
-              h-auto 
-              shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),5px_5px_4px_rgba(189,194,199,0.75)] 
-              overflow-hidden
-            '
-						style={{ backgroundColor: COLORS.bg_Colour }}
-					>
-						<CardHeader className='md:w-auto md:text-[10px] h-full'>
-							<div className='max-w-screen-xl flex justify-between'>
-								<span style={{ ...FONTS.heading_04 }}>{card.label}</span>
-								<span
-									className='text-2xl font-bold'
-									style={{ ...FONTS.heading_01 }}
-								>
-									<span style={{ color: card.color }}>{card.current}</span>
-									{card.total && (
-										<span className='text-sm text-gray-500'>/{card.total}</span>
-									)}
-								</span>
-							</div>
-						</CardHeader>
-						<CardContent className='h-full md:h-[30px] md:w-[220px] md:pb-0 lg:w-[100%] lg:mb-2 '>
-							<ChartContainer config={chartConfig} style={{ ...FONTS.para_03 }}>
-								<LineChart
-									data={chartData}
-									margin={{ left: 0, right: 0 }}
-									width={500}
-									height={70}
-									className='md:mb-20'
-								>
-									<XAxis dataKey='month' hide />
-									<ChartTooltip
-										cursor={false}
-										content={<ChartTooltipContent hideLabel />}
-									/>
-									<Line
-										dataKey='desktop'
-										type='monotone'
-										stroke={card.color}
-										strokeWidth={2.5}
-										dot={true}
-										className='max-w-sm md:max-w-full h-auto md:h-[60px]'
-									/>
-								</LineChart>
-							</ChartContainer>
-						</CardContent>
-					</Card>
+<Card
+  key={card.label}
+  className='
+    relative 
+    w-full 
+    md:max-w-full
+    h-auto 
+    shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),5px_5px_4px_rgba(189,194,199,0.75)] 
+    overflow-hidden
+    flex flex-col
+  '
+  style={{ backgroundColor: COLORS.bg_Colour }}
+>
+  <CardHeader className='p-4 pb-2'>
+    <div className='flex justify-between items-center w-full'>
+      <span style={{ ...FONTS.heading_04 }}>{card.label}</span>
+      <div className='text-right'>
+        <span
+          className='text-2xl font-bold block'
+          style={{ ...FONTS.heading_01 }}
+        >
+          <span style={{ color: card.color }}>{card.current}</span>
+          {card.total && (
+            <span className='text-sm text-gray-500'>/{card.total}</span>
+          )}
+        </span>
+      </div>
+    </div>
+  </CardHeader>
+  <CardContent className='p-4 pt-2 flex-1'>
+    <div className='w-full h-[70px]'>
+      <ChartContainer 
+        config={chartConfig} 
+        style={{ 
+          ...FONTS.para_03,
+          width: '100%',
+          height: '100%'
+        }}
+      >
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart
+            data={chartData}
+            margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+          >
+            <XAxis dataKey='month' hide />
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent hideLabel />}
+            />
+            <Line
+              dataKey='desktop'
+              type='monotone'
+              stroke={card.color}
+              strokeWidth={2.5}
+              dot={false}
+              activeDot={{ r: 4, fill: card.color }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </ChartContainer>
+    </div>
+  </CardContent>
+</Card>
 				))}
 			</div>
 
@@ -347,17 +399,13 @@ export const Attendance = () => {
 								style={{ ...FONTS.heading_06 }}
 							>
 								<li>
-									Classes Scheduled:{' '}
-									{((attendancedata?.data?.offlineClassCount || 0) +
-										(attendancedata?.data?.onlineClassCount || 0)) /
-										30}
+									Classes Scheduled: {selectedDateStats.scheduled}
 								</li>
 								<li>
-									Classes Attended:{' '}
-									{attendancedata?.data?.attendedClassCount || 0}
+									Classes Attended: {selectedDateStats.attended}
 								</li>
-								<li>Absent: {attendancedata?.data?.totalAbsentDays || 0}</li>
-								<li>Notes: Good Performance</li>
+								<li>Absent: {selectedDateStats.absent}</li>
+								<li>Notes: {getSelectedDateStatus()?.status === 'present' ? 'Good Performance' : 'Needs Improvement'}</li>
 							</ul>
 						</div>
 						<button
