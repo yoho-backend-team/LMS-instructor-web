@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Client from '../../../api/index';
 
 export const getCoursesListData = async () => {
@@ -10,9 +11,9 @@ export const getCoursesListData = async () => {
 	}
 };
 
-export const getCourseData = async () => {
+export const getCourseData = async (course: string) => {
 	try {
-		const response = await Client.Instructor.course.get();
+		const response = await Client.Instructor.course.get(course);
 		return response;
 	} catch (error) {
 		console.error('Error in getcoursedata:', error);

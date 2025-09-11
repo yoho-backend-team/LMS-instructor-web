@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useNavigate } from 'react-router-dom';
 import CourseCard from './CourseCard';
 import { useDispatch, useSelector } from 'react-redux';
@@ -37,7 +38,7 @@ const MainCourse = () => {
 								image={course?.image}
 								modules={course?.coursemodules.length}
 								duration={course?.duration}
-								onClick={() => navigate('/about/mernstack')}
+								onClick={() => navigate(`/about/${course?._id}`)}
 							/>
 						</div>
 					))

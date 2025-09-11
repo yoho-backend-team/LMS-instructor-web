@@ -21,6 +21,9 @@ interface FilterGroup {
 interface CompletedclassProps {
   data?: any;
   classType?: boolean;
+  showOnlineOnly?: boolean;
+  currentPage?: number;
+  onPageChange?: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
@@ -193,7 +196,7 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
       </Card>
 
       {/* Filtered Data Cards */}
-      {filteredData.length === 0 ? (
+      {filteredData?.length === 0 ? (
         <div className="text-center py-8">
 
           <p style={{ ...FONTS.heading_04 }} className="text-gray-600">
@@ -228,7 +231,7 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
                 <div className="flex justify-center">
                   <Button
                     onClick={() => handleClassDetailPage(item.uuid)}
-                    className="cursor-pointer bg-gradient-to-r from-green-400 to-green-500 text-white hover:from-green-500 hover:to-green-600
+                    className="cursor-pointer bg-gradient-to-r from-green-400 to-green-500 text-black hover:from-green-500 hover:to-green-600
                       shadow-[0px_3px_4px_0px_rgba(255,255,255,0.75)_inset,3px_-3px_3px_0px_rgba(255,255,255,0.25)_inset,
                       -4px_8px_23px_0px_#3ABE65_inset,-8px_-8px_12px_0px_#3ABE65_inset,2px_3px_3px_0px_rgba(189,194,199,0.75),
                       8px_8px_12px_0px_rgba(189,194,199,0.25),-1px_-1px_6px_0px_rgba(255,255,255,0.75),

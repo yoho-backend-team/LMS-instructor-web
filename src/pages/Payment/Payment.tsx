@@ -35,7 +35,7 @@ export const Payment = () => {
   const staffDetail = SalaryDetails[0]?.staff
   const bankDetail = SalaryDetails[0]?.staff?.Bank_Details
 
-  const [staffDetails, setStaffDetails] = useState({
+  const [staffDetails, setStaffDetails] = useState<any>({
     name: "John Doe",
     designation: "Teacher",
     staffId: "STF-001",
@@ -67,7 +67,7 @@ export const Payment = () => {
 
   const handleStaffDetailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    setStaffDetails((prev) => ({
+    setStaffDetails((prev: any) => ({
       ...prev,
       [name]: value,
     }))
@@ -231,7 +231,7 @@ export const Payment = () => {
                       <input
                         type="text"
                         name="name"
-                        value={staffDetail?.username}
+                        value={staffDetails?.username}
                         onChange={handleStaffDetailChange}
                         disabled={!isEditing}
                         className="p-4 rounded-lg mb-2 w-full"
@@ -404,12 +404,15 @@ export const Payment = () => {
                 <CustomTabContent value="salary">
                   <div className="">
                     <div>
-                      <label className="block mb-1" style={{ ...FONTS.heading_05 }}>
+                      <label className="block  mb-1" style={{ ...FONTS.heading_05 }}>
                         Monthly Basic
                       </label>
                       <input
                         type="text"
                         value={salaryStructure.basic}
+                        onChange={(e) =>
+                          setSalaryStructure((prev: any) => ({ ...prev, basic: e.target.value }))
+                        }
                         disabled
                         className="p-4 rounded-lg mb-2 w-full"
                         style={{
