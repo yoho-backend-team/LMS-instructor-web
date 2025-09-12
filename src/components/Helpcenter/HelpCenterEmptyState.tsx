@@ -12,6 +12,7 @@ const HelpCenterEmptyState: React.FC<HelpCenterEmptyStateProps> = ({
 }) => {
   const isSearchResult = searchQuery && searchQuery.trim().length > 0;
   
+  
   return (
     <div className="flex flex-col items-center justify-center py-8 sm:py-12 px-4 sm:px-6 text-center">
       {/* Image */}

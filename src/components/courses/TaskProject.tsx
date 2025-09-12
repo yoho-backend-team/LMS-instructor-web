@@ -16,13 +16,13 @@ const Taskprojects = () => {
 
   useEffect(() => {
     if (taskData) {
-      const response: Task[] = taskData?.map((item: { id: any; _id: any; instructor: { full_name: any; }; task_type: any; module: any; deadline: string | Date; status: any; task_name: any; question: any; answers: any; }) => ({
+      const response: Task[] = taskData?.map((item: { id: any; _id: any; instructor: { full_name: any; }; task_type: any; module: any; deadline: string | Date; is_active: boolean; task_name: any; question: any; answers: any; }) => ({
         id: item?.id || item?._id,
         name: item?.instructor?.full_name,
         type: item?.task_type,
         task: item?.module?.description || "No module specified",
         deadline: formatDate(item?.deadline),
-        status: item?.status || "pending",
+        is_active: item?.is_active || false,
         instructor: item?.instructor?.full_name,
         taskName: item?.task_name,
         question: item?.question,

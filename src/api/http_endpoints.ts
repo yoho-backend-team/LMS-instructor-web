@@ -42,7 +42,7 @@ function generateendpoints() {
 				task:{
         		  create: '/task-project',
         		  get: '/task-project/get/:course',
-        		  update: '/task-project/update/',
+        		  update: '/task-project/update/:taskid',
 						},
 				batches: {
 					get: `/institutes/:instituteid/branches/:branchid/courses/:courseId/batches/`,
@@ -74,7 +74,7 @@ function generateendpoints() {
 				get: '/institutes/faq/all',
 			},
 			help: {
-				get: `/helpcenter`,
+				get: `/help-center/all`,
 			},
 			reports: {
 				get: '/institutes/reports/users/teaching-staff',
