@@ -13,6 +13,7 @@ const Community = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
+				
 				dispatch(getAllCommunitiesData(''));
 			} catch (error) {
 				console.error('Community fetch error:', error);
