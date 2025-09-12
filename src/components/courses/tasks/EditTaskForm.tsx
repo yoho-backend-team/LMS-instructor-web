@@ -30,7 +30,7 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
 
   // Extract student submissions from task data
   const studentSubmissions: StudentSubmission[] | any = task?.answers;
-
+   console.log(task,"sow")
   // Calculate pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -64,28 +64,38 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
   }, [studentGrades, studentSubmissions]);
 
   const handleGradeChange = async (submissionId: string, field: string, value: string) => {
-    const updatedGrades = {
-      ...studentGrades,
-      [submissionId]: {
-        ...studentGrades[submissionId],
-        [field]: value,
-      },
-    };
-    setStudentGrades(updatedGrades);
+  const updatedGrades = {
+    ...studentGrades,
+    [submissionId]: {
+      ...studentGrades[submissionId],
+      [field]: value,
+    },
+  };
+  setStudentGrades(updatedGrades);
 
-    // If status is being changed to "completed", update the individual submission immediately
-    if (field === "status" && value === "completed") {
-      const submission = studentSubmissions.find((sub: any) => sub?._id === submissionId);
-      if (submission) {
-        const grade = updatedGrades[submissionId];
-        const updatedSubmission = {
-          ...submission,
-          mark: grade ? parseInt(grade.mark) || 0 : submission?.mark,
-          remark: grade?.remark || submission?.remark,
-          status: "completed",
-        };
+  // If status is being changed to "completed", update the individual submission immediately
+  if (field === "status" && value === "completed") {
+    const submission = studentSubmissions.find((sub: any) => sub?._id === submissionId);
+    if (submission) {
+      const grade = updatedGrades[submissionId];
+      const updatedSubmission = {
+        ...submission,
+        mark: grade ? parseInt(grade.mark) || 0 : submission?.mark,
+        remark: grade?.remark || submission?.remark,
+        status: "completed",
+      };
 
-        // Update the task answers array with this submission updated
+      // Call API to update only this specific submission
+      try {
+        setIsUpdating(true);
+       await updateTaskData(task._id , {
+  remark: updatedSubmission.remark,
+  mark: updatedSubmission.mark,
+  status: updatedSubmission.status,
+  student: updatedSubmission.student?._id, 
+});
+
+        // Update local state
         const updatedSubmissions = studentSubmissions?.map((sub: any) =>
           sub?._id === submissionId ? updatedSubmission : sub,
         );
@@ -95,25 +105,17 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
           answers: updatedSubmissions,
           status: task?.status,
         };
-
-        // Call API to update the task with patch via service function
-        try {
-          setIsUpdating(true);
-          const taskId = task._id || "68b83292900e5217f5c1874f";
-          await updateTaskData(taskId, {
-            answers: updatedSubmissions,
-            status: task?.status,
-          });
-          onSave(updatedTask);
-        } catch (error) {
-          console.error("Error updating individual submission:", error);
-          alert("Error updating submission. Please try again.");
-        } finally {
-          setIsUpdating(false);
-        }
+        
+        onSave(updatedTask);
+      } catch (error) {
+        console.error("Error updating individual submission:", error);
+        alert("Error updating submission. Please try again.");
+      } finally {
+        setIsUpdating(false);
       }
     }
-  };
+  }
+};
 
   const handleSubmit = async () => {
     try {

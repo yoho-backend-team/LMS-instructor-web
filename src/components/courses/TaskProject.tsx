@@ -19,6 +19,7 @@ const Taskprojects = () => {
       const response: Task[] = taskData?.map((item: { id: any; _id: any; instructor: { full_name: any; }; task_type: any; module: any; deadline: string | Date; is_active: boolean; task_name: any; question: any; answers: any; }) => ({
         id: item?.id || item?._id,
         name: item?.instructor?.full_name,
+        _id:item?._id,
         type: item?.task_type,
         task: item?.module?.description || "No module specified",
         deadline: formatDate(item?.deadline),

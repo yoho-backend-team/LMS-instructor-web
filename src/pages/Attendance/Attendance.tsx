@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { COLORS, FONTS } from '@/constants/uiConstants';
-import { Line, LineChart, XAxis } from 'recharts';
+import {  LineChart, XAxis } from 'recharts';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import {
 	type ChartConfig,
@@ -22,7 +21,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { getDashBoardReports } from '@/features/Dashboard/reducers/thunks';
 import { selectDashBoard } from '@/features/Dashboard/reducers/selectors';
-import { selectAttendance } from '@/features/attentance/reduces/selectors';
+import { selectAttendance, selectAttendanceDaily } from '@/features/attentance/reduces/selectors';
 import type { AppDispatch } from '@/store/store';
 import { getInstructorAttendance, getAttendanceDailyThunk } from '@/features/attentance/reduces/thunks';
 import {  ResponsiveContainer } from 'recharts';
@@ -61,6 +60,8 @@ export const Attendance = () => {
 	const dispatch = useDispatch<AppDispatch>();
 	const dashData = useSelector(selectDashBoard);
 	const attendancedata: any = useSelector(selectAttendance);
+	const dailydata =useSelector(selectAttendanceDaily)
+	console.log(dailydata,"dailydata")
 
 	const generateChartData = useCallback(() => {
 		// Fixed: Check for the correct data structure from your API
@@ -339,14 +340,14 @@ export const Attendance = () => {
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Line
+            {/* <Line
               dataKey='desktop'
               type='monotone'
               stroke={card.color}
               strokeWidth={2.5}
               dot={false}
               activeDot={{ r: 4, fill: card.color }}
-            />
+            /> */}
           </LineChart>
         </ResponsiveContainer>
       </ChartContainer>
@@ -394,19 +395,24 @@ export const Attendance = () => {
 							>
 								{selectedDate ? selectedDate.toDateString() : 'Select a date'}
 							</p>
+							{dailydata?.map((item,index) => (
 							<ul
+							key={index}
 								className='space-y-2 text-gray-700'
 								style={{ ...FONTS.heading_06 }}
 							>
+								
 								<li>
-									Classes Scheduled: {selectedDateStats.scheduled}
+									Class Name: {item.class_name}
 								</li>
 								<li>
-									Classes Attended: {selectedDateStats.attended}
+									Duration: {item.duration}
 								</li>
-								<li>Absent: {selectedDateStats.absent}</li>
-								<li>Notes: {getSelectedDateStatus()?.status === 'present' ? 'Good Performance' : 'Needs Improvement'}</li>
+								<li>Start Date: {item.start_date}</li>
+								<li>End Time: {item.end_time}</li>
+
 							</ul>
+							) )}
 						</div>
 						<button
 							className='w-max-sm mt-4 self-start px-4 py-2 bg-gray rounded-xl btnshadow text-white text-[14px] hover:!text-white btnhovershadow cursor-pointer '

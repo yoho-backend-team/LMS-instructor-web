@@ -9,6 +9,7 @@ import CourseButton from "../button";
 import { useNavigate } from "react-router-dom";
 
 export interface Task {
+  _id:string;
   id: string;
   name: string;
   type: string;
