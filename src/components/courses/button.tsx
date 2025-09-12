@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import type React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const CourseButton: React.FC<{ activeTabs: string }> = ({ activeTabs }) => {
+const CourseButton: React.FC<{ activeTabs: string, course_id:string }> = ({ activeTabs, course_id }) => {
 	const navigate = useNavigate();
 
 	return (
@@ -48,7 +48,7 @@ const CourseButton: React.FC<{ activeTabs: string }> = ({ activeTabs }) => {
 
 			<Button
 				onClick={() => {
-					navigate('/batches');
+					navigate(`/batches/${course_id}`);
 				}}
 				className={
 					activeTabs === 'batches'
@@ -58,6 +58,7 @@ const CourseButton: React.FC<{ activeTabs: string }> = ({ activeTabs }) => {
 			>
 				Batches
 			</Button>
+
 		</div>
 	);
 };

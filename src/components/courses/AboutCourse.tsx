@@ -48,7 +48,7 @@ const CourseList: React.FC = () => {
 			</div>
 
 			<div className='flex justify-center mb-8'>
-				<CourseButton activeTabs='about' />
+				<CourseButton activeTabs='about' course_id={course} />
 			</div>
 
 			<div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>

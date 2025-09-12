@@ -129,3 +129,13 @@ export const updateTaskData = async (params:any, data: any) => {
     console.log(error.message);
   }
 };
+
+export const getCourseModules = async (data: any) => {
+  try {
+	const response = await Client.Instructor.course.course_track.get(data);
+	return response
+	// No response to return since update returns void
+  } catch (error:any) {
+    console.log(error.message);
+  }
+};

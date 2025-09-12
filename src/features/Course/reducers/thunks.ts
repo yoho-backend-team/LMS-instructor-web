@@ -4,6 +4,7 @@ import {
 	getCourseData,
 	getAllBatches,
 	getTaskDeatails,
+	getCourseModules,
 } from '../services/Course';
 import { getBatches, getCoursedata, getcoursedetails, getTaskData } from './CourseSlice';
 
@@ -51,3 +52,14 @@ export const getAllTaskData = (params: any) => async (dispatch: any) => {
 		throw error;
 	}
 }
+
+export const getInstructorcourseModules = (data: any) => async (dispatch: any) => {
+	try {
+		const response = await getCourseModules(data)
+		dispatch(getCourseModules(response?.data));
+		return response?.data;
+	} catch (error) {
+		console.error('Error in getStudentcoursedata:', error);
+		throw error;
+	}
+};

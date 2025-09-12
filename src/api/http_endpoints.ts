@@ -47,6 +47,9 @@ function generateendpoints() {
 				batches: {
 					get: `/institutes/:instituteid/branches/:branchid/courses/:courseId/batches/`,
 				},
+				course_track: {
+					get: `/institutes/course-module/course-track`,
+				},
 				
 			},
 			class: {

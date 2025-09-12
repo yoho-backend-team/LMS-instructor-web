@@ -28,6 +28,7 @@ import Batches from '@/components/courses/Batches';
 import CourseNotes from '@/components/courses/coursenotes';
 import ChangePasswordPage from '@/pages/Authentication/ChangePassword/ChangePassword';
 import Taskprojects from '@/components/courses/TaskProject';
+import Course_Track from '@/components/courses/Course_Track';
 
 const AppRoutes = () => {
 	const { isAuthenticated, isLoading } = useAuth();
@@ -70,9 +71,10 @@ const AppRoutes = () => {
 					path='notes_materials'
 					element={<NotesMaterials setselectedNotes={() => {}} />}
 				/>
-				<Route path='batches' element={<Batches />} />
+				<Route path='batches/:course' element={<Batches />} />
 				<Route path='task' element={<Taskprojects />} />
 				<Route path='*' element={<Navigate to='/' />} />
+				<Route path='course/course-track' element={<Course_Track />} />
 			</Route>
 		</Routes>
 	);
