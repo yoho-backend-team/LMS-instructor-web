@@ -126,10 +126,38 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
     }
   }
 
-  const filteredPayments =
-    selectedStatus.toLowerCase() === "all"
-      ? SalaryDetails
-      : SalaryDetails?.filter((payment: any) => payment?.status.toLowerCase() === selectedStatus.toLowerCase())
+  const filteredPayments = (() => {
+    if (!SalaryDetails) return []
+
+    const statusLower = selectedStatus?.toLowerCase()
+
+    if (statusLower === "all") {
+      return SalaryDetails
+    }
+
+    return SalaryDetails.filter((payment: any) => {
+      const paymentStatus = payment?.status?.toLowerCase()
+
+      // Handle different variations of completed status
+      if (statusLower === "complete" || statusLower === "completed") {
+        return (
+          paymentStatus === "completed" ||
+          paymentStatus === "paid" ||
+          paymentStatus === "complete" ||
+          paymentStatus !== "pending"
+        )
+      }
+
+      // Handle pending status
+      if (statusLower === "pending") {
+        return paymentStatus === "pending"
+      }
+
+      // Default exact match
+      return paymentStatus === statusLower
+    })
+  })()
+
   return (
     <div className="p-4 custom-inset-shadow grid gap-4">
       <section
@@ -165,8 +193,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               <button
                 style={{
                   boxShadow: `
-      										rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
                 }}
                 className={`p-2 rounded-lg w-[100px] m-auto
                         ${
@@ -177,6 +205,7 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               >
                 {PaymentTable?.status === "pending" ? "Pending" : "Paid"}
               </button>
+
               <p className="flex justify-center items-center gap-4">
                 <button
                   onClick={() => handleDownloadPDF(PaymentTable)}
@@ -216,8 +245,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
             className="p-2 rounded-lg cursor-pointer"
             style={{
               boxShadow: `
-      										rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
             }}
           >
             <p className="h-5 w-5 text-[#716F6F] font-bold flex justify-center items-center rounded-full">X</p>
@@ -232,8 +261,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               style={{
                 ...FONTS.heading_06,
                 boxShadow: `
-      										rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
               }}
             >
               {new Date(selectedDetail?.payment_date).toLocaleString("en-US", {
@@ -249,8 +278,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               style={{
                 ...FONTS.heading_06,
                 boxShadow: `
-      										rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
               }}
             >
               {formatDateTime(selectedDetail?.payment_date)}
@@ -264,8 +293,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               style={{
                 ...FONTS.heading_06,
                 boxShadow: `
-      										rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
               }}
             >
               {selectedDetail?.attendance_details?.totalWorkingDays}
@@ -278,8 +307,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               style={{
                 ...FONTS.heading_06,
                 boxShadow: `
-      										rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
               }}
             >
               {selectedDetail?.salary_amount}
@@ -293,8 +322,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               style={{
                 ...FONTS.heading_06,
                 boxShadow: `
-      										rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      										rgba(106, 141, 175, 0.75) 2px 2px 3px inset`,
+      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+      							rgba(106, 141, 175, 0.75) 2px 2px 3px inset`,
               }}
             >
               {selectedDetail?.attendance_details?.absentDays}
@@ -308,8 +337,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               style={{
                 ...FONTS.heading_06,
                 boxShadow: `
-      										rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
               }}
             >
               {selectedDetail?.attendance_details?.presentDays}
@@ -323,8 +352,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               style={{
                 ...FONTS.heading_06,
                 boxShadow: `
-      										rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
               }}
             >
               {selectedDetail.paymentMethod || "Cash"}
@@ -338,8 +367,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               style={{
                 ...FONTS.heading_06,
                 boxShadow: `
-      										rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
               }}
             >
               {selectedDetail.deductions || "NIL"}
