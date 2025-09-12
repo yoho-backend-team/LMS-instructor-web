@@ -78,10 +78,7 @@ const Dashboard: React.FC = () => {
 						<div className='flex flex-row gap-5'>
 							<Attendance />
 							<Payment />
-						</div>
-						<div className='grid grid-cols-2 gap-5'>
-							<Assesments />
-							<DashCalender />
+
 						</div>
 						<Updates />
 					</div>

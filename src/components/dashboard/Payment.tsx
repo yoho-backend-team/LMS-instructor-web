@@ -19,8 +19,8 @@ const Payment: React.FC = () => {
 
     const { TabView } = TabViewResponsive();
 
-    const centerX = 50;
-    const centerY = 110;
+    const centerX = TabView ? 30 : 50;
+    const centerY = TabView ? 97 : 110;
 
     const getCirclePosition = (angleDeg: number) => {
         const angleRad = (angleDeg - 90) * (Math.PI / 180);
@@ -37,15 +37,15 @@ const Payment: React.FC = () => {
 
     const Circle = ({ strokeDashoffset }: { strokeDashoffset: number }) => (
         <div className={`relative w-full h-full ${TabView ? 'left-6' : ''}`}>
-            <div className={TabView ? `relative w-[248px] h-[264px] -top-6 left-2` : `relative w-[160px] h-[180px] -top-5 left-8`}>
+            <div className={TabView ? `relative w-[160px] h-[180px] -top-6 left-2` : `relative w-[160px] h-[180px] -top-5 left-8`}>
                 <img
-                    className={TabView ? `absolute w-[100px] h-[100px] top-4 left-0` : 'absolute w-[150px] h-[150px] top-4 left-0'}
+                    className={TabView ? `absolute w-[100px] h-[100px] top-0 left-0` : 'absolute w-[150px] h-[150px] top-4 left-0'}
                     alt='Ellipse'
                     src={eclip}
                 />
 
                 <svg
-                    className={`${TabView ? 'w-[100px] h-[100px]' : 'w-[150px] h-[180px]'} transform -rotate-90`}
+                    className={`${TabView ? 'w-[100px] h-[100px] transform -rotate-90 ' : 'w-[150px] h-[180px]'} transform -rotate-90`}
                     viewBox='0 0 200 200'
                 >
                     <defs>
@@ -78,7 +78,7 @@ const Payment: React.FC = () => {
                 </svg>
 
                 <img
-                    className={`absolute w-[100px] h-[100px]  ${TabView ? 'left-6 top-[40px]' : 'top-[40px] left-6'} `}
+                    className={`absolute ${TabView ? ' w-[60px] h-[60px] left-5 top-[20px]' : ' w-[100px] h-[100px] top-[40px] left-6'} `}
                     alt='Group'
                     src={dots}
                 />
@@ -89,10 +89,10 @@ const Payment: React.FC = () => {
                     alt='Sun'
                     className='absolute'
                     style={{
-                        width: 30,
-                        height: 30,
-                        left: sunX + 20 - 10,
-                        top: sunY + 20 - 95,
+                        width: TabView ? 20 : 30,
+                        height: TabView ? 20 : 30,
+                        left: TabView ? sunX + 20 - 10 : sunX + 20 - 10,
+                        top: TabView ? sunY - 22 - 95 : sunY + 20 - 95,
                     }}
                 />
 
@@ -102,26 +102,26 @@ const Payment: React.FC = () => {
                     alt='Moon'
                     className='absolute'
                     style={{
-                        width: 23,
-                        height: 23,
+                        width: TabView ? 16 : 23,
+                        height: TabView ? 16 : 23,
                         left: moonX + 20 - 16,
                         top: moonY + 20 - 16,
                     }}
                 />
 
-                <div className={`absolute w-[65px] h-[65px] ${TabView ? 'top-[95px] left-[80px]' : 'top-[55px] left-[40px]'}  bg-[#ebeff3] rounded-[40.33px] shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40]`}>
-                    <div className='flex flex-col w-[63px] items-center gap-2 relative top-[17px] left-[2px]'>
-                        <div className="relative w-[62px] mt-[-1.00px] [font-family:'Quicksand',Helvetica] font-semibold text-dark text-[10px] text-center tracking-[0] leading-4">
+                <div className={`absolute ${TabView ? 'w-[40px] h-[40px] top-[30px] left-[30px]' : 'w-[65px] h-[65px] top-[55px] left-[40px]'}  bg-[#ebeff3] rounded-[40.33px] shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40]`}>
+                    <div className={`flex flex-col w-[63px] items-center ${TabView ? 'top-[6px] -left-2.5' : 'gap-2 top-[17px] left-[2px]'}  relative `}>
+                        <div className={`relative w-[62px] mt-[-1.00px] [font-family:'Quicksand',Helvetica] font-semibold text-dark  ${TabView ? 'text-[6px]' : 'text-[10px]'} text-center tracking-[0] leading-4`}>
                             Progress
                         </div>
 
-                        <div className="relative self-stretch h-[19px] bg-[linear-gradient(135deg,rgba(123,0,255,1)_0%,rgba(178,0,255,1)_100%)] [-webkit-background-clip:text] bg-clip-text [-webkit-text-fill-color:transparent] [text-fill-color:transparent] [font-family:'Quicksand',Helvetica] font-bold text-transparent text-md text-center tracking-[0] leading-4 whitespace-nowrap">
+                        <div className={`relative self-stretch h-[19px] bg-[linear-gradient(135deg,rgba(123,0,255,1)_0%,rgba(178,0,255,1)_100%)] [-webkit-background-clip:text] bg-clip-text [-webkit-text-fill-color:transparent] [text-fill-color:transparent] [font-family:'Quicksand',Helvetica] font-bold text-transparent ${TabView ? 'text-[10px]' : 'text-md'}  text-center tracking-[0] leading-4 whitespace-nowrap`}>
                             {progress}%
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 
     return (
