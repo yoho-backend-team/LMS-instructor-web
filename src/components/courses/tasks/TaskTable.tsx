@@ -114,11 +114,11 @@ console.log(tasks, 'tasksss')
           {/* Header Row */}
           <Card className='bg-gradient-to-r from-[#7B00FF] to-[#B200FF] !text-white p-4 mx-4 rounded-md sticky top-0 z-10 mb-4'>
             <div className='grid grid-cols-5 gap-4 text-center !text-white'>
-              <div style={{ ...FONTS?.heading_02, color: COLORS?.black }}>Name</div>
-              <div style={{ ...FONTS?.heading_02, color: COLORS?.black }}>Type</div>
-              <div style={{ ...FONTS?.heading_02, color: COLORS?.black }}>Task</div>
-              <div style={{ ...FONTS?.heading_02, color: COLORS?.black }}>Deadline</div>
-              <div style={{ ...FONTS?.heading_02, color: COLORS?.black }}>Status</div>
+              <div style={{ ...FONTS?.heading_02, color: COLORS?.white }}>Name</div>
+              <div style={{ ...FONTS?.heading_02, color: COLORS?.white }}>Type</div>
+              <div style={{ ...FONTS?.heading_02, color: COLORS?.white }}>Task</div>
+              <div style={{ ...FONTS?.heading_02, color: COLORS?.white }}>Deadline</div>
+              <div style={{ ...FONTS?.heading_02, color: COLORS?.white }}>Status</div>
             </div>
           </Card>
 
