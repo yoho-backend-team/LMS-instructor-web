@@ -34,6 +34,14 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
     { value: '02', label: 'February' },
     { value: '03', label: 'March' },
     { value: '04', label: 'April' },
+    { value: '05', label: 'May' },
+    { value: '06', label: 'June' },
+    { value: '07', label: 'July' },
+    { value: '08', label: 'August' },
+    { value: '09', label: 'September' },
+    { value: '10', label: 'October' },
+    { value: '11', label: 'November' },
+    { value: '12', label: 'December' },
   ];
 
   const years: DropdownOption[] = Array.from({ length: 5 }, (_, i) => {
@@ -184,7 +192,7 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
       <Card className="bg-gradient-to-r from-[#7B00FF] to-[#B200FF] text-white mx-2 p-4 mt-2">
         <table className="w-full">
           <thead>
-            <tr className="flex justify-around items-center !text-black" style={{ ...FONTS.heading_03 }}>
+            <tr className="flex justify-around items-center !text-white" style={{ ...FONTS.heading_03 }}>
               {headers.map((title, index) => (
                 <th key={index}>{title}</th>
               ))}
@@ -229,7 +237,7 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
                 <div className="flex justify-center">
                   <Button
                     onClick={() => handleClassDetailPage(item.uuid)}
-                    className="cursor-pointer bg-gradient-to-r from-green-400 to-green-500 text-black hover:from-green-500 hover:to-green-600
+                    className="cursor-pointer bg-gradient-to-r from-green-400 to-green-500 text-white hover:from-green-500 hover:to-green-600
                       shadow-[0px_3px_4px_0px_rgba(255,255,255,0.75)_inset,3px_-3px_3px_0px_rgba(255,255,255,0.25)_inset,
                       -4px_8px_23px_0px_#3ABE65_inset,-8px_-8px_12px_0px_#3ABE65_inset,2px_3px_3px_0px_rgba(189,194,199,0.75),
                       8px_8px_12px_0px_rgba(189,194,199,0.25),-1px_-1px_6px_0px_rgba(255,255,255,0.75),

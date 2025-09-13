@@ -288,73 +288,48 @@ export const Attendance = () => {
 				</div>
 			</div>
 
-			<div className='flex flex-row gap-4 justify-center pt-6'>
+			<div className='flex flex-wrap gap-6 justify-center pt-6'>
 				{attendanceCards.map((card) => (
 					<Card
 						key={card.label}
 						className='
-							relative 
-							w-full 
-							md:max-w-full
-							h-auto 
-							shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),5px_5px_4px_rgba(189,194,199,0.75)] 
-							overflow-hidden
-							flex flex-col
-						'
+        relative 
+        w-full 
+        sm:w-[300px]
+        md:w-[350px]
+        lg:w-[400px]
+        h-[160px]
+        shadow-[-4px_-4px_6px_rgba(255,255,255,0.7),6px_6px_6px_rgba(189,194,199,0.75)] 
+        overflow-hidden
+        flex flex-col
+        justify-between
+        p-6
+      '
 						style={{ backgroundColor: COLORS.bg_Colour }}
 					>
-						<CardHeader className='p-4 pb-2'>
-							<div className='flex justify-between items-center w-full'>
-								<span style={{ ...FONTS.heading_04 }}>{card.label}</span>
-								<div className='text-right'>
-									<span
-										className='text-2xl font-bold block'
-										style={{ ...FONTS.heading_01 }}
-									>
-										<span style={{ color: card.color }}>{card.current}</span>
-										{card.total && (
-											<span className='text-sm text-gray-500'>/{card.total}</span>
-										)}
-									</span>
-								</div>
-							</div>
-						</CardHeader>
-						<CardContent className='p-4 pt-2 flex-1'>
-							<div className='w-full h-[70px]'>
-								<ChartContainer
-									config={chartConfig}
-									style={{
-										...FONTS.para_03,
-										width: '100%',
-										height: '100%'
-									}}
+						<div className='flex justify-between items-start w-full'>
+							<span
+								className='text-lg md:text-xl font-semibold'
+								style={{ ...FONTS.heading_03 }}
+							>
+								{card.label}
+							</span>
+							<div className='text-right'>
+								<span
+									className='text-3xl md:text-4xl font-bold block leading-tight'
+									style={{ ...FONTS.heading_01 }}
 								>
-									<ResponsiveContainer width="100%" height="100%">
-										<LineChart
-											data={chartData}
-											margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
-										>
-											<XAxis dataKey='month' hide />
-											<ChartTooltip
-												cursor={false}
-												content={<ChartTooltipContent hideLabel />}
-											/>
-											<Line
-												dataKey='desktop'
-												type='monotone'
-												stroke={card.color}
-												strokeWidth={2.5}
-												dot={false}
-												activeDot={{ r: 4, fill: card.color }}
-											/>
-										</LineChart>
-									</ResponsiveContainer>
-								</ChartContainer>
+									<span style={{ color: card.color }}>{card.current}</span>
+									{card.total && (
+										<span className='text-base text-gray-500'>/{card.total}</span>
+									)}
+								</span>
 							</div>
-						</CardContent>
+						</div>
 					</Card>
 				))}
 			</div>
+
 
 			<div className='flex flex-row gap-6 pt-6 '>
 				<div className='flex flex-col'>
