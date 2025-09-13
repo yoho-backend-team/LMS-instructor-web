@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import { FONTS, COLORS } from "@/constants/uiConstants";
 import HelpCenterTabs from "./HelpCenterTabs";
@@ -30,18 +31,18 @@ const HelpCenterMain: React.FC = () => {
   // Map API data into HelpTopic structure
   const helpDetailTopics: HelpTopic[] = Array.isArray(HelpDetails?.data)
     ? HelpDetails.data.map((item: any) => ({
-        title: item.title,
-        category: item.module,
-        description: item.description,
-        video: null,
-      }))
+      title: item.title,
+      category: item.module,
+      description: item.description,
+      video: null,
+    }))
     : [];
 
   // Build category tabs with count
   const buildTabs = (): HelpCenterTab[] => {
     const categoryCount: Record<string, number> = {};
-    helpDetailTopics.forEach((item) => {
-      categoryCount[item.category] = (categoryCount[item.category] || 0) + 1;
+    helpDetailTopics.forEach((item: any) => {
+      categoryCount[item?.category] = (categoryCount[item?.category] || 0) + 1;
     });
 
     return [
@@ -61,14 +62,14 @@ const HelpCenterMain: React.FC = () => {
       ? helpDetailTopics
       : helpDetailTopics.filter((item) => item.category === activeTab);
 
-    if (searchQuery.trim()) {
-      filtered = filtered.filter(
+    if (searchQuery?.trim()) {
+      filtered = filtered?.filter(
         (topic) =>
-          topic.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          (topic.category &&
-            topic.category.toLowerCase().includes(searchQuery.toLowerCase())) ||
-          (topic.description &&
-            topic.description.toLowerCase().includes(searchQuery.toLowerCase()))
+          topic?.title?.toLowerCase()?.includes(searchQuery.toLowerCase()) ||
+          (topic?.category &&
+            topic?.category?.toLowerCase()?.includes(searchQuery.toLowerCase())) ||
+          (topic?.description &&
+            topic?.description?.toLowerCase()?.includes(searchQuery.toLowerCase()))
       );
     }
 

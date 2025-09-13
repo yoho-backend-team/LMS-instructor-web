@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
 import { FONTS } from "@/constants/uiConstants";
 import { Button } from "@/components/ui/button";
-import { updateTaskData } from "../../../features/Course/services/Course"; 
+import { updateTaskData } from "../../../features/Course/services/Course";
 import type { Task } from "./TaskTable";
 
 interface EditTaskFormProps {
@@ -30,7 +31,7 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
 
   // Extract student submissions from task data
   const studentSubmissions: StudentSubmission[] | any = task?.answers;
-
+  console.log(task, "sow")
   // Calculate pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -51,7 +52,7 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
 
   const [showQuestionView, setShowQuestionView] = useState(false);
   const [showAttachmentView, setShowAttachmentView] = useState(false);
-  const [selectedSubmission, setSelectedSubmission] = useState<StudentSubmission | null>(null);
+  const [selectedSubmission, setSelectedSubmission] = useState<StudentSubmission | any>(null);
   const [allStudentsCompleted, setAllStudentsCompleted] = useState(false);
 
   // Check if all students are completed
@@ -85,25 +86,27 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
           status: "completed",
         };
 
-        // Update the task answers array with this submission updated
-        const updatedSubmissions = studentSubmissions?.map((sub: any) =>
-          sub?._id === submissionId ? updatedSubmission : sub,
-        );
-
-        const updatedTask: Task = {
-          ...task,
-          answers: updatedSubmissions,
-          status: task?.status,
-        };
-
-        // Call API to update the task with patch via service function
+        // Call API to update only this specific submission
         try {
           setIsUpdating(true);
-          const taskId = task._id || "68b83292900e5217f5c1874f";
-          await updateTaskData(taskId, {
+          await updateTaskData(task._id, {
+            remark: updatedSubmission.remark,
+            mark: updatedSubmission.mark,
+            status: updatedSubmission.status,
+            student: updatedSubmission.student?._id,
+          });
+
+          // Update local state
+          const updatedSubmissions = studentSubmissions?.map((sub: any) =>
+            sub?._id === submissionId ? updatedSubmission : sub,
+          );
+
+          const updatedTask: Task = {
+            ...task,
             answers: updatedSubmissions,
             status: task?.status,
-          });
+          };
+
           onSave(updatedTask);
         } catch (error) {
           console.error("Error updating individual submission:", error);
@@ -140,7 +143,7 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
         status: allGraded ? "completed" : task?.status,
       };
 
-      const taskId = task._id || "68b83292900e5217f5c1874f";
+      const taskId = task?._id;
       await updateTaskData(taskId, {
         answers: updatedSubmissions,
         status: allGraded ? "completed" : task?.status,
@@ -376,9 +379,8 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
                               key={page}
                               onClick={() => paginate(page)}
                               disabled={isUpdating}
-                              className={`px-3 py-1 rounded-md ${
-                                currentPage === page ? "bg-purple-600 text-white" : "bg-gray-200"
-                              }`}
+                              className={`px-3 py-1 rounded-md ${currentPage === page ? "bg-purple-600 text-white" : "bg-gray-200"
+                                }`}
                             >
                               {page}
                             </button>

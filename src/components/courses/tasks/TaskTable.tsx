@@ -9,6 +9,7 @@ import CourseButton from "../button";
 import { useNavigate } from "react-router-dom";
 
 export interface Task {
+  _id?: string;
   id: string;
   name: string;
   type: string;
@@ -66,7 +67,7 @@ const TaskTable = ({ tasks, onTaskUpdate, course }: TaskTableProps) => {
   };
 
   const handleEditTask = (updatedTask: Task) => {
-    const updatedTasks = tasks?.map(task => 
+    const updatedTasks = tasks?.map(task =>
       task?.id === updatedTask?.id ? updatedTask : task
     );
     onTaskUpdate(updatedTasks);
@@ -79,7 +80,7 @@ const TaskTable = ({ tasks, onTaskUpdate, course }: TaskTableProps) => {
     setSelectedTask(null);
   };
 
-console.log(tasks, 'tasksss')
+  console.log(tasks, 'tasksss')
 
   return (
     <div className='w-full mx-auto p-4'>
@@ -142,11 +143,10 @@ console.log(tasks, 'tasksss')
                     <div style={{ ...FONTS?.para_01 }}>{task?.deadline}</div>
                     <div>
                       <Button
-                        className={`cursor-pointer px-4 py-1 w-25 rounded-lg text-sm font-medium ${
-                          task?.is_active === true
+                        className={`cursor-pointer px-4 py-1 w-25 rounded-lg text-sm font-medium ${task?.is_active === true
                             ? "bg-green-500 text-white"
                             : "bg-gradient-to-l from-[#7B00FF] to-[#B200FF] !text-white"
-                        }`}
+                          }`}
                       >
                         {task?.is_active === true ? "Completed" : "Pending"}
                       </Button>

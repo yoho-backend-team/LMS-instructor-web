@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { ReactNode } from "react";
 
 export interface Tab {
@@ -10,14 +11,14 @@ export interface Tab {
 
 export interface HelpTopic {
   count: ReactNode;
-  title: string;
+  title?: string;
   category?: string;
   description?: string;
   HelpDetails?: any[];
 }
 
 export interface HelpCenterTabsProps {
-  tabs: HelpTopic[];
+  tabs: HelpTopic[] | any[];
   activeTab: string;
   onTabChange: (tabId: string) => void;
 }
