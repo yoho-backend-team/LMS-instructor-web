@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Card } from '../ui/card';
 import { Button } from '../ui/button';
 import pdfimage from '../../assets/icons/notes/image 59.png';
@@ -39,13 +40,14 @@ const NotesMaterials = ({ setselectedNotes }: NotesMaterialsProps) => {
 			const response = await deleteNotes({
 				noteId: note?.uuid,
 			});
-		
+
 			if (response) {
 				toast.success(`${note?.title} deleted`);
 			} else {
 				toast.error('Failed to delete the note, please try again.');
 			}
 		} catch (error) {
+			console.log(error)
 			toast.error('Something went wrong, please try again.');
 		}
 	};
@@ -99,7 +101,7 @@ const NotesMaterials = ({ setselectedNotes }: NotesMaterialsProps) => {
 												href={GetImageUrl(note?.file) ?? undefined}
 												download
 												target='_blank'
-												rel='noopener noreferrer'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+												rel='noopener noreferrer'
 											>
 												<img
 													src={pdfimage}
@@ -126,7 +128,7 @@ const NotesMaterials = ({ setselectedNotes }: NotesMaterialsProps) => {
 												variant='outline'
 												onClick={() => setselectedNotes(note)}
 											>
-												<img src={Edit} className='w-5 h-5' alt='Edit Button'/>
+												<img src={Edit} className='w-5 h-5' alt='Edit Button' />
 											</Button>
 
 											<Button

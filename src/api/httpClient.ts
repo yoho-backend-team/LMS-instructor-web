@@ -43,6 +43,10 @@ class Client {
 			params: params,
 			headers: {
 				'User-Type': userType,
+				'Cache-Control': 'no-cache',
+				'Pragma': 'co-cache',
+				'If-None-Match': '',
+				'If-Modifiec-Since': '',
 			},
 		});
 		return response.data;
@@ -68,15 +72,15 @@ class Client {
 		return response?.data;
 	}
 
-	 async patch(url: string, data: any, params?: any, userType?: string) {
-    const response = await Axios.patch(url, data, {
-      params,
-      headers: {
-        'User-Type': userType,
-      },
-    });
-    return response;
-  }
+	async patch(url: string, data: any, params?: any, userType?: string) {
+		const response = await Axios.patch(url, data, {
+			params,
+			headers: {
+				'User-Type': userType,
+			},
+		});
+		return response;
+	}
 
 	async delete(url: string, params?: any, userType?: string) {
 		const response = await Axios.delete(url, {

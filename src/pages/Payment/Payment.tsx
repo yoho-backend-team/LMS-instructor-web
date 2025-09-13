@@ -76,10 +76,6 @@ export const Payment = () => {
     }))
   }
 
-  // const handleSaveStaffDetails = () => {
-  // 	setIsEditing(false);
-  // };
-
   return (
     <div className="py-4">
       {/* Header */}

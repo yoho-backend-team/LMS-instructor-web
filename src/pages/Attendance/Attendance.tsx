@@ -25,7 +25,7 @@ import { selectDashBoard } from '@/features/Dashboard/reducers/selectors';
 import { selectAttendance } from '@/features/attentance/reduces/selectors';
 import type { AppDispatch } from '@/store/store';
 import { getInstructorAttendance, getAttendanceDailyThunk } from '@/features/attentance/reduces/thunks';
-import {  ResponsiveContainer } from 'recharts';
+import { ResponsiveContainer } from 'recharts';
 
 const chartConfig = {
 	desktop: {
@@ -65,18 +65,18 @@ export const Attendance = () => {
 	const generateChartData = useCallback(() => {
 		// Fixed: Check for the correct data structure from your API
 		if (!attendancedata?.data?.data) return [];
-		
+
 		// Group attendance data by month from the 'data' array
 		const monthlyData: { [key: string]: { present: number; absent: number; total: number } } = {};
-		
+
 		attendancedata.data.data.forEach((record: any) => {
 			const date = new Date(record.date);
 			const monthName = format(date, 'MMM');
-			
+
 			if (!monthlyData[monthName]) {
 				monthlyData[monthName] = { present: 0, absent: 0, total: 0 };
 			}
-			
+
 			monthlyData[monthName].total += 1;
 			if (record.status === 'present') {
 				monthlyData[monthName].present += 1;
@@ -102,7 +102,7 @@ export const Attendance = () => {
 	}, [dispatch, selectedDate])
 
 	const chartData = generateChartData();
-	
+
 	const attendanceCards = [
 		{
 			label: 'Classes Attend',
@@ -151,9 +151,9 @@ export const Attendance = () => {
 	// Helper function to get status for selected date
 	const getSelectedDateStatus = () => {
 		if (!attendancedata?.data?.workingDays) return null;
-		
+
 		const selectedDateStr = selectedDate.toISOString().split('T')[0];
-		return attendancedata.data.workingDays.find((day: any) => 
+		return attendancedata.data.workingDays.find((day: any) =>
 			day.date === selectedDateStr
 		);
 	};
@@ -162,7 +162,7 @@ export const Attendance = () => {
 	const getSelectedDateStats = () => {
 		const dateStatus = getSelectedDateStatus();
 		const totalClasses = attendancedata?.data?.total_class || 1; // Default to 1 if 0
-		
+
 		return {
 			scheduled: totalClasses,
 			attended: dateStatus?.status === 'present' ? 1 : 0,
@@ -290,69 +290,69 @@ export const Attendance = () => {
 
 			<div className='flex flex-row gap-4 justify-center pt-6'>
 				{attendanceCards.map((card) => (
-<Card
-  key={card.label}
-  className='
-    relative 
-    w-full 
-    md:max-w-full
-    h-auto 
-    shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),5px_5px_4px_rgba(189,194,199,0.75)] 
-    overflow-hidden
-    flex flex-col
-  '
-  style={{ backgroundColor: COLORS.bg_Colour }}
->
-  <CardHeader className='p-4 pb-2'>
-    <div className='flex justify-between items-center w-full'>
-      <span style={{ ...FONTS.heading_04 }}>{card.label}</span>
-      <div className='text-right'>
-        <span
-          className='text-2xl font-bold block'
-          style={{ ...FONTS.heading_01 }}
-        >
-          <span style={{ color: card.color }}>{card.current}</span>
-          {card.total && (
-            <span className='text-sm text-gray-500'>/{card.total}</span>
-          )}
-        </span>
-      </div>
-    </div>
-  </CardHeader>
-  <CardContent className='p-4 pt-2 flex-1'>
-    <div className='w-full h-[70px]'>
-      <ChartContainer 
-        config={chartConfig} 
-        style={{ 
-          ...FONTS.para_03,
-          width: '100%',
-          height: '100%'
-        }}
-      >
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            data={chartData}
-            margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
-          >
-            <XAxis dataKey='month' hide />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Line
-              dataKey='desktop'
-              type='monotone'
-              stroke={card.color}
-              strokeWidth={2.5}
-              dot={false}
-              activeDot={{ r: 4, fill: card.color }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </ChartContainer>
-    </div>
-  </CardContent>
-</Card>
+					<Card
+						key={card.label}
+						className='
+							relative 
+							w-full 
+							md:max-w-full
+							h-auto 
+							shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),5px_5px_4px_rgba(189,194,199,0.75)] 
+							overflow-hidden
+							flex flex-col
+						'
+						style={{ backgroundColor: COLORS.bg_Colour }}
+					>
+						<CardHeader className='p-4 pb-2'>
+							<div className='flex justify-between items-center w-full'>
+								<span style={{ ...FONTS.heading_04 }}>{card.label}</span>
+								<div className='text-right'>
+									<span
+										className='text-2xl font-bold block'
+										style={{ ...FONTS.heading_01 }}
+									>
+										<span style={{ color: card.color }}>{card.current}</span>
+										{card.total && (
+											<span className='text-sm text-gray-500'>/{card.total}</span>
+										)}
+									</span>
+								</div>
+							</div>
+						</CardHeader>
+						<CardContent className='p-4 pt-2 flex-1'>
+							<div className='w-full h-[70px]'>
+								<ChartContainer
+									config={chartConfig}
+									style={{
+										...FONTS.para_03,
+										width: '100%',
+										height: '100%'
+									}}
+								>
+									<ResponsiveContainer width="100%" height="100%">
+										<LineChart
+											data={chartData}
+											margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+										>
+											<XAxis dataKey='month' hide />
+											<ChartTooltip
+												cursor={false}
+												content={<ChartTooltipContent hideLabel />}
+											/>
+											<Line
+												dataKey='desktop'
+												type='monotone'
+												stroke={card.color}
+												strokeWidth={2.5}
+												dot={false}
+												activeDot={{ r: 4, fill: card.color }}
+											/>
+										</LineChart>
+									</ResponsiveContainer>
+								</ChartContainer>
+							</div>
+						</CardContent>
+					</Card>
 				))}
 			</div>
 

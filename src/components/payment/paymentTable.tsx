@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import { FONTS } from "@/constants/uiConstants"
@@ -50,10 +51,9 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
   const headers = [
     "Month",
     "Payment",
-    "workingDays",
-    "present",
-    "absent",
-    // 'deductions',
+    "Balance",
+    "Transaction Id",
+    "Bank Name",
     "status",
     "Actions",
   ]
@@ -129,7 +129,7 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
   const filteredPayments =
     selectedStatus.toLowerCase() === "all"
       ? SalaryDetails
-      : SalaryDetails?.filter((payment: any) => payment?.status.toLowerCase() === selectedStatus.toLowerCase())
+      : SalaryDetails?.filter((payment: any) => payment?.status?.toLowerCase() === selectedStatus?.toLowerCase())
   return (
     <div className="p-4 custom-inset-shadow grid gap-4">
       <section
@@ -159,9 +159,9 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
                 })}
               </p>
               <p>{PaymentTable?.salary_amount}</p>
-              <p>{PaymentTable?.attendance_details?.totalWorkingDays}</p>
-              <p>{PaymentTable?.attendance_details?.presentDays}</p>
-              <p>{PaymentTable?.attendance_details?.absentDays}</p>
+              <p>{PaymentTable?.balance}</p>
+              <p>{PaymentTable?.transaction_id}</p>
+              <p>{PaymentTable?.staff?.bank_details?.bank_name ?? "nil"}</p>
               <button
                 style={{
                   boxShadow: `
@@ -169,11 +169,10 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
       										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
                 }}
                 className={`p-2 rounded-lg w-[100px] m-auto
-                        ${
-                          PaymentTable?.status !== "pending"
-                            ? "bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-500 hover:to-green-600 shadow-[0px_3px_4px_0px_rgba(255,255,255,0.75)_inset,3px_-3px_3px_0px_rgba(255,255,255,0.25)_inset,-4px_8px_23px_0px_#3ABE65_inset,-8px_-8px_12px_0px_#3ABE65_inset,2px_3px_3px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-1px_-1px_6px_0px_rgba(255,255,255,0.75),-1px_-1px_6px_1px_rgba(255,255,255,0.25)]"
-                            : "bg-gradient-to-r from-red-500 to-red-600 text-white  shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_red_inset,-4px_-8px_10px_0px_#B20_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white"
-                        }`}
+                        ${PaymentTable?.status !== "pending"
+                    ? "bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-500 hover:to-green-600 shadow-[0px_3px_4px_0px_rgba(255,255,255,0.75)_inset,3px_-3px_3px_0px_rgba(255,255,255,0.25)_inset,-4px_8px_23px_0px_#3ABE65_inset,-8px_-8px_12px_0px_#3ABE65_inset,2px_3px_3px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-1px_-1px_6px_0px_rgba(255,255,255,0.75),-1px_-1px_6px_1px_rgba(255,255,255,0.25)]"
+                    : "bg-gradient-to-r from-red-500 to-red-600 text-white  shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_red_inset,-4px_-8px_10px_0px_#B20_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white"
+                  }`}
               >
                 {PaymentTable?.status === "pending" ? "Pending" : "Paid"}
               </button>
@@ -350,11 +349,10 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
             <p style={{ ...FONTS.heading_04 }}>Status</p>
             <Button
               className={`p-2 px-8 rounded-lg mt-4 
-                        ${
-                          selectedDetail.status !== "pending"
-                            ? "bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-500 hover:to-green-600 shadow-[0px_3px_4px_0px_rgba(255,255,255,0.75)_inset,3px_-3px_3px_0px_rgba(255,255,255,0.25)_inset,-4px_8px_23px_0px_#3ABE65_inset,-8px_-8px_12px_0px_#3ABE65_inset,2px_3px_3px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-1px_-1px_6px_0px_rgba(255,255,255,0.75),-1px_-1px_6px_1px_rgba(255,255,255,0.25)]"
-                            : "bg-gradient-to-r from-red-500 to-red-600 text-white  shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_red_inset,-4px_-8px_10px_0px_#B20_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white"
-                        }`}
+                        ${selectedDetail.status !== "pending"
+                  ? "bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-500 hover:to-green-600 shadow-[0px_3px_4px_0px_rgba(255,255,255,0.75)_inset,3px_-3px_3px_0px_rgba(255,255,255,0.25)_inset,-4px_8px_23px_0px_#3ABE65_inset,-8px_-8px_12px_0px_#3ABE65_inset,2px_3px_3px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-1px_-1px_6px_0px_rgba(255,255,255,0.75),-1px_-1px_6px_1px_rgba(255,255,255,0.25)]"
+                  : "bg-gradient-to-r from-red-500 to-red-600 text-white  shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_red_inset,-4px_-8px_10px_0px_#B20_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white"
+                }`}
             >
               {selectedDetail?.status === "pending" ? "Pending" : "Paid"}
             </Button>
