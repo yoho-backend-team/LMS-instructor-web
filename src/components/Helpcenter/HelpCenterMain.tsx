@@ -26,7 +26,7 @@ const HelpCenterMain: React.FC = () => {
   useEffect(() => {
     dispatch(getStudentProfileThunk());
     dispatch(getHelpThunk({ instituteid: instituteId?._id }));
-  }, [dispatch]);
+  }, [dispatch, instituteId?._id]);
 
   // Map API data into HelpTopic structure
   const helpDetailTopics: HelpTopic[] = Array.isArray(HelpDetails?.data)

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, type JSXElementConstructor, type ReactElement, type ReactNode, type ReactPortal } from "react";
 import { FONTS } from "@/constants/uiConstants";
 import { Button } from "@/components/ui/button";
@@ -33,7 +34,7 @@ const AddTaskForm = ({ onSave, onClose, course }: AddTaskFormProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    
+
     if (errors[name]) {
       setErrors(prev => {
         const newErrors = { ...prev };
@@ -50,25 +51,25 @@ const AddTaskForm = ({ onSave, onClose, course }: AddTaskFormProps) => {
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    
+
     if (!formData.instructor.trim()) newErrors.instructor = "Instructor name is required";
     if (!formData.type.trim()) newErrors.type = "Type is required";
     if (!formData.taskName.trim()) newErrors.taskName = "Task name is required";
     if (!formData.task.trim()) newErrors.task = "Task description is required";
     if (!formData.deadline) newErrors.deadline = "Deadline is required";
     if (!formData.question.trim()) newErrors.question = "Question is required";
-    
+
     if (formData.score && !/^\d+$/.test(formData.score)) {
       newErrors.score = "Score must be a number";
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async () => {
     if (!validateForm()) return;
-    
+
     try {
       let fileUrl: string | null = null;
 
@@ -93,7 +94,7 @@ const AddTaskForm = ({ onSave, onClose, course }: AddTaskFormProps) => {
         task_type: formData.type.toLowerCase(),
         module: formData.task,
         task_name: formData.taskName,
-        course: course?._id, 
+        course: course?._id,
         deadline: formData.deadline.split("-").reverse().join("-"),
         question: formData.question,
         status: "pending",
@@ -122,7 +123,7 @@ const AddTaskForm = ({ onSave, onClose, course }: AddTaskFormProps) => {
         score: "0",
         file: formData.file
       };
-      
+
       onSave(newTask);
       alert("Success! Task added successfully!");
       onClose();
@@ -230,7 +231,7 @@ const AddTaskForm = ({ onSave, onClose, course }: AddTaskFormProps) => {
               </select>
               {errors.task && <p className="text-red-500 text-sm mt-1">{errors.task}</p>}
             </div>
-            
+
             {/* Deadline Field */}
             <div>
               <label className="block mb-1" style={{ ...FONTS.heading_05 }}>

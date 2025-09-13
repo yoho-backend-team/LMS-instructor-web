@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -144,8 +145,8 @@ const TaskTable = ({ tasks, onTaskUpdate, course }: TaskTableProps) => {
                     <div>
                       <Button
                         className={`cursor-pointer px-4 py-1 w-25 rounded-lg text-sm font-medium ${task?.is_active === true
-                            ? "bg-green-500 text-white"
-                            : "bg-gradient-to-l from-[#7B00FF] to-[#B200FF] !text-white"
+                          ? "bg-green-500 text-white"
+                          : "bg-gradient-to-l from-[#7B00FF] to-[#B200FF] !text-white"
                           }`}
                       >
                         {task?.is_active === true ? "Completed" : "Pending"}
