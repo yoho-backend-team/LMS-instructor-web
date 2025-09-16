@@ -18,7 +18,6 @@ import { getStudentticket } from "@/features/Tickets/reducer/thunks";
 import type { AppDispatch } from "@/store/store";
 import { selectTicket } from "@/features/Tickets/reducer/selector";
 
-
 interface Message {
   _id: string;
   sender: string;
@@ -177,7 +176,7 @@ const Tickets = () => {
                     <div className="flex items-center gap-1">
                       <img
                         src={ticketicon}
-                        alt="Prev"
+                        alt="Ticket"
                         className="w-9 h-9 p-2 rounded-lg shadow-[4px_3px_3px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
                       />
                       <p className="ml-3" style={FONTS.heading_04}>
@@ -206,39 +205,29 @@ const Tickets = () => {
             ))}
           </div>
 
-          {totalPages >= 1 && (
-            <div className="flex justify-end items-center mt-10 gap-2">
+          {/* ✅ Simplified pagination UI */}
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center mt-10 gap-4">
               <Button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
                 variant="outline"
                 size="icon"
-                className="rounded-full cursor-pointer bg-[#ebeff3] shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
+                className="rounded-full bg-[#ebeff3] shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
               >
                 <ChevronLeft size={20} />
               </Button>
 
-              {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
-                <Button
-                  key={pageNumber}
-                  onClick={() => handlePageChange(pageNumber)}
-                  className={`rounded-full w-10 h-10 px-0 transition-all duration-200 cursor-pointer 
-                    ${currentPage === pageNumber
-                      ? "bg-gradient-to-l from-[#7B00FF] to-[#B200FF] !text-white cursor-pointer shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] py-5"
-                      : "bg-[#ebeff3] text-black shadow-[3px_3px_5px_rgba(255,255,255,0.7),_inset_2px_2px_3px_rgba(189,194,199,0.75)]"
-                    }`}
-                  variant="ghost"
-                >
-                  {pageNumber}
-                </Button>
-              ))}
+              <span style={FONTS.heading_05} className="text-sm md:text-base text-black">
+                Page <strong>{currentPage}</strong> of <strong>{totalPages}</strong>
+              </span>
 
               <Button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
                 variant="outline"
                 size="icon"
-                className="rounded-full cursor-pointer bg-[#ebeff3] shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
+                className="rounded-full bg-[#ebeff3] shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
               >
                 <ChevronRight size={20} />
               </Button>
@@ -254,7 +243,6 @@ const Tickets = () => {
                 ? 'No closed tickets found'
                 : 'No tickets found'}
           </p>
-
         </div>
       )}
     </div>

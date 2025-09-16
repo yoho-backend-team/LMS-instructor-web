@@ -80,7 +80,8 @@ const AddTaskForm = ({ onSave, onClose, course }: AddTaskFormProps) => {
           uploadFormData.append('file', formData.file);
 
           const uploadRes = await uploadquestionfile(uploadFormData);
-          fileUrl = uploadRes?.data?.data?.file;
+          console.log(uploadRes, 'uploaded res')
+          fileUrl = uploadRes?.data?.file;
           console.log("File uploaded:", fileUrl);
         } catch (uploadError) {
           console.error('File upload failed:', uploadError);
@@ -95,12 +96,12 @@ const AddTaskForm = ({ onSave, onClose, course }: AddTaskFormProps) => {
         module: formData.task,
         task_name: formData.taskName,
         course: course?._id,
-        deadline: formData.deadline.split("-").reverse().join("-"),
+        deadline: new Date(formData.deadline).toISOString(),
         question: formData.question,
         status: "pending",
         score: "0",
         remark: "",
-        fileUrl,
+        question_file: fileUrl,
       };
 
       console.log("New Task Data:", taskPayload);
