@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Card } from '../ui/card';
 import { Button } from '../ui/button';
 import pdfimage from '../../assets/icons/notes/image 59.png';
@@ -39,6 +40,7 @@ const StudyMaterials = ({ setselectedNotes }: StudyMaterialsProps) => {
 				toast.error('Failed to delete the note, please try again.');
 			}
 		} catch (error) {
+			console.log(error)
 			toast.error('Something went wrong, please try again.');
 		}
 	};

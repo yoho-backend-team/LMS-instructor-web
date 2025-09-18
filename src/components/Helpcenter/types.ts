@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { ReactNode } from "react";
+
 export interface Tab {
   id: string;
   label: string;
@@ -8,14 +10,15 @@ export interface Tab {
 }
 
 export interface HelpTopic {
-  title: string;
+  count: ReactNode;
+  title?: string;
   category?: string;
   description?: string;
   HelpDetails?: any[];
 }
 
 export interface HelpCenterTabsProps {
-  tabs: HelpTopic[];
+  tabs: HelpTopic[] | any[];
   activeTab: string;
   onTabChange: (tabId: string) => void;
 }
@@ -35,3 +38,12 @@ export interface LearningResourcesProps {
   onBack: () => void;
   data: any
 }
+
+
+
+export interface HelpCenterTab {
+  category: string;
+  count: number;
+}
+
+

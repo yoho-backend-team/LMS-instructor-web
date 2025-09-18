@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { FONTS } from "@/constants/uiConstants";
 import { Button } from "@/components/ui/button";
+import { updateTaskData } from "../../../features/Course/services/Course";
 import type { Task } from "./TaskTable";
 
 interface EditTaskFormProps {
@@ -9,7 +10,6 @@ interface EditTaskFormProps {
   onSave: (task: Task) => void;
   onClose: () => void;
 }
-
 interface StudentSubmission {
   _id: string;
   student: string;
@@ -27,33 +27,32 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
   const [activeTab, setActiveTab] = useState("taskDetails");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
-
-  console.log("Task answers:", task.answers);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   // Extract student submissions from task data
   const studentSubmissions: StudentSubmission[] | any = task?.answers;
-
+  console.log(task, "sow")
   // Calculate pagination
-  // const indexOfLastItem = currentPage * itemsPerPage;
-  // const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  // const currentItems = studentSubmissions.slice(indexOfFirstItem, indexOfLastItem);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = studentSubmissions?.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(studentSubmissions?.length / itemsPerPage);
 
   // State for student grades and remarks
-  const [studentGrades, setStudentGrades] = useState<Record<string, { mark: string, remark: string, status: string }>>(
+  const [studentGrades, setStudentGrades] = useState<Record<string, { mark: string; remark: string; status: string }>>(
     studentSubmissions?.reduce((acc: any, submission: any) => {
       acc[submission?._id] = {
         mark: submission.mark?.toString() || "0",
         remark: submission?.remark || "",
-        status: submission?.status || "pending"
+        status: submission?.status || "pending",
       };
       return acc;
-    }, {} as Record<string, { mark: string, remark: string, status: string }>)
+    }, {} as Record<string, { mark: string; remark: string; status: string }>),
   );
 
   const [showQuestionView, setShowQuestionView] = useState(false);
   const [showAttachmentView, setShowAttachmentView] = useState(false);
-  const [selectedSubmission, setSelectedSubmission] = useState<StudentSubmission | null>(null);
+  const [selectedSubmission, setSelectedSubmission] = useState<StudentSubmission | any>(null);
   const [allStudentsCompleted, setAllStudentsCompleted] = useState(false);
 
   // Check if all students are completed
@@ -65,15 +64,14 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
     setAllStudentsCompleted(allCompleted);
   }, [studentGrades, studentSubmissions]);
 
-  const handleGradeChange = (submissionId: string, field: string, value: string) => {
+  const handleGradeChange = async (submissionId: string, field: string, value: string) => {
     const updatedGrades = {
       ...studentGrades,
       [submissionId]: {
         ...studentGrades[submissionId],
-        [field]: value
-      }
+        [field]: value,
+      },
     };
-
     setStudentGrades(updatedGrades);
 
     // If status is being changed to "completed", update the individual submission immediately
@@ -85,55 +83,81 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
           ...submission,
           mark: grade ? parseInt(grade.mark) || 0 : submission?.mark,
           remark: grade?.remark || submission?.remark,
-          status: "completed"
+          status: "completed",
         };
 
-        console.log("Updated individual submission:", updatedSubmission);
+        // Call API to update only this specific submission
+        try {
+          setIsUpdating(true);
+          await updateTaskData(task._id, {
+            remark: updatedSubmission.remark,
+            mark: updatedSubmission.mark,
+            status: updatedSubmission.status,
+            student: updatedSubmission.student?._id,
+          });
 
-        // Update the task with this single submission change
-         const updatedSubmissions = studentSubmissions?.map((sub: any) =>
-          sub?._id === submissionId ? updatedSubmission : sub
-        );
+          // Update local state
+          const updatedSubmissions = studentSubmissions?.map((sub: any) =>
+            sub?._id === submissionId ? updatedSubmission : sub,
+          );
 
-        const updatedTask: Task = {
-          ...task,
-          answers: updatedSubmissions,
-          // Don't change main status yet - only when all are completed and Update All is clicked
-          status: task?.status
-        };
+          const updatedTask: Task = {
+            ...task,
+            answers: updatedSubmissions,
+            status: task?.status,
+          };
 
-        onSave(updatedTask);
+          onSave(updatedTask);
+        } catch (error) {
+          console.error("Error updating individual submission:", error);
+          alert("Error updating submission. Please try again.");
+        } finally {
+          setIsUpdating(false);
+        }
       }
     }
   };
 
-  const handleSubmit = () => {
-    // Update all student submissions with new grades
-    const updatedSubmissions = studentSubmissions?.map((submission: any) => {
-      const grade = studentGrades[submission?._id];
-      return {
-        ...submission,
-        mark: grade ? parseInt(grade.mark) || 0 : submission?.mark,
-        remark: grade?.remark || submission?.remark,
-        status: grade?.status || submission?.status
+  const handleSubmit = async () => {
+    try {
+      setIsUpdating(true);
+
+      // Update all student submissions with new grades
+      const updatedSubmissions = studentSubmissions?.map((submission: any) => {
+        const grade = studentGrades[submission?._id];
+        return {
+          ...submission,
+          mark: grade ? parseInt(grade.mark) || 0 : submission?.mark,
+          remark: grade?.remark || submission?.remark,
+          status: grade?.status || submission?.status,
+        };
+      });
+
+      // Check if all students have been graded as completed
+      const allGraded = updatedSubmissions.every((sub: any) => sub?.status === "completed");
+
+      const updatedTask: Task = {
+        ...task,
+        answers: updatedSubmissions,
+        // Only update main task status if all are completed
+        status: allGraded ? "completed" : task?.status,
       };
-    });
 
-    console.log("All updated submissions:", updatedSubmissions);
+      const taskId = task?._id;
+      await updateTaskData(taskId, {
+        answers: updatedSubmissions,
+        status: allGraded ? "completed" : task?.status,
+      });
 
-    // Check if all students have been graded as completed
-    const allGraded = updatedSubmissions.every((sub: any) => sub?.status === "completed");
+      onSave(updatedTask);
 
-    const updatedTask: Task = {
-      ...task,
-      answers: updatedSubmissions,
-      // Only change main task status if all students are completed
-      status: allGraded ? "completed" : task?.status
-    };
-    
-    console.log("Final updated task with main status:", updatedTask);
-
-    onSave(updatedTask);
+      alert("Task updated successfully!");
+    } catch (error) {
+      console.error("Error updating all submissions:", error);
+      alert("Error updating task. Please try again.");
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
@@ -143,10 +167,21 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
     setShowAttachmentView(true);
   };
 
+  const handleDownloadAttachment = () => {
+    if (selectedSubmission && selectedSubmission.file) {
+      const link = document.createElement("a");
+      link.href = selectedSubmission.file;
+      link.download = `attachment_${selectedSubmission.student}_${selectedSubmission._id}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
   return (
     <>
       <div className="fixed inset-0 backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50">
-        <div className="bg-[#f1f4f8] rounded-2xl shadow-xl w-full max-w-6xl mx-4 scrollbar-hide" style={{ maxHeight: '90vh', overflowY: 'auto' }}>
+        <div className="bg-[#f1f4f8] rounded-2xl shadow-xl w-full max-w-6xl mx-4 scrollbar-hide" style={{ maxHeight: "90vh", overflowY: "auto" }}>
           <div className="p-6">
             <div className="flex justify-between items-center mb-6">
               <h2 style={{ ...FONTS.heading_02 }}>Task Details & Grading</h2>
@@ -154,7 +189,6 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
                 &times;
               </button>
             </div>
-
             {/* Status Indicator */}
             <div className="mb-4 p-3 rounded-lg bg-gray-100">
               <div className="flex items-center justify-between">
@@ -164,18 +198,15 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
                   </p>
                   <p style={{ ...FONTS.para_01 }} className="text-sm text-gray-600 mt-1">
                     {allStudentsCompleted
-                      ? "All students have been marked as completed. Click 'Update All Grades' to finalize and update main status."
-                      : "Update individual student statuses. Main task status will update to 'completed' only when all students are marked as completed and you click 'Update All Grades'."}
+                      ? "All students have been marked as completed. Click 'Complete Task & Update All Grades' to finalize and update main status."
+                      : "Update individual student statuses. Main task status will update to 'completed' only when all students are marked as completed and you click 'Complete Task & Update All Grades'."}
                   </p>
                 </div>
                 {allStudentsCompleted && (
-                  <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
-                    Ready to Complete Task
-                  </div>
+                  <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Ready to Complete Task</div>
                 )}
               </div>
             </div>
-
             {/* Tab Navigation */}
             <div className="flex mb-6 border-b">
               <button
@@ -190,44 +221,51 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
                 onClick={() => setActiveTab("studentSubmissions")}
                 style={{ ...FONTS.heading_05 }}
               >
-                Student Submissions ({studentSubmissions.length})
+                Student Submissions ({studentSubmissions?.length || 0})
               </button>
             </div>
-
             {activeTab === "taskDetails" ? (
               <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <label className="block mb-1" style={{ ...FONTS.heading_05 }}>Instructor Name</label>
+                  <label className="block mb-1" style={{ ...FONTS.heading_05 }}>
+                    Instructor Name
+                  </label>
                   <input type="text" value={task.instructor || ""} className="p-3 rounded-lg w-full bg-gray-100" style={{ ...FONTS.heading_06 }} readOnly />
                 </div>
                 <div>
-                  <label className="block mb-1" style={{ ...FONTS.heading_05 }}>Type</label>
+                  <label className="block mb-1" style={{ ...FONTS.heading_05 }}>
+                    Type
+                  </label>
                   <input type="text" value={task.type} className="p-3 rounded-lg w-full bg-gray-100" style={{ ...FONTS.heading_06 }} readOnly />
                 </div>
                 <div>
-                  <label className="block mb-1" style={{ ...FONTS.heading_05 }}>Task Name</label>
+                  <label className="block mb-1" style={{ ...FONTS.heading_05 }}>
+                    Task Name
+                  </label>
                   <input type="text" value={task.taskName || ""} className="p-3 rounded-lg w-full bg-gray-100" style={{ ...FONTS.heading_06 }} readOnly />
                 </div> 
                 <div>
-                  <label className="block mb-1" style={{ ...FONTS.heading_05 }}>Task</label>
+                  <label className="block mb-1" style={{ ...FONTS.heading_05 }}>
+                    Task
+                  </label>
                   <input type="text" value={task.task} className="p-3 rounded-lg w-full bg-gray-100" style={{ ...FONTS.heading_06 }} readOnly />
                 </div>
                 <div>
-                  <label className="block mb-1" style={{ ...FONTS.heading_05 }}>Deadline</label>
+                  <label className="block mb-1" style={{ ...FONTS.heading_05 }}>
+                    Deadline
+                  </label>
                   <input type="text" value={task.deadline} className="p-3 rounded-lg w-full bg-gray-100" style={{ ...FONTS.heading_06 }} readOnly />
                 </div>
                 <div>
-                  <label className="block mb-1" style={{ ...FONTS.heading_05 }}>Status</label>
-                  <input
-                    type="text"
-                    value={task.status}
-                    className="p-3 rounded-lg w-full bg-gray-100"
-                    style={{ ...FONTS.heading_06 }}
-                    readOnly
-                  />
+                  <label className="block mb-1" style={{ ...FONTS.heading_05 }}>
+                    Status
+                  </label>
+                  <input type="text" value={task.status} className="p-3 rounded-lg w-full bg-gray-100" style={{ ...FONTS.heading_06 }} readOnly />
                 </div>
                 <div>
-                  <label className="block mb-1" style={{ ...FONTS.heading_05 }}>Question</label>
+                  <label className="block mb-1" style={{ ...FONTS.heading_05 }}>
+                    Question
+                  </label>
                   <div className="flex items-center gap-2">
                     <input type="text" value={task.question || ""} className="p-3 rounded-lg w-full bg-gray-100" style={{ ...FONTS.heading_06 }} readOnly />
                     <Button
@@ -247,19 +285,31 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
                     <table className="min-w-full bg-white rounded-lg overflow-hidden">
                       <thead className="bg-gradient-to-r from-[#7B00FF] to-[#B200FF] text-white">
                         <tr>
-                          <th className="px-4 py-3 text-left" style={{ ...FONTS.heading_06 }}>Student ID</th>
-                          <th className="px-4 py-3 text-left" style={{ ...FONTS.heading_06 }}>Status</th>
-                          <th className="px-4 py-3 text-left" style={{ ...FONTS.heading_06 }}>Mark</th>
-                          <th className="px-4 py-3 text-left" style={{ ...FONTS.heading_06 }}>Remark</th>
-                          <th className="px-4 py-3 text-left" style={{ ...FONTS.heading_06 }}>Submitted On</th>
-                          <th className="px-4 py-3 text-left" style={{ ...FONTS.heading_06 }}>Actions</th>
+                          <th className="px-4 py-3 text-left" style={{ ...FONTS.heading_06 }}>
+                            Student Name
+                          </th>
+                          <th className="px-4 py-3 text-left" style={{ ...FONTS.heading_06 }}>
+                            Status
+                          </th>
+                          <th className="px-4 py-3 text-left" style={{ ...FONTS.heading_06 }}>
+                            Mark
+                          </th>
+                          <th className="px-4 py-3 text-left" style={{ ...FONTS.heading_06 }}>
+                            Remark
+                          </th>
+                          <th className="px-4 py-3 text-left" style={{ ...FONTS.heading_06 }}>
+                            Submitted On
+                          </th>
+                          <th className="px-4 py-3 text-left" style={{ ...FONTS.heading_06 }}>
+                            Actions
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
-                        {studentSubmissions?.map((submission: any, index: number) => (
-                          <tr key={index} className="border-b hover:bg-gray-50">
+                        {currentItems?.map((submission: any, index: number) => (
+                          <tr key={submission?._id || index} className="border-b hover:bg-gray-50">
                             <td className="px-4 py-3" style={{ ...FONTS.para_01 }}>
-                              {submission?.student?.first_name}
+                              {submission?.student?.first_name || submission?.studentName || "N/A"}
                             </td>
                             <td className="px-4 py-3">
                               <select
@@ -267,6 +317,7 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
                                 onChange={(e) => handleGradeChange(submission?._id, "status", e.target.value)}
                                 className="p-2 border rounded w-full"
                                 style={{ ...FONTS.para_01 }}
+                                disabled={isUpdating}
                               >
                                 <option value="pending">Pending</option>
                                 <option value="completed">Completed</option>
@@ -281,6 +332,7 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
                                 max="100"
                                 className="p-2 border rounded w-full"
                                 style={{ ...FONTS.para_01 }}
+                                disabled={isUpdating}
                               />
                             </td>
                             <td className="px-4 py-3">
@@ -291,16 +343,18 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
                                 className="p-2 border rounded w-full"
                                 style={{ ...FONTS.para_01 }}
                                 placeholder="Enter remarks"
+                                disabled={isUpdating}
                               />
                             </td>
                             <td className="px-4 py-3" style={{ ...FONTS.para_01 }}>
-                              {new Date(submission?.completed_at).toLocaleDateString()}
+                              {submission?.completed_at ? new Date(submission.completed_at).toLocaleDateString() : "N/A"}
                             </td>
                             <td className="px-4 py-3">
                               <Button
                                 onClick={() => handleViewAttachment(submission)}
                                 className="cursor-pointer bg-gradient-to-l from-[#7B00FF] to-[#B200FF] !text-white"
                                 size="sm"
+                                disabled={isUpdating}
                               >
                                 View Attachment
                               </Button>
@@ -309,35 +363,31 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
                         ))}
                       </tbody>
                     </table>
-
                     {/* Pagination */}
                     {totalPages > 1 && (
                       <div className="flex justify-center mt-4">
                         <nav className="flex items-center space-x-2">
                           <button
                             onClick={() => paginate(Math.max(1, currentPage - 1))}
-                            disabled={currentPage === 1}
+                            disabled={currentPage === 1 || isUpdating}
                             className="px-3 py-1 rounded-md bg-gray-200 disabled:opacity-50"
                           >
                             Previous
                           </button>
-
                           {Array.from({ length: totalPages }, (_, i) => i + 1)?.map((page) => (
                             <button
                               key={page}
                               onClick={() => paginate(page)}
-                              className={`px-3 py-1 rounded-md ${currentPage === page
-                                ? "bg-purple-600 text-white"
-                                : "bg-gray-200"
+                              disabled={isUpdating}
+                              className={`px-3 py-1 rounded-md ${currentPage === page ? "bg-purple-600 text-white" : "bg-gray-200"
                                 }`}
                             >
                               {page}
                             </button>
                           ))}
-
                           <button
                             onClick={() => paginate(Math.min(totalPages, currentPage + 1))}
-                            disabled={currentPage === totalPages}
+                            disabled={currentPage === totalPages || isUpdating}
                             className="px-3 py-1 rounded-md bg-gray-200 disabled:opacity-50"
                           >
                             Next
@@ -353,21 +403,25 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
                 )}
               </div>
             )}
-
             <div className="flex justify-end gap-4 mt-6 p-3 rounded-lg w-full bg-gray-10">
-              <Button variant="outline" onClick={onClose} style={{
-                ...FONTS.heading_06,
-                cursor: "pointer",
-                boxShadow: "rgba(255,255,255,0.7) 5px 5px 4px, rgba(189,194,199,0.75) 2px 2px 3px inset",
-              }}>
+              <Button
+                variant="outline"
+                onClick={onClose}
+                style={{
+                  ...FONTS.heading_06,
+                  cursor: "pointer",
+                  boxShadow: "rgba(255,255,255,0.7) 5px 5px 4px, rgba(189,194,199,0.75) 2px 2px 3px inset",
+                }}
+                disabled={isUpdating}
+              >
                 Cancel
               </Button>
               <Button
                 onClick={handleSubmit}
                 className="cursor-pointer bg-gradient-to-l from-[#7B00FF] to-[#B200FF] !text-white shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)]"
-                disabled={!allStudentsCompleted}
+                disabled={!allStudentsCompleted || isUpdating}
               >
-                {allStudentsCompleted ? "Complete Task & Update All Grades" : "Update All Grades"}
+                {isUpdating ? "Updating..." : allStudentsCompleted ? "Complete Task & Update All Grades" : "Update All Grades"}
               </Button>
             </div>
           </div>
@@ -408,9 +462,14 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
               {selectedSubmission.file ? (
                 <>
                   <p style={{ ...FONTS.heading_06 }} className="mb-4">
+                    Student: {selectedSubmission?.student?.first_name || selectedSubmission?.studentName || "N/A"}
+                  </p>
+                  <p style={{ ...FONTS.heading_06 }} className="mb-4">
                     Student has submitted a file
                   </p>
-                  <Button className="bg-blue-500 text-white">Download Attachment</Button>
+                  <Button className="bg-blue-500 text-white" onClick={handleDownloadAttachment}>
+                    Download Attachment
+                  </Button>
                 </>
               ) : (
                 <p style={{ ...FONTS.heading_06 }} className="mb-4">

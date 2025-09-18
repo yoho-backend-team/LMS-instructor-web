@@ -6,11 +6,9 @@ import ProfileCard from '@/components/dashboard/ProfileCard';
 import CourseProgress from '@/components/dashboard/CourseProgress';
 import Attendance from '@/components/dashboard/Attendance';
 import Payment from '@/components/dashboard/Payment';
-import Assesments from '@/components/dashboard/Assesments';
 import Updates from '@/components/dashboard/Updates';
 import { FONTS } from '@/constants/uiConstants';
 import { TabViewResponsive } from '@/hooks/TabViewResponce/TabViewResponsive';
-import DashCalender from '@/components/ui/calendarDash';
 import { useDispatch } from 'react-redux';
 import { getDashBoardReports } from '@/features/Dashboard/reducers/thunks';
 import { useLoader } from '@/context/LoadingContext/Loader';
@@ -78,16 +76,13 @@ const Dashboard: React.FC = () => {
 						<div className='flex flex-row gap-5'>
 							<Attendance />
 							<Payment />
-						</div>
-						<div className='grid grid-cols-2 gap-5'>
-							<Assesments />
-							<DashCalender />
+
 						</div>
 						<Updates />
 					</div>
 				) : (
 					<div className='grid grid-cols-3 gap-5'>
-						
+
 						{/* <div>
 							<Payment />
 						</div>
@@ -102,19 +97,16 @@ const Dashboard: React.FC = () => {
 						<div>
 							<Attendance />
 							<div className='mt-5'>
-							<Payment />
+								<Payment />
 							</div>
 
 						</div>
 						<div className='col-span-2'>
 							<Updates />
 						</div>
-						{/* <div>
-							<DashCalender />
-						</div> */}
 					</div>
 				)}
-				
+
 
 				<div className='flex flex-row space-x-25'>
 					{/* <div className='divshadow p-2 rounded-xl'>
@@ -131,42 +123,42 @@ const Dashboard: React.FC = () => {
 					</div> */}
 
 					<Card className='bg-[#ebeff3] rounded-2xl w-[19%] shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40]'>
-					<Button
-						className="bg-[#ebeff3] w-56 mx-6 h-14 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
-						style={FONTS.heading_06}
-						variant="outline"
-					>
-						Total Course Handling: 1
-					</Button>
-						</Card>
+						<Button
+							className="bg-[#ebeff3] w-56 mx-6 h-14 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
+							style={FONTS.heading_06}
+							variant="outline"
+						>
+							Total Course Handling: 1
+						</Button>
+					</Card>
 
 					<Card className='bg-[#ebeff3] rounded-2xl w-[19%] shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40]'>
-					<Button
-						className="bg-[#ebeff3] w-56 mx-6 h-14 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
-						style={FONTS.heading_06}
-						variant="outline"
-					>
-						Batch's Holding: 1
-					</Button>
-						</Card>
+						<Button
+							className="bg-[#ebeff3] w-56 mx-6 h-14 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
+							style={FONTS.heading_06}
+							variant="outline"
+						>
+							Batch's Holding: 1
+						</Button>
+					</Card>
 					<Card className='bg-[#ebeff3] rounded-2xl w-[19%] shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40]'>
-					<Button
-						className="bg-[#ebeff3] w-56 mx-6 h-14 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
-						style={FONTS.heading_06}
-						variant="outline"
-					>
-						Branch: Palkalaiperur
-					</Button>
-						</Card>
+						<Button
+							className="bg-[#ebeff3] w-56 mx-6 h-14 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
+							style={FONTS.heading_06}
+							variant="outline"
+						>
+							Branch: Palkalaiperur
+						</Button>
+					</Card>
 					<Card className='bg-[#ebeff3] rounded-2xl w-[25%] shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40]'>
-					<Button
-						className="bg-[#ebeff3] w-66 mx-8 h-14 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
-						style={FONTS.heading_06}
-						variant="outline"
-					>
-						Category: Web Development
-					</Button>
-						</Card>
+						<Button
+							className="bg-[#ebeff3] w-66 mx-8 h-14 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
+							style={FONTS.heading_06}
+							variant="outline"
+						>
+							Category: Web Development
+						</Button>
+					</Card>
 				</div>
 			</div>
 		</>

@@ -117,7 +117,7 @@ class Client {
         ,
         get:  (params: any) =>  httpClient.get(HTTP_END_POINTS.Instructor.course.task.get.replace(":course",params.course), params, 'instructor')
       ,
-        update: (params:any, data:any) => httpClient.patch(HTTP_END_POINTS.Instructor.course.task.update + params?.id,
+        update: (params:any, data:any) => httpClient.patch(HTTP_END_POINTS.Instructor.course.task.update.replace(":taskid", params),
             data,
             {},
             'instructor')

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import { FONTS } from "@/constants/uiConstants"
@@ -50,10 +51,9 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
   const headers = [
     "Month",
     "Payment",
-    "workingDays",
-    "present",
-    "absent",
-    // 'deductions',
+    "Balance",
+    "Transaction Id",
+    "Bank Name",
     "status",
     "Actions",
   ]
@@ -126,14 +126,42 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
     }
   }
 
-  const filteredPayments =
-    selectedStatus.toLowerCase() === "all"
-      ? SalaryDetails
-      : SalaryDetails?.filter((payment: any) => payment?.status.toLowerCase() === selectedStatus.toLowerCase())
+  const filteredPayments = (() => {
+    if (!SalaryDetails) return []
+
+    const statusLower = selectedStatus?.toLowerCase()
+
+    if (statusLower === "all") {
+      return SalaryDetails
+    }
+
+    return SalaryDetails.filter((payment: any) => {
+      const paymentStatus = payment?.status?.toLowerCase()
+
+      // Handle different variations of completed status
+      if (statusLower === "complete" || statusLower === "completed") {
+        return (
+          paymentStatus === "completed" ||
+          paymentStatus === "paid" ||
+          paymentStatus === "complete" ||
+          paymentStatus !== "pending"
+        )
+      }
+
+      // Handle pending status
+      if (statusLower === "pending") {
+        return paymentStatus === "pending"
+      }
+
+      // Default exact match
+      return paymentStatus === statusLower
+    })
+  })()
+
   return (
     <div className="p-4 custom-inset-shadow grid gap-4">
       <section
-        className="grid grid-cols-7 text-center bg-gradient-to-r from-[#7B00FF] to-[#B200FF] !text-black p-4 rounded-lg"
+        className="grid grid-cols-7 text-center bg-gradient-to-r from-[#7B00FF] to-[#B200FF] !text-white p-4 rounded-lg"
         style={{ ...FONTS.heading_03 }}
       >
         {headers.map((header, index) => (
@@ -159,24 +187,24 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
                 })}
               </p>
               <p>{PaymentTable?.salary_amount}</p>
-              <p>{PaymentTable?.attendance_details?.totalWorkingDays}</p>
-              <p>{PaymentTable?.attendance_details?.presentDays}</p>
-              <p>{PaymentTable?.attendance_details?.absentDays}</p>
+              <p>{PaymentTable?.balance}</p>
+              <p>{PaymentTable?.transaction_id}</p>
+              <p>{PaymentTable?.staff?.bank_details?.bank_name ?? "nil"}</p>
               <button
                 style={{
                   boxShadow: `
-      										rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
                 }}
                 className={`p-2 rounded-lg w-[100px] m-auto
-                        ${
-                          PaymentTable?.status !== "pending"
-                            ? "bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-500 hover:to-green-600 shadow-[0px_3px_4px_0px_rgba(255,255,255,0.75)_inset,3px_-3px_3px_0px_rgba(255,255,255,0.25)_inset,-4px_8px_23px_0px_#3ABE65_inset,-8px_-8px_12px_0px_#3ABE65_inset,2px_3px_3px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-1px_-1px_6px_0px_rgba(255,255,255,0.75),-1px_-1px_6px_1px_rgba(255,255,255,0.25)]"
-                            : "bg-gradient-to-r from-red-500 to-red-600 text-white  shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_red_inset,-4px_-8px_10px_0px_#B20_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white"
-                        }`}
+                        ${PaymentTable?.status !== "pending"
+                    ? "bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-500 hover:to-green-600 shadow-[0px_3px_4px_0px_rgba(255,255,255,0.75)_inset,3px_-3px_3px_0px_rgba(255,255,255,0.25)_inset,-4px_8px_23px_0px_#3ABE65_inset,-8px_-8px_12px_0px_#3ABE65_inset,2px_3px_3px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-1px_-1px_6px_0px_rgba(255,255,255,0.75),-1px_-1px_6px_1px_rgba(255,255,255,0.25)]"
+                    : "bg-gradient-to-r from-red-500 to-red-600 text-white  shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_red_inset,-4px_-8px_10px_0px_#B20_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white"
+                  }`}
               >
                 {PaymentTable?.status === "pending" ? "Pending" : "Paid"}
               </button>
+
               <p className="flex justify-center items-center gap-4">
                 <button
                   onClick={() => handleDownloadPDF(PaymentTable)}
@@ -216,8 +244,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
             className="p-2 rounded-lg cursor-pointer"
             style={{
               boxShadow: `
-      										rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
             }}
           >
             <p className="h-5 w-5 text-[#716F6F] font-bold flex justify-center items-center rounded-full">X</p>
@@ -232,8 +260,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               style={{
                 ...FONTS.heading_06,
                 boxShadow: `
-      										rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
               }}
             >
               {new Date(selectedDetail?.payment_date).toLocaleString("en-US", {
@@ -249,8 +277,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               style={{
                 ...FONTS.heading_06,
                 boxShadow: `
-      										rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
               }}
             >
               {formatDateTime(selectedDetail?.payment_date)}
@@ -264,8 +292,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               style={{
                 ...FONTS.heading_06,
                 boxShadow: `
-      										rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
               }}
             >
               {selectedDetail?.attendance_details?.totalWorkingDays}
@@ -278,8 +306,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               style={{
                 ...FONTS.heading_06,
                 boxShadow: `
-      										rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
               }}
             >
               {selectedDetail?.salary_amount}
@@ -293,8 +321,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               style={{
                 ...FONTS.heading_06,
                 boxShadow: `
-      										rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      										rgba(106, 141, 175, 0.75) 2px 2px 3px inset`,
+      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+      							rgba(106, 141, 175, 0.75) 2px 2px 3px inset`,
               }}
             >
               {selectedDetail?.attendance_details?.absentDays}
@@ -308,8 +336,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               style={{
                 ...FONTS.heading_06,
                 boxShadow: `
-      										rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
               }}
             >
               {selectedDetail?.attendance_details?.presentDays}
@@ -323,8 +351,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               style={{
                 ...FONTS.heading_06,
                 boxShadow: `
-      										rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
               }}
             >
               {selectedDetail.paymentMethod || "Cash"}
@@ -338,8 +366,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               style={{
                 ...FONTS.heading_06,
                 boxShadow: `
-      										rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      										rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
               }}
             >
               {selectedDetail.deductions || "NIL"}
@@ -350,11 +378,10 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
             <p style={{ ...FONTS.heading_04 }}>Status</p>
             <Button
               className={`p-2 px-8 rounded-lg mt-4 
-                        ${
-                          selectedDetail.status !== "pending"
-                            ? "bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-500 hover:to-green-600 shadow-[0px_3px_4px_0px_rgba(255,255,255,0.75)_inset,3px_-3px_3px_0px_rgba(255,255,255,0.25)_inset,-4px_8px_23px_0px_#3ABE65_inset,-8px_-8px_12px_0px_#3ABE65_inset,2px_3px_3px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-1px_-1px_6px_0px_rgba(255,255,255,0.75),-1px_-1px_6px_1px_rgba(255,255,255,0.25)]"
-                            : "bg-gradient-to-r from-red-500 to-red-600 text-white  shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_red_inset,-4px_-8px_10px_0px_#B20_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white"
-                        }`}
+                        ${selectedDetail.status !== "pending"
+                  ? "bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-500 hover:to-green-600 shadow-[0px_3px_4px_0px_rgba(255,255,255,0.75)_inset,3px_-3px_3px_0px_rgba(255,255,255,0.25)_inset,-4px_8px_23px_0px_#3ABE65_inset,-8px_-8px_12px_0px_#3ABE65_inset,2px_3px_3px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-1px_-1px_6px_0px_rgba(255,255,255,0.75),-1px_-1px_6px_1px_rgba(255,255,255,0.25)]"
+                  : "bg-gradient-to-r from-red-500 to-red-600 text-white  shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_red_inset,-4px_-8px_10px_0px_#B20_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white"
+                }`}
             >
               {selectedDetail?.status === "pending" ? "Pending" : "Paid"}
             </Button>

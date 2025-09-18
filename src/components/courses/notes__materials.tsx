@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Card } from '../ui/card';
 import { Button } from '../ui/button';
 import pdfimage from '../../assets/icons/notes/image 59.png';
@@ -39,13 +40,14 @@ const NotesMaterials = ({ setselectedNotes }: NotesMaterialsProps) => {
 			const response = await deleteNotes({
 				noteId: note?.uuid,
 			});
-		
+
 			if (response) {
 				toast.success(`${note?.title} deleted`);
 			} else {
 				toast.error('Failed to delete the note, please try again.');
 			}
 		} catch (error) {
+			console.log(error)
 			toast.error('Something went wrong, please try again.');
 		}
 	};
@@ -57,25 +59,25 @@ const NotesMaterials = ({ setselectedNotes }: NotesMaterialsProps) => {
 					<Card className='bg-gradient-to-r from-[#7B00FF] to-[#B200FF] text-white p-6 sticky top-0 z-10 ml-4 mr-4 mb-4'>
 						<div className='grid grid-cols-4 gap-4'>
 							<div
-								className='text-center !text-black'
+								className='text-center !text-white'
 								style={{ ...FONTS.heading_02 }}
 							>
 								File
 							</div>
 							<div
-								className='text-center !text-black'
+								className='text-center !text-white'
 								style={{ ...FONTS.heading_02 }}
 							>
 								Name
 							</div>
 							<div
-								className='text-center !text-black'
+								className='text-center !text-white'
 								style={{ ...FONTS.heading_02 }}
 							>
 								Date
 							</div>
 							<div
-								className='text-center !text-black'
+								className='text-center !text-white'
 								style={{ ...FONTS.heading_02 }}
 							>
 								Actions
