@@ -26,7 +26,7 @@ const ProfileInformation: React.FC = () => {
     dispatch(getStudentProfileThunk());
   }, [dispatch]);
 
-  const [profileData, setProfileData] = useState({
+   const [profileData, setProfileData] = useState({
     name: profileDetails?.full_name,
     traineeId: profileDetails?.userDetail?.staffId,
     profileImage: profileDetails?.image,

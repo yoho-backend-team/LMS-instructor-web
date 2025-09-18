@@ -91,7 +91,7 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
         console.log("Updated individual submission:", updatedSubmission);
 
         // Update the task with this single submission change
-        const updatedSubmissions = studentSubmissions?.map((sub: any) =>
+         const updatedSubmissions = studentSubmissions?.map((sub: any) =>
           sub?._id === submissionId ? updatedSubmission : sub
         );
 
@@ -130,7 +130,7 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
       // Only change main task status if all students are completed
       status: allGraded ? "completed" : task?.status
     };
-
+    
     console.log("Final updated task with main status:", updatedTask);
 
     onSave(updatedTask);
@@ -207,7 +207,7 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
                 <div>
                   <label className="block mb-1" style={{ ...FONTS.heading_05 }}>Task Name</label>
                   <input type="text" value={task.taskName || ""} className="p-3 rounded-lg w-full bg-gray-100" style={{ ...FONTS.heading_06 }} readOnly />
-                </div>
+                </div> 
                 <div>
                   <label className="block mb-1" style={{ ...FONTS.heading_05 }}>Task</label>
                   <input type="text" value={task.task} className="p-3 rounded-lg w-full bg-gray-100" style={{ ...FONTS.heading_06 }} readOnly />
