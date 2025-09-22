@@ -189,7 +189,7 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               <p>{PaymentTable?.salary_amount}</p>
               <p>{PaymentTable?.balance}</p>
               <p>{PaymentTable?.transaction_id}</p>
-              <p>{PaymentTable?.staff?.bank_details?.bank_name ?? "nil"}</p>
+              <p>{PaymentTable?.bank_details?.bank_name ?? "nil"}</p>
               <button
                 style={{
                   boxShadow: `

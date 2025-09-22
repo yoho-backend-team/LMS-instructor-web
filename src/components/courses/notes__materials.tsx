@@ -54,7 +54,8 @@ const NotesMaterials = ({ setselectedNotes }: NotesMaterialsProps) => {
 
 	return (
 		<div className='w-full h-screen mx-auto p-4 mt-6'>
-			<Card className='overflow-hidden bg-[#EBEFF3] shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] p-6'>
+			<Card className='overflow-hidden bg-[#EBEFF3] h-[87vh]
+			shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] p-6'>
 				<div className='flex flex-col'>
 					<Card className='bg-gradient-to-r from-[#7B00FF] to-[#B200FF] text-white p-6 sticky top-0 z-10 ml-4 mr-4 mb-4'>
 						<div className='grid grid-cols-4 gap-4'>

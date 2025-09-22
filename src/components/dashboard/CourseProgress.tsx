@@ -65,7 +65,7 @@ const CourseProgress: React.FC = () => {
 
                             <svg
                                 className={`${TabView ? 'w-[248px] h-[277px]' : 'w-[258px] h-[287px]'} transform -rotate-90`}
-                                viewBox='0 0 200 200'
+                                viewBox='0 0 198 205'
                             >
                                 <defs>
                                     {/* Gradient */}
@@ -110,8 +110,8 @@ const CourseProgress: React.FC = () => {
                                 style={{
                                     width: 50,
                                     height: 50,
-                                    left: sunX + 20 - 16,
-                                    top: sunY + 20 - 16,
+                                    left: sunX + 22 - 16,
+                                    top: sunY + 19 - 16,
                                 }}
                             />
 
@@ -123,8 +123,8 @@ const CourseProgress: React.FC = () => {
                                 style={{
                                     width: 35,
                                     height: 35,
-                                    left: moonX + 20 - 16,
-                                    top: moonY + 20 - 16,
+                                    left: moonX + 20 - 18,
+                                    top: moonY + 22 - 16,
                                 }}
                             />
 

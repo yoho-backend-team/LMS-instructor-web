@@ -60,7 +60,7 @@ const Payment: React.FC = () => {
 
                 <svg
                     className={`${TabView ? 'w-[100px] h-[100px] transform -rotate-90 ' : 'w-[150px] h-[180px]'} transform -rotate-90`}
-                    viewBox='0 0 200 200'
+                    viewBox='-1 -1 200 210'
                 >
                     <defs>
                         {/* Gradient */}
@@ -82,7 +82,7 @@ const Payment: React.FC = () => {
                         r={radius}
                         fill='none'
                         stroke='url(#progressGradient)'
-                        strokeWidth='25'
+                        strokeWidth='27'
                         strokeLinecap='round'
                         strokeDasharray={circumference}
                         strokeDashoffset={strokeDashoffset}
@@ -106,7 +106,7 @@ const Payment: React.FC = () => {
                         style={{
                             width: TabView ? 20 : 30,
                             height: TabView ? 20 : 30,
-                            left: sunX + 20 - 16,
+                            left: sunX + 18 - 16,
                             top: sunY + 20 - 16,
                         }}
                     />
@@ -134,8 +134,8 @@ const Payment: React.FC = () => {
                     style={{
                         width: TabView ? 16 : 23,
                         height: TabView ? 16 : 23,
-                        left: moonX + 20 - 16,
-                        top: moonY + 20 - 16,
+                        left: moonX + 19 - 16,
+                        top: moonY + 21 - 16,
                     }}
                 />
 

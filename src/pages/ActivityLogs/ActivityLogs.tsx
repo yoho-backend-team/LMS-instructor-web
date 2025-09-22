@@ -270,6 +270,7 @@ const ActivityLogs = () => {
                     className="rounded-lg bg-gray-100 w-full"
                     style={{ backgroundColor: COLORS.bg_Colour }}
                     captionLayout="dropdown"
+                     showOutsideDays={false} 
                   />
                 </div>
               )}
@@ -289,6 +290,7 @@ const ActivityLogs = () => {
                     className="rounded-lg bg-gray-100 w-full"
                     style={{ backgroundColor: COLORS.bg_Colour }}
                     captionLayout="dropdown"
+                     showOutsideDays={false} 
                   />
                 </div>
               )}

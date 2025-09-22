@@ -1,17 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { COLORS, FONTS } from '@/constants/uiConstants';
-import { LineChart, XAxis } from 'recharts';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import {
-	type ChartConfig,
-	ChartContainer,
-	ChartTooltip,
-	ChartTooltipContent,
-} from '@/components/ui/chart';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import filter from '../../assets/icons/common/Mask group.png';
-import { startOfMonth, setMonth, setYear, format } from 'date-fns';
+import { startOfMonth, setMonth, setYear } from 'date-fns';
 import {
 	Select,
 	SelectContent,
@@ -25,14 +17,17 @@ import { selectDashBoard } from '@/features/Dashboard/reducers/selectors';
 import { selectAttendance, selectAttendanceDaily } from '@/features/attentance/reduces/selectors';
 import type { AppDispatch } from '@/store/store';
 import { getInstructorAttendance, getAttendanceDailyThunk } from '@/features/attentance/reduces/thunks';
-import { ResponsiveContainer } from 'recharts';
-
-const chartConfig = {
-	desktop: {
-		label: 'Day',
-		color: 'var(--chart-1)',
-	},
-} satisfies ChartConfig;
+// import Attendence_1 from "../../assets/attendence/attengraph1.png"
+// import Attendence_2 from "../../assets/attendence/attengraph2.png"
+// import Attendence_3 from "../../assets/attendence/attengraph3.png"
+import {
+	ResponsiveContainer,
+	LineChart,
+	Line,
+	XAxis,
+	YAxis,
+	Tooltip,
+} from "recharts";
 
 const months = [
 	'January',
@@ -62,37 +57,7 @@ export const Attendance = () => {
 	const dashData = useSelector(selectDashBoard);
 	const attendancedata: any = useSelector(selectAttendance);
 	const dailydata = useSelector(selectAttendanceDaily)
-	console.log(dailydata, "dailydata")
 
-	const generateChartData = useCallback(() => {
-		// Fixed: Check for the correct data structure from your API
-		if (!attendancedata?.data?.data) return [];
-
-		// Group attendance data by month from the 'data' array
-		const monthlyData: { [key: string]: { present: number; absent: number; total: number } } = {};
-
-		attendancedata.data.data.forEach((record: any) => {
-			const date = new Date(record.date);
-			const monthName = format(date, 'MMM');
-
-			if (!monthlyData[monthName]) {
-				monthlyData[monthName] = { present: 0, absent: 0, total: 0 };
-			}
-
-			monthlyData[monthName].total += 1;
-			if (record.status === 'present') {
-				monthlyData[monthName].present += 1;
-			} else {
-				monthlyData[monthName].absent += 1;
-			}
-		});
-
-		// Convert to chart format
-		return Object.entries(monthlyData).map(([month, data]) => ({
-			month,
-			desktop: data.present,
-		}));
-	}, [attendancedata]);
 
 	useEffect(() => {
 		if (selectedDate?.toISOString().split('T')[0] == new Date().toISOString().split('T')[0]) {
@@ -103,25 +68,29 @@ export const Attendance = () => {
 		}
 	}, [dispatch, selectedDate])
 
-	const chartData = generateChartData();
+
+
 
 	const attendanceCards = [
 		{
 			label: 'Classes Attend',
-			current: attendancedata?.data?.totalWorkingDays || 0,
+			current: attendancedata?.data?.presentDays || 0,
 			color: COLORS.light_blue,
+
 		},
 		{
 			label: 'Present Days',
 			current: attendancedata?.data?.presentDays || 0,
 			total: attendancedata?.data?.totalWorkingDays || 0,
 			color: COLORS.light_pink,
+
 		},
 		{
 			label: 'Absent Days',
 			current: attendancedata?.data?.absentDays || 0,
 			total: attendancedata?.data?.totalWorkingDays || 0,
 			color: COLORS.light_green_02,
+
 		},
 	];
 
@@ -290,73 +259,72 @@ export const Attendance = () => {
 				</div>
 			</div>
 
-			<div className='flex flex-wrap gap-6 justify-center pt-6'>
-				{attendanceCards.map((card) => (
-					<Card
-						key={card.label}
-						className='
-    relative 
-    w-full 
-    md:max-w-full
-    h-auto 
-    shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),5px_5px_4px_rgba(189,194,199,0.75)] 
-    overflow-hidden
-    flex flex-col
-  '
-						style={{ backgroundColor: COLORS.bg_Colour }}
-					>
-						<CardHeader className='p-4 pb-2'>
-							<div className='flex justify-between items-center w-full'>
-								<span style={{ ...FONTS.heading_04 }}>{card.label}</span>
-								<div className='text-right'>
-									<span
-										className='text-2xl font-bold block'
-										style={{ ...FONTS.heading_01 }}
-									>
-										<span style={{ color: card.color }}>{card.current}</span>
-										{card.total && (
-											<span className='text-sm text-gray-500'>/{card.total}</span>
-										)}
-									</span>
-								</div>
-							</div>
-						</CardHeader>
-						<CardContent className='p-4 pt-2 flex-1'>
-							<div className='w-full h-[70px]'>
-								<ChartContainer
-									config={chartConfig}
-									style={{
-										...FONTS.para_03,
-										width: '100%',
-										height: '100%'
-									}}
-								>
-									<ResponsiveContainer width="100%" height="100%">
-										<LineChart
-											data={chartData}
-											margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+			<div className='flex gap-6 justify-start pt-6 overflow-x-auto'>
+				{attendanceCards.map((card) => {
+					const lineData = Array.from({ length: 6 }, (_, i) => {
+						const val = card.current + Math.sin(i * 1.5) * 5 + (Math.random() * 3 - 1.5);
+						return {
+							name: `P${i + 1}`,
+							value: val,
+							showLine: i % 2 === 0, 
+						};
+					});
+
+
+					return (
+						<Card
+							key={card.label}
+							className='
+          relative 
+          w-full 
+          md:max-w-full
+          h-auto 
+          shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),5px_5px_4px_rgba(189,194,199,0.75)] 
+          overflow-hidden
+          flex flex-col
+        '
+							style={{ backgroundColor: COLORS.bg_Colour }}
+						>
+							<CardHeader className='p-4 pb-2'>
+								<div className='flex justify-between items-center w-full'>
+									<span style={{ ...FONTS.heading_04 }}>{card.label}</span>
+									<div className='text-right'>
+										<span
+											className='text-2xl font-bold block'
+											style={{ ...FONTS.heading_01 }}
 										>
-											<XAxis dataKey='month' hide />
-											<ChartTooltip
-												cursor={false}
-												content={<ChartTooltipContent hideLabel />}
+											<span style={{ color: card.color }}>{card.current}</span>
+											{card.total && (
+												<span className='text-sm text-gray-500'>/{card.total}</span>
+											)}
+										</span>
+									</div>
+								</div>
+							</CardHeader>
+							<CardContent className='p-4 pt-2 flex-1'>
+								<div className='w-full h-[120px] flex items-center justify-center'>
+									<ResponsiveContainer width="100%" height="100%">
+										<LineChart data={lineData}>
+											<XAxis dataKey="name" hide />
+											<YAxis hide />
+											<Tooltip />
+											<Line
+												type="monotone"
+												dataKey="value"
+												stroke={card.color}
+												strokeWidth={7}
+												dot={false}
+												isAnimationActive={true}
 											/>
-											{/* <Line
-              dataKey='desktop'
-              type='monotone'
-              stroke={card.color}
-              strokeWidth={2.5}
-              dot={false}
-              activeDot={{ r: 4, fill: card.color }}
-            /> */}
 										</LineChart>
 									</ResponsiveContainer>
-								</ChartContainer>
-							</div>
-						</CardContent>
-					</Card>
-				))}
+								</div>
+							</CardContent>
+						</Card>
+					);
+				})}
 			</div>
+
 
 
 			<div className='flex flex-row gap-6 pt-6 '>
@@ -376,6 +344,7 @@ export const Attendance = () => {
 						onMonthChange={handleCalendarMonthChange}
 						className='border **:gap-5 **:py-0.5 md:**:gap-2 rounded-lg shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),5px_5px_4px_rgba(189,194,199,0.75)]'
 						style={{ ...FONTS.heading_02, backgroundColor: COLORS.bg_Colour }}
+						showOutsideDays={false}
 					/>
 				</div>
 
