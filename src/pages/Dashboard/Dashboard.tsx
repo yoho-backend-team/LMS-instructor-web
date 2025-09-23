@@ -12,14 +12,13 @@ import { TabViewResponsive } from '@/hooks/TabViewResponce/TabViewResponsive';
 import { useDispatch } from 'react-redux';
 import { getDashBoardReports } from '@/features/Dashboard/reducers/thunks';
 import { useLoader } from '@/context/LoadingContext/Loader';
-import Loader from '@/components/Loader/Loader';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
 const Dashboard: React.FC = () => {
 	const { TabView } = TabViewResponsive();
 	const dispatch = useDispatch<any>();
-	const { showLoader, hideLoader, IsLoading } = useLoader();
+	const { showLoader, hideLoader } = useLoader();
 
 	useEffect(() => {
 		(async () => {
@@ -44,11 +43,6 @@ const Dashboard: React.FC = () => {
 				className='flex flex-col h-full w-full p-5 gap-5 overflow-x-hidden'
 				style={{ scrollbarWidth: 'none' }}
 			>
-				{IsLoading && (
-					<div className='w-full h-[100vh] absolute z-10 bg-transparent backdrop-blur-sm'>
-						<Loader />
-					</div>
-				)}
 				{TabView ? (
 					<div className='flex flex-col gap-5'>
 						<ProfileCard />
