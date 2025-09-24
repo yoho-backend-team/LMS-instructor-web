@@ -16,6 +16,11 @@ import { CustomTabContent, CustomTabs } from "@/components/payment/CustomTabs"
 import { useDispatch, useSelector } from "react-redux"
 import { selectPayment } from "@/features/Payment/reducers/selectors"
 import { getStudentPaymentThunk } from "@/features/Payment/reducers/thunks"
+import image1 from "../../assets/Payment/Paymentimage_1.png"
+import image2 from "../../assets/Payment/Paymentimage_2.png"
+import image3 from "../../assets/Payment/Paymentimage_3.png"
+import image4 from "../../assets/Payment/Paymentimage_4.png"
+import image5 from "../../assets/Payment/Paymentimage_5.png"
 
 export const Payment = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date())
@@ -30,6 +35,7 @@ export const Payment = () => {
 
   const dispatch = useDispatch<any>()
   const SalaryDetails = useSelector(selectPayment)
+  console.log(SalaryDetails, "salary details")
 
   useEffect(() => {
     dispatch(getStudentPaymentThunk({}))
@@ -76,9 +82,13 @@ export const Payment = () => {
     }))
   }
 
-  // const handleSaveStaffDetails = () => {
-  // 	setIsEditing(false);
-  // };
+  const leftCards = [
+    { title: "Course Fees", desc: "Total course fee details", salary: "10000", image: image1 },
+    { title: "Amount Paid", desc: "Payment completed so far", salary: "20000", image: image2 },
+    { title: "Pending Status", desc: "Remaining amount details", salary: "1000", image: image3 },
+    { title: "Status", desc: "Overall payment status", salary: "30000", image: image4 },
+    { title: "Payment Method", desc: "Mode of transaction", salary: "40000", image: image5 },
+  ];
 
   return (
     <div className="py-4">
@@ -139,60 +149,96 @@ export const Payment = () => {
         </div>
       </div>
 
-      <Card style={{ backgroundColor: COLORS.bg_Colour }} className="px-4 custom-inset-shadow mt-6 flex flex-row">
-        <h2 style={{ ...FONTS.heading_02 }}>Payment Status</h2>
 
-        {showSelect && (
-          <div>
-            <Select value={selectedStatus} onValueChange={handleSelectStatus}>
-              <SelectTrigger
-                className="w-[150px] cursor-pointer rounded-sm border-0 px-4 py-5 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] focus:outline-none"
-                style={{ ...FONTS.para_02, backgroundColor: COLORS.bg_Colour }}
-              >
-                <SelectValue placeholder="Payment Status" />
-              </SelectTrigger>
-              <SelectContent className="bg-[#ebeff3] rounded-sm p-2 shadow-[4px_4px_6px_rgba(189,194,199,0.5),-4px_-4px_6px_rgba(255,255,255,0.7)]">
-                {status.map((status) => (
-                  <SelectItem
-                    key={status}
-                    value={status}
-                    className={`
-                      cursor-pointer px-2 py-2 text-gray-700 
-                      rounded-sm 
-                      bg-[#ebeff3]
-                      shadow-[inset_-2px_-2px_4px_rgba(255,255,255,0.8),inset_2px_2px_4px_rgba(189,194,199,0.6)]
-                      data-[state=checked]:bg-gradient-to-r 
-                      data-[state=checked]:from-purple-500 
-                      data-[state=checked]:to-purple-700 
-                      data-[state=checked]:text-white
-                      mb-2 transition
-                    `}
-                    style={{ backgroundColor: COLORS.bg_Colour }}
+
+      <div className="flex h-screen">
+        <div className="w-[20%] bg-[#ebeff3]  p-4 flex flex-col gap-4">
+          {leftCards.map((item, index) => (
+            <div
+              key={index}
+              className="px-2 py-3 rounded-lg cursor-pointer
+            bg-[#ebeff3]
+            shadow-[5px_5px_4px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]
+            hover:shadow-[inset_-2px_-2px_4px_rgba(255,255,255,0.8),inset_2px_2px_4px_rgba(189,194,199,0.6)]
+            transition-shadow"
+            >
+              <h3 className="text-gray-700 font-semibold text-lg">{item.title}</h3>
+              <div className="flex items-center justify-between mt-2">
+                {item.image && (
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-10 h-10 object-contain"
+                  />
+                )}
+
+                <p className="text-gray-500 text-end">{item.salary}</p>
+              </div>
+
+            </div>
+          ))}
+        </div>
+
+        <div className="flex-1 bg-gray-200 p-4">
+          <Card
+            style={{ backgroundColor: COLORS.bg_Colour }}
+            className="px-4 custom-inset-shadow mt-6 flex flex-row"
+          >
+            <h2 style={{ ...FONTS.heading_02 }}>Payment Status</h2>
+
+            {showSelect && (
+              <div>
+                <Select value={selectedStatus} onValueChange={handleSelectStatus}>
+                  <SelectTrigger
+                    className="w-[150px] cursor-pointer rounded-sm border-0 px-4 py-5 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] focus:outline-none"
+                    style={{ ...FONTS.para_02, backgroundColor: COLORS.bg_Colour }}
                   >
-                    {status || "Year"}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+                    <SelectValue placeholder="Payment Status" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-[#ebeff3] rounded-sm p-2 shadow-[4px_4px_6px_rgba(189,194,199,0.5),-4px_-4px_6px_rgba(255,255,255,0.7)]">
+                    {status.map((status) => (
+                      <SelectItem
+                        key={status}
+                        value={status}
+                        className={`
+                    cursor-pointer px-2 py-2 text-gray-700 
+                    rounded-sm 
+                    bg-[#ebeff3]
+                    shadow-[inset_-2px_-2px_4px_rgba(255,255,255,0.8),inset_2px_2px_4px_rgba(189,194,199,0.6)]
+                    data-[state=checked]:bg-gradient-to-r 
+                    data-[state=checked]:from-purple-500 
+                    data-[state=checked]:to-purple-700 
+                    data-[state=checked]:text-white
+                    mb-2 transition
+                  `}
+                        style={{ backgroundColor: COLORS.bg_Colour }}
+                      >
+                        {status || "Year"}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+          </Card>
+
+          <div className="flex absolute right-14 top-33 items-center gap-3">
+            <img
+              src={filImg}
+              alt="filter"
+              className="cursor-pointer p-2 rounded-lg bg-[#ebeff3] 
+              shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset]"
+              onClick={toggleSelect}
+            />
           </div>
-        )}
-      </Card>
 
-      <div className="flex absolute right-14 top-29 items-center gap-3">
-        <img
-          src={filImg}
-          alt="filter"
-          className="cursor-pointer p-2 rounded-lg bg-[#ebeff3] 
-                    shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset]"
-          onClick={toggleSelect}
-        />
+          <div className="mt-8 custom-inset-shadow">
+            <PaymentDetails selectedStatus={selectedStatus ?? "All"} />
+          </div>
+        </div>
       </div>
 
-      <div className="mt-8 custom-inset-shadow">
-        <PaymentDetails selectedStatus={selectedStatus ?? "All"} />
-      </div>
 
-      {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: "rgba(0,0,0,0.4)" }}>
           <div className="bg-[#ebeff3] rounded-lg p-6 w-full max-w-2xl lg:max-h-[95vh] flex flex-col">
@@ -224,7 +270,6 @@ export const Payment = () => {
                 ]}
                 defaultValue={activeTab}
               >
-                {/* Staff Details Tab */}
                 <CustomTabContent value="staff">
                   <div className="">
                     <div>

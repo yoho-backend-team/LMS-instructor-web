@@ -71,6 +71,7 @@ class Client {
 					data,
 					'instructor'
 				),
+			getByDaily: (params: string, data: any) => httpClient.get(HTTP_END_POINTS.Instructor.attendance.class_by_day.replace(":staffId", params), data)
 		},
 		course_list: {
 			get: () =>
@@ -111,6 +112,16 @@ class Client {
 						'instructor'
 					),
 			},
+			 task: {
+        create:  (data: any, params:any) =>httpClient.post(HTTP_END_POINTS.Instructor.course.task.create, data, params, 'instructor')
+        ,
+        get:  (params: any) =>  httpClient.get(HTTP_END_POINTS.Instructor.course.task.get.replace(":course",params.course), params, 'instructor')
+      ,
+        update: (params:any, data:any) => httpClient.patch(HTTP_END_POINTS.Instructor.course.task.update.replace(":taskid", params),
+            data,
+            {},
+            'instructor')
+      },
 			study_material: {
 				create: (data: any, params?: any) =>
 					httpClient.post(
@@ -154,7 +165,7 @@ class Client {
 		class: {
 			get: (params: any) =>
 				httpClient.get(
-					HTTP_END_POINTS.Instructor.class.get.replace(":courseid", getInstructorCourseId()?.uuid),
+					HTTP_END_POINTS.Instructor.class.get.replace(":courseid", params?.users),
 					params,
 					'instructor'
 				),

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Card } from '../ui/card';
 import { Button } from '../ui/button';
 import pdfimage from '../../assets/icons/notes/image 59.png';
@@ -39,43 +40,45 @@ const NotesMaterials = ({ setselectedNotes }: NotesMaterialsProps) => {
 			const response = await deleteNotes({
 				noteId: note?.uuid,
 			});
-		
+
 			if (response) {
 				toast.success(`${note?.title} deleted`);
 			} else {
 				toast.error('Failed to delete the note, please try again.');
 			}
 		} catch (error) {
+			console.log(error)
 			toast.error('Something went wrong, please try again.');
 		}
 	};
 
 	return (
 		<div className='w-full h-screen mx-auto p-4 mt-6'>
-			<Card className='overflow-hidden bg-[#EBEFF3] shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] p-6'>
+			<Card className='overflow-hidden bg-[#EBEFF3] h-[87vh]
+			shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] p-6'>
 				<div className='flex flex-col'>
 					<Card className='bg-gradient-to-r from-[#7B00FF] to-[#B200FF] text-white p-6 sticky top-0 z-10 ml-4 mr-4 mb-4'>
 						<div className='grid grid-cols-4 gap-4'>
 							<div
-								className='text-center !text-black'
+								className='text-center !text-white'
 								style={{ ...FONTS.heading_02 }}
 							>
 								File
 							</div>
 							<div
-								className='text-center !text-black'
+								className='text-center !text-white'
 								style={{ ...FONTS.heading_02 }}
 							>
 								Name
 							</div>
 							<div
-								className='text-center !text-black'
+								className='text-center !text-white'
 								style={{ ...FONTS.heading_02 }}
 							>
 								Date
 							</div>
 							<div
-								className='text-center !text-black'
+								className='text-center !text-white'
 								style={{ ...FONTS.heading_02 }}
 							>
 								Actions

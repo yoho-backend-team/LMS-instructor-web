@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from 'react';
 import fileimg from '../../assets/courses icons/File.jpg';
 import { FONTS } from '@/constants/uiConstants';
@@ -17,6 +18,8 @@ import {
 	selectCoursedata,
 } from '@/features/Course/reducers/selector';
 import { getInstructorcourseData } from '@/features/Course/reducers/thunks';
+// import upload from "../../assets/courses icons/upload Icon.png"
+import { HiUpload } from 'react-icons/hi';
 
 interface FileUploadDesignProps {
 	selectedNotes: {
@@ -48,7 +51,7 @@ const FileUploadDesign = ({
 		const fetchData = async () => {
 			try {
 				await dispatch(getDashBoardReports());
-				await dispatch(getInstructorcourseData());
+				await dispatch(getInstructorcourseData(""));
 			} catch (error) {
 				console.log(error);
 			}
@@ -146,6 +149,7 @@ const FileUploadDesign = ({
 						toast.error('Failed to upload note, please try again.');
 					}
 				} catch (error) {
+					console.warn(error)
 					toast.error('Something went wrong, please try again.');
 				} finally {
 					setIsLoading(false);
@@ -172,6 +176,7 @@ const FileUploadDesign = ({
 						toast.error('Failed to update the note, please try again.');
 					}
 				} catch (error) {
+					console.warn(error)
 					toast.error('Something went wrong, please try again.');
 				} finally {
 					setIsLoading(false);
@@ -202,6 +207,7 @@ const FileUploadDesign = ({
 						toast.error('Failed to upload notes, please try again.');
 					}
 				} catch (error) {
+					console.warn(error)
 					toast.error('Something went wrong, please try again.');
 				} finally {
 					setIsLoading(false);
@@ -228,6 +234,7 @@ const FileUploadDesign = ({
 						toast.error('Failed to update the note, please try again.');
 					}
 				} catch (error) {
+					console.warn(error)
 					toast.error('Something went wrong, please try again.');
 				} finally {
 					setIsLoading(false);
@@ -327,7 +334,9 @@ const FileUploadDesign = ({
 					{isLoading && (
 						<div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
 					)}
-					{isLoading ? 'Uploading...' : 'Upload Note'}
+					{isLoading ? 'Uploading...' : 'Upload'}
+				<HiUpload style={{ width: '28px', height: '24px', color: 'white', margin: 'auto' }} />
+
 				</button>
 
 			</div>

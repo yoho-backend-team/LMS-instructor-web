@@ -1,13 +1,6 @@
 import { COLORS, FONTS } from '@/constants/uiConstants';
-import { Line, LineChart, XAxis } from 'recharts';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import {
-	type ChartConfig,
-	ChartContainer,
-	ChartTooltip,
-	ChartTooltipContent,
-} from '@/components/ui/chart';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import filter from '../../assets/icons/common/Mask group.png';
 import { startOfMonth, setMonth, setYear } from 'date-fns';
@@ -21,16 +14,20 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { getDashBoardReports } from '@/features/Dashboard/reducers/thunks';
 import { selectDashBoard } from '@/features/Dashboard/reducers/selectors';
-import { selectAttendance } from '@/features/attentance/reduces/selectors';
+import { selectAttendance, selectAttendanceDaily } from '@/features/attentance/reduces/selectors';
 import type { AppDispatch } from '@/store/store';
-import { getInstructorAttendance } from '@/features/attentance/reduces/thunks';
-
-const chartConfig = {
-	desktop: {
-		label: 'Day',
-		color: 'var(--chart-1)',
-	},
-} satisfies ChartConfig;
+import { getInstructorAttendance, getAttendanceDailyThunk } from '@/features/attentance/reduces/thunks';
+// import Attendence_1 from "../../assets/attendence/attengraph1.png"
+// import Attendence_2 from "../../assets/attendence/attengraph2.png"
+// import Attendence_3 from "../../assets/attendence/attengraph3.png"
+import {
+	ResponsiveContainer,
+	LineChart,
+	Line,
+	XAxis,
+	YAxis,
+	Tooltip,
+} from "recharts";
 
 const months = [
 	'January',
@@ -58,39 +55,42 @@ export const Attendance = () => {
 	const [showFilters, setShowFilters] = useState<boolean>(false);
 	const dispatch = useDispatch<AppDispatch>();
 	const dashData = useSelector(selectDashBoard);
-	const attendancedata = useSelector(selectAttendance);
+	const attendancedata: any = useSelector(selectAttendance);
+	const dailydata = useSelector(selectAttendanceDaily)
 
-	const generateChartData = useCallback(() => {
-		if (!attendancedata?.data?.formattedAttendance) return [];
-		return Object.entries(attendancedata.data.formattedAttendance).map(
-			([month, attendance]) => {
-				const att = attendance as { presentDays?: number };
-				return {
-					month,
-					desktop: att.presentDays || 0,
-				};
-			}
-		);
-	}, [attendancedata]);
 
-	const chartData = generateChartData();
+	useEffect(() => {
+		if (selectedDate?.toISOString().split('T')[0] == new Date().toISOString().split('T')[0]) {
+			dispatch(getAttendanceDailyThunk({ date: selectedDate?.toISOString().split('T')[0] }));
+		} else {
+			const nextDay = new Date(selectedDate).setDate(selectedDate.getDate() + 1)
+			dispatch(getAttendanceDailyThunk({ date: new Date(nextDay).toISOString().split('T')[0] }));
+		}
+	}, [dispatch, selectedDate])
+
+
+
+
 	const attendanceCards = [
 		{
 			label: 'Classes Attend',
-			current: attendancedata?.data?.totalWorkingDays || 0,
+			current: attendancedata?.data?.presentDays || 0,
 			color: COLORS.light_blue,
+
 		},
 		{
 			label: 'Present Days',
 			current: attendancedata?.data?.presentDays || 0,
 			total: attendancedata?.data?.totalWorkingDays || 0,
 			color: COLORS.light_pink,
+
 		},
 		{
 			label: 'Absent Days',
 			current: attendancedata?.data?.absentDays || 0,
 			total: attendancedata?.data?.totalWorkingDays || 0,
 			color: COLORS.light_green_02,
+
 		},
 	];
 
@@ -119,6 +119,28 @@ export const Attendance = () => {
 		(_, i) => new Date().getFullYear() - 2 + i
 	);
 
+	// Helper function to get status for selected date
+	// const getSelectedDateStatus = () => {
+	// 	if (!attendancedata?.data?.workingDays) return null;
+
+	// 	const selectedDateStr = selectedDate.toISOString().split('T')[0];
+	// 	return attendancedata.data.workingDays.find((day: any) =>
+	// 		day.date === selectedDateStr
+	// 	);
+	// };
+
+	// Calculate classes for selected date (simplified calculation)
+	// const getSelectedDateStats = () => {
+	// 	const dateStatus = getSelectedDateStatus();
+	// 	const totalClasses = attendancedata?.data?.total_class || 1; // Default to 1 if 0
+
+	// 	return {
+	// 		scheduled: totalClasses,
+	// 		attended: dateStatus?.status === 'present' ? 1 : 0,
+	// 		absent: dateStatus?.status === 'absent' ? 1 : 0,
+	// 	};
+	// };
+
 	useEffect(() => {
 		dispatch(getDashBoardReports());
 	}, [dispatch]);
@@ -135,7 +157,9 @@ export const Attendance = () => {
 		} catch (error) {
 			console.log(error);
 		}
-	}, [dispatch, selectedDate]);
+	}, [dashData?.institute.uuid, dashData?.user?.uuid, dispatch, selectedDate]);
+
+	// const selectedDateStats = getSelectedDateStats();
 
 	return (
 		<div className='p-4'>
@@ -235,63 +259,73 @@ export const Attendance = () => {
 				</div>
 			</div>
 
-			<div className='flex flex-row gap-4 justify-center pt-6'>
-				{attendanceCards.map((card) => (
-					<Card
-						key={card.label}
-						className='
-              relative 
-              w-full 
-              md:max-w-full
-              md:h-[150px]
-              h-auto 
-              shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),5px_5px_4px_rgba(189,194,199,0.75)] 
-              overflow-hidden
-            '
-						style={{ backgroundColor: COLORS.bg_Colour }}
-					>
-						<CardHeader className='md:w-auto md:text-[10px] h-full'>
-							<div className='max-w-screen-xl flex justify-between'>
-								<span style={{ ...FONTS.heading_04 }}>{card.label}</span>
-								<span
-									className='text-2xl font-bold'
-									style={{ ...FONTS.heading_01 }}
-								>
-									<span style={{ color: card.color }}>{card.current}</span>
-									{card.total && (
-										<span className='text-sm text-gray-500'>/{card.total}</span>
-									)}
-								</span>
-							</div>
-						</CardHeader>
-						<CardContent className='h-full md:h-[30px] md:w-[220px] md:pb-0 lg:w-[100%] lg:mb-2 '>
-							<ChartContainer config={chartConfig} style={{ ...FONTS.para_03 }}>
-								<LineChart
-									data={chartData}
-									margin={{ left: 0, right: 0 }}
-									width={500}
-									height={70}
-									className='md:mb-20'
-								>
-									<XAxis dataKey='month' hide />
-									<ChartTooltip
-										cursor={false}
-										content={<ChartTooltipContent hideLabel />}
-									/>
-									<Line
-										dataKey='desktop'
-										type='monotone'
-										stroke={card.color}
-										strokeWidth={2.5}
-										dot={true}
-										className='max-w-sm md:max-w-full h-auto md:h-[60px]'
-									/>
-								</LineChart>
-							</ChartContainer>
-						</CardContent>
-					</Card>
-				))}
+			<div className='flex gap-6 justify-start pt-6 overflow-x-auto'>
+				{attendanceCards.map((card) => {
+					const lineData = Array.from({ length: 6 }, (_, i) => {
+						const val = card.current + Math.sin(i * 1.5) * 5 + (Math.random() * 3 - 1.5);
+						return {
+							name: `P${i + 1}`,
+							value: val,
+							showLine: i % 2 === 0, 
+						};
+					});
+
+
+					return (
+						<Card
+							key={card.label}
+							className='
+          relative 
+          w-full 
+          md:max-w-full
+          h-auto 
+          shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),5px_5px_4px_rgba(189,194,199,0.75)] 
+          overflow-hidden
+          flex flex-col
+        '
+							style={{ backgroundColor: COLORS.bg_Colour }}
+						>
+							<CardHeader className='p-4 pb-2'>
+								<div className='flex justify-between items-center w-full'>
+									<span style={{ ...FONTS.heading_04 }}>{card.label}</span>
+									<div className='text-right'>
+										<span
+											className='text-2xl font-bold block'
+											style={{ ...FONTS.heading_01 }}
+										>
+											<span style={{ color: card.color }}>{card.current}</span>
+											{card.total && (
+												<span className='text-sm text-gray-500'>/{card.total}</span>
+											)}
+										</span>
+									</div>
+								</div>
+							</CardHeader>
+							<CardContent className='p-4 pt-2 flex-1'>
+								<div className='w-full h-[120px] flex items-center justify-center'>
+									<ResponsiveContainer width="100%" height="100%">
+										<LineChart data={lineData}>
+											<XAxis dataKey="name" hide />
+											<YAxis hide />
+											<Tooltip />
+											<Line
+												type="monotone"
+												dataKey="value"
+												stroke={card.color}
+												strokeWidth={7}
+												dot={false}
+												isAnimationActive={true}
+											/>
+										</LineChart>
+									</ResponsiveContainer>
+								</div>
+							</CardContent>
+						</Card>
+					);
+				})}
 			</div>
+
+
 
 			<div className='flex flex-row gap-6 pt-6 '>
 				<div className='flex flex-col'>
@@ -310,6 +344,7 @@ export const Attendance = () => {
 						onMonthChange={handleCalendarMonthChange}
 						className='border **:gap-5 **:py-0.5 md:**:gap-2 rounded-lg shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),5px_5px_4px_rgba(189,194,199,0.75)]'
 						style={{ ...FONTS.heading_02, backgroundColor: COLORS.bg_Colour }}
+						showOutsideDays={false}
 					/>
 				</div>
 
@@ -331,23 +366,24 @@ export const Attendance = () => {
 							>
 								{selectedDate ? selectedDate.toDateString() : 'Select a date'}
 							</p>
-							<ul
-								className='space-y-2 text-gray-700'
-								style={{ ...FONTS.heading_06 }}
-							>
-								<li>
-									Classes Scheduled:{' '}
-									{((attendancedata?.data?.offlineClassCount || 0) +
-										(attendancedata?.data?.onlineClassCount || 0)) /
-										30}
-								</li>
-								<li>
-									Classes Attended:{' '}
-									{attendancedata?.data?.attendedClassCount || 0}
-								</li>
-								<li>Absent: {attendancedata?.data?.totalAbsentDays || 0}</li>
-								<li>Notes: Good Performance</li>
-							</ul>
+							{dailydata?.map((item: any, index: number) => (
+								<ul
+									key={index}
+									className='space-y-2 text-gray-700'
+									style={{ ...FONTS.heading_06 }}
+								>
+
+									<li>
+										Class Name: {item?.class_name}
+									</li>
+									<li>
+										Duration: {item?.duration}
+									</li>
+									<li>Start Date: {item?.start_date}</li>
+									<li>End Time: {item?.end_time}</li>
+
+								</ul>
+							))}
 						</div>
 						<button
 							className='w-max-sm mt-4 self-start px-4 py-2 bg-gray rounded-xl btnshadow text-white text-[14px] hover:!text-white btnhovershadow cursor-pointer '

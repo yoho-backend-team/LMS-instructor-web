@@ -11,6 +11,7 @@ import { GetImageUrl } from '@/utils/helper';
 import { toast } from 'react-toastify';
 import { authInstructorLogout } from '@/features/Authentication/services';
 import LogoutConfirmationModal from './LogoutConfirmationModal';
+
 import type { AppDispatch } from '@/store/store';
 import { getDashBoardReports } from '@/features/Dashboard/reducers/thunks';
 import {
@@ -88,10 +89,27 @@ const Navbar = () => {
 				toast.error('Failed to logout, please try again.');
 			}
 		} catch (error) {
+			console.log(error)
 			toast.error('Something went wrong, please try again.');
 		} finally {
 			setIsLoading(false);
 		}
+	};
+
+	// helper to check if nav is active (includes children for courses)
+	const isNavActive = (itemPath: string) => {
+		if (itemPath === '') {
+			return location.pathname === '/';
+		}
+		if (itemPath === 'courses') {
+			// highlight for /courses and all its children
+			return location.pathname.startsWith('/courses')
+				|| location.pathname.startsWith('/note_materials')
+				|| location.pathname.startsWith('/task')
+				|| location.pathname.startsWith('/batches')
+				|| location.pathname.startsWith('/about');
+		}
+		return location.pathname.startsWith(`/${itemPath}`);
 	};
 
 	return (
@@ -129,6 +147,7 @@ const Navbar = () => {
 					</Tooltip>
 				</TooltipProvider>
 
+				{/* Navigation Items with Tooltips */}
 				<div className='flex lg:gap-10 md:gap-5'>
 					{navItems.map((item) => (
 						<TooltipProvider key={item.path}>
@@ -141,18 +160,17 @@ const Navbar = () => {
 										<Card
 											className='bg-[#ebeff3] w-[48px] h-[48px] flex items-center justify-center shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]'
 											style={{
-												boxShadow:
-													location.pathname === `/${item.path}`
-														? `
+												boxShadow: isNavActive(item.path)
+													? `
                           rgba(255, 255, 255, 0.7) -4px -4px 4px,
                           rgba(189, 194, 199, 0.75) 5px 5px 4px
                           `
-														: undefined,
+													: undefined,
 											}}
 										>
 											<img
 												src={
-													location.pathname === `/${item.path}`
+													isNavActive(item.path)
 														? item.iconActive
 														: item.iconInactive
 												}
@@ -228,6 +246,7 @@ const Navbar = () => {
 						</Tooltip>
 					</TooltipProvider>
 
+					{/* Profile Dropdown */}
 					{showProfileSection && (
 						<Card
 							className='absolute z-50 right-6 top-20 bg-[#ebeff3] px-5 w-[200px] h-[156px]'
@@ -238,7 +257,7 @@ const Navbar = () => {
                 `,
 							}}
 						>
-							<Card className='bg-[#ebeff3] shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] h-[48px] w-[160px] cursor-pointer flex gap-2 justify-center'>
+							<Card className='bg-[#ebeff3] shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] h-[48px] w-[160px] cursor-pointer flex gap-2 justify-center hover:bg-gradient-to-l from-[#7B00FF] to-[#B200FF] hover:text-white'>
 								<Link
 									className='flex justify-center gap-2'
 									to='profile'
@@ -249,7 +268,7 @@ const Navbar = () => {
 										alt='profile-icon'
 										style={{ width: 28, height: 28 }}
 									/>
-									<p style={{ ...FONTS.para_01 }}>Profile</p>
+<p className="font-quicksand font-bold text-[20px] ">Profile</p>
 								</Link>
 							</Card>
 							<Button
