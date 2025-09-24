@@ -59,7 +59,7 @@ const Payment: React.FC = () => {
                 />
 
                 <svg
-                    className={`${TabView ? 'w-[100px] h-[100px] transform -rotate-45 ' : 'w-[150px] h-[180px]'} transform -rotate-45`}
+                    className={`${TabView ? 'w-[100px] h-[100px] transform -rotate-45 ' : 'w-[150px] h-[180px]'} transform -rotate-90`}
                     viewBox='-1 -1 200 210'
                 >
                     <defs>

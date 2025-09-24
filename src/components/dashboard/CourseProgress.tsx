@@ -64,7 +64,7 @@ const CourseProgress: React.FC = () => {
                             />
 
                             <svg
-                                className={`${TabView ? 'w-[248px] h-[277px]' : 'w-[258px] h-[287px]'} transform -rotate-45`}
+                                className={`${TabView ? 'w-[248px] h-[277px]' : 'w-[258px] h-[287px]'} transform -rotate-90`}
                                 viewBox='0 0 197 205'
                             >
                                 <circle
