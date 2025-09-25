@@ -52,10 +52,23 @@ const ActivityLogs = () => {
 
   const allLogs = activityLogs1?.data ?? [];
 
+  // ✅ Fixed filter logic
   const filteredLogs = allLogs.filter((log: any) => {
     const logDate = new Date(log.createdAt);
-    if (fromDate && logDate < fromDate) return false;
-    if (toDate && logDate > toDate) return false;
+
+    let from = fromDate ? new Date(fromDate) : null;
+    let to = toDate ? new Date(toDate) : null;
+
+    if (from) {
+      from.setHours(0, 0, 0, 0); // start of day
+      if (logDate < from) return false;
+    }
+
+    if (to) {
+      to.setHours(23, 59, 59, 999); // end of day
+      if (logDate > to) return false;
+    }
+
     return true;
   });
 
@@ -258,20 +271,23 @@ const ActivityLogs = () => {
               {showFromCalendar && (
                 <div className="mt-6 p-1 rounded-lg" style={{ boxShadow: 'rgba(189, 194, 199, 0.7) 2px 5px 4px, rgba(255, 255, 255, 0.4) 3px 2px 2px inset' }}>
                   <Calendar
-                    mode="single"
-                    selected={fromDate}
-                    onSelect={(selectedDate) => {
-                      if (selectedDate) {
-                        setFromDate(selectedDate);
-                        setShowFromCalendar(false);
-                        setCurrentPage(1);
-                      }
-                    }}
-                    className="rounded-lg bg-gray-100 w-full"
-                    style={{ backgroundColor: COLORS.bg_Colour }}
-                    captionLayout="dropdown"
-                     showOutsideDays={false} 
-                  />
+  mode="single"
+  selected={toDate}
+  onSelect={(selectedDate) => {
+    if (selectedDate) {
+      setToDate(selectedDate);
+      setShowToCalendar(false);
+      setCurrentPage(1);
+    }
+  }}
+  className="rounded-lg bg-gray-100 w-full"
+  style={{ backgroundColor: COLORS.bg_Colour }}
+  captionLayout="dropdown"
+  fromYear={2000}   
+  toYear={2100}    
+  showOutsideDays={false}
+/>
+
                 </div>
               )}
 
