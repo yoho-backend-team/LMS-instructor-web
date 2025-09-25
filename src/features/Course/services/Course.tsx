@@ -31,6 +31,26 @@ export const getAllBatches = async (data: any) => {
 	}
 };
 
+export const getWithUuidBatches = async (data: any) => {
+	try {
+		const response = await Client.Instructor.course.batches.getWithUuid(data);
+		return response;
+	} catch (error) {
+		console.error('Error in getallbatches:', error);
+		throw error;
+	}
+};
+
+export const UpdateModuleWithUuidBatches = async (params:any, data: any) => {
+	try {
+		const response = await Client.Instructor.course.batches.updateModuleWithUUID(params, data);
+		return response;
+	} catch (error) {
+		console.error('Error in getallbatches:', error);
+		throw error;
+	}
+};
+
 export const createStudyMaterial = async (data: any) => {
 	try {
 		const response = await Client.Instructor.course.study_material.create(data);
