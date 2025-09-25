@@ -2,7 +2,6 @@
 
 import { FONTS } from "@/constants/uiConstants"
 import Cloud from "../../assets/icons/payments/Cloud.png"
-import FileUpload from "../../assets/icons/payments/File-upload.png"
 import { useEffect, useState, useRef } from "react"
 import Modal from "./Modal"
 import { Button } from "../ui/button"
@@ -13,6 +12,7 @@ import { getDashBoardReports } from "@/features/Dashboard/reducers/thunks"
 import { SalarySlip } from "./Salaryslip"
 import html2canvas from "html2canvas"
 import jsPDF from "jspdf"
+import Frame1 from "../../assets/payment/Frame 1.png" 
 
 interface PaymentTable {
   Month: string
@@ -133,7 +133,7 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
   return (
     <div className="p-4 custom-inset-shadow grid gap-4">
       <section
-        className="grid grid-cols-7 text-center bg-gradient-to-r from-[#7B00FF] to-[#B200FF] !text-black p-4 rounded-lg"
+        className="grid grid-cols-7 text-center bg-gradient-to-r from-[#7B00FF] to-[#B200FF] !text-white p-4 rounded-lg"
         style={{ ...FONTS.heading_03 }}
       >
         {headers.map((header, index) => (
@@ -187,15 +187,20 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
                   <img src={Cloud || "/placeholder.svg"} alt="Download" />
                 </button>
                 <button
-                  onClick={() => {
-                    setIsModalOpen(true)
-                    setSelectedDetail(PaymentTable)
-                  }}
-                  className="bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] p-2 rounded-lg cursor-pointer"
-                  title="Upload"
-                >
-                  <img src={FileUpload || "/placeholder.svg"} alt="Upload" />
-                </button>
+  onClick={() => {
+    setIsModalOpen(true);
+    setSelectedDetail(PaymentTable);
+  }}
+  className="bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] p-2 rounded-lg cursor-pointer"
+  title="View"
+>
+  <img
+    src={Frame1 || "/placeholder.svg"}
+    alt="View"
+    className="w-6 h-6 object-cover rounded-md"
+  />
+</button>
+
               </p>
             </div>
           ))

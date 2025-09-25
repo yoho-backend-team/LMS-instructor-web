@@ -110,7 +110,7 @@ const HelpCenterMain: React.FC = () => {
             color: COLORS.text_title,
           }}
         >
-          Help Centre
+          Help Center
         </h1>
 
         {/* Main Content Card */}
@@ -165,7 +165,7 @@ const HelpCenterMain: React.FC = () => {
               color: COLORS.text_title,
             }}
           >
-            Help Centre
+            Help Center
           </h2>
 
           {currentTopics?.length > 0 ? (

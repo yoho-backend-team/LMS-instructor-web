@@ -16,6 +16,7 @@ import { CustomTabContent, CustomTabs } from "@/components/payment/CustomTabs"
 import { useDispatch, useSelector } from "react-redux"
 import { selectPayment } from "@/features/Payment/reducers/selectors"
 import { getStudentPaymentThunk } from "@/features/Payment/reducers/thunks"
+import { updateInstructorbankdetails } from "../../features/Payment/services/index" // Import your service
 
 export const Payment = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date())
@@ -27,6 +28,8 @@ export const Payment = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [activeTab, setActiveTab] = useState("staff")
   const [isEditing, setIsEditing] = useState(false)
+  const [isBankEditing, setIsBankEditing] = useState(false) // New state for bank editing
+  const [bankEditDetails, setBankEditDetails] = useState<any>({}) // State for bank edit form
 
   const dispatch = useDispatch<any>()
   const SalaryDetails = useSelector(selectPayment)
@@ -37,6 +40,17 @@ export const Payment = () => {
 
   const staffDetail = SalaryDetails[0]?.staff
   const bankDetail = SalaryDetails[0]?.staff?.Bank_Details
+
+  // Initialize bank edit details when bankDetail changes
+  useEffect(() => {
+    if (bankDetail) {
+      setBankEditDetails({
+        Account_Number: bankDetail.Account_Number || '',
+        Branch: bankDetail.Branch || '',
+        IFSC: bankDetail.IFSC || ''
+      })
+    }
+  }, [bankDetail])
 
   const [staffDetails, setStaffDetails] = useState<any>({
     name: "John Doe",
@@ -76,9 +90,60 @@ export const Payment = () => {
     }))
   }
 
-  // const handleSaveStaffDetails = () => {
-  // 	setIsEditing(false);
-  // };
+  // Handle bank detail changes
+  const handleBankDetailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setBankEditDetails((prev: any) => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+
+  // Handle Request Edit button click
+  const handleRequestEdit = () => {
+    setIsBankEditing(true)
+  }
+
+  // Handle Save bank details
+  const handleSaveBankDetails = async () => {
+    try {
+      // Prepare data for API call
+      const updateData = {
+        id: staffDetail?.id, // Assuming you have staff ID
+        Bank_Details: {
+          Account_Number: bankEditDetails.Account_Number,
+          Branch: bankEditDetails.Branch,
+          IFSC: bankEditDetails.IFSC
+        }
+      }
+
+      // Call the API service
+      const response = await updateInstructorbankdetails(updateData)
+      
+      if (response) {
+        // Refresh the data after successful update
+        dispatch(getStudentPaymentThunk({}))
+        setIsBankEditing(false)
+        
+        // Optional: Show success message
+        console.log('Bank details updated successfully')
+      }
+    } catch (error) {
+      console.error('Error updating bank details:', error)
+      // Optional: Show error message to user
+    }
+  }
+
+  // Handle Cancel bank edit
+  const handleCancelBankEdit = () => {
+    // Reset to original values
+    setBankEditDetails({
+      Account_Number: bankDetail?.Account_Number || '',
+      Branch: bankDetail?.Branch || '',
+      IFSC: bankDetail?.IFSC || ''
+    })
+    setIsBankEditing(false)
+  }
 
   return (
     <div className="py-4">
@@ -234,7 +299,7 @@ export const Payment = () => {
                       <input
                         type="text"
                         name="name"
-                        value={staffDetails?.username}
+                        value={staffDetail?.username}
                         onChange={handleStaffDetailChange}
                         disabled={!isEditing}
                         className="p-4 rounded-lg mb-2 w-full"
@@ -304,31 +369,6 @@ export const Payment = () => {
                       />
                     </div>
                   </div>
-                  {/* <div className='flex justify-end space-x-4 mt-4'>
-										{isEditing ? (
-											<>
-												<Button
-													onClick={() => setIsEditing(false)}
-													className='cursor-pointer bg-gradient-to-r from-red-500 to-red-600 text-white  shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_red_inset,-4px_-8px_10px_0px_#B20_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white'
-												>
-													Cancel
-												</Button>
-												<Button
-													onClick={handleSaveStaffDetails}
-													className='cursor-pointer bg-gradient-to-r from-green-400 to-green-500 text-white hover:from-green-500 hover:to-green-600 shadow-[0px_3px_4px_0px_rgba(255,255,255,0.75)_inset,3px_-3px_3px_0px_rgba(255,255,255,0.25)_inset,-4px_8px_23px_0px_#3ABE65_inset,-8px_-8px_12px_0px_#3ABE65_inset,2px_3px_3px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-1px_-1px_6px_0px_rgba(255,255,255,0.75),-1px_-1px_6px_1px_rgba(255,255,255,0.25)]'
-												>
-													Save
-												</Button>
-											</>
-										) : (
-											<Button
-												onClick={() => setIsEditing(true)}
-												className='cursor-pointer bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white rounded-lg shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white'
-											>
-												Edit
-											</Button>
-										)}
-									</div> */}
                 </CustomTabContent>
 
                 {/* Bank Details Tab */}
@@ -340,8 +380,10 @@ export const Payment = () => {
                       </label>
                       <input
                         type="text"
-                        value={bankDetail?.Account_Number}
-                        disabled
+                        name="Account_Number"
+                        value={isBankEditing ? bankEditDetails.Account_Number : bankDetail?.Account_Number}
+                        onChange={handleBankDetailChange}
+                        disabled={!isBankEditing}
                         className="p-4 rounded-lg mb-2 w-full"
                         style={{
                           ...FONTS.heading_06,
@@ -357,8 +399,10 @@ export const Payment = () => {
                       </label>
                       <input
                         type="text"
-                        value={bankDetail?.Branch}
-                        disabled
+                        name="Branch"
+                        value={isBankEditing ? bankEditDetails.Branch : bankDetail?.Branch}
+                        onChange={handleBankDetailChange}
+                        disabled={!isBankEditing}
                         className="p-4 rounded-lg mb-2 w-full"
                         style={{
                           ...FONTS.heading_06,
@@ -374,8 +418,10 @@ export const Payment = () => {
                       </label>
                       <input
                         type="text"
-                        value={bankDetail?.IFSC}
-                        disabled
+                        name="IFSC"
+                        value={isBankEditing ? bankEditDetails.IFSC : bankDetail?.IFSC}
+                        onChange={handleBankDetailChange}
+                        disabled={!isBankEditing}
                         className="p-4 rounded-lg mb-2 w-full"
                         style={{
                           ...FONTS.heading_06,
@@ -387,19 +433,29 @@ export const Payment = () => {
                     </div>
                   </div>
                   <div className="flex justify-end space-x-4 mt-6">
-                    <Button
-                      onClick={() => setIsModalOpen(false)}
-                      // disabled
-                      className="cursor-pointer bg-gradient-to-r from-red-500 to-red-600 text-white  shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_red_inset,-4px_-8px_10px_0px_#B20_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white"
-                    >
-                      Request Edit
-                    </Button>
-                    {/* <Button
-											disabled
-											className='cursor-pointer bg-gradient-to-r from-green-400 to-green-500 text-white hover:from-green-500 hover:to-green-600 shadow-[0px_3px_4px_0px_rgba(255,255,255,0.75)_inset,3px_-3px_3px_0px_rgba(255,255,255,0.25)_inset,-4px_8px_23px_0px_#3ABE65_inset,-8px_-8px_12px_0px_#3ABE65_inset,2px_3px_3px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-1px_-1px_6px_0px_rgba(255,255,255,0.75),-1px_-1px_6px_1px_rgba(255,255,255,0.25)]'
-										>
-											Save
-										</Button> */}
+                    {isBankEditing ? (
+                      <>
+                        <Button
+                          onClick={handleCancelBankEdit}
+                          className="cursor-pointer bg-gradient-to-r from-gray-500 to-gray-600 text-white shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_gray_inset,-4px_-8px_10px_0px_#666_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white"
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          onClick={handleSaveBankDetails}
+                          className="cursor-pointer bg-gradient-to-r from-green-400 to-green-500 text-white hover:from-green-500 hover:to-green-600 shadow-[0px_3px_4px_0px_rgba(255,255,255,0.75)_inset,3px_-3px_3px_0px_rgba(255,255,255,0.25)_inset,-4px_8px_23px_0px_#3ABE65_inset,-8px_-8px_12px_0px_#3ABE65_inset,2px_3px_3px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-1px_-1px_6px_0px_rgba(255,255,255,0.75),-1px_-1px_6px_1px_rgba(255,255,255,0.25)]"
+                        >
+                          Save
+                        </Button>
+                      </>
+                    ) : (
+                      <Button
+                        onClick={handleRequestEdit}
+                        className="cursor-pointer bg-gradient-to-r from-red-500 to-red-600 text-white shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_red_inset,-4px_-8px_10px_0px_#B20_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white"
+                      >
+                        Request Edit
+                      </Button>
+                    )}
                   </div>
                 </CustomTabContent>
 
@@ -495,21 +551,6 @@ export const Payment = () => {
                       />
                     </div>
                   </div>
-                  {/* <div className='flex justify-end space-x-4 mt-6'>
-										<Button
-											onClick={() => setIsModalOpen(false)}
-											disabled
-											className='cursor-pointer bg-gradient-to-r from-red-500 to-red-600 text-white  shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_red_inset,-4px_-8px_10px_0px_#B20_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white'
-										>
-											Cancel
-										</Button>
-										<Button
-											disabled
-											className='cursor-pointer bg-gradient-to-r from-green-400 to-green-500 text-white hover:from-green-500 hover:to-green-600 shadow-[0px_3px_4px_0px_rgba(255,255,255,0.75)_inset,3px_-3px_3px_0px_rgba(255,255,255,0.25)_inset,-4px_8px_23px_0px_#3ABE65_inset,-8px_-8px_12px_0px_#3ABE65_inset,2px_3px_3px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-1px_-1px_6px_0px_rgba(255,255,255,0.75),-1px_-1px_6px_1px_rgba(255,255,255,0.25)]'
-										>
-											Save
-										</Button>
-									</div> */}
                 </CustomTabContent>
               </CustomTabs>
             </div>
