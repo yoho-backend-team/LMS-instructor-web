@@ -26,14 +26,14 @@ const ProfileCard: React.FC = () => {
 			icon: 'completed',
 			total:
 				ClassesData?.[0]?.offline_class?.completed +
-					ClassesData?.[0]?.online_class?.completed || 0,
+				ClassesData?.[0]?.online_class?.completed || 0,
 		},
 		{
 			title: 'Pending',
 			icon: 'pending',
 			total:
 				ClassesData?.[0]?.offline_class?.pending +
-					ClassesData?.[0]?.online_class?.pending || 0,
+				ClassesData?.[0]?.online_class?.pending || 0,
 		},
 		{
 			title: 'Live Class',
@@ -85,7 +85,7 @@ const ProfileCard: React.FC = () => {
 						fontFamily: FONTS.heading_06.fontFamily,
 						fontWeight: FONTS.heading_06.fontWeight,
 					}}
-					className='items-center w-[104px] h-[48px] rounded-xl btnshadow text-[#716F6F] text-[14px] hover:text-white btnhovershadow'
+					className='items-center w-[104px] h-[48px] rounded-xl btnshadow cursor-pointer text-[#716F6F] text-[14px] hover:text-white btnhovershadow'
 				>
 					View Profile
 				</button>

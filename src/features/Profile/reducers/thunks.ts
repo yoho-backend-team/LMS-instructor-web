@@ -7,6 +7,7 @@ export const getStudentProfileThunk =
 		try {
 			const response = await getStudentProfile();
 			dispatch(getProfile(response?.data));
+			return response
 		} catch (error) {
 			console.log(error);
 		}

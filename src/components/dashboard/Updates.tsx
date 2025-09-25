@@ -34,8 +34,8 @@ const Updates: React.FC = () => {
                 <p style={{ ...FONTS.para_01 }}><span>{data.length}</span> New Messages</p>
             </div>
             <div className='flex flex-row gap-10 '>
-                <button onClick={() => setActiveTab('today')} style={{ fontFamily: FONTS.heading_06.fontFamily, fontSize: FONTS.heading_06.fontSize, fontWeight: FONTS.heading_06.fontWeight }} className={activeTab === 'today' ? `btnshadow text-white btnfocusshadow  w-[86px] h-[42px] rounded-xl` : `text-[#716F6F] btnshadow w-[86px] h-[42px] rounded-xl btnhovershadow hover:text-white`}>Today</button>
-                <button onClick={() => setActiveTab('upcoming')} style={{ fontFamily: FONTS.heading_06.fontFamily, fontSize: FONTS.heading_06.fontSize, fontWeight: FONTS.heading_06.fontWeight }} className={activeTab === 'upcoming' ? `btnshadow text-white btnfocusshadow w-[86px] h-[42px] rounded-xl` : `text-[#716F6F] btnshadow w-[86px] h-[42px] rounded-xl btnhovershadow hover:text-white focus:text-white`}>Previous</button>
+                <button onClick={() => setActiveTab('today')} style={{ fontFamily: FONTS.heading_06.fontFamily, fontSize: FONTS.heading_06.fontSize, fontWeight: FONTS.heading_06.fontWeight }} className={activeTab === 'today' ? `btnshadow text-white btnfocusshadow  w-[86px] h-[42px] rounded-xl cursor-pointer` : `text-[#716F6F] btnshadow w-[86px] h-[42px] rounded-xl btnhovershadow hover:text-white cursor-pointer`}>Today</button>
+                <button onClick={() => setActiveTab('upcoming')} style={{ fontFamily: FONTS.heading_06.fontFamily, fontSize: FONTS.heading_06.fontSize, fontWeight: FONTS.heading_06.fontWeight }} className={activeTab === 'upcoming' ? `btnshadow text-white btnfocusshadow w-[86px] h-[42px] rounded-xl cursor-pointer` : `text-[#716F6F] btnshadow w-[86px] h-[42px] rounded-xl btnhovershadow hover:text-white focus:text-white cursor-pointer`}>Previous</button>
             </div>
             <div>
                 {activeTab == 'today' ?

@@ -268,7 +268,7 @@ const Navbar = () => {
 										alt='profile-icon'
 										style={{ width: 28, height: 28 }}
 									/>
-<p className="font-quicksand font-bold text-[20px] ">Profile</p>
+									<p className="font-quicksand font-bold text-[20px] ">Profile</p>
 								</Link>
 							</Card>
 							<Button
