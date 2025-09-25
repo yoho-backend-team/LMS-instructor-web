@@ -36,7 +36,7 @@ const EmailVerification = () => {
 						},
 					});
 				} else {
-					toast.error('Failed to send OTP, please try again.');
+					toast.error('Username/Email not registered');
 				}
 			}
 		} catch (error: any) {

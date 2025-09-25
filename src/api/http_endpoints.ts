@@ -91,6 +91,9 @@ function generateendpoints() {
 		notificationSubscription: {
 			post: '/notification/subscribe',
 		},
+		staffIdCard: {
+			get: '/staffidcard/download/card/:id'
+		}
 	};
 }
 
