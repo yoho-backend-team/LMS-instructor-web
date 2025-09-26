@@ -59,18 +59,16 @@ const OtpVerification = () => {
 				otp: enteredOtp,
 			};
 			const response = await authOtpVerification(params_data);
-			if (response) {
-				if (data?.step === 'otp') {
-					login(response?.data);
-					toast.success('Login successfully');
-					navigate('/');
-				} else {
+			if (response.status) {
+				if (data?.otp === enteredOtp) {
 					navigate('/change-password', {
 						state: {
 							email,
 						},
 					});
 					toast.success('OTP verified successfully!');
+				} else {
+					toast.error('Enter valid otp')
 				}
 			} else {
 				toast.error('Invalid OTP, please enter valid OTP.');

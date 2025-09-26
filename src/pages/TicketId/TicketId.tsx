@@ -151,13 +151,13 @@ const TicketId = () => {
             <div className="flex flex-col sm:flex-row items-center w-full gap-3">
 
               {/* Message Icon */}
-              <div className="p-2 bg-[#ebeff3] rounded-md flex items-center justify-center w-15 h-15">
+              {/* <div className="p-2 bg-[#ebeff3] rounded-md flex items-center justify-center w-15 h-15">
                 <img
                   src={messageicon}
                   alt="Message"
                   className="w-20 h-20 object-contain cursor-pointer"
                 />
-              </div>
+              </div> */}
 
               {/* Input Box */}
               <div className="flex-1 w-full bg-[#ebeff3] rounded-md shadow-[inset_2px_2px_5px_rgba(189,194,199,0.75),3px_3px_5px_rgba(255,255,255,0.7)] px-3 py-2">

@@ -6,3 +6,12 @@ export const getStudentPayment = async (params: any) => {
 		return response;
 	}
 };
+export const updateInstructorbankdetails = async (data: any) => {
+	const response = await Client.Instructor.index.update(data);
+	if (response) {
+		return response;
+	}
+};
+
+
+

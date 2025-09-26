@@ -22,7 +22,7 @@ const HelpTopicCard: React.FC<HelpTopicCardProps> = ({
           <span
             className="text-xs px-3 sm:px-4 py-2 rounded-md sm:text-sm"
             style={{
-               boxShadow: `
+              boxShadow: `
         rgba(255, 255, 255, 0.7) 3px 3px 5px, 
         rgba(189, 194, 199, 0.75) 2px 2px 3px inset
       `,
@@ -47,7 +47,7 @@ const HelpTopicCard: React.FC<HelpTopicCardProps> = ({
 
       {topic.description && (
         <p
-          className="mt-3 text-sm sm:text-base leading-relaxed"
+          className="mt-3 text-sm sm:text-base leading-relaxed "
           style={{
             ...FONTS.para_02,
             color: COLORS.text_desc,
@@ -58,22 +58,22 @@ const HelpTopicCard: React.FC<HelpTopicCardProps> = ({
       )}
 
       {showViewButton && onViewDetails && (
-        <div className="flex justify-end mt-4">
-  <button 
-    onClick={() => onViewDetails(topic)}
-    className="px-3 sm:px-4 py-2 rounded-md bg-[#7b00ff] !text-white transition-colors duration-200 hover:opacity-90 text-sm sm:text-base"
-    style={{
-      boxShadow: `
-        rgba(255, 255, 255, 0.7) 3px 3px 5px, 
-        rgba(189, 194, 199, 0.75) 2px 2px 3px inset
-      `,
-      ...FONTS.heading_07,
-    }}
-  >
-    View Details
-  </button>
-</div>
-
+        <div className='flex justify-end mt-4'>
+          <button
+            onClick={() => onViewDetails(topic)}
+            className="mt-4 px-3 sm:px-4 py-2 rounded-md bg-[#7b00ff] !text-white transition-colors duration-200 hover:opacity-90 self-start text-sm sm:text-base"
+            style={{
+              boxShadow: `
+              rgba(255, 255, 255, 0.7) 3px 3px 5px, 
+              rgba(189, 194, 199, 0.75) 2px 2px 3px inset
+            `,
+              ...FONTS.heading_07,
+              color: COLORS.light_blue,
+            }}
+          >
+            View Details
+          </button>
+        </div>
       )}
     </div>
   );
