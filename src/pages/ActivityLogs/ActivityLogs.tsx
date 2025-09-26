@@ -269,27 +269,32 @@ const ActivityLogs = () => {
               </section>
 
               {showFromCalendar && (
-                <div className="mt-6 p-1 rounded-lg" style={{ boxShadow: 'rgba(189, 194, 199, 0.7) 2px 5px 4px, rgba(255, 255, 255, 0.4) 3px 2px 2px inset' }}>
-                  <Calendar
-  mode="single"
-  selected={toDate}
-  onSelect={(selectedDate) => {
-    if (selectedDate) {
-      setToDate(selectedDate);
-      setShowToCalendar(false);
-      setCurrentPage(1);
-    }
-  }}
-  className="rounded-lg bg-gray-100 w-full"
-  style={{ backgroundColor: COLORS.bg_Colour }}
-  captionLayout="dropdown"
-  fromYear={2000}   
-  toYear={2100}    
-  showOutsideDays={false}
-/>
-
-                </div>
-              )}
+  <div
+    className="mt-6 p-1 rounded-lg"
+    style={{
+      boxShadow:
+        'rgba(189, 194, 199, 0.7) 2px 5px 4px, rgba(255, 255, 255, 0.4) 3px 2px 2px inset',
+    }}
+  >
+    <Calendar
+      mode="single"
+      selected={fromDate} // ✅ should be fromDate
+      onSelect={(selectedDate) => {
+        if (selectedDate) {
+          setFromDate(selectedDate); // ✅ update fromDate
+          setShowFromCalendar(false);
+          setCurrentPage(1);
+        }
+      }}
+      className="rounded-lg bg-gray-100 w-full"
+      style={{ backgroundColor: COLORS.bg_Colour }}
+      captionLayout="dropdown"
+      fromYear={2000}
+      toYear={2100}
+      showOutsideDays={false}
+    />
+  </div>
+)}
 
               {showToCalendar && (
                 <div className="mt-6 p-1 rounded-lg" style={{ boxShadow: 'rgba(189, 194, 199, 0.7) 2px 5px 4px, rgba(255, 255, 255, 0.4) 3px 2px 2px inset' }}>
