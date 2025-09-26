@@ -13,10 +13,11 @@ const Taskprojects = () => {
   const taskData = useSelector(selectTasks);
   const selectCourse: any = useSelector((state: RootState) => state?.CourseSlice?.courseData);
   const [tasks, setTasks] = useState<Task[]>([]);
+ 
 
   useEffect(() => {
     if (taskData) {
-      const response: Task[] = taskData?.map((item: { id: any; _id: any; instructor: { full_name: any; }; task_type: any; module: any; deadline: string | Date; is_active: boolean; task_name: any; question: any; answers: any; }) => ({
+      const response:Task[] = taskData?.map((item: { id: any; _id: any; instructor: { full_name: any; }; task_type: any; module: any; deadline: string | Date; is_active: boolean; task_name: any; question: any; answers: any; question_file: any }) => ({
         id: item?.id || item?._id,
         name: item?.instructor?.full_name,
         _id:item?._id,
@@ -31,7 +32,9 @@ const Taskprojects = () => {
         studentAttachmentName: "quiz_answers.pdf",
         remark: "",
         // Map answers from backend
-        answers: item?.answers || []
+        answers: item?.answers || [],
+        question_file: item?.question_file,
+        
       }));
       setTasks(response);
     }

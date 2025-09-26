@@ -109,6 +109,7 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
   }, [data, selectedFilters]);
 
   const handleClassDetailPage = (id: string) => {
+    console.log('class uuid',id)
     navigate(`/class/${classType}/${id}`);
   };
 

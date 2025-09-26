@@ -57,7 +57,7 @@ const IDCard: React.FC<IDCardProps> = ({ data }) => {
     institution: 'Classie',
     profileImage: idCard?.image,
    contact: idCard?.contact,
-    emergencyContact: '+1 234 567 8900',
+    emergencyContact: idCard?.contact,
   };
 
   // Convert remote image to Base64
@@ -321,17 +321,6 @@ const IDCard: React.FC<IDCardProps> = ({ data }) => {
                 </label>
                 <div className="rounded-lg px-4 py-3 text-sm leading-relaxed shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] min-h-[44px] flex items-center" style={{ backgroundColor: COLORS.bg_Colour, fontFamily: FONTS.para_01.fontFamily, color: COLORS.text_desc }}>
                   {idCardData.address}
-                </div>
-              </div>
-
-
-
-              <div>
-                <label className="block font-medium mb-2 text-sm leading-relaxed" style={{ color: COLORS.text_desc, fontFamily: FONTS.para_01.fontFamily }}>
-                  Blood Group
-                </label>
-                <div className="rounded-lg px-4 py-3 text-sm leading-relaxed shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] min-h-[44px] flex items-center" style={{ backgroundColor: COLORS.bg_Colour, fontFamily: FONTS.para_01.fontFamily, color: COLORS.text_desc }}>
-                  {idCardData.contact}
                 </div>
               </div>
 

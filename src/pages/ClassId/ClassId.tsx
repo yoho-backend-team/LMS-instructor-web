@@ -24,7 +24,7 @@ const ClassId = () => {
     useEffect(() => {
         if (id) {
             dispatch(getClassIdDetail({
-                classType: classType === 'true' ? "online" : "offline",
+                classType: "offline",
                 course: id,
             }));
         }
