@@ -21,6 +21,7 @@ interface StudentSubmission {
   completed_at: string;
   createdAt: string;
   updatedAt: string;
+
 }
 
 const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
@@ -74,7 +75,6 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
     };
     setStudentGrades(updatedGrades);
 
-    // If status is being changed to "completed", update the individual submission immediately
     if (field === "status" && value === "completed") {
       const submission = studentSubmissions.find((sub: any) => sub?._id === submissionId);
       if (submission) {
@@ -86,7 +86,6 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
           status: "completed",
         };
 
-        // Call API to update only this specific submission
         try {
           setIsUpdating(true);
           await updateTaskData(task._id, {
