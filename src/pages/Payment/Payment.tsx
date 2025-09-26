@@ -17,6 +17,11 @@ import { useDispatch, useSelector } from "react-redux"
 import { selectPayment } from "@/features/Payment/reducers/selectors"
 import { getStudentPaymentThunk } from "@/features/Payment/reducers/thunks"
 import { updateInstructorbankdetails } from "../../features/Payment/services/index" // Import your service
+import image1 from "../../assets/Payment/Paymentimage_1.png"
+import image2 from "../../assets/Payment/Paymentimage_2.png"
+import image3 from "../../assets/Payment/Paymentimage_3.png"
+import image4 from "../../assets/Payment/Paymentimage_4.png"
+import image5 from "../../assets/Payment/Paymentimage_5.png"
 
 export const Payment = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date())
@@ -146,6 +151,15 @@ export const Payment = () => {
     setIsBankEditing(false)
   }
 
+  const leftCards = [
+    { title: "Course Fees", desc: "Total course fee details", salary: "10000", image: image1 },
+    { title: "Amount Paid", desc: "Payment completed so far", salary: "20000", image: image2 },
+    { title: "Pending Status", desc: "Remaining amount details", salary: "1000", image: image3 },
+    { title: "Status", desc: "Overall payment status", salary: "30000", image: image4 },
+    { title: "Payment Method", desc: "Mode of transaction", salary: "40000", image: image5 },
+  ];
+
+
   return (
     <div className="py-4">
       {/* Header */}
@@ -209,7 +223,7 @@ export const Payment = () => {
 
       <div className="flex h-screen">
         <div className="w-[20%] bg-[#ebeff3]  p-4 flex flex-col gap-4">
-          {leftCards.map((item, index) => (
+          {leftCards?.map((item, index) => (
             <div
               key={index}
               className="px-2 py-3 rounded-lg cursor-pointer
