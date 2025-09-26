@@ -293,6 +293,10 @@ class Client {
 		post: (data: any) =>
 			httpClient.post(HTTP_END_POINTS.notificationSubscription.post, data),
 	};
+
+	staffIdCard = {
+		get: (data: any) => httpClient.get(HTTP_END_POINTS.staffIdCard.get.replace(":id",data)),
+	}
 }
 
 export default new Client();

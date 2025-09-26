@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import PersonalInformation from './PersonalInformation';
 import IDCard from './IDCard';
 import { COLORS, FONTS } from '@/constants/uiConstants';
+import type { PersonalInformationRef } from './PersonalInformation';
 
 interface PersonalInfo {
   mailAddress: string;
@@ -30,23 +31,47 @@ interface ProfileContentProps {
   onPersonalInfoChange?: (data: PersonalInfo) => void;
   onInstituteInfoChange?: (data: InstituteInfo) => void;
   isEditing?: boolean;
-  onSave?: () => void;
+  onSave?: () => Promise<void> | void; // Make onSave potentially async
   onCancel?: () => void;
   activeMenuItem?: string;
   isSaving?: boolean;
 }
 
 const ProfileContent: React.FC<ProfileContentProps> = ({
-  // personalInfo,
-  // instituteInfo,
-  // onPersonalInfoChange,
-  // onInstituteInfoChange,
   isEditing = false,
   onSave,
   onCancel,
   activeMenuItem = 'profile',
   isSaving = false
 }) => {
+  const personalInfoRef = useRef<PersonalInformationRef>(null);
+
+  const handleCancel = () => {
+    // Reset the form data
+    if (personalInfoRef.current) {
+      personalInfoRef.current.resetForm();
+    }
+    // Call the original cancel callback
+    if (onCancel) {
+      onCancel();
+    }
+  };
+
+  const handleSave = async () => {
+    if (onSave) {
+      // If onSave returns a promise (async), wait for it to complete
+      const saveResult = onSave();
+      if (saveResult instanceof Promise) {
+        await saveResult;
+      }
+      // After saving, automatically call cancel to close the edit mode
+      handleCancel();
+    } else {
+      // If no onSave provided, just close the edit mode
+      handleCancel();
+    }
+  };
+
   // Render content based on active menu item
   const renderContent = () => {
     switch (activeMenuItem) {
@@ -71,7 +96,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
               {isEditing && (
                 <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 p-3 sm:p-4 border-b border-gray-200 flex-shrink-0">
                   <button
-                    onClick={onCancel}
+                    onClick={handleCancel}
                     disabled={isSaving}
                     className="cursor-pointer px-3 sm:px-4 py-2 rounded-lg font-medium transition-all duration-200 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] hover:shadow-[inset_3px_3px_5px_rgba(189,194,199,0.75),inset_-3px_-3px_5px_rgba(255,255,255,0.7)] text-xs sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{
@@ -85,7 +110,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
                   </button>
 
                   <button
-                    onClick={onSave}
+                    onClick={handleSave}
                     disabled={isSaving}
                     className="cursor-pointer px-3 sm:px-4 py-2 rounded-lg font-medium transition-all duration-200 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] hover:shadow-[inset_3px_3px_5px_rgba(123,0,255,0.3),inset_-3px_-3px_5px_rgba(255,255,255,0.7)] text-xs sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     style={{
@@ -100,17 +125,14 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
                     )}
                     {isSaving ? 'Saving...' : 'Save Changes'}
                   </button>
-
                 </div>
               )}
 
               <div className="p-4 sm:p-6 overflow-y-auto flex-1 scrollbar-hide">
                 <PersonalInformation
-                  // data={personalInfo}
-                  // onDataChange={onPersonalInfoChange}
+                  ref={personalInfoRef}
                   isEditing={isEditing}
                 />
-
               </div>
             </div>
           </div>
