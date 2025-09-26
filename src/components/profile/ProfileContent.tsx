@@ -3,20 +3,23 @@ import PersonalInformation from './PersonalInformation';
 import IDCard from './IDCard';
 import { COLORS, FONTS } from '@/constants/uiConstants';
 import type { PersonalInformationRef } from './PersonalInformation';
+import { updateStudentProfile } from '../../features/Profile/services/index';
 
 interface PersonalInfo {
-  mailAddress: string;
-  name: string;
+  full_name: string;
+  address1: string;
+  address2: string;
+  alternate_phone_number: string;
+  city: string;
+  pincode: number;
+  state: string;
+  phone_number: string;
+  dob: string;
+  email: string;
   gender: string;
   qualification: string;
-  contactNumber: string;
-  alternateNumber: string;
-  dateOfBirth: string;
-  addressLine1: string;
-  addressLine2: string;
-  city: string;
-  state: string;
-  pinCode: string;
+  roll_no: string;
+  image: string;
 }
 
 interface InstituteInfo {
@@ -31,7 +34,7 @@ interface ProfileContentProps {
   onPersonalInfoChange?: (data: PersonalInfo) => void;
   onInstituteInfoChange?: (data: InstituteInfo) => void;
   isEditing?: boolean;
-  onSave?: () => Promise<void> | void; // Make onSave potentially async
+  onSave?: (data: any) => Promise<void> | void;
   onCancel?: () => void;
   activeMenuItem?: string;
   isSaving?: boolean;
@@ -45,30 +48,77 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
   isSaving = false
 }) => {
   const personalInfoRef = useRef<PersonalInformationRef>(null);
+  const [currentFormData, setCurrentFormData] = React.useState<PersonalInfo | null>(null);
+
+  // Handle data changes from PersonalInformation component
+  const handlePersonalInfoChange = (data: PersonalInfo) => {
+    setCurrentFormData(data);
+  };
 
   const handleCancel = () => {
-    // Reset the form data
     if (personalInfoRef.current) {
       personalInfoRef.current.resetForm();
     }
-    // Call the original cancel callback
+    setCurrentFormData(null);
     if (onCancel) {
       onCancel();
     }
   };
 
-  const handleSave = async () => {
-    if (onSave) {
-      // If onSave returns a promise (async), wait for it to complete
-      const saveResult = onSave();
-      if (saveResult instanceof Promise) {
-        await saveResult;
+  const transformDataForAPI = (data: PersonalInfo) => {
+    return {
+      full_name: data.full_name,
+      dob: data.dob,
+      email: data.email,
+      gender: data.gender,
+      qualification: data.qualification,
+      roll_no: data.roll_no,
+      image: data.image,
+      contact_info: {
+        address1: data.address1,
+        address2: data.address2,
+        alternate_phone_number: data.alternate_phone_number,
+        city: data.city || '',
+        pincode: data.pincode,
+        state: data.state || '',
+        phone_number: data.phone_number,
       }
-      // After saving, automatically call cancel to close the edit mode
+    };
+  };
+
+  const handleSave = async () => {
+    if (!currentFormData) {
+      console.warn('No changes detected');
       handleCancel();
-    } else {
-      // If no onSave provided, just close the edit mode
+      return;
+    }
+
+    try {
+      // Transform the data before sending to API
+      const apiData = transformDataForAPI(currentFormData);
+      console.log('Sending data to API:', apiData);
+       const response = await updateStudentProfile(apiData);
+        console.log('Profile updated successfully:', response);
+         if(response){
+          
+         }
+
+      if (onSave) {
+        await onSave(apiData);
+      } else {
+        const response = await updateStudentProfile(apiData);
+        console.log('Profile updated successfully:', response);
+        
+        if (response && response.status === 'failed') {
+          throw new Error(response.message || 'Failed to update profile');
+        }
+      }
+      
       handleCancel();
+    } catch (error) {
+      console.error('Failed to update profile:', error);
+      // You might want to show an error message to the user here
+      // Example: setErrorState(error.message);
     }
   };
 
@@ -92,7 +142,6 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
                 height: '75vh',
                 fontFamily: FONTS.para_01.fontFamily
               }}>
-              {/* Header with Save/Cancel buttons */}
               {isEditing && (
                 <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 p-3 sm:p-4 border-b border-gray-200 flex-shrink-0">
                   <button
@@ -132,6 +181,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
                 <PersonalInformation
                   ref={personalInfoRef}
                   isEditing={isEditing}
+                  onDataChange={handlePersonalInfoChange}
                 />
               </div>
             </div>
