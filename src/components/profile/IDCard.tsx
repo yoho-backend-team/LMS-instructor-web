@@ -48,7 +48,7 @@ const IDCard: React.FC<IDCardProps> = ({ data }) => {
   console.log('profile object id',idCard)
 
   const idCardData: IDCardData = data || {
-    staffName:idCard?.name || 'John Doe',
+    staffName:idCard?.name || '',
     staffId: idCard?.id || '-',
     email: idCard?.email,
    address: idCard?.address?.state,
