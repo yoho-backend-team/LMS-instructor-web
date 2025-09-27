@@ -152,13 +152,27 @@ export const Payment = () => {
     setIsBankEditing(false)
   }
 
-  const leftCards = [
-    { title: "Course Fees", desc: "Total course fee details", salary: "10000", image: image1 },
-    { title: "Amount Paid", desc: "Payment completed so far", salary: "20000", image: image2 },
-    { title: "Pending Status", desc: "Remaining amount details", salary: "1000", image: image3 },
-    { title: "Status", desc: "Overall payment status", salary: "30000", image: image4 },
-    { title: "Payment Method", desc: "Mode of transaction", salary: "40000", image: image5 },
-  ];
+  const [leftCards,setLeftCards]= useState<any>([
+    { title: "Salary Paid", desc: "Payment completed so far", salary: "0", image: image2 },
+    { title: "Payment Method", desc: "Mode of transaction", salary: "Online", image: image5 },
+  ]);
+
+useEffect(() => {
+  if (SalaryDetails?.length) {
+    const totalSalary = SalaryDetails.reduce((acc: number, item: any) => {
+      return acc + (Number(item.salary_amount) || 0)
+    }, 0)
+
+    setLeftCards((prev: any) => {
+      const updated = [...prev]
+      updated[0] = { ...updated[0], salary: totalSalary.toLocaleString() } 
+      return updated
+    })
+  }
+}, [SalaryDetails])
+
+
+    console.log('salary details',SalaryDetails)
 
 
   return (
@@ -224,7 +238,7 @@ export const Payment = () => {
 
       <div className="flex h-screen">
         <div className="w-[20%] bg-[#ebeff3]  p-4 flex flex-col gap-4">
-          {leftCards?.map((item, index) => (
+          {leftCards?.map((item: any, index: any) => (
             <div
               key={index}
               className="px-2 py-3 rounded-lg cursor-pointer
