@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/components/community/CommunitySide/Sidebar.tsx
 import React from 'react';
 import doubleicon from '@/assets/icons/community/Group 210.png';
@@ -77,7 +78,7 @@ const Sidebar: React.FC<Props> = ({
 			</div>
 
 			<div
-				className='p-4 h-[60vh] flex flex-col gap-4 relative bg-[#EBEFF3] overflow-y-auto
+				className='p-4 h-[65vh] flex flex-col gap-4 relative bg-[#EBEFF3] overflow-y-auto
   [&::-webkit-scrollbar]:w-2
   [&::-webkit-scrollbar-track]:bg-gray-100
   [&::-webkit-scrollbar-thumb]:bg-gray-300
@@ -88,7 +89,7 @@ const Sidebar: React.FC<Props> = ({
 					filteredCommunities?.map((chat: any) => (
 						<div
 							key={chat._id}
-							className={`relative mb-2 z-10 flex items-center justify-between p-3 bg-[#EBEFF3] rounded-lg overflow-hidden shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] transition-all cursor-pointer ${selectedChat?._id === chat?._id ? 'bg-gray-200' : ''
+							className={`px-2 py-10 relative mb-2 z-10 flex items-center justify-between p-3 bg-[#EBEFF3] rounded-lg overflow-hidden shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] transition-all cursor-pointer ${selectedChat?._id === chat?._id ? 'bg-gray-200' : ''
 								}`}
 							onClick={() => onSelectChat(chat)}
 						>
