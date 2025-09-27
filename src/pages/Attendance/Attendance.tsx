@@ -135,6 +135,15 @@ export const Attendance = () => {
     navigate('/classes')
   }
 
+  function formatISOTime(isoString: string): string {
+  const date = new Date(isoString);
+  return date.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+}
+
   const years = Array.from(
     { length: 5 },
     (_, i) => new Date().getFullYear() - 2 + i
@@ -373,13 +382,13 @@ export const Attendance = () => {
   {dailydata?.map((item: any, index: number) => (
     <div
       key={index}
-      className="rounded-md p-3 bg-[#f7f9fb] shadow-[inset_-2px_-2px_4px_rgba(255,255,255,0.7),inset_2px_2px_4px_rgba(189,194,199,0.6)]"
+      className="rounded-md p-3 bg-[#f7f9fb] h-32 shadow-[inset_-2px_-2px_4px_rgba(255,255,255,0.7),inset_2px_2px_4px_rgba(189,194,199,0.6)]"
     >
       <ul className="space-y-1 text-gray-700" style={{ ...FONTS.heading_06 }}>
         <li><strong>Class:</strong> {item?.class_name}</li>
         <li><strong>Duration:</strong> {item?.duration}</li>
-        <li><strong>Start:</strong> {item?.start_date}</li>
-        <li><strong>End:</strong> {item?.end_time}</li>
+        <li><strong>Start:</strong> {formatISOTime(item?.start_date)}</li>
+        <li><strong>End:</strong> {formatISOTime(item?.end_time)}</li>
       </ul>
     </div>
   ))}

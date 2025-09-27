@@ -28,7 +28,7 @@ const MainCourse = () => {
 		<div className='px-4 py-6'>
 			<h1 className='text-black text-2xl font-semibold mb-6'>Courses</h1>
 
-			<div className='grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-screen-xl mx-auto'>
+			<div className='grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-screen-xl mx-auto'>
 				{coursedata?.length !== 0 ? (
 					coursedata?.map((course: any, index: any) => (
 						<div key={index}>
