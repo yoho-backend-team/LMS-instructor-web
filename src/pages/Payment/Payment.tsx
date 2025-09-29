@@ -17,7 +17,7 @@ import { CustomTabContent, CustomTabs } from "@/components/payment/CustomTabs";
 import { useDispatch, useSelector } from "react-redux";
 import { selectPayment } from "@/features/Payment/reducers/selectors";
 import { getStudentPaymentThunk } from "@/features/Payment/reducers/thunks";
-import { updateInstructorbankdetails } from "../../features/Payment/services/index";
+// import { updateInstructorbankdetails } from "../../features/Payment/services/index";
 import image2 from "../../assets/Payment/Paymentimage_2.png";
 import image5 from "../../assets/Payment/Paymentimage_5.png";
 import Frame1 from "../../assets/payment/Frame 1.png";
@@ -36,7 +36,7 @@ export const Payment = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("staff");
   const [isEditing, setIsEditing] = useState(false);
-  const [isBankEditing, setIsBankEditing] = useState(false); // New state for bank editing
+  const [isBankEditing, _setIsBankEditing] = useState(false); // New state for bank editing
   const [bankEditDetails, setBankEditDetails] = useState<any>({}); // State for bank edit form
 
   const dispatch = useDispatch<any>();
@@ -61,7 +61,7 @@ export const Payment = () => {
     }
   }, [bankDetail]);
 
-  const [staffDetails, setStaffDetails] = useState<any>();
+  const [_staffDetails, setStaffDetails] = useState<any>();
 
   const [salaryStructure, setSalaryStructure] = useState({
     basic: "30,000",
@@ -103,51 +103,51 @@ export const Payment = () => {
     }));
   };
 
-  // Handle Request Edit button click
-  const handleRequestEdit = () => {
-    setIsBankEditing(true);
-  };
+  // // Handle Request Edit button click
+  // const handleRequestEdit = () => {
+  //   setIsBankEditing(true);
+  // };
 
-  // Handle Save bank details
-  const handleSaveBankDetails = async () => {
-    try {
-      // Prepare data for API call
-      const updateData = {
-        id: staffDetail?.id, // Assuming you have staff ID
-        Bank_Details: {
-          Account_Number: bankEditDetails.Account_Number,
-          Branch: bankEditDetails.Branch,
-          IFSC: bankEditDetails.IFSC,
-        },
-      };
+  // // Handle Save bank details
+  // const handleSaveBankDetails = async () => {
+  //   try {
+  //     // Prepare data for API call
+  //     const updateData = {
+  //       id: staffDetail?.id, // Assuming you have staff ID
+  //       Bank_Details: {
+  //         Account_Number: bankEditDetails.Account_Number,
+  //         Branch: bankEditDetails.Branch,
+  //         IFSC: bankEditDetails.IFSC,
+  //       },
+  //     };
 
-      // Call the API service
-      const response = await updateInstructorbankdetails(updateData);
+  //     // Call the API service
+  //     const response = await updateInstructorbankdetails(updateData);
 
-      if (response) {
-        // Refresh the data after successful update
-        dispatch(getStudentPaymentThunk({}));
-        setIsBankEditing(false);
+  //     if (response) {
+  //       // Refresh the data after successful update
+  //       dispatch(getStudentPaymentThunk({}));
+  //       setIsBankEditing(false);
 
-        // Optional: Show success message
-        console.log("Bank details updated successfully");
-      }
-    } catch (error) {
-      console.error("Error updating bank details:", error);
-      // Optional: Show error message to user
-    }
-  };
+  //       // Optional: Show success message
+  //       console.log("Bank details updated successfully");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error updating bank details:", error);
+  //     // Optional: Show error message to user
+  //   }
+  // };
 
-  // Handle Cancel bank edit
-  const handleCancelBankEdit = () => {
-    // Reset to original values
-    setBankEditDetails({
-      Account_Number: bankDetail?.Account_Number || "",
-      Branch: bankDetail?.Branch || "",
-      IFSC: bankDetail?.IFSC || "",
-    });
-    setIsBankEditing(false);
-  };
+  // // Handle Cancel bank edit
+  // const handleCancelBankEdit = () => {
+  //   // Reset to original values
+  //   setBankEditDetails({
+  //     Account_Number: bankDetail?.Account_Number || "",
+  //     Branch: bankDetail?.Branch || "",
+  //     IFSC: bankDetail?.IFSC || "",
+  //   });
+  //   setIsBankEditing(false);
+  // };
 
   const [leftCards, setLeftCards] = useState<any>([
     {

@@ -174,25 +174,25 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
 };
 
 
-  const handleDownloadAttachment = () => {
-  if (!selectedSubmission?.file) {
-    alert("No file available to download");
-    return;
-  }
+//   const handleDownloadAttachment = () => {
+//   if (!selectedSubmission?.file) {
+//     alert("No file available to download");
+//     return;
+//   }
 
-  const fileUrl = GetImageUrl(selectedSubmission.file); // guaranteed string
-  if (!fileUrl) {
-    alert("Invalid file URL");
-    return;
-  }
+//   const fileUrl = GetImageUrl(selectedSubmission.file); // guaranteed string
+//   if (!fileUrl) {
+//     alert("Invalid file URL");
+//     return;
+//   }
 
-  const link = document.createElement("a");
-  link.href = fileUrl; // ✅ now TypeScript knows this is a string
-  link.download = `attachment_${selectedSubmission.student}_${selectedSubmission._id}`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-};
+//   const link = document.createElement("a");
+//   link.href = fileUrl; // ✅ now TypeScript knows this is a string
+//   link.download = `attachment_${selectedSubmission.student}_${selectedSubmission._id}`;
+//   document.body.appendChild(link);
+//   link.click();
+//   document.body.removeChild(link);
+// };
 
 
   return (
