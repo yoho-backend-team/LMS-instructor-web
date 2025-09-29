@@ -111,7 +111,7 @@ const Dashboard: React.FC = () => {
 							style={FONTS.heading_06}
 							variant="outline"
 						>
-							Total Course Handling: {dashboard?.classes?.Total}
+							Total Course Handling: {dashboard?.courses?.length}
 						</Button>
 					</Card>
 
@@ -130,16 +130,16 @@ const Dashboard: React.FC = () => {
 							style={FONTS.heading_06}
 							variant="outline"
 						>
-							Branch: {dashboard?.branch?.branch_indentity}
+							Branch: {dashboard?.branch?.branch_identity}
 						</Button>
 					</Card>
 					<Card className='bg-[#ebeff3] rounded-2xl w-[25%] shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40]'>
 						<Button
-							className="bg-[#ebeff3] w-66 mx-8 h-14 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
+							className="bg-[#ebeff3] mx-2 p-2 h-14 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
 							style={FONTS.heading_06}
 							variant="outline"
 						>
-							Category:
+							Institute:{dashboard?.institute?.institute_name}
 						</Button>
 					</Card>
 				</div>
