@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { showSessionExpiredModal } from '@/components/SessionExpired/Sessionexpires';
 import { ClearLocalStorage, GetLocalStorage } from '@/utils/helper';
 import axios from 'axios';
 
@@ -24,12 +25,19 @@ Axios.interceptors.request.use((config) => {
 Axios.interceptors.response.use(
 	(response) => response,
 	(error) => {
-		if (error?.response && error?.response?.status === 401 && error?.response?.data?.status === "session_expired") {
-			ClearLocalStorage()
+		if (
+			error?.response 
+			&&
+			error?.response?.status === 401 &&
+			error?.response?.data?.status === 'session_expired'
+		) {
+			ClearLocalStorage();
+			showSessionExpiredModal();
 		}
-		return Promise.reject(error)
+		return Promise.reject(error);
 	}
-)
+);
+
 
 class Client {
 	async get(
