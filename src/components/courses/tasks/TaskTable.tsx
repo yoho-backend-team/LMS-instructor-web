@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { FONTS, COLORS } from "@/constants/uiConstants";
 import navigationicon from '../../../assets/courses icons/navigation arrow.svg';
@@ -55,7 +54,7 @@ const TaskTable = ({ tasks, onTaskUpdate, course }: TaskTableProps) => {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [typeFilter, setTypeFilter] = useState("all");
   const navigate = useNavigate();
@@ -83,9 +82,9 @@ const TaskTable = ({ tasks, onTaskUpdate, course }: TaskTableProps) => {
   const currentItems = filteredTasks.slice(indexOfFirstItem, indexOfLastItem);
 
   // Reset to first page when filters change
-  useState(() => {
+  useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, typeFilter]);
+  }, [searchTerm, statusFilter, typeFilter]);
 
   const handleRowClick = (task: Task) => {
     setSelectedTask(task);

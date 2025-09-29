@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Download, QrCode } from 'lucide-react';
 import { COLORS, FONTS } from '@/constants/uiConstants';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectProfile } from '@/features/Profile/reducers/selectors';
+import { useDispatch } from 'react-redux';
+// import { selectProfile } from '@/features/Profile/reducers/selectors';
 import { getStudentProfileThunk } from '@/features/Profile/reducers/thunks';
 import * as htmlToImage from 'html-to-image';
 import { saveAs } from 'file-saver';
@@ -33,7 +33,6 @@ const IDCard: React.FC<IDCardProps> = ({ data }) => {
   const [idCard,setIdCard] = useState<any>('')
 
   const dispatch = useDispatch<any>();
-  const profileDetails = useSelector(selectProfile);
   const userId:any = GetLocalStorage("instructorDetails");
 
   useEffect(() => {

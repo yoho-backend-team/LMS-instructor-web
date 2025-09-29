@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { getWithUuidBatches, UpdateModuleWithUuidBatches } from "@/features/Course/services/Course";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { toast } from "react-toastify";
-import { set } from "date-fns";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 const CourseTrack = () => {
     const { batchId } = useParams();

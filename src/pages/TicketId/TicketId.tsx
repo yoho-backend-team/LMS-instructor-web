@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useNavigate, useParams } from 'react-router-dom';
 import ticketicon from '../../assets/icons/Tickets/back.png';
-import messageicon from '../../assets/icons/Tickets/Frame 301.png';
+// import messageicon from '../../assets/icons/Tickets/Frame 301.png';
 import sendicon from '../../assets/icons/Tickets/Frame 5386.png';
 import { Button } from '@/components/ui/button';
 import { COLORS, FONTS } from "@/constants/uiConstants";

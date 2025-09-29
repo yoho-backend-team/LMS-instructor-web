@@ -6,17 +6,15 @@ import type React from "react"
 import { COLORS, FONTS } from "@/constants/uiConstants"
 import { useEffect, useState, type SetStateAction } from "react"
 import { startOfMonth, setYear } from "date-fns"
-import Edit from "../../assets/icons/payments/Edit-alt.png"
 import { Card } from "@/components/ui/card"
 import filImg from "../../assets/classes/filter.png"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import PaymentDetails from "@/components/payment/paymentTable"
-import { Button } from "@/components/ui/button"
 import { CustomTabContent, CustomTabs } from "@/components/payment/CustomTabs"
 import { useDispatch, useSelector } from "react-redux"
 import { selectPayment } from "@/features/Payment/reducers/selectors"
 import { getStudentPaymentThunk } from "@/features/Payment/reducers/thunks"
-import { updateInstructorbankdetails } from "../../features/Payment/services/index" // Import your service
+// import { updateInstructorbankdetails } from "../../features/Payment/services/index" // Import your service
 import image1 from "../../assets/Payment/Paymentimage_1.png"
 import image2 from "../../assets/Payment/Paymentimage_2.png"
 import image3 from "../../assets/Payment/Paymentimage_3.png"
@@ -34,7 +32,7 @@ export const Payment = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [activeTab, setActiveTab] = useState("staff")
   const [isEditing, setIsEditing] = useState(false)
-  const [isBankEditing, setIsBankEditing] = useState(false) // New state for bank editing
+  const [isBankEditing] = useState(false) // New state for bank editing
   const [bankEditDetails, setBankEditDetails] = useState<any>({}) // State for bank edit form
 
   const dispatch = useDispatch<any>()
@@ -59,7 +57,7 @@ export const Payment = () => {
     }
   }, [bankDetail])
 
-  const [staffDetails, setStaffDetails] = useState<any>({
+  const [, setStaffDetails] = useState<any>({
     name: "John Doe",
     designation: "Teacher",
     staffId: "STF-001",
@@ -107,50 +105,10 @@ export const Payment = () => {
   }
 
   // Handle Request Edit button click
-  const handleRequestEdit = () => {
-    setIsBankEditing(true)
-  }
 
   // Handle Save bank details
-  const handleSaveBankDetails = async () => {
-    try {
-      // Prepare data for API call
-      const updateData = {
-        id: staffDetail?.id, // Assuming you have staff ID
-        Bank_Details: {
-          Account_Number: bankEditDetails.Account_Number,
-          Branch: bankEditDetails.Branch,
-          IFSC: bankEditDetails.IFSC
-        }
-      }
-
-      // Call the API service
-      const response = await updateInstructorbankdetails(updateData)
-
-      if (response) {
-        // Refresh the data after successful update
-        dispatch(getStudentPaymentThunk({}))
-        setIsBankEditing(false)
-
-        // Optional: Show success message
-        console.log('Bank details updated successfully')
-      }
-    } catch (error) {
-      console.error('Error updating bank details:', error)
-      // Optional: Show error message to user
-    }
-  }
 
   // Handle Cancel bank edit
-  const handleCancelBankEdit = () => {
-    // Reset to original values
-    setBankEditDetails({
-      Account_Number: bankDetail?.Account_Number || '',
-      Branch: bankDetail?.Branch || '',
-      IFSC: bankDetail?.IFSC || ''
-    })
-    setIsBankEditing(false)
-  }
 
   const leftCards = [
     { title: "Course Fees", desc: "Total course fee details", salary: "10000", image: image1 },

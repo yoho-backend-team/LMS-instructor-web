@@ -1,5 +1,5 @@
 import { COLORS, FONTS } from "@/constants/uiConstants";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardHeader } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import filter from "../../assets/icons/common/Mask group.png";
@@ -26,14 +26,6 @@ import {
 // import Attendence_1 from "../../assets/attendence/attengraph1.png"
 // import Attendence_2 from "../../assets/attendence/attengraph2.png"
 // import Attendence_3 from "../../assets/attendence/attengraph3.png"
-import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-} from "recharts";
 import { useNavigate } from "react-router-dom";
 
 const months = [
@@ -282,15 +274,6 @@ export const Attendance = () => {
 
       <div className="flex gap-6 justify-start pt-6 overflow-x-auto">
         {attendanceCards.map((card) => {
-          const lineData = Array.from({ length: 6 }, (_, i) => {
-            const val =
-              card.current + Math.sin(i * 1.5) * 5 + (Math.random() * 3 - 1.5);
-            return {
-              name: `P${i + 1}`,
-              value: val,
-              showLine: i % 2 === 0,
-            };
-          });
 
           return (
             <Card

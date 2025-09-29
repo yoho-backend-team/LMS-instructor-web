@@ -44,9 +44,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
   isEditing = false,
   onSave,
   onCancel,
-  activeMenuItem = 'profile',
-  isSaving = false
-}) => {
+  activeMenuItem = 'profile'}) => {
   const personalInfoRef = useRef<PersonalInformationRef>(null);
   const [currentFormData, setCurrentFormData] = useState<PersonalInfo | null>(null);
   const [saving, setSaving] = useState(false);

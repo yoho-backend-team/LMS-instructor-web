@@ -15,7 +15,7 @@ const OtpVerification = () => {
 	const [isVerifying, setIsVerifying] = useState(false);
 	const location = useLocation();
 	const { data, email } = location?.state;
-	const { login } = useAuth();
+	useAuth();
 
 	const handleOtpChange = (index: number, value: string) => {
 		setShowError(false);
