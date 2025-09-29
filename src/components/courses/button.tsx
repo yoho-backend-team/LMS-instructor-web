@@ -11,7 +11,7 @@ const CourseButton: React.FC<CourseButtonProps> = ({ activeTabs, courseId }) => 
   const navigate = useNavigate();
 
   return (
-    <div className="flex justify-center gap-6 mb-12">
+    <div className="grid lg:grid-cols-4 md:grid-cols-2 justify-center gap-6 mb-12 md:justify-items-center">
       <Button
         onClick={() => {
           navigate(`/about/${courseId}`);

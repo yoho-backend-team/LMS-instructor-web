@@ -108,7 +108,7 @@ const { showLoader, hideLoader } = useLoader();
 
       <Card className="overflow-hidden bg-[#EBEFF3] rounded-xl shadow-inner">
         <div className="flex flex-col">
-          <Card className="bg-gradient-to-r from-[#7B00FF] to-[#B200FF] !text-white p-4 mx-4 rounded-md sticky top-0 z-10 mb-4">
+          <Card className="bg-gradient-to-r from-[#7B00FF] to-[#B200FF] !text-white p-4 mx-4 rounded-md sticky top-0 z-0 mb-4">
             <div className="grid grid-cols-5 gap-4  text-center !text-white">
               <div style={{ ...FONTS.heading_02, color: COLORS.white }}>
                 Batches

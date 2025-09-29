@@ -18,23 +18,23 @@ function CourseNotes() {
   const [selectedNotes, setselectedNotes] = useState<any | null>(null);
   const { showLoader, hideLoader } = useLoader();
   const dispatch = useDispatch<any>();
-  
-	useEffect(() => {
-	  (async () => {
-		try {
-		  showLoader();
-		  const timeoutId = setTimeout(() => {
-			hideLoader();
-		  }, 8000);
-		  const response = await dispatch(getDashBoardReports());
-		  if (response) {
-			clearTimeout(timeoutId);
-		  }
-		} finally {
-		  hideLoader();
-		}
-	  })();
-	}, [dispatch, hideLoader, showLoader]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        showLoader();
+        const timeoutId = setTimeout(() => {
+          hideLoader();
+        }, 8000);
+        const response = await dispatch(getDashBoardReports());
+        if (response) {
+          clearTimeout(timeoutId);
+        }
+      } finally {
+        hideLoader();
+      }
+    })();
+  }, [dispatch, hideLoader, showLoader]);
 
   return (
     <>
@@ -50,7 +50,7 @@ function CourseNotes() {
         </h1>
       </div>
 
-      <div className="flex justify-end mb-4 absolute right-10 top-40">
+      <div className="flex justify-end mb-4 absolute right-10 top-40 md:relative md:top-50 md:right-0">
         <div className="flex gap-6">
           <div
             onClick={() => setActiveTab("notes")}
@@ -79,7 +79,7 @@ function CourseNotes() {
         <>
           <CourseButton activeTabs="notes" />
           <h1 className="text-black text-4xl font-semibold mb-4">Add Notes</h1>
-          <div className="grid grid-cols-2 w-full px-0 mx-0">
+          <div className="grid grid-cols-2 md:grid-cols-1 w-full px-0 mx-0">
             <Add_Notes selectedNotes={selectedNotes} activeTab={activeTab} />
             <NotesMaterials setselectedNotes={setselectedNotes} />
           </div>

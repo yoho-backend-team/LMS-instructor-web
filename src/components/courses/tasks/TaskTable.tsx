@@ -1,9 +1,15 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { FONTS, COLORS } from "@/constants/uiConstants";
-import navigationicon from '../../../assets/courses icons/navigation arrow.svg';
+import navigationicon from "../../../assets/courses icons/navigation arrow.svg";
 import EditTaskForm from "./EditTaskForm";
 import AddTaskForm from "./AddTaskForm";
 import CourseButton from "../button";
@@ -53,23 +59,27 @@ const TaskTable = ({ tasks, onTaskUpdate, course }: TaskTableProps) => {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, _setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [typeFilter, setTypeFilter] = useState("all");
   const navigate = useNavigate();
 
   // Filter tasks based on search term and filters
   const filteredTasks = useMemo(() => {
-    return tasks.filter(task => {
-      const matchesSearch = task.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           task.task.toLowerCase().includes(searchTerm.toLowerCase());
-      
-      const matchesStatus = statusFilter === "all" || 
-                           (statusFilter === "active" && task.is_active === true) ||
-                           (statusFilter === "inactive" && task.is_active === false);
-      
-      const matchesType = typeFilter === "all" || task.type.toLowerCase() === typeFilter.toLowerCase();
-      
+    return tasks.filter((task) => {
+      const matchesSearch =
+        task.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        task.task.toLowerCase().includes(searchTerm.toLowerCase());
+
+      const matchesStatus =
+        statusFilter === "all" ||
+        (statusFilter === "active" && task.is_active === true) ||
+        (statusFilter === "inactive" && task.is_active === false);
+
+      const matchesType =
+        typeFilter === "all" ||
+        task.type.toLowerCase() === typeFilter.toLowerCase();
+
       return matchesSearch && matchesStatus && matchesType;
     });
   }, [tasks, searchTerm, statusFilter, typeFilter]);
@@ -81,7 +91,7 @@ const TaskTable = ({ tasks, onTaskUpdate, course }: TaskTableProps) => {
   const currentItems = filteredTasks.slice(indexOfFirstItem, indexOfLastItem);
 
   // Reset to first page when filters change
-  useState(() => {
+  useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm, typeFilter]);
 
@@ -96,13 +106,16 @@ const TaskTable = ({ tasks, onTaskUpdate, course }: TaskTableProps) => {
   };
 
   const handleAddTask = (newTask: Task) => {
-    const updatedTasks = [...tasks, { ...newTask, id: Date?.now()?.toString() }];
+    const updatedTasks = [
+      ...tasks,
+      { ...newTask, id: Date?.now()?.toString() },
+    ];
     onTaskUpdate(updatedTasks);
     setShowAddForm(false);
   };
 
   const handleEditTask = (updatedTask: Task) => {
-    const updatedTasks = tasks?.map(task =>
+    const updatedTasks = tasks?.map((task) =>
       task?.id === updatedTask?.id ? updatedTask : task
     );
     onTaskUpdate(updatedTasks);
@@ -128,32 +141,35 @@ const TaskTable = ({ tasks, onTaskUpdate, course }: TaskTableProps) => {
   const getPageNumbers = () => {
     const pageNumbers = [];
     const maxPagesToShow = 5;
-    
+
     if (totalPages <= maxPagesToShow) {
       for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
       }
     } else {
-      const startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+      const startPage = Math.max(
+        1,
+        currentPage - Math.floor(maxPagesToShow / 2)
+      );
       const endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
-      
+
       for (let i = startPage; i <= endPage; i++) {
         pageNumbers.push(i);
       }
     }
-    
+
     return pageNumbers;
   };
 
-  console.log(tasks, 'tasksss')
+  console.log(tasks, "tasksss");
 
   return (
-    <div className='w-full mx-auto p-4'>
+    <div className="w-full mx-auto p-4">
       {/* Top Navigation & Title */}
-      <div className='flex items-center gap-3 mb-6'>
+      <div className="flex items-center gap-3 mb-6">
         <Button
-          onClick={() => navigate('/courses')}
-          className='bg-[#EBEFF3] text-[#333] hover:bg-[#e0e0e0] px-1 py-1 rounded-md shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]'
+          onClick={() => navigate("/courses")}
+          className="bg-[#EBEFF3] text-[#333] hover:bg-[#e0e0e0] px-1 py-1 rounded-md shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
         >
           <img src={navigationicon} alt="Navigation" />
         </Button>
@@ -161,13 +177,12 @@ const TaskTable = ({ tasks, onTaskUpdate, course }: TaskTableProps) => {
       </div>
 
       {/* Course Button Tabs */}
-      <CourseButton activeTabs='task' />
+      <CourseButton activeTabs="task" />
 
       {/* Filters and Add Task Button */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
         {/* Search and Filter Controls */}
         <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
-          
           {/* Type Filter */}
           <Select value={typeFilter} onValueChange={setTypeFilter}>
             <SelectTrigger className="w-full sm:w-40">
@@ -191,7 +206,6 @@ const TaskTable = ({ tasks, onTaskUpdate, course }: TaskTableProps) => {
               <SelectItem value="inactive">Pending</SelectItem>
             </SelectContent>
           </Select>
-
         </div>
 
         {/* + Add Task Button */}
@@ -206,30 +220,45 @@ const TaskTable = ({ tasks, onTaskUpdate, course }: TaskTableProps) => {
 
       {/* Results Count */}
       <div className="mb-4 text-sm text-gray-600">
-        Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, filteredTasks.length)} of {filteredTasks.length} tasks
-        {(searchTerm || statusFilter !== "all" || typeFilter !== "all") && " (filtered)"}
+        Showing {indexOfFirstItem + 1}-
+        {Math.min(indexOfLastItem, filteredTasks.length)} of{" "}
+        {filteredTasks.length} tasks
+        {(searchTerm || statusFilter !== "all" || typeFilter !== "all") &&
+          " (filtered)"}
       </div>
 
       {/* Task List Container */}
-      <Card className='overflow-hidden bg-[#EBEFF3] rounded-xl shadow-inner'>
-        <div className='flex flex-col'>
+      <Card className="overflow-hidden bg-[#EBEFF3] rounded-xl shadow-inner">
+        <div className="flex flex-col">
           {/* Header Row */}
-          <Card className='bg-gradient-to-r from-[#7B00FF] to-[#B200FF] !text-white p-4 mx-4 rounded-md sticky top-0 z-10 mb-4'>
-            <div className='grid grid-cols-5 gap-4 text-center !text-white'>
-              <div style={{ ...FONTS?.heading_02, color: COLORS?.white }}>Name</div>
-              <div style={{ ...FONTS?.heading_02, color: COLORS?.white }}>Type</div>
-              <div style={{ ...FONTS?.heading_02, color: COLORS?.white }}>Task</div>
-              <div style={{ ...FONTS?.heading_02, color: COLORS?.white }}>Deadline</div>
-              <div style={{ ...FONTS?.heading_02, color: COLORS?.white }}>Status</div>
+          <Card className="bg-gradient-to-r from-[#7B00FF] to-[#B200FF] !text-white p-4 mx-4 rounded-md sticky top-0 z-0 mb-4">
+            <div className="grid grid-cols-5 gap-4 text-center !text-white">
+              <div style={{ ...FONTS?.heading_02, color: COLORS?.white }}>
+                Name
+              </div>
+              <div style={{ ...FONTS?.heading_02, color: COLORS?.white }}>
+                Type
+              </div>
+              <div style={{ ...FONTS?.heading_02, color: COLORS?.white }}>
+                Task
+              </div>
+              <div style={{ ...FONTS?.heading_02, color: COLORS?.white }}>
+                Deadline
+              </div>
+              <div style={{ ...FONTS?.heading_02, color: COLORS?.white }}>
+                Status
+              </div>
             </div>
           </Card>
 
           {/* Task Rows */}
-          <div className='overflow-y-auto mx-4'>
+          <div className="overflow-y-auto mx-4">
             {currentItems.length === 0 ? (
-              <div className='flex justify-center mt-3 py-8'>
+              <div className="flex justify-center mt-3 py-8">
                 <p style={{ ...FONTS?.heading_06 }} className="text-gray-500">
-                  {filteredTasks.length === 0 ? "No tasks available" : "No tasks match your filters"}
+                  {filteredTasks.length === 0
+                    ? "No tasks available"
+                    : "No tasks match your filters"}
                 </p>
               </div>
             ) : (
@@ -237,27 +266,34 @@ const TaskTable = ({ tasks, onTaskUpdate, course }: TaskTableProps) => {
                 <Card
                   key={task?.id}
                   onClick={() => handleRowClick(task)}
-                  className='bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] text-black p-4 mb-2 hover:shadow-md rounded-lg cursor-pointer transition-shadow duration-200'
+                  className="bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] text-black p-4 mb-2 hover:shadow-md rounded-lg cursor-pointer transition-shadow duration-200"
                 >
-                  <div className='grid grid-cols-5 gap-4 text-center items-center'>
-                    <div style={{ ...FONTS?.para_01 }} className="truncate" title={task?.name}>
+                  <div className="grid grid-cols-5 gap-4 text-center items-center">
+                    <div
+                      style={{ ...FONTS?.para_01 }}
+                      className="truncate"
+                      title={task?.name}
+                    >
                       {task?.name}
                     </div>
                     <div style={{ ...FONTS?.para_01 }} className="capitalize">
                       {task?.type}
                     </div>
-                    <div style={{ ...FONTS?.para_01 }} className="truncate" title={task?.task}>
+                    <div
+                      style={{ ...FONTS?.para_01 }}
+                      className="truncate"
+                      title={task?.task}
+                    >
                       {task?.task}
                     </div>
-                    <div style={{ ...FONTS?.para_01 }}>
-                      {task?.deadline}
-                    </div>
+                    <div style={{ ...FONTS?.para_01 }}>{task?.deadline}</div>
                     <div>
                       <Button
-                        className={`cursor-pointer px-4 py-1 w-25 rounded-lg text-sm font-medium ${task?.is_active === true
-                          ? "bg-green-500 text-white hover:bg-green-600"
-                          : "bg-gradient-to-l from-[#7B00FF] to-[#B200FF] !text-white hover:from-[#6A00E0] hover:to-[#9B00E0]"
-                          }`}
+                        className={`cursor-pointer px-4 py-1 w-25 rounded-lg text-sm font-medium ${
+                          task?.is_active === true
+                            ? "bg-green-500 text-white hover:bg-green-600"
+                            : "bg-gradient-to-l from-[#7B00FF] to-[#B200FF] !text-white hover:from-[#6A00E0] hover:to-[#9B00E0]"
+                        }`}
                       >
                         {task?.is_active === true ? "Completed" : "Pending"}
                       </Button>
@@ -276,7 +312,7 @@ const TaskTable = ({ tasks, onTaskUpdate, course }: TaskTableProps) => {
           <div className="text-sm text-gray-600">
             Page {currentPage} of {totalPages}
           </div>
-          
+
           <div className="flex items-center gap-2">
             {/* Previous Button */}
             <Button
@@ -290,14 +326,14 @@ const TaskTable = ({ tasks, onTaskUpdate, course }: TaskTableProps) => {
 
             {/* Page Numbers */}
             <div className="flex gap-1">
-              {getPageNumbers().map(pageNumber => (
+              {getPageNumbers().map((pageNumber) => (
                 <Button
                   key={pageNumber}
                   variant={currentPage === pageNumber ? "default" : "outline"}
                   onClick={() => handlePageChange(pageNumber)}
                   className={`px-3 py-1 min-w-[40px] ${
-                    currentPage === pageNumber 
-                      ? "bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white" 
+                    currentPage === pageNumber
+                      ? "bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white"
                       : ""
                   }`}
                 >
@@ -318,7 +354,10 @@ const TaskTable = ({ tasks, onTaskUpdate, course }: TaskTableProps) => {
           </div>
 
           {/* Items per page selector (duplicate for bottom) */}
-          <Select value={itemsPerPage.toString()} onValueChange={handleItemsPerPageChange}>
+          <Select
+            value={itemsPerPage.toString()}
+            onValueChange={handleItemsPerPageChange}
+          >
             <SelectTrigger className="w-32">
               <SelectValue placeholder="Items per page" />
             </SelectTrigger>

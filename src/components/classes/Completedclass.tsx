@@ -140,15 +140,15 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
   return (
     <div style={{ backgroundColor: COLORS.bg_Colour }} className="mb-4">
       {/* Sticky Filter Section */}
-      <div className="sticky top-0 z-10 bg-[#f1f3f5] pt-2 pb-3">
+      <div className="sticky top-0 z-0 bg-[#f1f3f5] pt-2 pb-3">
         <Card
           style={{ backgroundColor: COLORS.bg_Colour }}
           className="px-4 py-3 shadow-sm"
         >
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center ">
             {/* Filter content (left side) - Only appears when filters are shown */}
             {showFilters && (
-              <div className="flex-1 mr-4 grid grid-cols-6 gap-4">
+              <div className="flex-1 mr-4 grid grid-cols-6 gap-4 ">
                 {filterGroups.map((group) => (
                   <div key={group.title} className="relative">
                     <Button
