@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useNavigate, useParams } from 'react-router-dom';
 import ticketicon from '../../assets/icons/Tickets/back.png';
-import messageicon from '../../assets/icons/Tickets/Frame 301.png';
 import sendicon from '../../assets/icons/Tickets/Frame 5386.png';
 import { Button } from '@/components/ui/button';
 import { COLORS, FONTS } from "@/constants/uiConstants";
@@ -17,6 +15,10 @@ import { GetImageUrl, GetLocalStorage } from '@/utils/helper';
 import { socketConnect } from '../../socket/socket'
 import socket from '../../socket/socket'
 import { useEffect, useRef, useState } from 'react';
+import { useLoader } from '@/context/LoadingContext/Loader';
+import { getDashBoardReports } from '@/features/Dashboard/reducers/thunks';
+import type { AppDispatch } from '@/store/store';
+import { useDispatch } from 'react-redux';
 
 const TicketId = () => {
   const { id } = useParams();
@@ -26,6 +28,25 @@ const TicketId = () => {
   const [Messages, setMessages] = useState<any[]>(ticket?.messages);
   const inputValue = useRef<HTMLInputElement | null>(null)
   const instructor: any = GetLocalStorage("instructorDetails")
+  const dispatch = useDispatch<AppDispatch>();
+   const { showLoader, hideLoader } = useLoader();
+  
+    useEffect(() => {
+      (async () => {
+        try {
+          showLoader();
+          const timeoutId = setTimeout(() => {
+            hideLoader();
+          }, 8000);
+          const response = await dispatch(getDashBoardReports());
+          if (response) {
+            clearTimeout(timeoutId);
+          }
+        } finally {
+          hideLoader();
+        }
+      })();
+    }, [dispatch, hideLoader, showLoader]);
 
   const handleBack = () => {
     navigate(-1);

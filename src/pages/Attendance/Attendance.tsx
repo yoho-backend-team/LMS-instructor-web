@@ -1,5 +1,5 @@
 import { COLORS, FONTS } from "@/constants/uiConstants";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card , CardHeader } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import filter from "../../assets/icons/common/Mask group.png";
@@ -35,6 +35,7 @@ import {
   Tooltip,
 } from "recharts";
 import { useNavigate } from "react-router-dom";
+import { useLoader } from "@/context/LoadingContext/Loader";
 
 const months = [
   "January",
@@ -190,6 +191,25 @@ export const Attendance = () => {
   }, [dashData?.institute.uuid, dashData?.user?.uuid, dispatch, selectedDate]);
 
   // const selectedDateStats = getSelectedDateStats();
+
+  const { showLoader, hideLoader } = useLoader();
+  
+    useEffect(() => {
+      (async () => {
+        try {
+          showLoader();
+          const timeoutId = setTimeout(() => {
+            hideLoader();
+          }, 8000);
+          const response = await dispatch(getDashBoardReports());
+          if (response) {
+            clearTimeout(timeoutId);
+          }
+        } finally {
+          hideLoader();
+        }
+      })();
+    }, [dispatch, hideLoader, showLoader]);
 
   return (
     <div className="p-4">
