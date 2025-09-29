@@ -1,5 +1,5 @@
 import { COLORS, FONTS } from "@/constants/uiConstants";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardHeader } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import filter from "../../assets/icons/common/Mask group.png";
@@ -26,15 +26,16 @@ import {
 // import Attendence_1 from "../../assets/attendence/attengraph1.png"
 // import Attendence_2 from "../../assets/attendence/attengraph2.png"
 // import Attendence_3 from "../../assets/attendence/attengraph3.png"
-import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-} from "recharts";
+// import {
+//   ResponsiveContainer,
+//   LineChart,
+//   Line,
+//   XAxis,
+//   YAxis,
+//   Tooltip,
+// } from "recharts";
 import { useNavigate } from "react-router-dom";
+import { useLoader } from "@/context/LoadingContext/Loader";
 
 const months = [
   "January",
@@ -51,7 +52,6 @@ const months = [
   "December",
 ] as const;
 
-
 export const Attendance = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedMonth, setSelectedMonth] = useState<string>(
@@ -66,7 +66,7 @@ export const Attendance = () => {
   const attendancedata: any = useSelector(selectAttendance);
   const dailydata = useSelector(selectAttendanceDaily);
   const navigate = useNavigate();
-  console.log('attendance data', dailydata)
+  console.log("attendance data", dailydata);
 
   useEffect(() => {
     if (
@@ -131,18 +131,18 @@ export const Attendance = () => {
   };
 
   const handleNavigate = () => {
-    console.log(' clickde nav')
-    navigate('/classes')
-  }
+    console.log(" clickde nav");
+    navigate("/classes");
+  };
 
   function formatISOTime(isoString: string): string {
-  const date = new Date(isoString);
-  return date.toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  });
-}
+    const date = new Date(isoString);
+    return date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+  }
 
   const years = Array.from(
     { length: 5 },
@@ -191,6 +191,25 @@ export const Attendance = () => {
 
   // const selectedDateStats = getSelectedDateStats();
 
+  const { showLoader, hideLoader } = useLoader();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        showLoader();
+        const timeoutId = setTimeout(() => {
+          hideLoader();
+        }, 8000);
+        const response = await dispatch(getDashBoardReports());
+        if (response) {
+          clearTimeout(timeoutId);
+        }
+      } finally {
+        hideLoader();
+      }
+    })();
+  }, [dispatch, hideLoader, showLoader]);
+
   return (
     <div className="p-4">
       {/* Header */}
@@ -205,7 +224,7 @@ export const Attendance = () => {
         <div className="relative flex items-center">
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="p-2 rounded-md shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] hover:scale-105 transition z-10"
+            className="p-2 rounded-md shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] hover:scale-105 transition z-0"
             style={{ backgroundColor: COLORS.bg_Colour }}
             aria-label="Filter attendance data"
           >
@@ -291,15 +310,15 @@ export const Attendance = () => {
 
       <div className="flex gap-6 justify-start pt-6 overflow-x-auto">
         {attendanceCards.map((card) => {
-          const lineData = Array.from({ length: 6 }, (_, i) => {
-            const val =
-              card.current + Math.sin(i * 1.5) * 5 + (Math.random() * 3 - 1.5);
-            return {
-              name: `P${i + 1}`,
-              value: val,
-              showLine: i % 2 === 0,
-            };
-          });
+          // const lineData = Array.from({ length: 6 }, (_, i) => {
+          //   const val =
+          //     card.current + Math.sin(i * 1.5) * 5 + (Math.random() * 3 - 1.5);
+          //   return {
+          //     name: `P${i + 1}`,
+          //     value: val,
+          //     showLine: i % 2 === 0,
+          //   };
+          // });
 
           return (
             <Card
@@ -359,51 +378,60 @@ export const Attendance = () => {
         </div>
 
         <div className="flex flex-col w-full">
-  <h3
-    className="text-lg font-semibold mb-4 mt-2"
-    style={{ ...FONTS.heading_02 }}
-  >
-    Day Overview
-  </h3>
+          <h3
+            className="text-lg font-semibold mb-4 mt-2"
+            style={{ ...FONTS.heading_02 }}
+          >
+            Day Overview
+          </h3>
 
-  <div
-    className="flex flex-col justify-between rounded-md p-6 shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),5px_5px_4px_rgba(189,194,199,0.75)]"
-    style={{ backgroundColor: COLORS.bg_Colour, height: "375px" }} 
-  >
+          <div
+            className="flex flex-col justify-between rounded-md p-6 shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),5px_5px_4px_rgba(189,194,199,0.75)]"
+            style={{ backgroundColor: COLORS.bg_Colour, height: "375px" }}
+          >
+            <p
+              className="text-sm mb-4 text-gray-700"
+              style={{ ...FONTS.para_01 }}
+            >
+              {selectedDate ? selectedDate.toDateString() : "Select a date"}
+            </p>
 
-    <p
-      className="text-sm mb-4 text-gray-700"
-      style={{ ...FONTS.para_01 }}
-    >
-      {selectedDate ? selectedDate.toDateString() : "Select a date"}
-    </p>
+            <div className="grid grid-cols-2 gap-4 overflow-y-auto pr-2 flex-1 no-scrollbar">
+              {dailydata?.map((item: any, index: number) => (
+                <div
+                  key={index}
+                  className="rounded-md p-3 bg-[#f7f9fb] h-32 shadow-[inset_-2px_-2px_4px_rgba(255,255,255,0.7),inset_2px_2px_4px_rgba(189,194,199,0.6)]"
+                >
+                  <ul
+                    className="space-y-1 text-gray-700"
+                    style={{ ...FONTS.heading_06 }}
+                  >
+                    <li>
+                      <strong>Class:</strong> {item?.class_name}
+                    </li>
+                    <li>
+                      <strong>Duration:</strong> {item?.duration}
+                    </li>
+                    <li>
+                      <strong>Start:</strong> {formatISOTime(item?.start_date)}
+                    </li>
+                    <li>
+                      <strong>End:</strong> {formatISOTime(item?.end_time)}
+                    </li>
+                  </ul>
+                </div>
+              ))}
+            </div>
 
-    <div className="grid grid-cols-2 gap-4 overflow-y-auto pr-2 flex-1 no-scrollbar">
-  {dailydata?.map((item: any, index: number) => (
-    <div
-      key={index}
-      className="rounded-md p-3 bg-[#f7f9fb] h-32 shadow-[inset_-2px_-2px_4px_rgba(255,255,255,0.7),inset_2px_2px_4px_rgba(189,194,199,0.6)]"
-    >
-      <ul className="space-y-1 text-gray-700" style={{ ...FONTS.heading_06 }}>
-        <li><strong>Class:</strong> {item?.class_name}</li>
-        <li><strong>Duration:</strong> {item?.duration}</li>
-        <li><strong>Start:</strong> {formatISOTime(item?.start_date)}</li>
-        <li><strong>End:</strong> {formatISOTime(item?.end_time)}</li>
-      </ul>
-    </div>
-  ))}
-</div>
-
-    <button
-      className="w-max-sm mt-4 self-start px-4 py-2 bg-gray rounded-xl btnshadow text-white text-[14px] hover:!text-white btnhovershadow cursor-pointer"
-      style={{ ...FONTS.heading_06 }}
-      onClick={handleNavigate}
-    >
-      View Details
-    </button>
-  </div>
-</div>
-
+            <button
+              className="w-max-sm mt-4 self-start px-4 py-2 bg-gray rounded-xl btnshadow text-white text-[14px] hover:!text-white btnhovershadow cursor-pointer"
+              style={{ ...FONTS.heading_06 }}
+              onClick={handleNavigate}
+            >
+              View Details
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

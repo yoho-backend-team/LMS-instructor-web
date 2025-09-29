@@ -20,6 +20,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
   modules,
   duration,
   onClick,
+  
 }) => {
   return (
     <div

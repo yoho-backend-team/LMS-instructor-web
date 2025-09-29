@@ -1,6 +1,10 @@
 import { Card } from '../ui/card';
 import { Button } from '../ui/button';
 import { COLORS, FONTS } from '@/constants/uiConstants';
+import { useLoader } from '@/context/LoadingContext/Loader';
+import { getDashBoardReports } from '@/features/Dashboard/reducers/thunks';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 interface ClassItem {
   day: string;
@@ -16,6 +20,8 @@ interface LiveclassProps {
   currentPage: number;
   onPageChange: (page: number) => void;
 }
+
+
 
 const Liveclass = ({ showOnlineOnly, data, currentPage, onPageChange }: LiveclassProps) => {
   // Filter based on online/offline toggle
@@ -33,6 +39,26 @@ const Liveclass = ({ showOnlineOnly, data, currentPage, onPageChange }: Liveclas
   const headers = ['Day', 'Topic', 'Join Link', 'Duration', 'Action'];
 
   // ...inside your component
+  const dispatch = useDispatch<any>();
+
+  const { showLoader, hideLoader } = useLoader();
+  
+    useEffect(() => {
+      (async () => {
+        try {
+          showLoader();
+          const timeoutId = setTimeout(() => {
+            hideLoader();
+          }, 8000);
+          const response = await dispatch(getDashBoardReports());
+          if (response) {
+            clearTimeout(timeoutId);
+          }
+        } finally {
+          hideLoader();
+        }
+      })();
+    }, [dispatch, hideLoader, showLoader]);
 
 return (
   <div>

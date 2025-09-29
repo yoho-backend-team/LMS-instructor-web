@@ -1,7 +1,10 @@
 import { Card } from '../ui/card';
 import { Button } from '../ui/button';
 import { COLORS, FONTS } from '@/constants/uiConstants';
-import bgImg from '../../assets/classes/Group 197.png';
+import { useDispatch } from 'react-redux';
+import { useLoader } from '@/context/LoadingContext/Loader';
+import { useEffect } from 'react';
+import { getDashBoardReports } from '@/features/Dashboard/reducers/thunks';
 
 interface ClassItem {
   day: string;
@@ -32,6 +35,26 @@ const Upcomingclass = ({ showOnlineOnly, data, currentPage, onPageChange }: Upco
 
   // Table headers
   const headers = ['Day', 'Topic', 'Join Link', 'Duration', 'Action'];
+
+  const { showLoader, hideLoader } = useLoader();
+  const dispatch=useDispatch<any>();
+  
+    useEffect(() => {
+      (async () => {
+        try {
+          showLoader();
+          const timeoutId = setTimeout(() => {
+            hideLoader();
+          }, 8000);
+          const response = await dispatch(getDashBoardReports());
+          if (response) {
+            clearTimeout(timeoutId);
+          }
+        } finally {
+          hideLoader();
+        }
+      })();
+    }, [dispatch, hideLoader, showLoader]);
 
   return (
     <div className="bg-[#ebeff3] min-h-[300px]">
