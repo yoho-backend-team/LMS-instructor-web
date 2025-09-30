@@ -1,11 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useMemo } from 'react';
-import { Card } from '../ui/card';
-import { Button } from '../ui/button';
-import { COLORS, FONTS } from '@/constants/uiConstants';
-import filterImg from '../../assets/classes/filter.png';
-import { useNavigate } from 'react-router-dom';
-import { ChevronDown, X } from 'lucide-react';
+import { useState, useMemo, useEffect } from "react";
+import { Card } from "../ui/card";
+import { Button } from "../ui/button";
+import { COLORS, FONTS } from "@/constants/uiConstants";
+import filterImg from "../../assets/classes/filter.png";
+import { useNavigate } from "react-router-dom";
+import { ChevronDown, X } from "lucide-react";
+import { useLoader } from "@/context/LoadingContext/Loader";
+import { getDashBoardReports } from "@/features/Dashboard/reducers/thunks";
+import { useDispatch } from "react-redux";
 
 interface DropdownOption {
   value: string;
@@ -27,21 +30,21 @@ interface CompletedclassProps {
 
 const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
   const navigate = useNavigate();
-  const headers = ['Title', 'Start Date', 'Start Time', 'Duration', 'Action'];
+  const headers = ["Title", "Start Date", "Start Time", "Duration", "Action"];
 
   const months: DropdownOption[] = [
-    { value: '01', label: 'January' },
-    { value: '02', label: 'February' },
-    { value: '03', label: 'March' },
-    { value: '04', label: 'April' },
-    { value: '05', label: 'May' },
-    { value: '06', label: 'June' },
-    { value: '07', label: 'July' },
-    { value: '08', label: 'August' },
-    { value: '09', label: 'September' },
-    { value: '10', label: 'October' },
-    { value: '11', label: 'November' },
-    { value: '12', label: 'December' },
+    { value: "01", label: "January" },
+    { value: "02", label: "February" },
+    { value: "03", label: "March" },
+    { value: "04", label: "April" },
+    { value: "05", label: "May" },
+    { value: "06", label: "June" },
+    { value: "07", label: "July" },
+    { value: "08", label: "August" },
+    { value: "09", label: "September" },
+    { value: "10", label: "October" },
+    { value: "11", label: "November" },
+    { value: "12", label: "December" },
   ];
 
   const years: DropdownOption[] = Array.from({ length: 5 }, (_, i) => {
@@ -52,40 +55,40 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
   // Get unique courses from data
   const courses = useMemo(() => {
     const courseSet = new Set<string>();
-    data?.forEach(item => {
+    data?.forEach((item) => {
       if (item.courseDetails?.course_name) {
         courseSet.add(item.courseDetails.course_name);
       }
     });
-    return Array.from(courseSet).map(course => ({
+    return Array.from(courseSet).map((course) => ({
       value: course,
-      label: course
+      label: course,
     }));
   }, [data]);
 
-
-
   const filterGroups: FilterGroup[] = [
-    { title: 'Month', options: months },
-    { title: 'Year', options: years },
-    { title: 'Course', options: courses },
+    { title: "Month", options: months },
+    { title: "Year", options: years },
+    { title: "Course", options: courses },
   ];
 
   const [showFilters, setShowFilters] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const [selectedFilters, setSelectedFilters] = useState<Record<string, string>>({});
+  const [selectedFilters, setSelectedFilters] = useState<
+    Record<string, string>
+  >({});
 
   const toggleFilters = () => {
-    setShowFilters(prev => !prev);
+    setShowFilters((prev) => !prev);
     setOpenDropdown(null);
   };
 
   const toggleDropdown = (title: string) => {
-    setOpenDropdown(prev => (prev === title ? null : title));
+    setOpenDropdown((prev) => (prev === title ? null : title));
   };
 
   const selectOption = (groupTitle: string, value: string) => {
-    setSelectedFilters(prev => ({ ...prev, [groupTitle]: value }));
+    setSelectedFilters((prev) => ({ ...prev, [groupTitle]: value }));
     setOpenDropdown(null);
   };
 
@@ -94,11 +97,11 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
   };
 
   const filteredData = useMemo(() => {
-    return data?.filter(item => {
-      const date = item.start_date || '';
+    return data?.filter((item) => {
+      const date = item.start_date || "";
       const month = date.slice(5, 7);
       const year = date.slice(0, 4);
-      const courseName = item.courseDetails?.course_name || '';
+      const courseName = item.courseDetails?.course_name || "";
 
       return (
         (!selectedFilters.Month || month === selectedFilters.Month) &&
@@ -109,22 +112,43 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
   }, [data, selectedFilters]);
 
   const handleClassDetailPage = (id: string) => {
-    console.log('class uuid',id)
+    console.log("class uuid", id);
     navigate(`/class/${classType}/${id}`);
   };
 
-
   const hasActiveFilters = Object.keys(selectedFilters).length > 0;
+  const { showLoader, hideLoader } = useLoader();
+  const dispatch = useDispatch<any>();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        showLoader();
+        const timeoutId = setTimeout(() => {
+          hideLoader();
+        }, 8000);
+        const response = await dispatch(getDashBoardReports());
+        if (response) {
+          clearTimeout(timeoutId);
+        }
+      } finally {
+        hideLoader();
+      }
+    })();
+  }, [dispatch, hideLoader, showLoader]);
 
   return (
     <div style={{ backgroundColor: COLORS.bg_Colour }} className="mb-4">
       {/* Sticky Filter Section */}
-      <div className="sticky top-0 z-10 bg-[#f1f3f5] pt-2 pb-3">
-        <Card style={{ backgroundColor: COLORS.bg_Colour }} className="px-4 py-3 shadow-sm">
-          <div className="flex justify-between items-center">
+      <div className="sticky top-0 z-0 bg-[#f1f3f5] pt-2 pb-3">
+        <Card
+          style={{ backgroundColor: COLORS.bg_Colour }}
+          className="px-4 py-3 shadow-sm"
+        >
+          <div className="flex justify-between items-center ">
             {/* Filter content (left side) - Only appears when filters are shown */}
             {showFilters && (
-              <div className="flex-1 mr-4 grid grid-cols-6 gap-4">
+              <div className="flex-1 mr-4 grid grid-cols-6 gap-4 ">
                 {filterGroups.map((group) => (
                   <div key={group.title} className="relative">
                     <Button
@@ -139,18 +163,24 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
                     </Button>
 
                     {openDropdown === group.title && (
-                      <div className="absolute z-50 w-full mt-1 bg-[#ebeff3] 
-                  shadow-[2px_2px_3px_rgba(189,194,199,0.75)_inset] rounded-md p-1 max-h-60 overflow-y-auto">
-                        {group.options.map(option => (
+                      <div
+                        className="absolute z-50 w-full mt-1 bg-[#ebeff3] 
+                  shadow-[2px_2px_3px_rgba(189,194,199,0.75)_inset] rounded-md p-1 max-h-60 overflow-y-auto"
+                      >
+                        {group.options.map((option) => (
                           <div
                             key={option.value}
                             style={{ ...FONTS.para_02 }}
                             className={`p-2 m-1 cursor-pointer rounded-sm
-                        ${selectedFilters[group.title] === option.value
-                                ? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF] !text-white'
-                                : 'bg-[#ebeff3] hover:bg-[#dde1e5]'}
+                        ${
+                          selectedFilters[group.title] === option.value
+                            ? "bg-gradient-to-l from-[#7B00FF] to-[#B200FF] !text-white"
+                            : "bg-[#ebeff3] hover:bg-[#dde1e5]"
+                        }
                         shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset]`}
-                            onClick={() => selectOption(group.title, option.value)}
+                            onClick={() =>
+                              selectOption(group.title, option.value)
+                            }
                           >
                             {option.label}
                           </div>
@@ -193,7 +223,10 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
       <Card className="bg-gradient-to-r from-[#7B00FF] to-[#B200FF] text-white mx-2 p-4 mt-2">
         <table className="w-full">
           <thead>
-            <tr className="flex justify-around items-center !text-white" style={{ ...FONTS.heading_03 }}>
+            <tr
+              className="flex justify-around items-center !text-white"
+              style={{ ...FONTS.heading_03 }}
+            >
               {headers.map((title, index) => (
                 <th key={index}>{title}</th>
               ))}
@@ -205,11 +238,10 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
       {/* Filtered Data Cards */}
       {filteredData?.length === 0 ? (
         <div className="text-center py-8">
-
           <p style={{ ...FONTS.heading_04 }} className="text-gray-600">
             {hasActiveFilters
-              ? 'No classes match your filters'
-              : 'No completed classes available'}
+              ? "No classes match your filters"
+              : "No completed classes available"}
           </p>
           {hasActiveFilters && (
             <Button
@@ -219,7 +251,6 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
               Clear Filters
             </Button>
           )}
-
         </div>
       ) : (
         <div className="space-y-2 mx-2 mt-2">
@@ -230,10 +261,13 @@ const Completedclass: React.FC<CompletedclassProps> = ({ data, classType }) => {
                 transition-all duration-300 ease-in-out hover:-translate-y-1 
                 hover:shadow-[6px_6px_8px_rgba(0,0,0,0.1),-2px_-2px_6px_rgba(255,255,255,0.8)] cursor-pointer"
             >
-              <div className="flex justify-around items-center py-1" style={{ ...FONTS.heading_06 }}>
-                <div>{item.courseDetails?.course_name || 'N/A'}</div>
-                <div>{(item.start_date || '').slice(0, 10)}</div>
-                <div>{(item.start_time || '').slice(11, 16)}</div>
+              <div
+                className="flex justify-around items-center py-1"
+                style={{ ...FONTS.heading_06 }}
+              >
+                <div>{item.courseDetails?.course_name || "N/A"}</div>
+                <div>{(item.start_date || "").slice(0, 10)}</div>
+                <div>{(item.start_time || "").slice(11, 16)}</div>
                 <div>{item.duration} Min</div>
                 <div className="flex justify-center">
                   <Button

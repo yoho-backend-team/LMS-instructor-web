@@ -33,6 +33,7 @@ const IDCard: React.FC<IDCardProps> = ({ data }) => {
   const [idCard,setIdCard] = useState<any>('')
 
   const dispatch = useDispatch<any>();
+  // const profileDetails = useSelector(selectProfile);
   const userId:any = GetLocalStorage("instructorDetails");
 
   useEffect(() => {
