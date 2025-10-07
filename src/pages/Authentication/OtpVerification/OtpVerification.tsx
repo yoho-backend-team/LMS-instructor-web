@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { COLORS, FONTS } from "@/constants/uiConstants";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import Logo from "../../../assets/icons/navbar/icons8-ionic-50.png";
 import { authOtpVerification } from "@/features/Authentication/services";
 import { toast } from "react-toastify";
@@ -16,6 +16,20 @@ const OtpVerification = () => {
   const location = useLocation();
   const { data, email } = location?.state;
   const { login } = useAuth();
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+
+    return () => {
+      window.removeEventListener("resize", checkScreenSize);
+    };
+  }, []);
 
   const handleOtpChange = (index: number, value: string) => {
     setShowError(false);
@@ -84,15 +98,20 @@ const OtpVerification = () => {
   };
 
   return (
-    <div className="flex bg-[#ebeff3] w-full h-[100vh] p-4 gap-4">
-      <div className="w-1/2 h-full">
+    <div 
+      className={`flex bg-[#ebeff3] w-full h-[100vh] p-4 gap-4 ${
+        !isDesktop ? "justify-center items-center" : ""
+      }`}
+    >
+      {/* Form Section */}
+      <div className={`${isDesktop ? "w-1/2" : "w-full max-w-md"} h-full`}>
         <Card
           className="bg-[#ebeff3] w-full h-full px-4 rounded-md flex justify-center cursor-pointer"
           style={{
             boxShadow: `
-					  rgba(255, 255, 255, 0.7) -4px -4px 4px,
-					  rgba(189, 194, 199, 0.75) 5px 5px 4px
-					`,
+              rgba(255, 255, 255, 0.7) -4px -4px 4px,
+              rgba(189, 194, 199, 0.75) 5px 5px 4px
+            `,
           }}
         >
           <div className="flex flex-col items-center">
@@ -100,28 +119,40 @@ const OtpVerification = () => {
               className="bg-[#ebeff3] w-[50px] h-[50px] rounded-full flex items-center justify-center cursor-pointer"
               style={{
                 boxShadow: `
-					  rgba(255, 255, 255, 0.7) -4px -4px 4px,
-					  rgba(189, 194, 199, 0.75) 5px 5px 4px
-					`,
+                  rgba(255, 255, 255, 0.7) -4px -4px 4px,
+                  rgba(189, 194, 199, 0.75) 5px 5px 4px
+                `,
               }}
             >
               <img src={Logo} alt="logo" style={{ width: 20, height: 20 }} />
             </Card>
+            
+            {/* Responsive headings */}
             <p
-              className="text-center my-3 mb-5"
+              className="text-center my-3 mb-5 text-sm sm:text-base md:text-lg lg:text-xl"
               style={{ ...FONTS.heading_02 }}
             >
               OTP Verifications
             </p>
-            <p style={{ ...FONTS.heading_06 }}>
+            
+            <p 
+              className="text-xs sm:text-sm md:text-base text-center"
+              style={{ ...FONTS.heading_06 }}
+            >
               Enter the 6 digit OTP Sent to your Mobile Number
             </p>
+            
             <div className="mt-2">
-              <p style={{ ...FONTS.heading_06, color: COLORS.light_red }}>
+              <p 
+                className="text-xs sm:text-sm md:text-base"
+                style={{ ...FONTS.heading_06, color: COLORS.light_red }}
+              >
                 OTP: {data?.otp}
               </p>
             </div>
-            <div className="flex gap-3 justify-center my-3">
+            
+            {/* Responsive OTP inputs */}
+            <div className="flex gap-2 sm:gap-3 justify-center my-3">
               {otpDigits.map((digit, idx) => (
                 <input
                   key={idx}
@@ -134,7 +165,7 @@ const OtpVerification = () => {
                   ref={(el) => {
                     if (el) otpRefs.current[idx] = el;
                   }}
-                  className="w-16 h-16 text-center rounded-md px-4 py-2 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] outline-none"
+                  className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 text-center rounded-md px-2 sm:px-4 py-2 text-sm sm:text-base md:text-lg shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] outline-none"
                 />
               ))}
             </div>
@@ -142,7 +173,7 @@ const OtpVerification = () => {
             {showError && (
               <p
                 style={{ ...FONTS.para_03, color: COLORS.light_red }}
-                className="my-3"
+                className="my-3 text-xs sm:text-sm md:text-base"
               >
                 Please enter your otp
               </p>
@@ -153,9 +184,9 @@ const OtpVerification = () => {
               type="submit"
               onClick={handleOtpVerify}
               disabled={isVerifying}
-              className={`w-full my-6 mt-8 py-2 rounded-md flex justify-center items-center gap-2 transition
-										bg-gradient-to-r from-[#7B00FF] to-[#B200FF]
-										${isVerifying ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
+              className={`w-full my-6 mt-8 py-2 rounded-md flex justify-center items-center gap-2 transition text-sm sm:text-base lg:text-lg
+                bg-gradient-to-r from-[#7B00FF] to-[#B200FF]
+                ${isVerifying ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
               style={{ ...FONTS.heading_04, color: COLORS.white }}
             >
               {isVerifying && (
@@ -166,8 +197,12 @@ const OtpVerification = () => {
 
             <div className="flex justify-center">
               <p
+                className="text-xs sm:text-sm md:text-base cursor-pointer"
                 style={{ ...FONTS.heading_06, color: COLORS.blue_02 }}
-                className="hover:underline"
+                onClick={() => {
+                  // Add resend OTP logic here
+                  toast.info("Resend OTP functionality to be implemented");
+                }}
               >
                 Resend OTP
               </p>
@@ -175,17 +210,21 @@ const OtpVerification = () => {
           </div>
         </Card>
       </div>
-      <div className="w-1/2 h-full">
-        <Card
-          className="bg-gradient-to-l from-[#B200FF] to-[#7B00FF] w-full h-full rounded-md flex items-center justify-center cursor-pointer"
-          style={{
-            boxShadow: `
-				  rgba(255, 255, 255, 0.7) -4px -4px 4px,
-				  rgba(189, 194, 199, 0.75) 5px 5px 4px
-					`,
-          }}
-        ></Card>
-      </div>
+
+      {/* Gradient Section (Desktop only) */}
+      {isDesktop && (
+        <div className="w-1/2 h-full">
+          <Card
+            className="bg-gradient-to-l from-[#B200FF] to-[#7B00FF] w-full h-full rounded-md flex items-center justify-center cursor-pointer"
+            style={{
+              boxShadow: `
+                rgba(255, 255, 255, 0.7) -4px -4px 4px,
+                rgba(189, 194, 199, 0.75) 5px 5px 4px
+              `,
+            }}
+          ></Card>
+        </div>
+      )}
     </div>
   );
 };
