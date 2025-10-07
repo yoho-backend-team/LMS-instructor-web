@@ -10,6 +10,8 @@ import { useEffect } from 'react';
 import type { AppDispatch } from '@/store/store';
 import { selectIdClass } from '@/features/classId/services/reducers/selector';
 import { getClassIdDetail } from '@/features/classId/services/reducers/thunks';
+import { useLoader } from '@/context/LoadingContext/Loader';
+import { getDashBoardReports } from '@/features/Dashboard/reducers/thunks';
 
 const ClassId = () => {
     const { id, classType } = useParams();
@@ -24,7 +26,7 @@ const ClassId = () => {
     useEffect(() => {
         if (id) {
             dispatch(getClassIdDetail({
-                classType: classType === 'true' ? "online" : "offline",
+                classType: "offline",
                 course: id,
             }));
         }
@@ -35,6 +37,24 @@ const ClassId = () => {
         navigate(-1);
     }
 
+    const { showLoader, hideLoader } = useLoader();
+    
+      useEffect(() => {
+        (async () => {
+          try {
+            showLoader();
+            const timeoutId = setTimeout(() => {
+              hideLoader();
+            }, 8000);
+            const response = await dispatch(getDashBoardReports());
+            if (response) {
+              clearTimeout(timeoutId);
+            }
+          } finally {
+            hideLoader();
+          }
+        })();
+      }, [dispatch, hideLoader, showLoader]);
     // const startDate = new Date(classIdData.data?.start_date)
 
 

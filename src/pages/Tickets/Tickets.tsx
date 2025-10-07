@@ -17,6 +17,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getStudentticket } from "@/features/Tickets/reducer/thunks";
 import type { AppDispatch } from "@/store/store";
 import { selectTicket } from "@/features/Tickets/reducer/selector";
+import { useLoader } from "@/context/LoadingContext/Loader";
+import { getDashBoardReports } from "@/features/Dashboard/reducers/thunks";
 
 interface Message {
   _id: string;
@@ -95,6 +97,24 @@ const Tickets = () => {
     dispatch(getStudentticket({ page: 1, limit: 10 }));
   }, [dispatch]);
 
+  const { showLoader, hideLoader } = useLoader();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        showLoader();
+        const timeoutId = setTimeout(() => {
+          hideLoader();
+        }, 8000);
+        const response = await dispatch(getDashBoardReports());
+        if (response) {
+          clearTimeout(timeoutId);
+        }
+      } finally {
+        hideLoader();
+      }
+    })();
+  }, [dispatch, hideLoader, showLoader]);
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
@@ -120,10 +140,11 @@ const Tickets = () => {
         {["all", "open", "closed"].map((label) => (
           <Button
             key={label}
-            className={`cursor-pointer  rounded-xl ${filter === label
-              ? "bg-gradient-to-l from-[#7B00FF] to-[#B200FF] !text-white shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)]"
-              : "bg-[#ebeff3] !text-black shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
-              }`}
+            className={`cursor-pointer  rounded-xl ${
+              filter === label
+                ? "bg-gradient-to-l from-[#7B00FF] to-[#B200FF] !text-white shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)]"
+                : "bg-[#ebeff3] !text-black shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
+            }`}
             style={FONTS.heading_05}
             variant="outline"
             onClick={() => {
@@ -142,12 +163,20 @@ const Tickets = () => {
             {paginatedTickets.map((ticket: Ticket) => (
               <Card
                 key={ticket._id}
-                onClick={() => navigate(`/ticket/${ticket.ticket_id}`, { state: ticket })}
+                onClick={() =>
+                  navigate(`/ticket/${ticket.ticket_id}`, { state: ticket })
+                }
                 className="relative bg-[#ebeff3] min-h-[231px] shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] cursor-pointer"
               >
                 <CardHeader>
                   <div className="flex justify-between items-center">
-                    <CardTitle style={{ ...FONTS.heading_01, color: COLORS.blue_02, fontSize: "24px" }}>
+                    <CardTitle
+                      style={{
+                        ...FONTS.heading_01,
+                        color: COLORS.blue_02,
+                        fontSize: "24px",
+                      }}
+                    >
                       {ticket.ticket_id}
                     </CardTitle>
                     <CardAction>
@@ -187,10 +216,11 @@ const Tickets = () => {
                       <Dialog>
                         <DialogTrigger>
                           <Button
-                            className={`rounded-lg cursor-pointer ${ticket.status === "opened"
-                              ? "bg-gradient-to-l from-[#7B00FF] to-[#B200FF] !text-white shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)]"
-                              : "bg-[#ebeff3] !text-black shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
-                              }`}
+                            className={`rounded-lg cursor-pointer ${
+                              ticket.status === "opened"
+                                ? "bg-gradient-to-l from-[#7B00FF] to-[#B200FF] !text-white shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)]"
+                                : "bg-[#ebeff3] !text-black shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
+                            }`}
                             style={FONTS.heading_04}
                             variant="outline"
                           >
@@ -218,8 +248,12 @@ const Tickets = () => {
                 <ChevronLeft size={20} />
               </Button>
 
-              <span style={FONTS.heading_05} className="text-sm md:text-base text-black">
-                Page <strong>{currentPage}</strong> of <strong>{totalPages}</strong>
+              <span
+                style={FONTS.heading_05}
+                className="text-sm md:text-base text-black"
+              >
+                Page <strong>{currentPage}</strong> of{" "}
+                <strong>{totalPages}</strong>
               </span>
 
               <Button
@@ -237,11 +271,11 @@ const Tickets = () => {
       ) : (
         <div className="flex flex-col items-center justify-center py-35">
           <p className="text-lg font-medium mb-4" style={FONTS.para_01}>
-            {filter === 'open'
-              ? 'No open tickets found'
-              : filter === 'closed'
-                ? 'No closed tickets found'
-                : 'No tickets found'}
+            {filter === "open"
+              ? "No open tickets found"
+              : filter === "closed"
+              ? "No closed tickets found"
+              : "No tickets found"}
           </p>
         </div>
       )}

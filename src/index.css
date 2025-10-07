@@ -382,3 +382,15 @@ button:focus-visible {
   border-color: rgb(209, 213, 219) !important;
 }
 
+
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none; 
+}
+

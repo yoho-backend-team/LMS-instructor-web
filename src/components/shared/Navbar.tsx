@@ -257,9 +257,9 @@ const Navbar = () => {
                 `,
 							}}
 						>
-							<Card className='bg-[#ebeff3] shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] h-[48px] w-[160px] cursor-pointer flex gap-2 justify-center hover:bg-gradient-to-l from-[#7B00FF] to-[#B200FF] hover:text-white'>
+							<Card className='bg-[#ebeff3] shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] h-[48px] w-[160px] cursor-pointer flex gap-2 justify-center'>
 								<Link
-									className='flex justify-center gap-2'
+									className='flex  justify-center gap-2'
 									to='profile'
 									onClick={() => setshowProfileSection(false)}
 								>
@@ -268,7 +268,7 @@ const Navbar = () => {
 										alt='profile-icon'
 										style={{ width: 28, height: 28 }}
 									/>
-<p className="font-quicksand font-bold text-[20px] ">Profile</p>
+									<p className="font-quicksand font-bold text-[20px] ">Profile</p>
 								</Link>
 							</Card>
 							<Button

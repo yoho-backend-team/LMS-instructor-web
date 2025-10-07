@@ -3,7 +3,6 @@
 
 import { FONTS } from "@/constants/uiConstants"
 import Cloud from "../../assets/icons/payments/Cloud.png"
-import FileUpload from "../../assets/icons/payments/File-upload.png"
 import { useEffect, useState, useRef } from "react"
 import Modal from "./Modal"
 import { Button } from "../ui/button"
@@ -14,6 +13,7 @@ import { getDashBoardReports } from "@/features/Dashboard/reducers/thunks"
 import { SalarySlip } from "./Salaryslip"
 import html2canvas from "html2canvas"
 import jsPDF from "jspdf"
+import Frame1 from "../../assets/payment/Frame 1.png" 
 
 interface PaymentTable {
   Month: string
@@ -215,15 +215,20 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
                   <img src={Cloud || "/placeholder.svg"} alt="Download" />
                 </button>
                 <button
-                  onClick={() => {
-                    setIsModalOpen(true)
-                    setSelectedDetail(PaymentTable)
-                  }}
-                  className="bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] p-2 rounded-lg cursor-pointer"
-                  title="Upload"
-                >
-                  <img src={FileUpload || "/placeholder.svg"} alt="Upload" />
-                </button>
+  onClick={() => {
+    setIsModalOpen(true);
+    setSelectedDetail(PaymentTable);
+  }}
+  className="bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] p-2 rounded-lg cursor-pointer"
+  title="View"
+>
+  <img
+    src={Frame1 || "/placeholder.svg"}
+    alt="View"
+    className="w-6 h-6 object-cover rounded-md"
+  />
+</button>
+
               </p>
             </div>
           ))
@@ -375,27 +380,31 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
           </section>
 
           <section>
-            <p style={{ ...FONTS.heading_04 }}>Status</p>
-            <Button
-              className={`p-2 px-8 rounded-lg mt-4 
-                        ${selectedDetail.status !== "pending"
-                  ? "bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-500 hover:to-green-600 shadow-[0px_3px_4px_0px_rgba(255,255,255,0.75)_inset,3px_-3px_3px_0px_rgba(255,255,255,0.25)_inset,-4px_8px_23px_0px_#3ABE65_inset,-8px_-8px_12px_0px_#3ABE65_inset,2px_3px_3px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-1px_-1px_6px_0px_rgba(255,255,255,0.75),-1px_-1px_6px_1px_rgba(255,255,255,0.25)]"
-                  : "bg-gradient-to-r from-red-500 to-red-600 text-white  shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_red_inset,-4px_-8px_10px_0px_#B20_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white"
-                }`}
-            >
-              {selectedDetail?.status === "pending" ? "Pending" : "Paid"}
-            </Button>
+          <section>
+    <p style={{ ...FONTS.heading_04 }}>Status</p>
+    <Button
+      className={`p-2 px-8 rounded-lg 
+        ${selectedDetail.status !== "pending"
+          ? "bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-500 hover:to-green-600 shadow-[...]"
+          : "bg-gradient-to-r from-red-500 to-red-600 text-white shadow-[...] hover:text-white"
+        }`}
+    >
+      {selectedDetail?.status === "pending" ? "Pending" : "Paid"}
+    </Button>
+  </section>
           </section>
         </div>
 
-        <div className="flex justify-end ">
-          <Button
-            onClick={() => setIsModalOpen(false)}
-            className="cursor-pointer bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white rounded-lg shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white"
-          >
-            Close
-          </Button>
-        </div>
+        <div className="flex justify-end mt-6">
+  <Button
+    onClick={() => setIsModalOpen(false)}
+    className="cursor-pointer bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white rounded-lg shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white"
+  >
+    Close
+  </Button>
+</div>
+
+      
       </Modal>
 
       {pdfPaymentData && (

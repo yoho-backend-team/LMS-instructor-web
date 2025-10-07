@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { Card, CardContent } from '../ui/card';
 import eclip from '../../assets/dashboard/ellipse-2-4.svg';
@@ -20,8 +21,9 @@ interface RootState {
 }
 
 const CourseProgress: React.FC = () => {
-    const CourseProgress = useSelector((state: RootState) => state.dashboard.data.classes) ?? [];
-    const progress = CourseProgress?.[0]?.total || 0;
+    const CourseProgress: any = useSelector((state: RootState) => state.dashboard.data.classes) ?? [];
+    const progress = parseFloat((((CourseProgress?.[0]?.offline_class?.completed + CourseProgress?.[0]?.online_class?.completed) / CourseProgress?.[0]?.total) * 100).toFixed(1));
+    // CourseProgress?.[0]?.total || 0;
 
     const radius = 80;
     const radius2 = 100;
@@ -107,8 +109,8 @@ const CourseProgress: React.FC = () => {
                                 style={{
                                     width: 50,
                                     height: 50,
-                                    left: sunX + 22 - 16,
-                                    top: sunY + 19 - 16,
+                                    left: progress < 70 && progress > 30 ? sunX : (progress < 30 ? sunX + 5 : (progress <= 0 ? sunX : sunX - 1)), // center the image
+                                    top: progress < 70 && progress > 30 ? sunY + 20 : (progress < 30 ? sunY + 15 : sunY - 1),
                                 }}
                             />
 

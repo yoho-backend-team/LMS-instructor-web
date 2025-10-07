@@ -1,20 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Download, QrCode } from 'lucide-react';
 import { COLORS, FONTS } from '@/constants/uiConstants';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectProfile } from '@/features/Profile/reducers/selectors';
+import { useDispatch } from 'react-redux';
+// import { selectProfile } from '@/features/Profile/reducers/selectors';
 import { getStudentProfileThunk } from '@/features/Profile/reducers/thunks';
+import * as htmlToImage from 'html-to-image';
+import { saveAs } from 'file-saver';
+import { getStaffIdCard } from '@/features/Profile/services';
+import { GetImageUrl, GetLocalStorage } from '@/utils/helper';
 
 interface IDCardData {
   staffName: string;
   staffId: string;
-  course: string;
-  batch: string;
+  email: string;
+ address: string;
   validFrom: string;
   validUntil: string;
   institution: string;
   profileImage: string;
-  bloodGroup?: string;
+ contact?: string;
   emergencyContact?: string;
 }
 
@@ -24,53 +28,102 @@ interface IDCardProps {
 
 const IDCard: React.FC<IDCardProps> = ({ data }) => {
   const [isFlipped, setIsFlipped] = useState(false);
-
+  const [profileImgBase64, setProfileImgBase64] = useState<string | null>(null);
+  const frontRef = useRef<HTMLDivElement>(null);
+  const [idCard,setIdCard] = useState<any>('')
 
   const dispatch = useDispatch<any>();
-	const profileDetails = useSelector(selectProfile);
+  // const profileDetails = useSelector(selectProfile);
+  const userId:any = GetLocalStorage("instructorDetails");
 
-	useEffect(() => {
-		dispatch(getStudentProfileThunk());
-		
-	}, [dispatch]);
-  
-  // Sample data - replace with actual data from props or API
+  useEffect(() => {
+    dispatch(getStudentProfileThunk());
+    (async()=>{
+      const response = await getStaffIdCard(userId?._id)
+      setIdCard(response?.data[0]);
+      console.log(response?.data[0]?.id,'staffidcard')
+    })()
+  }, [dispatch]);
+
+  console.log('profile object id',idCard)
+
   const idCardData: IDCardData = data || {
-    staffName: profileDetails?.full_name,
-    staffId: profileDetails?.userDetail?.staffId,
-    course: 'Theoretical Physics',
-    batch: 'Batch 2024-25',
-    validFrom: '2024-01-01',
+    staffName:idCard?.name || '',
+    staffId: idCard?.id || '-',
+    email: idCard?.email,
+   address: idCard?.address?.state,
+    validFrom: idCard?.contact,
     validUntil: '2024-12-31',
     institution: 'Classie',
-    profileImage: 'https://img.freepik.com/premium-photo/character-portrait-albert-einstein-generate-by-ai_978242-594.jpg?w=2000',
-    bloodGroup: 'O+',
-    emergencyContact: '+1 234 567 8900'
+    profileImage: idCard?.image,
+   contact: idCard?.contact,
+    emergencyContact: idCard?.contact,
   };
 
-  const handleDownload = () => {
-    // Implement ID card download functionality
+  // Convert remote image to Base64
+ useEffect(() => {
+  const fetchImageAsBase64 = async (url: string) => {
+    try {
+      const response = await fetch(url, { mode: 'cors' });
+      if (!response.ok) throw new Error('Failed to fetch image');
+      const blob = await response.blob();
+      return await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+    } catch (err) {
+      console.error('Failed to fetch image for Base64:', err);
+      return null;
+    }
   };
 
-  const handleCardClick = () => {
-    setIsFlipped(!isFlipped);
+  if (idCardData.profileImage) {
+    fetchImageAsBase64(idCardData.profileImage).then((base64) => {
+      if (base64) setProfileImgBase64(base64);
+    });
+  }
+}, [idCardData.profileImage]);
+
+
+  const handleDownload = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!frontRef.current) return;
+
+    try {
+      const dataUrl = await htmlToImage.toPng(frontRef.current, {
+        quality: 1,
+        cacheBust: true,
+        backgroundColor: '#ffffff',
+      });
+      saveAs(dataUrl, `${idCardData.staffName || 'IDCard'}_IDCard.png`);
+    } catch (err) {
+      console.error('Failed to download ID Card:', err);
+      alert('Failed to download ID Card. Make sure all images allow CORS.');
+    }
   };
+
+  const handleCardClick = () => setIsFlipped(!isFlipped);
 
   return (
     <div className="w-full">
-      <div className="rounded-lg shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] flex flex-col"
-        style={{ 
-          width: '100%',
-          marginTop: '1rem',
-          height: '75vh',
-          fontFamily: FONTS.para_01.fontFamily
-        }}>
-        
+      <div
+        className="rounded-lg shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] flex flex-col"
+        style={{ width: '100%', marginTop: '1rem', height: '75vh', fontFamily: FONTS.para_01.fontFamily }}
+      >
         {/* Header */}
         <div className="p-4 sm:p-6 border-b border-gray-200 flex-shrink-0">
           <div className="flex justify-between items-center">
-            <h2 className="font-bold text-2xl leading-none" style={{ color: COLORS.text_title, fontFamily: FONTS.heading_01.fontFamily, fontWeight: FONTS.heading_01.fontWeight }}>
-            Staff ID Card
+            <h2
+              className="font-bold text-2xl leading-none"
+              style={{
+                color: COLORS.text_title,
+                fontFamily: FONTS.heading_01.fontFamily,
+                fontWeight: FONTS.heading_01.fontWeight,
+              }}
+            >
+              Staff ID Card
             </h2>
           </div>
         </div>
@@ -79,42 +132,60 @@ const IDCard: React.FC<IDCardProps> = ({ data }) => {
           {/* ID Card Preview */}
           <div className="mb-8 flex justify-center">
             <div className="relative w-full max-w-80 h-[500px]" style={{ perspective: '1000px' }}>
-              <div 
+              <div
                 className="relative w-full h-full transition-transform duration-700 cursor-pointer"
                 onClick={handleCardClick}
-                style={{ 
-                  transformStyle: 'preserve-3d',
-                  transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)'
-                }}
+                style={{ transformStyle: 'preserve-3d', transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }}
               >
                 {/* Card Front */}
-                <div className="absolute inset-0 w-full h-full rounded-2xl  overflow-hidden" style={{ backfaceVisibility: 'hidden' }}>
-                  {/* Half Color Design */}
+                <div
+                  ref={frontRef}
+                  className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden"
+                  style={{ backfaceVisibility: 'hidden' }}
+                >
                   <div className="h-full relative">
-                    {/* Top Half - Colored */}
-                    <div className="h-1/2 p-6 relative flex flex-col" style={{ background: `linear-gradient(135deg, ${COLORS.light_blue}, ${COLORS.purple_01})`, color: COLORS.white }}>
-                      {/* Header */}
+                    {/* Top Half */}
+                    <div
+                      className="h-1/2 p-6 relative flex flex-col"
+                      style={{
+                        background: `linear-gradient(135deg, ${COLORS.light_blue}, ${COLORS.purple_01})`,
+                        color: COLORS.white,
+                      }}
+                    >
                       <div className="text-center mb-4">
-                        <h3 className="text-lg font-bold mb-1" style={{ fontFamily: FONTS.heading_04.fontFamily }}>{idCardData.institution}</h3>
-                        <p className="text-sm opacity-90" style={{ fontFamily: FONTS.para_01.fontFamily }}>STAFF ID CARD</p>
+                        <h3 className="text-lg font-bold mb-1" style={{ fontFamily: FONTS.heading_04.fontFamily }}>
+                          {idCardData.institution}
+                        </h3>
+                        <p className="text-sm opacity-90" style={{ fontFamily: FONTS.para_01.fontFamily }}>
+                          STAFF ID CARD
+                        </p>
                         <div className="w-16 h-0.5 bg-white/50 mx-auto mt-2"></div>
                       </div>
 
                       {/* Profile Image */}
-                      <div className="flex justify-center mb-4">
-                        <div className="w-20 h-20 rounded-full border-4 border-white/30 overflow-hidden bg-white/10">
-                          <img 
-                            src={idCardData.profileImage} 
-                            alt={idCardData.staffName}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      </div>
+                     <div className="flex justify-center mb-4">
+  <div className="w-20 h-20 rounded-full border-4 border-white/30 overflow-hidden bg-white/10">
+    {profileImgBase64 ? (
+      <img
+        src={GetImageUrl(idCardData.profileImage)}
+        alt={idCardData.staffName}
+        className="w-full h-full object-cover"
+      />
+    ) : (
+      <div className="w-full h-full bg-gray-200 animate-pulse" />
+    )}
+  </div>
+</div>
+
 
                       {/* Staff Info */}
                       <div className="text-center">
-                        <h4 className="text-lg font-bold mb-1" style={{ fontFamily: FONTS.heading_04.fontFamily }}>{idCardData.staffName}</h4>
-                        <p className="text-sm opacity-90" style={{ fontFamily: FONTS.para_01.fontFamily }}>{idCardData.course}</p>
+                        <h4 className="text-lg font-bold mb-1" style={{ fontFamily: FONTS.heading_04.fontFamily }}>
+                          {idCardData.staffName}
+                        </h4>
+                        <p className="text-sm opacity-90" style={{ fontFamily: FONTS.para_01.fontFamily }}>
+                          {idCardData.email}
+                        </p>
                       </div>
 
                       {/* Decorative elements */}
@@ -122,41 +193,30 @@ const IDCard: React.FC<IDCardProps> = ({ data }) => {
                       <div className="absolute bottom-0 left-0 w-12 h-12 bg-white/10 rounded-full translate-y-6 -translate-x-6"></div>
                     </div>
 
-                    {/* Bottom Half - White */}
+                    {/* Bottom Half */}
                     <div className="h-1/2 p-6 bg-white relative flex flex-col" style={{ color: COLORS.text_desc }}>
-                      {/* Details */}
                       <div className="space-y-2 text-sm flex-1" style={{ fontFamily: FONTS.para_01.fontFamily }}>
                         <div className="flex justify-between">
                           <span className="opacity-70">Staff ID:</span>
                           <span className="font-semibold">{idCardData.staffId}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="opacity-70">Batch:</span>
-                          <span className="font-semibold">{idCardData.batch}</span>
+                          <span className="opacity-70">Address:</span>
+                          <span className="font-semibold">{idCardData.address}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="opacity-70">Blood Group:</span>
-                          <span className="font-semibold">{idCardData.bloodGroup || 'N/A'}</span>
+                          <span className="opacity-70">Contact:</span>
+                          <span className="font-semibold">{idCardData.contact|| 'N/A'}</span>
                         </div>
-                       
                       </div>
 
                       {/* Bottom Section */}
                       <div className="flex items-end justify-between mt-4">
-                        {/* Left side - Course details */}
-                        <div className="text-xs" style={{ fontFamily: FONTS.para_01.fontFamily }}>
-                          <div className="mb-1">
-                            <span className="opacity-70">Duration:</span>
-                            <div className="font-semibold">6 Months</div>
-                          </div>
-                        </div>
+                        
 
-                        {/* Right side - Download button */}
+                        {/* Download Button */}
                         <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDownload();
-                          }}
+                          onClick={handleDownload}
                           className="w-10 h-10 rounded-lg flex items-center justify-center hover:bg-gray-100 transition-all duration-200 shadow-md"
                           style={{ backgroundColor: COLORS.bg_Colour }}
                           title="Download ID Card"
@@ -165,8 +225,10 @@ const IDCard: React.FC<IDCardProps> = ({ data }) => {
                         </button>
                       </div>
 
-                      {/* Click to flip hint */}
-                      <div className="absolute top-2 right-2 text-xs opacity-50" style={{ fontFamily: FONTS.para_01.fontFamily }}>
+                      <div
+                        className="absolute top-2 right-2 text-xs opacity-50"
+                        style={{ fontFamily: FONTS.para_01.fontFamily }}
+                      >
                         Click to flip
                       </div>
                     </div>
@@ -174,12 +236,25 @@ const IDCard: React.FC<IDCardProps> = ({ data }) => {
                 </div>
 
                 {/* Card Back */}
-                <div className="absolute inset-0 w-full h-full rounded-2xl  overflow-hidden" style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}>
-                  <div className="h-full relative" style={{ background: `linear-gradient(135deg, ${COLORS.purple_01}, ${COLORS.light_blue})`, color: COLORS.white }}>
+                <div
+                  className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden"
+                  style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+                >
+                  <div
+                    className="h-full relative"
+                    style={{
+                      background: `linear-gradient(135deg, ${COLORS.purple_01}, ${COLORS.light_blue})`,
+                      color: COLORS.white,
+                    }}
+                  >
                     {/* Header */}
                     <div className="text-center p-6 border-b border-white/20">
-                      <h3 className="text-lg font-bold mb-1" style={{ fontFamily: FONTS.heading_04.fontFamily }}>QR Code</h3>
-                      <p className="text-sm opacity-90" style={{ fontFamily: FONTS.para_01.fontFamily }}>Scan for verification</p>
+                      <h3 className="text-lg font-bold mb-1" style={{ fontFamily: FONTS.heading_04.fontFamily }}>
+                        QR Code
+                      </h3>
+                      <p className="text-sm opacity-90" style={{ fontFamily: FONTS.para_01.fontFamily }}>
+                        Scan for verification
+                      </p>
                     </div>
 
                     {/* QR Code Section */}
@@ -187,14 +262,16 @@ const IDCard: React.FC<IDCardProps> = ({ data }) => {
                       <div className="w-48 h-48 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-lg">
                         <QrCode className="w-32 h-32" style={{ color: COLORS.text_desc }} />
                       </div>
-                      
+
                       <div className="text-center">
-                        <p className="text-sm opacity-90 mb-2" style={{ fontFamily: FONTS.para_01.fontFamily }}>Staff ID: {idCardData.staffId}</p>
-                        <p className="text-xs opacity-70" style={{ fontFamily: FONTS.para_01.fontFamily }}>Scan this QR code for quick verification</p>
+                        <p className="text-sm opacity-90 mb-2" style={{ fontFamily: FONTS.para_01.fontFamily }}>
+                          Staff ID: {idCardData.staffId}
+                        </p>
+                        <p className="text-xs opacity-70" style={{ fontFamily: FONTS.para_01.fontFamily }}>
+                          Scan this QR code for quick verification
+                        </p>
                       </div>
                     </div>
-
-                   
 
                     {/* Decorative elements */}
                     <div className="absolute top-0 left-0 w-20 h-20 bg-white/10 rounded-full -translate-y-10 -translate-x-10"></div>
@@ -205,8 +282,8 @@ const IDCard: React.FC<IDCardProps> = ({ data }) => {
             </div>
           </div>
 
-          {/* ID Card Details */}
-          <div className="mb-8">
+          {/* Remaining details sections remain unchanged (ID Card Details, Card Status, Digital Features) */}
+           <div className="mb-8">
             <h3 className="font-bold mb-6 text-xl leading-none" style={{ color: COLORS.text_title, fontFamily: FONTS.heading_02.fontFamily, fontWeight: FONTS.heading_02.fontWeight }}>
               ID Card Details
             </h3>
@@ -234,27 +311,16 @@ const IDCard: React.FC<IDCardProps> = ({ data }) => {
                   Course
                 </label>
                 <div className="rounded-lg px-4 py-3 text-sm leading-relaxed shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] min-h-[44px] flex items-center" style={{ backgroundColor: COLORS.bg_Colour, fontFamily: FONTS.para_01.fontFamily, color: COLORS.text_desc }}>
-                  {idCardData.course}
+                  {idCardData.address}
                 </div>
               </div>
 
               <div>
                 <label className="block font-medium mb-2 text-sm leading-relaxed" style={{ color: COLORS.text_desc, fontFamily: FONTS.para_01.fontFamily }}>
-                  Batch
+                 Address
                 </label>
                 <div className="rounded-lg px-4 py-3 text-sm leading-relaxed shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] min-h-[44px] flex items-center" style={{ backgroundColor: COLORS.bg_Colour, fontFamily: FONTS.para_01.fontFamily, color: COLORS.text_desc }}>
-                  {idCardData.batch}
-                </div>
-              </div>
-
-
-
-              <div>
-                <label className="block font-medium mb-2 text-sm leading-relaxed" style={{ color: COLORS.text_desc, fontFamily: FONTS.para_01.fontFamily }}>
-                  Blood Group
-                </label>
-                <div className="rounded-lg px-4 py-3 text-sm leading-relaxed shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] min-h-[44px] flex items-center" style={{ backgroundColor: COLORS.bg_Colour, fontFamily: FONTS.para_01.fontFamily, color: COLORS.text_desc }}>
-                  {idCardData.bloodGroup}
+                  {idCardData.address}
                 </div>
               </div>
 
