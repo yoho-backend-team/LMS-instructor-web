@@ -102,51 +102,52 @@ const Dashboard: React.FC = () => {
           </div>
         )}
 
-        <div className="flex md:flex-wrap gap-6 md:gap-4 lg:flex-row">
-          {/* Total Course Handling */}
-          <Card className="bg-[#ebeff3] rounded-2xl w-full sm:w-[48%] md:w-[30%] lg:w-[19%] shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40]">
-            <Button
-              className="bg-[#ebeff3] w-full h-14 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
-              style={FONTS.heading_06}
-              variant="outline"
-            >
-              Total Course Handling: {dashboard?.courses?.length}
-            </Button>
-          </Card>
+      <div className="flex flex-wrap justify-between gap-6 md:gap-4 lg:gap-6">
+  {/* Total Course Handling */}
+  <Card className="bg-[#ebeff3] rounded-2xl w-full sm:w-[48%] md:w-[30%] lg:w-[19%] flex justify-center shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40]">
+    <Button
+      className="bg-[#ebeff3] w-[90%] h-14 my-2 mx-3 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
+      style={FONTS.heading_06}
+      variant="outline"
+    >
+      Total Course Handling: {dashboard?.courses?.length}
+    </Button>
+  </Card>
 
-          {/* Batch Holding */}
-          <Card className="bg-[#ebeff3] rounded-2xl w-full sm:w-[48%] md:w-[30%] lg:w-[19%] shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40]">
-            <Button
-              className="bg-[#ebeff3] w-full h-14 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
-              style={FONTS.heading_06}
-              variant="outline"
-            >
-              Batch's Holding: {dashboard?.batches?.length}
-            </Button>
-          </Card>
+  {/* Batch Holding */}
+  <Card className="bg-[#ebeff3] rounded-2xl w-full sm:w-[48%] md:w-[30%] lg:w-[19%] flex justify-center shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40]">
+    <Button
+      className="bg-[#ebeff3] w-[90%] h-14 my-2 mx-3 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
+      style={FONTS.heading_06}
+      variant="outline"
+    >
+      Batch's Holding: {dashboard?.batches?.length}
+    </Button>
+  </Card>
 
-          {/* Branch */}
-          <Card className="bg-[#ebeff3] rounded-2xl w-full sm:w-[48%] md:w-[30%] lg:w-[19%] shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40]">
-            <Button
-              className="bg-[#ebeff3] w-full h-14 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
-              style={FONTS.heading_06}
-              variant="outline"
-            >
-              Branch: {dashboard?.branch?.branch_identity}
-            </Button>
-          </Card>
+  {/* Branch */}
+  <Card className="bg-[#ebeff3] rounded-2xl w-full sm:w-[48%] md:w-[30%] lg:w-[19%] flex justify-center shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40]">
+    <Button
+      className="bg-[#ebeff3] w-[90%] h-14 mx-3 my-2 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
+      style={FONTS.heading_06}
+      variant="outline"
+    >
+      Branch: {dashboard?.branch?.branch_identity}
+    </Button>
+  </Card>
 
-          {/* Institute */}
-          <Card className="bg-[#ebeff3] rounded-2xl w-full sm:w-[100%] md:w-[64%] lg:w-[25%] shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40]">
-            <Button
-              className="bg-[#ebeff3] w-full h-14 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
-              style={FONTS.heading_06}
-              variant="outline"
-            >
-              Institute: {dashboard?.institute?.institute_name}
-            </Button>
-          </Card>
-        </div>
+  {/* Institute */}
+  <Card className="bg-[#ebeff3] rounded-2xl w-full sm:w-[100%] md:w-[64%] lg:w-[25%] flex justify-center shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40]">
+    <Button
+      className="bg-[#ebeff3] w-[90%] h-14 mx-3 my-2 shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
+      style={FONTS.heading_06}
+      variant="outline"
+    >
+      Institute: {dashboard?.institute?.institute_name}
+    </Button>
+  </Card>
+</div>
+
       </div>
     </>
   );
