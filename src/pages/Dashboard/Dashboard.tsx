@@ -102,7 +102,7 @@ const Dashboard: React.FC = () => {
           </div>
         )}
 
-      <div className="flex flex-wrap justify-between gap-6 md:gap-4 lg:gap-6">
+       <div className="flex flex-wrap justify-between gap-6 md:gap-4 lg:gap-6">
   {/* Total Course Handling */}
   <Card className="bg-[#ebeff3] rounded-2xl w-full sm:w-[48%] md:w-[30%] lg:w-[19%] flex justify-center shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40]">
     <Button

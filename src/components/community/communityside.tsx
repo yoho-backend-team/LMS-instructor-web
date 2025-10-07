@@ -11,6 +11,7 @@ import ChatInputWithEmojiPicker from "./chatInputWithEmojiPicker";
 import type { CommunitiesProp, Community } from "./type.ts";
 import { useCommunityChat } from "./hooks/useCommunityChat";
 import { useAutoScroll } from "./hooks/useAutoScroll";
+import { bg } from "date-fns/locale";
 
 type Props = {
   communities: CommunitiesProp;
@@ -99,16 +100,36 @@ const CommunitySide: React.FC<Props> = ({ communities }) => {
       <div className="w-full lg:w-2/3 flex flex-col h-[75vh] position-sticky ">
         {selectedChat ? (
           <>
-          <div className="p-3 bg-[#EBEFF3] rounded-lg overflow-hidden shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] transition-all cursor-pointer ">
-              <ChatHeader chat={selectedChat} />
-            <MessageList
-              messages={messages}
-              formatMessageDate={formatMessageDate}
-              isMine={isMine}
-              bottomRef={bottomRef}
-            />
-            <ChatInputWithEmojiPicker onSend={sendMessage} />
-          </div>
+         <div className="p-3 bg-[#EBEFF3] rounded-lg overflow-hidden shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] transition-all cursor-pointer flex flex-col h-[75vh]">
+  {/* Header - stays fixed */}
+  <div className="flex-shrink-0 mb-2">
+    <ChatHeader chat={selectedChat} />
+  </div>
+
+  {/* Scrollable message area with background */}
+  <div
+    className="flex-1 overflow-y-auto px-2 py-1 rounded-md"
+    style={{
+      backgroundImage: `url(${bg})`,
+      backgroundSize: "cover",
+      backgroundRepeat: "no-repeat",
+      backgroundPosition: "center",
+    }}
+  >
+    <MessageList
+      messages={messages}
+      formatMessageDate={formatMessageDate}
+      isMine={isMine}
+      bottomRef={bottomRef}
+    />
+  </div>
+
+  {/* Input area - stays fixed */}
+  <div className="flex-shrink-0 mt-2">
+    <ChatInputWithEmojiPicker onSend={sendMessage} />
+  </div>
+</div>
+
           </>
         ) : (
           <div className="flex-1 min-w-0 bg-[#EBEFF3] rounded-xl shadow flex items-center justify-center ">
