@@ -24,15 +24,15 @@ const CourseProgress: React.FC = () => {
     const CourseProgress: any = useSelector((state: RootState) => state.dashboard.data.classes) ?? [];
     const progress = parseFloat((((CourseProgress?.[0]?.offline_class?.completed + CourseProgress?.[0]?.online_class?.completed) / CourseProgress?.[0]?.total) * 100).toFixed(1));
 
-    const radius = 70; // Reduced for laptop
-    const radius2 = 85; // Reduced for laptop
+    const radius = 70;
+    const radius2 = 85;
     const circumference = 2 * Math.PI * radius;
     const strokeDashoffset = circumference - (progress / 100) * circumference;
 
     const { TabView } = TabViewResponsive();
 
-    const centerX = 85; // Adjusted for laptop
-    const centerY = 100; // Adjusted for laptop
+    const centerX = 85;
+    const centerY = 100;
 
     const getCirclePosition = (angleDeg: number) => {
         const angleRad = (angleDeg - 90) * (Math.PI / 180);
@@ -48,14 +48,14 @@ const CourseProgress: React.FC = () => {
     const { x: moonX, y: moonY } = getCirclePosition(moonAngle);
 
     return (
-        <Card className='flex w-full h-[340px] lg:h-[320px] items-start justify-center gap-2.5 p-4 lg:p-3 relative bg-[#ebeff3] rounded-2xl shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40]'>
-            <CardContent className='flex flex-col w-full h-[300px] lg:h-[280px] items-center gap-4 lg:gap-3 relative p-0'>
-                <div className='flex flex-col h-[250px] lg:h-[230px] items-center gap-4 lg:gap-3 relative self-stretch w-full'>
+        <Card className='flex w-full h-[400px] lg:h-[360px] items-start justify-center gap-2.5 p-4 lg:p-3 relative bg-[#ebeff3] rounded-2xl shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40]'>
+            <CardContent className='flex flex-col w-full h-[360px] lg:h-[340px] items-center gap-4 lg:gap-3 relative p-0'>
+                <div className='flex flex-col h-[310px] lg:h-[290px] items-center gap-4 lg:gap-3 relative self-stretch w-full'>
                     <div className="relative self-stretch mt-2 [font-family:'Quicksand',Helvetica] font-bold text-dark text-lg lg:text-base tracking-[0] leading-[normal] text-center">
                         Courses Progress
                     </div>
 
-                    <div className='relative w-full h-[200px] lg:h-[180px] flex items-center justify-center'>
+                    <div className='relative w-full h-[260px] lg:h-[240px] flex items-center justify-center'>
                         <div className='relative w-[220px] lg:w-[190px] h-[220px] lg:h-[190px]'>
                             <img
                                 className='absolute w-full h-full top-0 left-0'
