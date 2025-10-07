@@ -50,7 +50,33 @@ function CourseNotes() {
         </h1>
       </div>
 
-      <div className="flex justify-end mb-4 absolute right-10 top-40 md:relative md:top-50 md:right-0">
+      {/* Mobile Tabs - Show at top on mobile */}
+      <div className="block md:hidden mb-6">
+        <div className="flex justify-center gap-8 bg-white p-4 rounded-lg shadow-sm">
+          <div
+            onClick={() => setActiveTab("notes")}
+            className={`flex flex-col items-center cursor-pointer ${
+              activeTab === "notes" ? "text-[#B200FF]" : "text-gray-500"
+            }`}
+          >
+            <img src={notesIcon} className="w-5 h-5 mb-1" alt="Notes" />
+            <span className="text-sm font-medium">Notes</span>
+          </div>
+
+          <div
+            onClick={() => setActiveTab("study")}
+            className={`flex flex-col items-center cursor-pointer ${
+              activeTab === "study" ? "text-[#B200FF]" : "text-gray-500"
+            }`}
+          >
+            <img src={studyIcon} className="w-5 h-5 mb-1" alt="Study" />
+            <span className="text-sm font-medium">Study Materials</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop Tabs - Show on right side */}
+      <div className="hidden md:flex justify-end mb-4 absolute right-10 top-40 md:relative md:top-50 md:right-0">
         <div className="flex gap-6">
           <div
             onClick={() => setActiveTab("notes")}
@@ -74,7 +100,6 @@ function CourseNotes() {
         </div>
       </div>
 
-  
       {activeTab === "notes" ? (
         <>
           <CourseButton activeTabs="notes" />

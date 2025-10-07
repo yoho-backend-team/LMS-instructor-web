@@ -23,10 +23,10 @@ const GridProgress: React.FC<propstype> = ({ title, value, icon }) => {
             <div className="flex flex-col">
                 <h3
                     style={{ ...FONTS.heading_05 }}
-                    className="text-[18px]">{title ?? "title"}</h3>
+                    className="!text-[12px]">{title ?? "title"}</h3>
                 <img src={dashicons[icon as keyof typeof dashicons]} alt="" width={40} height={40} className="mt-2" />
             </div>
-            <div className="w-[60px] h-[60px]">
+            <div className="w-[50px] h-[50px]">
                 <CircularProgressWithLabelDemo value={value} color={color[icon as keyof typeof color]} />
             </div>
         </div >

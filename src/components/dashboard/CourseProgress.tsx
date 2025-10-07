@@ -23,18 +23,16 @@ interface RootState {
 const CourseProgress: React.FC = () => {
     const CourseProgress: any = useSelector((state: RootState) => state.dashboard.data.classes) ?? [];
     const progress = parseFloat((((CourseProgress?.[0]?.offline_class?.completed + CourseProgress?.[0]?.online_class?.completed) / CourseProgress?.[0]?.total) * 100).toFixed(1));
-    // CourseProgress?.[0]?.total || 0;
 
-    const radius = 80;
-    const radius2 = 100;
+    const radius = 70; // Reduced for laptop
+    const radius2 = 85; // Reduced for laptop
     const circumference = 2 * Math.PI * radius;
-    const strokeDashoffset =
-        circumference - (progress / 100) * circumference;
+    const strokeDashoffset = circumference - (progress / 100) * circumference;
 
     const { TabView } = TabViewResponsive();
 
-    const centerX = 100;
-    const centerY = 115;
+    const centerX = 85; // Adjusted for laptop
+    const centerY = 100; // Adjusted for laptop
 
     const getCirclePosition = (angleDeg: number) => {
         const angleRad = (angleDeg - 90) * (Math.PI / 180);
@@ -50,32 +48,32 @@ const CourseProgress: React.FC = () => {
     const { x: moonX, y: moonY } = getCirclePosition(moonAngle);
 
     return (
-        <Card className='flex w-full h-[365px] items-start justify-center gap-2.5 p-5 relative bg-[#ebeff3] rounded-2xl shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40]'>
-            <CardContent className={`flex flex-col ${TabView ? 'w-80' : 'w-full'}  h-[325px] items-center gap-5 relative p-0`}>
-                <div className='flex flex-col h-[277px] items-center gap-5 relative self-stretch w-full'>
-                    <div className="relative self-stretch mt-2 [font-family:'Quicksand',Helvetica] font-bold text-dark text-xl tracking-[0] leading-[normal]">
+        <Card className='flex w-full h-[340px] lg:h-[320px] items-start justify-center gap-2.5 p-4 lg:p-3 relative bg-[#ebeff3] rounded-2xl shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40]'>
+            <CardContent className='flex flex-col w-full h-[300px] lg:h-[280px] items-center gap-4 lg:gap-3 relative p-0'>
+                <div className='flex flex-col h-[250px] lg:h-[230px] items-center gap-4 lg:gap-3 relative self-stretch w-full'>
+                    <div className="relative self-stretch mt-2 [font-family:'Quicksand',Helvetica] font-bold text-dark text-lg lg:text-base tracking-[0] leading-[normal] text-center">
                         Courses Progress
                     </div>
 
-                    <div className={`relative w-full h-[242px] ${TabView ? 'left-6' : ''}`}>
-                        <div className={TabView ? `relative w-[248px] h-[264px] -top-6 left-2` : `relative w-[258px] h-[274px] -top-5 left-8`}>
+                    <div className='relative w-full h-[200px] lg:h-[180px] flex items-center justify-center'>
+                        <div className='relative w-[220px] lg:w-[190px] h-[220px] lg:h-[190px]'>
                             <img
-                                className={TabView ? `absolute w-[248px] h-[248px] top-4 left-0` : 'absolute w-[258px] h-[258px] top-4 left-0'}
+                                className='absolute w-full h-full top-0 left-0'
                                 alt='Ellipse'
                                 src={eclip}
                             />
 
                             <svg
-                                className={`${TabView ? 'w-[248px] h-[277px]' : 'w-[258px] h-[287px]'} transform -rotate-90`}
-                                viewBox='0 0 197 205'
+                                className='w-full h-full transform -rotate-90'
+                                viewBox='0 0 170 170'
                             >
                                 <circle
-                                    cx='100'
-                                    cy='100'
+                                    cx='85'
+                                    cy='85'
                                     r={radius}
                                     fill='none'
                                     stroke='url(#progressGradient)'
-                                    strokeWidth='25'
+                                    strokeWidth='20'
                                     strokeLinecap='round'
                                     strokeDasharray={circumference}
                                     strokeDashoffset={strokeDashoffset}
@@ -96,7 +94,7 @@ const CourseProgress: React.FC = () => {
                             </svg>
 
                             <img
-                                className={`absolute w-[170px] h-[170px]  ${TabView ? 'left-9 top-[55px]' : 'top-[60px] left-11'} `}
+                                className='absolute w-[140px] lg:w-[120px] h-[140px] lg:h-[120px] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
                                 alt='Group'
                                 src={dots}
                             />
@@ -107,10 +105,10 @@ const CourseProgress: React.FC = () => {
                                 alt='Sun'
                                 className='absolute'
                                 style={{
-                                    width: 50,
-                                    height: 50,
-                                    left: progress < 70 && progress > 30 ? sunX : (progress < 30 ? sunX + 5 : (progress <= 0 ? sunX : sunX - 1)), // center the image
-                                    top: progress < 70 && progress > 30 ? sunY + 20 : (progress < 30 ? sunY + 15 : sunY - 1),
+                                    width: 40,
+                                    height: 40,
+                                    left: sunX - 20,
+                                    top: sunY - 20,
                                 }}
                             />
 
@@ -120,20 +118,19 @@ const CourseProgress: React.FC = () => {
                                 alt='Moon'
                                 className='absolute'
                                 style={{
-                                    width: 35,
-                                    height: 35,
-                                    left: moonX + 20 - 18,
-                                    top: moonY + 22 - 16,
+                                    width: 30,
+                                    height: 30,
+                                    left: moonX - 15,
+                                    top: moonY - 15,
                                 }}
                             />
 
-                            <div className={`absolute w-[81px] h-[81px] ${TabView ? 'top-[95px] left-[80px]' : 'top-[99px] left-[85px]'}  bg-[#ebeff3] rounded-[40.33px] shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40]`}>
-                                <div className='flex flex-col w-[63px] items-center gap-2 relative top-[17px] left-[9px]'>
-                                    <div className="relative w-[62px] mt-[-1.00px] [font-family:'Quicksand',Helvetica] font-semibold text-dark text-xs text-center tracking-[0] leading-4">
+                            <div className='absolute w-[65px] lg:w-[60px] h-[65px] lg:h-[60px] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#ebeff3] rounded-full shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40]'>
+                                <div className='flex flex-col w-full h-full items-center justify-center gap-1'>
+                                    <div className="[font-family:'Quicksand',Helvetica] font-semibold text-dark text-[10px] lg:text-[9px] text-center tracking-[0] leading-3">
                                         Progress
                                     </div>
-
-                                    <div className="relative self-stretch h-[19px] bg-[linear-gradient(135deg,rgba(123,0,255,1)_0%,rgba(178,0,255,1)_100%)] [-webkit-background-clip:text] bg-clip-text [-webkit-text-fill-color:transparent] [text-fill-color:transparent] [font-family:'Quicksand',Helvetica] font-bold text-transparent text-xl text-center tracking-[0] leading-4 whitespace-nowrap">
+                                    <div className="bg-[linear-gradient(135deg,rgba(123,0,255,1)_0%,rgba(178,0,255,1)_100%)] [-webkit-background-clip:text] bg-clip-text [-webkit-text-fill-color:transparent] [text-fill-color:transparent] [font-family:'Quicksand',Helvetica] font-bold text-transparent text-base lg:text-sm text-center tracking-[0] leading-4 whitespace-nowrap">
                                         {progress}%
                                     </div>
                                 </div>
@@ -142,19 +139,17 @@ const CourseProgress: React.FC = () => {
                     </div>
                 </div>
 
-                <div className={`flex items-center ${TabView ? 'pb-2' : 'mt-2'} justify-between relative self-stretch w-full flex-[0_0_auto]`}>
-                    <div className="relative w-fit mt-[-1px]">
+                <div className='flex items-center justify-between relative self-stretch w-full flex-[0_0_auto] mt-2 lg:mt-1 px-2'>
+                    <div className="relative w-fit">
                         <select
-                            className="appearance-none bg-transparent border-none p-0 m-0 font-bold text-[#7B00FF] text-sm font-['Quicksand'] focus:outline-none cursor-pointer pr-6"
+                            className="appearance-none bg-transparent border-none p-0 m-0 font-bold text-[#7B00FF] text-sm lg:text-xs font-['Quicksand'] focus:outline-none cursor-pointer pr-6"
                             defaultValue="5"
                         >
                             <option value="5">Batch A</option>
-
                         </select>
 
-                        {/* Custom dropdown arrow */}
                         <svg
-                            className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7B00FF] pointer-events-none"
+                            className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 lg:w-3 lg:h-3 text-[#7B00FF] pointer-events-none"
                             fill="none"
                             stroke="currentColor"
                             strokeWidth="2"
@@ -164,7 +159,7 @@ const CourseProgress: React.FC = () => {
                         </svg>
                     </div>
 
-                    <div className={`relative [font-family:'Quicksand',Helvetica] font-bold text-[#706f6f] text-sm text-right tracking-[0] leading-[normal]`}>
+                    <div className={`relative [font-family:'Quicksand',Helvetica] font-bold text-[#706f6f] text-sm lg:text-xs text-right tracking-[0] leading-[normal]`}>
                         {CourseProgress?.[0]?.total} Classes
                     </div>
                 </div>
