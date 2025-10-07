@@ -91,76 +91,66 @@ const { showLoader, hideLoader } = useLoader();
 
       <CourseButton activeTabs="batches" />
 
-      {/* <div className="flex gap-4 mb-4 ml-2">
-        {SelectBatches?.map((tab:any, index:any) => (
-          <Button
-            key={index}
-            onClick={() => setActiveTab(tab?.batch_name)}
-            className={`px-4 py-2  rounded-md shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] text-sm font-semibold ${activeTab === tab
-              ? 'bg-purple-700 text-white btnhovershadow hover:!text-white btnfocusshadow'
-              : 'bg-[#ebeff3] text-gray-700 btnhovershadow hover:!text-white'
-              }`}
-          >
-            {tab?.batch_name}
-          </Button>
-        ))}
-      </div> */}
+    
+      <div className="w-full overflow-x-auto">
+        <Card className="overflow-hidden bg-[#EBEFF3] rounded-xl shadow-inner min-w-[600px]">
+          <div className="flex flex-col">
+            <Card className="bg-gradient-to-r from-[#7B00FF] to-[#B200FF] !text-white p-4 mx-4 rounded-md sticky top-0 z-0 mb-4">
+              <div className="grid grid-cols-5 gap-4 text-center !text-white min-w-[500px]">
+                <div style={{ ...FONTS.heading_02, color: COLORS.white }}>
+                  Batches
+                </div>
+                <div style={{ ...FONTS.heading_02, color: COLORS.white }}>
+                  Total Students
+                </div>
+                <div style={{ ...FONTS.heading_02, color: COLORS.white }}>
+                  Total Classes
+                </div>
+                <div style={{ ...FONTS.heading_02, color: COLORS.white }}>
+                  Start Date
+                </div>
+                <div style={{ ...FONTS.heading_02, color: COLORS.white }}>
+                  End Date
+                </div>
+              </div>
+            </Card>
 
-      <Card className="overflow-hidden bg-[#EBEFF3] rounded-xl shadow-inner">
-        <div className="flex flex-col">
-          <Card className="bg-gradient-to-r from-[#7B00FF] to-[#B200FF] !text-white p-4 mx-4 rounded-md sticky top-0 z-0 mb-4">
-            <div className="grid grid-cols-5 gap-4  text-center !text-white">
-              <div style={{ ...FONTS.heading_02, color: COLORS.white }}>
-                Batches
-              </div>
-              <div style={{ ...FONTS.heading_02, color: COLORS.white }}>
-                Total Students
-              </div>
-              <div style={{ ...FONTS.heading_02, color: COLORS.white }}>
-                Total Classes
-              </div>
-              <div style={{ ...FONTS.heading_02, color: COLORS.white }}>
-                Start Date
-              </div>
-              <div style={{ ...FONTS.heading_02, color: COLORS.white }}>
-                End Date
-              </div>
+            <div className="overflow-y-auto mx-4">
+              {SelectBatches?.length ? (
+                SelectBatches?.map((item: any, index: any) => (
+                  <Card
+                    onClick={() => navigate(`/course-track/${item?.uuid}`)}
+                    key={index}
+                    className="bg-[#ebeff3] cursor-pointer shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] text-black p-4 mb-2 hover:shadow-md rounded-lg min-w-[500px]"
+                  >
+                    <div className="grid grid-cols-5 gap-4 text-center items-center">
+                      <div style={{ ...FONTS.para_01 }} className="truncate">
+                        {item?.batch_name}
+                      </div>
+                      <div style={{ ...FONTS.para_01 }}>
+                        {item?.student?.length}
+                      </div>
+                      <div style={{ ...FONTS.para_01 }}>
+                        {item?.classes?.length}
+                      </div>
+                      <div style={{ ...FONTS.para_01 }}>
+                        {formattedDate(item?.start_date)}
+                      </div>
+                      <div style={{ ...FONTS.para_01 }}>
+                        {formattedDate(item?.end_date)}
+                      </div>
+                    </div>
+                  </Card>
+                ))
+              ) : (
+                <div className="flex justify-center mt-3 py-8">
+                  <p style={{ ...FONTS.heading_06 }}>No batches available</p>
+                </div>
+              )}
             </div>
-          </Card>
-
-          <div className="overflow-y-auto mx-4">
-            {SelectBatches?.length ? (
-              SelectBatches?.map((item: any, index: any) => (
-                <Card
-                  onClick={() => navigate(`/course-track/${item?.uuid}`)}
-                  key={index}
-                  className="bg-[#ebeff3] cursor-pointer shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] text-black p-4 mb-2 hover:shadow-md rounded-lg"
-                >
-                  <div className="grid grid-cols-5 gap-4 text-center items-center">
-                    <div style={{ ...FONTS.para_01 }}>{item?.batch_name}</div>
-                    <div style={{ ...FONTS.para_01 }}>
-                      {item?.student?.length}
-                    </div>
-                    <div style={{ ...FONTS.para_01 }}>
-                      {item?.classes?.length}
-                    </div>
-                    <div style={{ ...FONTS.para_01 }}>
-                      {formattedDate(item?.start_date)}
-                    </div>
-                    <div style={{ ...FONTS.para_01 }}>
-                      {formattedDate(item?.end_date)}
-                    </div>
-                  </div>
-                </Card>
-              ))
-            ) : (
-              <div className="flex justify-center mt-3">
-                <p style={{ ...FONTS.heading_06 }}>No batches available</p>
-              </div>
-            )}
           </div>
-        </div>
-      </Card>
+        </Card>
+      </div>
     </div>
   );
 };

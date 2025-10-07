@@ -227,84 +227,175 @@ const TaskTable = ({ tasks, onTaskUpdate, course }: TaskTableProps) => {
           " (filtered)"}
       </div>
 
-      {/* Task List Container */}
-      <Card className="overflow-hidden bg-[#EBEFF3] rounded-xl shadow-inner">
-        <div className="flex flex-col">
-          {/* Header Row */}
-          <Card className="bg-gradient-to-r from-[#7B00FF] to-[#B200FF] !text-white p-4 mx-4 rounded-md sticky top-0 z-0 mb-4">
-            <div className="grid grid-cols-5 gap-4 text-center !text-white">
-              <div style={{ ...FONTS?.heading_02, color: COLORS?.white }}>
-                Name
+      {/* Desktop Table View (hidden on mobile) */}
+      <div className="hidden md:block">
+        <Card className="overflow-hidden bg-[#EBEFF3] rounded-xl shadow-inner">
+          <div className="flex flex-col">
+            {/* Header Row */}
+            <Card className="bg-gradient-to-r from-[#7B00FF] to-[#B200FF] !text-white p-4 mx-4 rounded-md sticky top-0 z-0 mb-4">
+              <div className="grid grid-cols-5 gap-4 text-center !text-white">
+                <div style={{ ...FONTS?.heading_02, color: COLORS?.white }}>
+                  Name
+                </div>
+                <div style={{ ...FONTS?.heading_02, color: COLORS?.white }}>
+                  Type
+                </div>
+                <div style={{ ...FONTS?.heading_02, color: COLORS?.white }}>
+                  Task
+                </div>
+                <div style={{ ...FONTS?.heading_02, color: COLORS?.white }}>
+                  Deadline
+                </div>
+                <div style={{ ...FONTS?.heading_02, color: COLORS?.white }}>
+                  Status
+                </div>
               </div>
-              <div style={{ ...FONTS?.heading_02, color: COLORS?.white }}>
-                Type
-              </div>
-              <div style={{ ...FONTS?.heading_02, color: COLORS?.white }}>
-                Task
-              </div>
-              <div style={{ ...FONTS?.heading_02, color: COLORS?.white }}>
-                Deadline
-              </div>
-              <div style={{ ...FONTS?.heading_02, color: COLORS?.white }}>
-                Status
-              </div>
-            </div>
-          </Card>
+            </Card>
 
-          {/* Task Rows */}
-          <div className="overflow-y-auto mx-4">
-            {currentItems.length === 0 ? (
-              <div className="flex justify-center mt-3 py-8">
-                <p style={{ ...FONTS?.heading_06 }} className="text-gray-500">
-                  {filteredTasks.length === 0
-                    ? "No tasks available"
-                    : "No tasks match your filters"}
-                </p>
-              </div>
-            ) : (
-              currentItems.map((task: any) => (
-                <Card
-                  key={task?.id}
-                  onClick={() => handleRowClick(task)}
-                  className="bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] text-black p-4 mb-2 hover:shadow-md rounded-lg cursor-pointer transition-shadow duration-200"
-                >
-                  <div className="grid grid-cols-5 gap-4 text-center items-center">
+            {/* Task Rows */}
+            <div className="overflow-y-auto mx-4">
+              {currentItems.length === 0 ? (
+                <div className="flex justify-center mt-3 py-8">
+                  <p style={{ ...FONTS?.heading_06 }} className="text-gray-500">
+                    {filteredTasks.length === 0
+                      ? "No tasks available"
+                      : "No tasks match your filters"}
+                  </p>
+                </div>
+              ) : (
+                currentItems.map((task: any) => (
+                  <Card
+                    key={task?.id}
+                    onClick={() => handleRowClick(task)}
+                    className="bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] text-black p-4 mb-2 hover:shadow-md rounded-lg cursor-pointer transition-shadow duration-200"
+                  >
+                    <div className="grid grid-cols-5 gap-4 text-center items-center">
+                      <div
+                        style={{ ...FONTS?.para_01 }}
+                        className="truncate"
+                        title={task?.name}
+                      >
+                        {task?.name}
+                      </div>
+                      <div style={{ ...FONTS?.para_01 }} className="capitalize">
+                        {task?.type}
+                      </div>
+                      <div
+                        style={{ ...FONTS?.para_01 }}
+                        className="truncate"
+                        title={task?.task}
+                      >
+                        {task?.task}
+                      </div>
+                      <div style={{ ...FONTS?.para_01 }}>{task?.deadline}</div>
+                      <div>
+                        <Button
+                          className={`cursor-pointer px-4 py-1 w-25 rounded-lg text-sm font-medium ${
+                            task?.is_active === true
+                              ? "bg-green-500 text-white hover:bg-green-600"
+                              : "bg-gradient-to-l from-[#7B00FF] to-[#B200FF] !text-white hover:from-[#6A00E0] hover:to-[#9B00E0]"
+                          }`}
+                        >
+                          {task?.is_active === true ? "Completed" : "Pending"}
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+                ))
+              )}
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      {/* Mobile Card View (shown on mobile) */}
+      <div className="block md:hidden">
+        <div className="space-y-4">
+          {currentItems.length === 0 ? (
+            <div className="flex justify-center py-8">
+              <p style={{ ...FONTS?.heading_06 }} className="text-gray-500">
+                {filteredTasks.length === 0
+                  ? "No tasks available"
+                  : "No tasks match your filters"}
+              </p>
+            </div>
+          ) : (
+            currentItems.map((task: any) => (
+              <Card
+                key={task?.id}
+                onClick={() => handleRowClick(task)}
+                className="bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] text-black p-4 hover:shadow-md rounded-lg cursor-pointer transition-shadow duration-200"
+              >
+                <div className="space-y-3">
+                  {/* Name */}
+                  <div className="flex justify-between items-start">
+                    <div style={{ ...FONTS?.para_01 }} className="font-semibold text-gray-700">
+                      Name:
+                    </div>
                     <div
                       style={{ ...FONTS?.para_01 }}
-                      className="truncate"
+                      className="text-right truncate flex-1 ml-2"
                       title={task?.name}
                     >
                       {task?.name}
                     </div>
-                    <div style={{ ...FONTS?.para_01 }} className="capitalize">
+                  </div>
+
+                  {/* Type */}
+                  <div className="flex justify-between items-start">
+                    <div style={{ ...FONTS?.para_01 }} className="font-semibold text-gray-700">
+                      Type:
+                    </div>
+                    <div style={{ ...FONTS?.para_01 }} className="capitalize text-right">
                       {task?.type}
+                    </div>
+                  </div>
+
+                  {/* Task */}
+                  <div className="flex justify-between items-start">
+                    <div style={{ ...FONTS?.para_01 }} className="font-semibold text-gray-700">
+                      Task:
                     </div>
                     <div
                       style={{ ...FONTS?.para_01 }}
-                      className="truncate"
+                      className="text-right truncate flex-1 ml-2"
                       title={task?.task}
                     >
                       {task?.task}
                     </div>
-                    <div style={{ ...FONTS?.para_01 }}>{task?.deadline}</div>
-                    <div>
-                      <Button
-                        className={`cursor-pointer px-4 py-1 w-25 rounded-lg text-sm font-medium ${
-                          task?.is_active === true
-                            ? "bg-green-500 text-white hover:bg-green-600"
-                            : "bg-gradient-to-l from-[#7B00FF] to-[#B200FF] !text-white hover:from-[#6A00E0] hover:to-[#9B00E0]"
-                        }`}
-                      >
-                        {task?.is_active === true ? "Completed" : "Pending"}
-                      </Button>
+                  </div>
+
+                  {/* Deadline */}
+                  <div className="flex justify-between items-start">
+                    <div style={{ ...FONTS?.para_01 }} className="font-semibold text-gray-700">
+                      Deadline:
+                    </div>
+                    <div style={{ ...FONTS?.para_01 }} className="text-right">
+                      {task?.deadline}
                     </div>
                   </div>
-                </Card>
-              ))
-            )}
-          </div>
+
+                  {/* Status */}
+                  <div className="flex justify-between items-center">
+                    <div style={{ ...FONTS?.para_01 }} className="font-semibold text-gray-700">
+                      Status:
+                    </div>
+                    <Button
+                      className={`cursor-pointer px-4 py-1 rounded-lg text-sm font-medium ${
+                        task?.is_active === true
+                          ? "bg-green-500 text-white hover:bg-green-600"
+                          : "bg-gradient-to-l from-[#7B00FF] to-[#B200FF] !text-white hover:from-[#6A00E0] hover:to-[#9B00E0]"
+                      }`}
+                    >
+                      {task?.is_active === true ? "Completed" : "Pending"}
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+            ))
+          )}
         </div>
-      </Card>
+      </div>
 
       {/* Pagination Controls */}
       {totalPages > 1 && (
