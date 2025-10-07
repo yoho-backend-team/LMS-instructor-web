@@ -46,6 +46,8 @@ function generateendpoints() {
 						},
 				batches: {
 					get: `/institutes/:instituteid/branches/:branchid/courses/:courseId/batches/`,
+					getwithUuid: `/institutes/:instituteid/branches/:branchid/batches/:batchId`,
+					UpdateModulewithUuid: `/institutes/:instituteid/branches/:branchid/update-module-status/`,
 				},
 				
 			},
@@ -91,6 +93,9 @@ function generateendpoints() {
 		notificationSubscription: {
 			post: '/notification/subscribe',
 		},
+		staffIdCard: {
+			get: '/staffidcard/download/card/:id'
+		}
 	};
 }
 

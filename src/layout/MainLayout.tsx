@@ -3,9 +3,12 @@ import Footer from '@/components/shared/Footer';
 import Navbar from '@/components/shared/Navbar';
 import { Outlet } from 'react-router-dom';
 import Client from '../api/index';
+import { useLoader } from '@/context/LoadingContext/Loader';
+import Loader from '@/components/Loader/Loader';
 
 const MainLayout = () => {
 	const publicVapidKey = import.meta.env.VITE_PUBLIC_VAPI_KEY;
+	const { IsLoading } = useLoader()
 
 	function urlBase64ToUint8Array(base64String: string) {
 		const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
@@ -51,6 +54,11 @@ const MainLayout = () => {
 	return (
 		<>
 			<div className='flex flex-col h-[100vh]  bg-[#EBEFF3]'>
+				{IsLoading && (
+					<div className='w-full h-full flex justify-center items-center absolute z-10 bg-transparent backdrop-blur-sm'>
+						<Loader />
+					</div>
+				)}
 				<div className='flex flex-col justify-center h-[90px] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)]'>
 					<Navbar />
 				</div>

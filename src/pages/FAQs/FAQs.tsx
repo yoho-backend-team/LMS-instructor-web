@@ -1,17 +1,37 @@
-import FAQInterface from '@/components/Faq/Faq';
-import { getFaqThunk } from '@/features/faq/reduces/thunks';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import FAQInterface from "@/components/Faq/Faq";
+import { useLoader } from "@/context/LoadingContext/Loader";
+import { getDashBoardReports } from "@/features/Dashboard/reducers/thunks";
+import { getFaqThunk } from "@/features/faq/reduces/thunks";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 const FAQs = () => {
-	const dispatch = useDispatch<any>();
+  const dispatch = useDispatch<any>();
+  const { showLoader, hideLoader } = useLoader();
 
-	useEffect(() => {
-		// getFaqThunk(dispatch)
-		dispatch(getFaqThunk());
-	}, [dispatch]);
+  useEffect(() => {
+    (async () => {
+      try {
+        showLoader();
+        const timeoutId = setTimeout(() => {
+          hideLoader();
+        }, 8000);
+        const response = await dispatch(getDashBoardReports());
+        if (response) {
+          clearTimeout(timeoutId);
+        }
+      } finally {
+        hideLoader();
+      }
+    })();
+  }, [dispatch, hideLoader, showLoader]);
 
-	return (<FAQInterface />);
+  useEffect(() => {
+    // getFaqThunk(dispatch)
+    dispatch(getFaqThunk());
+  }, [dispatch]);
+
+  return <FAQInterface />;
 };
 
 export default FAQs;

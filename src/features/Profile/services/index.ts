@@ -14,3 +14,12 @@ export const updateStudentProfile = async (data: any) => {
         return response;
     }
 }
+
+export const getStaffIdCard = async (data: any) => {
+    try{
+           const response = await Client.staffIdCard.get(data)
+           return response;
+    }catch(error){
+        console.log(error)
+    } 
+}

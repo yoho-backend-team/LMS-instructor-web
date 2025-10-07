@@ -4,6 +4,7 @@ import { FONTS } from "@/constants/uiConstants";
 import { Button } from "@/components/ui/button";
 import { updateTaskData } from "../../../features/Course/services/Course";
 import type { Task } from "./TaskTable";
+import { GetImageUrl } from "@/utils/helper";
 
 interface EditTaskFormProps {
   task: Task;
@@ -21,6 +22,7 @@ interface StudentSubmission {
   completed_at: string;
   createdAt: string;
   updatedAt: string;
+
 }
 
 const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
@@ -31,6 +33,7 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
 
   // Extract student submissions from task data
   const studentSubmissions: StudentSubmission[] | any = task?.answers;
+  console.log('task questions',task?.question_file)
   console.log(task, "sow")
   // Calculate pagination
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -74,7 +77,6 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
     };
     setStudentGrades(updatedGrades);
 
-    // If status is being changed to "completed", update the individual submission immediately
     if (field === "status" && value === "completed") {
       const submission = studentSubmissions.find((sub: any) => sub?._id === submissionId);
       if (submission) {
@@ -86,7 +88,6 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
           status: "completed",
         };
 
-        // Call API to update only this specific submission
         try {
           setIsUpdating(true);
           await updateTaskData(task._id, {
@@ -162,21 +163,37 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  const handleViewAttachment = (submission: StudentSubmission) => {
+ 
+   const handleViewAttachment = (submission: StudentSubmission) => {
+  if (submission && submission.file) {
     setSelectedSubmission(submission);
     setShowAttachmentView(true);
-  };
+  } else {
+    alert("No attachment available for this submission");
+  }
+};
 
-  const handleDownloadAttachment = () => {
-    if (selectedSubmission && selectedSubmission.file) {
-      const link = document.createElement("a");
-      link.href = selectedSubmission.file;
-      link.download = `attachment_${selectedSubmission.student}_${selectedSubmission._id}`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-  };
+
+//   const handleDownloadAttachment = () => {
+//   if (!selectedSubmission?.file) {
+//     alert("No file available to download");
+//     return;
+//   }
+
+//   const fileUrl = GetImageUrl(selectedSubmission.file); // guaranteed string
+//   if (!fileUrl) {
+//     alert("Invalid file URL");
+//     return;
+//   }
+
+//   const link = document.createElement("a");
+//   link.href = fileUrl; // ✅ now TypeScript knows this is a string
+//   link.download = `attachment_${selectedSubmission.student}_${selectedSubmission._id}`;
+//   document.body.appendChild(link);
+//   link.click();
+//   document.body.removeChild(link);
+// };
+
 
   return (
     <>
@@ -347,8 +364,11 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
                               />
                             </td>
                             <td className="px-4 py-3" style={{ ...FONTS.para_01 }}>
-                              {submission?.completed_at ? new Date(submission.completed_at).toLocaleDateString() : "N/A"}
-                            </td>
+  {submission?.completed_at
+    ? new Date(submission.completed_at).toLocaleDateString("en-GB") // en-GB → dd/mm/yyyy
+    : "N/A"}
+</td>
+
                             <td className="px-4 py-3">
                               <Button
                                 onClick={() => handleViewAttachment(submission)}
@@ -448,41 +468,78 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
         </div>
       )}
 
-      {/* Attachment View Modal */}
-      {showAttachmentView && selectedSubmission && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4">
-            <div className="flex justify-between items-center mb-4">
-              <h3 style={{ ...FONTS.heading_03 }}>Student Attachment</h3>
-              <button onClick={() => setShowAttachmentView(false)} className="text-gray-500 text-2xl">
-                &times;
-              </button>
-            </div>
-            <div className="p-4 bg-gray-100 rounded-lg text-center">
-              {selectedSubmission.file ? (
-                <>
-                  <p style={{ ...FONTS.heading_06 }} className="mb-4">
-                    Student: {selectedSubmission?.student?.first_name || selectedSubmission?.studentName || "N/A"}
-                  </p>
-                  <p style={{ ...FONTS.heading_06 }} className="mb-4">
-                    Student has submitted a file
-                  </p>
-                  <Button className="bg-blue-500 text-white" onClick={handleDownloadAttachment}>
-                    Download Attachment
-                  </Button>
-                </>
-              ) : (
-                <p style={{ ...FONTS.heading_06 }} className="mb-4">
-                  No attachment available for this submission
-                </p>
-              )}
-            </div>
-            <div className="mt-4 flex justify-end">
-              <Button onClick={() => setShowAttachmentView(false)}>Close</Button>
-            </div>
-          </div>
-        </div>
+{/* Attachment View Modal */}
+{showAttachmentView && selectedSubmission && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="bg-white rounded-lg p-6 max-w-3xl w-full mx-4">
+      <div className="flex justify-between items-center mb-4">
+        <h3 style={{ ...FONTS.heading_03 }}>Student Attachment</h3>
+        <button
+          onClick={() => setShowAttachmentView(false)}
+          className="text-gray-500 text-2xl"
+        >
+          &times;
+        </button>
+      </div>
+
+    
+      {selectedSubmission.file?.match(/\.(jpeg|jpg|png|gif|webp)$/i) ? (
+        <img
+          src={GetImageUrl(selectedSubmission.file)} 
+          alt="Student submission"
+          className="max-h-[400px] mx-auto rounded-lg border shadow-md mb-4 object-contain"
+        />
+      ) : (
+        <p className="text-center text-gray-600 mb-4">
+          This file cannot be previewed. Please download to view.
+        </p>
       )}
+
+      <div className="p-4 bg-gray-100 rounded-lg text-center">
+        <p style={{ ...FONTS.heading_06 }} className="mb-4">
+          Student:{" "}
+          {selectedSubmission?.student?.first_name ||
+            selectedSubmission?.studentName ||
+            "N/A"}
+        </p>
+
+       
+       <Button
+  className="bg-blue-500 text-white"
+  onClick={() => {
+    if (!selectedSubmission?.file) {
+      alert("No file available to download");
+      return;
+    }
+
+    const fileUrl = GetImageUrl(selectedSubmission.file);
+    if (!fileUrl) {
+      alert("Invalid file URL");
+      return;
+    }
+
+    const link = document.createElement("a");
+    link.href = fileUrl; // ✅ now guaranteed string
+    link.download = `attachment_${selectedSubmission.student}_${selectedSubmission._id}`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }}
+>
+  Download Attachment
+</Button>
+
+      </div>
+
+      <div className="mt-4 flex justify-end">
+        <Button onClick={() => setShowAttachmentView(false)}>Close</Button>
+      </div>
+    </div>
+  </div>
+)}
+
+
+
     </>
   );
 };

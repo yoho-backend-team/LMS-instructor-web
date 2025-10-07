@@ -28,6 +28,7 @@ import Batches from '@/components/courses/Batches';
 import CourseNotes from '@/components/courses/coursenotes';
 import ChangePasswordPage from '@/pages/Authentication/ChangePassword/ChangePassword';
 import Taskprojects from '@/components/courses/TaskProject';
+import CourseTrack from '@/components/courses/CourseTrack';
 
 const AppRoutes = () => {
 	const { isAuthenticated, isLoading } = useAuth();
@@ -65,6 +66,7 @@ const AppRoutes = () => {
 				<Route path='placement' element={<Placement />} />
 				<Route path='payment' element={<Payment />} />
 				<Route path='note_materials' element={<CourseNotes />} />
+				<Route path='course-track/:batchId' element={<CourseTrack />} />
 				<Route path='about/:course' element={<AboutCourse />} />
 				<Route
 					path='notes_materials'

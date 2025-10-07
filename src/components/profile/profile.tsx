@@ -12,6 +12,7 @@ import {
 } from '@/features/Profile/reducers/thunks';
 import { updateStudentProfile } from '@/features/Profile/services';
 import { useNavigate } from 'react-router-dom';
+import { useLoader } from '@/context/LoadingContext/Loader';
 
 const ProfileInformation: React.FC = () => {
   const [activeMenuItem, setActiveMenuItem] = useState('profile');
@@ -21,10 +22,19 @@ const ProfileInformation: React.FC = () => {
   const dispatch = useDispatch<any>();
   const profileDetails = useSelector(selectProfile);
   const navigate = useNavigate();
+  const { showLoader, hideLoader } = useLoader()
 
   useEffect(() => {
-    dispatch(getStudentProfileThunk());
-  }, [dispatch]);
+    (async () => {
+      showLoader()
+      const response = await dispatch(getStudentProfileThunk());
+      if (response) {
+        hideLoader()
+      } else {
+        hideLoader()
+      }
+    })()
+  }, [dispatch, hideLoader, showLoader]);
 
    const [profileData, setProfileData] = useState({
     name: profileDetails?.full_name,
@@ -182,7 +192,7 @@ const ProfileInformation: React.FC = () => {
       {/* Confirmation Dialog */}
       <ConfirmationDialog
         isOpen={showCancelDialog}
-        onClose={() => {setShowCancelDialog(false), dispatch(getStudentProfileThunk());}} 
+        onClose={() => { setShowCancelDialog(false), dispatch(getStudentProfileThunk()); }}
         onConfirm={confirmCancel}
         title='Discard Changes'
         description='You have unsaved changes. Are you sure you want to discard them?'

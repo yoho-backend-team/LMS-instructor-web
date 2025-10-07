@@ -96,6 +96,22 @@ const Navbar = () => {
 		}
 	};
 
+	// helper to check if nav is active (includes children for courses)
+	const isNavActive = (itemPath: string) => {
+		if (itemPath === '') {
+			return location.pathname === '/';
+		}
+		if (itemPath === 'courses') {
+			// highlight for /courses and all its children
+			return location.pathname.startsWith('/courses')
+				|| location.pathname.startsWith('/note_materials')
+				|| location.pathname.startsWith('/task')
+				|| location.pathname.startsWith('/batches')
+				|| location.pathname.startsWith('/about');
+		}
+		return location.pathname.startsWith(`/${itemPath}`);
+	};
+
 	return (
 		<nav>
 			<div className='flex justify-between gap-3 px-6'>
@@ -144,18 +160,17 @@ const Navbar = () => {
 										<Card
 											className='bg-[#ebeff3] w-[48px] h-[48px] flex items-center justify-center shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]'
 											style={{
-												boxShadow:
-													location.pathname === `/${item.path}`
-														? `
+												boxShadow: isNavActive(item.path)
+													? `
                           rgba(255, 255, 255, 0.7) -4px -4px 4px,
                           rgba(189, 194, 199, 0.75) 5px 5px 4px
                           `
-														: undefined,
+													: undefined,
 											}}
 										>
 											<img
 												src={
-													location.pathname === `/${item.path}`
+													isNavActive(item.path)
 														? item.iconActive
 														: item.iconInactive
 												}
@@ -244,7 +259,7 @@ const Navbar = () => {
 						>
 							<Card className='bg-[#ebeff3] shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] h-[48px] w-[160px] cursor-pointer flex gap-2 justify-center'>
 								<Link
-									className='flex justify-center gap-2'
+									className='flex  justify-center gap-2'
 									to='profile'
 									onClick={() => setshowProfileSection(false)}
 								>
@@ -253,7 +268,7 @@ const Navbar = () => {
 										alt='profile-icon'
 										style={{ width: 28, height: 28 }}
 									/>
-									<p style={{ ...FONTS.para_01 }}>Profile</p>
+									<p className="font-quicksand font-bold text-[20px] ">Profile</p>
 								</Link>
 							</Card>
 							<Button

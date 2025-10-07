@@ -10,6 +10,9 @@ const ProfileSlice = createSlice({
         getProfile: (state, action) => {
             state.data = action.payload;
         },
+        getStaffId: (state, action) => {
+            state.data = action.payload;
+        },
         updateProfile: (state: any, action) => {
             if (state.data) {
                 state.data = {
@@ -25,5 +28,5 @@ const ProfileSlice = createSlice({
     },
 });
 
-export const { getProfile, updateProfile } = ProfileSlice.actions;
+export const { getProfile, updateProfile, getStaffId } = ProfileSlice.actions;
 export default ProfileSlice.reducer;
