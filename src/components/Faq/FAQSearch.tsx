@@ -14,7 +14,7 @@ const FAQSearch: React.FC<FAQSearchProps> = ({ searchQuery, onSearchChange }) =>
 
   return (
     <div className="mb-6">
-      <label className="block font-medium mb-3 text-sm leading-relaxed" style={{ color: COLORS.text_title, fontFamily: FONTS.heading_05.fontFamily, fontSize: FONTS.heading_05.fontSize, fontWeight: FONTS.heading_05.fontWeight }}>
+      <label className="block font-medium mb-3 text-xl leading-relaxed" style={{ color: COLORS.text_title, fontFamily: FONTS.heading_05.fontFamily, fontSize: FONTS.heading_05.fontSize, fontWeight: FONTS.heading_05.fontWeight }}>
         Search FAQ
       </label>
       <div className="relative">
