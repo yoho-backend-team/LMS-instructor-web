@@ -34,47 +34,50 @@ const Sidebar: React.FC<Props> = ({
   };
 
   return (
-    <div className="w-full lg:w-[400px] xl:w-[500px] h-[75vh] bg-[#EBEFF3] rounded-xl shadow-2xl">
-      <div className="relative p-2 bg-[#EBEFF3]">
-        <div className="relative mt-4">
-          <input
-            type="text"
-            placeholder="Search"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full sticky p-3 h-10 pl-10 bg-[#EBEFF3] rounded-md shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]"
+   <div className="w-full lg:w-[400px] xl:w-[500px] h-[75vh] rounded-lg shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] transition-all cursor-pointer flex flex-col">
+  {/* 🔍 Search Bar */}
+  <div className="p-3 bg-[#EBEFF3] sticky top-0 z-10">
+    <div className="relative">
+      <input
+        type="text"
+        placeholder="Search"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="w-full p-3 h-10 pl-10 bg-[#EBEFF3] rounded-md shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] focus:outline-none"
+      />
+      {/* Search Icon */}
+      <svg
+        className="absolute left-3 top-3 h-5 w-5 text-gray-500"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+        />
+      </svg>
+      {/* Clear Icon */}
+      {searchTerm && (
+        <svg
+          onClick={handleClearSearch}
+          className="absolute right-3 top-3 h-5 w-5 text-gray-500 cursor-pointer hover:text-gray-700"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M6 18L18 6M6 6l12 12"
           />
-          <svg
-            className="absolute left-3 top-3 h-5 w-5 text-gray-500"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
-          {searchTerm && (
-            <svg
-              onClick={handleClearSearch}
-              className="absolute right-3 top-3 h-5 w-5 text-gray-500 cursor-pointer hover:text-gray-700"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          )}
-        </div>
-      </div>
+        </svg>
+      )}
+    </div>
+  </div>
 
       <div
         className="p-4 h-[60vh]  flex flex-col gap-4 relative bg-[#EBEFF3] overflow-y-auto

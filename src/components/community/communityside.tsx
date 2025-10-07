@@ -99,7 +99,8 @@ const CommunitySide: React.FC<Props> = ({ communities }) => {
       <div className="w-full lg:w-2/3 flex flex-col h-[75vh] position-sticky ">
         {selectedChat ? (
           <>
-            <ChatHeader chat={selectedChat} />
+          <div className="p-3 bg-[#EBEFF3] rounded-lg overflow-hidden shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] transition-all cursor-pointer ">
+              <ChatHeader chat={selectedChat} />
             <MessageList
               messages={messages}
               formatMessageDate={formatMessageDate}
@@ -107,6 +108,7 @@ const CommunitySide: React.FC<Props> = ({ communities }) => {
               bottomRef={bottomRef}
             />
             <ChatInputWithEmojiPicker onSend={sendMessage} />
+          </div>
           </>
         ) : (
           <div className="flex-1 min-w-0 bg-[#EBEFF3] rounded-xl shadow flex items-center justify-center ">
