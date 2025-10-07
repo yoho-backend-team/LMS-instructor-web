@@ -256,14 +256,15 @@ const ActivityLogs = () => {
             filteredLogs.map((data: any) => (
               <section
                 key={data.id}
-                className="flex justify-between items-start py-6 gap-12 my-4 relative"
+                className="flex justify-around items-start py-6 my-4 relative"
               >
-                <div className="lg:w-[170px] pl-6 !text-sm md:w-[160px]">
+                {/* <div className="lg:w-[170px] !text-sm md:w-[160px] sm:w-[100px]"> */}
+                <div className="w-[100px] sm:w-[160px] lg:w-[170px] !text-sm">
                   <p style={{ ...FONTS.heading_07 }}>
                     {formatFullDate(data?.createdAt)}
                   </p>
                 </div>
-                <div className="grid gap-6 w-3/4 relative pb-10">
+                <div className="grid gap-3 w-3/4 relative pb-10">
                   <div className="btnshadow h-full w-3 rounded-2xl absolute left-0 text-transparent"></div>
                   <h3
                     className="pl-14"
@@ -271,8 +272,8 @@ const ActivityLogs = () => {
                   >
                     {data?.title}
                   </h3>
-                  <section className="flex items-center gap-6 relative">
-                    <div className="relative">
+                  <section className="flex items-center gap-1 sm:gap-6 relative">
+                    <div className="relative mr-2 sm:mr-0">
                       <div
                         className="h-8 w-8 rounded-full flex p-1 absolute left-[-10px] top-[-5px]"
                         style={{
@@ -285,7 +286,7 @@ const ActivityLogs = () => {
                       </div>
                       <img src={vector_H} alt="Vector-H" />
                       <div
-                        className="h-8 w-8 rounded-full absolute right-0 top-[-5px]"
+                        className="h-8 w-8 rounded-full absolute -right-0 top-[-5px] lg:right-0 lg:top-[-5px]"
                         style={{
                           background: COLORS.green_text,
                           boxShadow:
@@ -293,7 +294,7 @@ const ActivityLogs = () => {
                         }}
                       ></div>
                     </div>
-                    <div className="p-3 custom-inset-shadow md:w-[380px]">
+                    <div className="p-3 custom-inset-shadow w-[140px] sm:w-[300px] ">
                       <p
                         style={{
                           ...FONTS.heading_07,
