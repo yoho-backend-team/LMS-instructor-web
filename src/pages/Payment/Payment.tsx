@@ -65,8 +65,8 @@ export const Payment = () => {
 
   const [salaryStructure, setSalaryStructure] = useState({
     basic: "30,000",
-    // hra: "12,000",
-    // conveyance: "2,000",
+    hra: "12,000",
+    conveyance: "2,000",
     travelAllowance: "3,000",
     homeAllowance: "5,000",
   });
