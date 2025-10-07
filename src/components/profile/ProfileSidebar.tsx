@@ -29,12 +29,12 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
 }) => {
 	return (
 		<div
-			className='rounded-lg shadow-lg xl:sticky xl:top-4 flex flex-col w-full'
+			className='rounded-lg shadow-lg xl:sticky xl:top-4 flex flex-col w-full h-[60vh] sm:min-h-[75vh] '
 			style={{
 				backgroundColor: COLORS.bg_Colour,
 				fontFamily: FONTS.para_01.fontFamily,
-				height: '75vh',
-				minHeight: '75vh',
+				// height: '75vh',
+				
 			}}
 		>
 			{/* Header Section */}
