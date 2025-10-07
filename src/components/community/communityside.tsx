@@ -97,7 +97,7 @@ const CommunitySide: React.FC<Props> = ({ communities }) => {
       />
 
       {/* Chat Area */}
-      <div className="w-full lg:w-2/3 2xl:w-full flex flex-col h-[75vh] position-sticky ">
+      <div className="w-full lg:w-2/3 2xl:w-full flex flex-col h-[85vh] sm:h-[75vh] position-sticky ">
         {selectedChat ? (
           <>
          <div className="p-3 bg-[#EBEFF3] rounded-lg overflow-hidden shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] transition-all cursor-pointer flex flex-col h-[75vh]">
