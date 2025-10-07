@@ -126,125 +126,7 @@ const ActivityLogs = () => {
           <img src={filter} alt="Filter" className="w-6 h-6" />
         </button>
       </div>
-      <div className="flex lg:flex-row gap-5 md:flex-col-reverse">
-        {/* Main Content */}
-        <div className="lg:w-3/4 md:w-full relative">
-          {filteredLogs.length > 0 ? (
-            filteredLogs.map((data: any) => (
-              <section
-                key={data.id}
-                className="flex justify-between items-start py-6 gap-12 my-4 relative"
-              >
-                <div className="lg:w-[170px] pl-6 !text-sm md:w-[160px]">
-                  <p style={{ ...FONTS.heading_07 }}>
-                    {formatFullDate(data?.createdAt)}
-                  </p>
-                </div>
-                <div className="grid gap-6 w-3/4 relative pb-10">
-                  <div className="btnshadow h-full w-3 rounded-2xl absolute left-0 text-transparent"></div>
-                  <h3
-                    className="pl-14"
-                    style={{ ...FONTS.heading_05, color: COLORS.text_title }}
-                  >
-                    {data?.title}
-                  </h3>
-                  <section className="flex items-center gap-6 relative">
-                    <div className="relative">
-                      <div
-                        className="h-8 w-8 rounded-full flex p-1 absolute left-[-10px] top-[-5px]"
-                        style={{
-                          background: COLORS.blue_user,
-                          boxShadow:
-                            "rgba(189, 194, 199, 0.7) 2px 5px 4px, rgba(255, 255, 255, 0.4) 3px 2px 2px inset",
-                        }}
-                      >
-                        <img src={User} alt="User-icon" />
-                      </div>
-                      <img src={vector_H} alt="Vector-H" />
-                      <div
-                        className="h-8 w-8 rounded-full absolute right-0 top-[-5px]"
-                        style={{
-                          background: COLORS.green_text,
-                          boxShadow:
-                            "rgba(189, 194, 199, 0.7) 2px 5px 4px, rgba(255, 255, 255, 0.4) 3px 2px 2px inset",
-                        }}
-                      ></div>
-                    </div>
-                    <div className="p-3 custom-inset-shadow md:w-[380px]">
-                      <p
-                        style={{
-                          ...FONTS.heading_07,
-                          color: COLORS.green_text,
-                        }}
-                      >
-                        {data?.details}
-                      </p>
-                    </div>
-                  </section>
-                </div>
-              </section>
-            ))
-          ) : (
-            <div className="flex flex-col w-full items-center gap-3 py-10">
-              <img
-                src={updatesimg}
-                alt="No logs"
-                className="w-[646px] h-[200px]"
-              />
-              <h1 style={{ ...FONTS.heading_04 }} className="pt-10  !text-2xl">
-                No Logs Found
-              </h1>
-              <p style={{ ...FONTS.para_02 }}>
-                Try adjusting your filters or date range.
-              </p>
-            </div>
-          )}
-
-          {/* Pagination */}
-          {!fromDate && !toDate && filteredLogs.length > 0 && (
-            <div className="flex justify-end px-4 sm:px-8 mt-10 pb-10 pt-10">
-              <div className="flex items-center  gap-8 ">
-                {/* Previous Button */}
-                <button
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.max(prev - 1, 1))
-                  }
-                  disabled={currentPage === 1}
-                  className="flex items-center gap-2 px-4 py-2 rounded-md bg-[#ebeff3] text-gray-600 font-medium
-        shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]
-        disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <span className="rounded-full border border-gray-400 w-6 h-6 flex items-center justify-center">
-                    <ChevronLeft size={14} />
-                  </span>
-                  Previous
-                </button>
-
-                {/* Page Indicator */}
-                <p className="text-gray-600 font-semibold text-sm sm:text-base">
-                  Page {currentPage} to {totalPages}
-                </p>
-
-                {/* Next Button */}
-                <button
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                  }
-                  disabled={currentPage === totalPages}
-                  className="flex items-center gap-2 px-4 py-2 rounded-md bg-[#ebeff3] text-gray-600 font-medium
-        shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]
-        disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Next
-                  <span className="rounded-full border border-gray-400 w-6 h-6 flex items-center justify-center">
-                    <ChevronRight size={14} />
-                  </span>
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-
+      <div >
         {/* Filter Panel */}
         <div className="lg:w-[500px] md:w-fit">
           {handleFilter && (
@@ -367,6 +249,125 @@ const ActivityLogs = () => {
             </div>
           )}
         </div>
+
+        {/* Main Content */}
+        <div className="w-full relative">
+          {filteredLogs.length > 0 ? (
+            filteredLogs.map((data: any) => (
+              <section
+                key={data.id}
+                className="flex justify-between items-start py-6 gap-12 my-4 relative"
+              >
+                <div className="lg:w-[170px] pl-6 !text-sm md:w-[160px]">
+                  <p style={{ ...FONTS.heading_07 }}>
+                    {formatFullDate(data?.createdAt)}
+                  </p>
+                </div>
+                <div className="grid gap-6 w-3/4 relative pb-10">
+                  <div className="btnshadow h-full w-3 rounded-2xl absolute left-0 text-transparent"></div>
+                  <h3
+                    className="pl-14"
+                    style={{ ...FONTS.heading_05, color: COLORS.text_title }}
+                  >
+                    {data?.title}
+                  </h3>
+                  <section className="flex items-center gap-6 relative">
+                    <div className="relative">
+                      <div
+                        className="h-8 w-8 rounded-full flex p-1 absolute left-[-10px] top-[-5px]"
+                        style={{
+                          background: COLORS.blue_user,
+                          boxShadow:
+                            "rgba(189, 194, 199, 0.7) 2px 5px 4px, rgba(255, 255, 255, 0.4) 3px 2px 2px inset",
+                        }}
+                      >
+                        <img src={User} alt="User-icon" />
+                      </div>
+                      <img src={vector_H} alt="Vector-H" />
+                      <div
+                        className="h-8 w-8 rounded-full absolute right-0 top-[-5px]"
+                        style={{
+                          background: COLORS.green_text,
+                          boxShadow:
+                            "rgba(189, 194, 199, 0.7) 2px 5px 4px, rgba(255, 255, 255, 0.4) 3px 2px 2px inset",
+                        }}
+                      ></div>
+                    </div>
+                    <div className="p-3 custom-inset-shadow md:w-[380px]">
+                      <p
+                        style={{
+                          ...FONTS.heading_07,
+                          color: COLORS.green_text,
+                        }}
+                      >
+                        {data?.details}
+                      </p>
+                    </div>
+                  </section>
+                </div>
+              </section>
+            ))
+          ) : (
+            <div className="flex flex-col w-full items-center gap-3 py-10">
+              <img
+                src={updatesimg}
+                alt="No logs"
+                className="w-[646px] h-[200px]"
+              />
+              <h1 style={{ ...FONTS.heading_04 }} className="pt-10  !text-2xl">
+                No Logs Found
+              </h1>
+              <p style={{ ...FONTS.para_02 }}>
+                Try adjusting your filters or date range.
+              </p>
+            </div>
+          )}
+
+{/* Pagination */}
+{!fromDate && !toDate && filteredLogs.length > 0 && (
+  <div className="flex justify-center px-4 mt-6 pb-6 pt-6 sm:mt-8 sm:pb-8 sm:pt-8">
+    <div className="flex items-center gap-4 sm:gap-6 md:gap-8 flex-wrap justify-center">
+      {/* Previous Button */}
+      <button
+        onClick={() =>
+          setCurrentPage((prev) => Math.max(prev - 1, 1))
+        }
+        disabled={currentPage === 1}
+        className="flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2 rounded-md bg-[#ebeff3] text-gray-600 font-medium text-sm sm:text-base
+          shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]
+          disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <span className="rounded-full border border-gray-400 w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center flex-shrink-0">
+          <ChevronLeft size={12} className="sm:w-3 sm:h-3" />
+        </span>
+        Previous
+      </button>
+
+      {/* Page Indicator */}
+      <p className="text-gray-600 font-semibold text-xs sm:text-sm md:text-base whitespace-nowrap">
+        Page {currentPage} of {totalPages}
+      </p>
+
+      {/* Next Button */}
+      <button
+        onClick={() =>
+          setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+        }
+        disabled={currentPage === totalPages}
+        className="flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2 rounded-md bg-[#ebeff3] text-gray-600 font-medium text-sm sm:text-base
+          shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]
+          disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Next
+        <span className="rounded-full border border-gray-400 w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center flex-shrink-0">
+          <ChevronRight size={12} className="sm:w-3 sm:h-3" />
+        </span>
+      </button>
+    </div>
+  </div>
+)}
+        </div>
+        
       </div>
     </div>
   );

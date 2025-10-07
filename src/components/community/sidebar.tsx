@@ -88,7 +88,7 @@ const Sidebar: React.FC<Props> = ({
           filteredCommunities?.map((chat: any) => (
             <div
               key={chat._id}
-              className={`relative mb-2 z-0 flex items-center justify-between p-3 bg-[#EBEFF3] rounded-lg overflow-hidden shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] transition-all cursor-pointer ${
+              className={`relative mb-2 z-0 flex items-center justify-between px-3 py-10 bg-[#EBEFF3] rounded-lg overflow-hidden shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),_5px_5px_4px_rgba(189,194,199,0.75)] transition-all cursor-pointer ${
                 selectedChat?._id === chat?._id ? "bg-gray-200" : ""
               }`}
               onClick={() => onSelectChat(chat)}
@@ -111,7 +111,10 @@ const Sidebar: React.FC<Props> = ({
                   )}
                 </div>
                 <div>
-                  <h3 style={{ ...FONTS.heading_05 }}>
+                  <h3 
+                    className="text-md xs:!text-sm md:text-sm lg:!text-xs xl:text-md"
+                    style={{ ...FONTS.heading_05 }}
+                  >
                     {chat?.batch?.batch_name || chat?.group}
                   </h3>
                   <p style={{ ...FONTS.heading_07 }}>
