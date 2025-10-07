@@ -1,5 +1,5 @@
 import { COLORS, FONTS } from "@/constants/uiConstants";
-import { Card, CardHeader } from "@/components/ui/card";
+// import { Card, CardHeader } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import filter from "../../assets/icons/common/Mask group.png";
@@ -15,7 +15,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getDashBoardReports } from "@/features/Dashboard/reducers/thunks";
 import { selectDashBoard } from "@/features/Dashboard/reducers/selectors";
 import {
-  selectAttendance,
   selectAttendanceDaily,
 } from "@/features/attentance/reduces/selectors";
 import type { AppDispatch } from "@/store/store";
@@ -36,6 +35,7 @@ import {
 // } from "recharts";
 import { useNavigate } from "react-router-dom";
 import { useLoader } from "@/context/LoadingContext/Loader";
+import AttendanceCardGraph from "@/components/dashboard/AttendanceCardGraph";
 
 const months = [
   "January",
@@ -63,10 +63,8 @@ export const Attendance = () => {
   const [showFilters, setShowFilters] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
   const dashData = useSelector(selectDashBoard);
-  const attendancedata: any = useSelector(selectAttendance);
   const dailydata = useSelector(selectAttendanceDaily);
   const navigate = useNavigate();
-  console.log("attendance data", dailydata);
 
   useEffect(() => {
     if (
@@ -90,25 +88,6 @@ export const Attendance = () => {
     }
   }, [dispatch, selectedDate]);
 
-  const attendanceCards = [
-    {
-      label: "Classes Attend",
-      current: attendancedata?.data?.presentDays || 0,
-      color: COLORS.light_blue,
-    },
-    {
-      label: "Present Days",
-      current: attendancedata?.data?.presentDays || 0,
-      total: attendancedata?.data?.totalWorkingDays || 0,
-      color: COLORS.light_pink,
-    },
-    {
-      label: "Absent Days",
-      current: attendancedata?.data?.absentDays || 0,
-      total: attendancedata?.data?.totalWorkingDays || 0,
-      color: COLORS.light_green_02,
-    },
-  ];
 
   const handleMonthChange = (newMonth: (typeof months)[number]) => {
     const monthIndex = months.indexOf(newMonth);
@@ -187,7 +166,7 @@ export const Attendance = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [dashData?.institute.uuid, dashData?.user?.uuid, dispatch, selectedDate]);
+  }, [dashData?.institute?.uuid, dashData?.user?.uuid, dispatch, selectedDate]);
 
   // const selectedDateStats = getSelectedDateStats();
 
@@ -307,77 +286,27 @@ export const Attendance = () => {
           )}
         </div>
       </div>
-
-      <div className="flex gap-6 justify-start  flex-col md:flex-row pt-6 overflow-x-auto">
-        {attendanceCards.map((card) => {
-          // const lineData = Array.from({ length: 6 }, (_, i) => {
-          //   const val =
-          //     card.current + Math.sin(i * 1.5) * 5 + (Math.random() * 3 - 1.5);
-          //   return {
-          //     name: `P${i + 1}`,
-          //     value: val,
-          //     showLine: i % 2 === 0,
-          //   };
-          // });
-
-          return (
-            <Card
-              key={card.label}
-              className="
-          relative 
-          w-full 
-          md:max-w-full
-          h-auto
-          overflow-hidden
-          flex flex-col
-        "
-              style={{ backgroundColor: COLORS.bg_Colour }}
-            >
-              <CardHeader className="p-4 pb-2">
-                <div className="flex justify-between items-center w-full">
-                  <span style={{ ...FONTS.heading_04 }}>{card.label}</span>
-                  <div className="text-right">
-                    <span
-                      className="text-2xl font-bold block"
-                      style={{ ...FONTS.heading_01 }}
-                    >
-                      <span style={{ color: card.color }}>{card.current}</span>
-                      {card.total && (
-                        <span className="text-sm text-gray-500">
-                          /{card.total}
-                        </span>
-                      )}
-                    </span>
-                  </div>
-                </div>
-              </CardHeader>
-            </Card>
-          );
-        })}
-      </div>
-
-     <div className="flex flex-col lg:flex-row gap-6 pt-6 w-full">
-  {/* Calendar Section */}
-  <div className="flex flex-col w-full lg:w-5/12">
-    <h2
-      className="text-xl font-semibold mb-4 mt-2"
-      style={{ ...FONTS.heading_02 }}
-    >
-      Calendar
-    </h2>
-
-    <Calendar
-      mode="single"
-      required
-      selected={selectedDate}
-      onSelect={setSelectedDate}
-      month={selectedDate}
-      onMonthChange={handleCalendarMonthChange}
-      className="border **:gap-2 **:py-0.5 md:**:gap-2 rounded-lg shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),5px_5px_4px_rgba(189,194,199,0.75)]"
-      style={{ ...FONTS.heading_02, backgroundColor: COLORS.bg_Colour }}
-      showOutsideDays={false}
-    />
-  </div>
+      <AttendanceCardGraph/>
+      <div className="flex flex-row gap-6 mt-5">
+        <div className="flex flex-col">
+          <h2
+            className="text-xl font-semibold mb-4 mt-2"
+            style={{ ...FONTS.heading_02 }}
+          >
+            Calendar
+          </h2>
+          <Calendar
+            mode="single"
+            required
+            selected={selectedDate}
+            onSelect={setSelectedDate}
+            month={selectedDate}
+            onMonthChange={handleCalendarMonthChange}
+            className="border **:gap-5 **:py-0.5 md:**:gap-2 rounded-lg shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),5px_5px_4px_rgba(189,194,199,0.75)]"
+            style={{ ...FONTS.heading_02, backgroundColor: COLORS.bg_Colour }}
+            showOutsideDays={false}
+          />
+        </div>
 
   {/* Day Overview Section */}
  <div className="flex flex-col w-full lg:w-7/12">
