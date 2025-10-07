@@ -14,7 +14,7 @@ const FAQSupport: React.FC<FAQSupportProps> = ({ onContactSupport }) => {
           color: COLORS.text_title,
           fontFamily: FONTS.heading_02.fontFamily,
           fontWeight: FONTS.heading_02.fontWeight,
-          fontSize: FONTS.heading_02.fontSize
+          fontSize: FONTS.para_01.fontSize
         }}
       >
         Need More Help?

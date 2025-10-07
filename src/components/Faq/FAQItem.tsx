@@ -28,7 +28,7 @@ const FAQItem: React.FC<FAQItemProps> = ({ id, question, content, isExpanded, on
           className="w-full px-5 py-4 text-left flex items-center justify-between rounded-lg focus:outline-none transition-all duration-200 hover:opacity-95"
           style={{
             fontFamily: FONTS.heading_05.fontFamily,
-            fontSize: FONTS.heading_05.fontSize,
+            fontSize: FONTS.heading_03.fontSize,
             fontWeight: FONTS.heading_05.fontWeight,
             color: COLORS.text_title,
             minHeight: '56px'

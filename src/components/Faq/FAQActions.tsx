@@ -16,10 +16,10 @@ const FAQActions: React.FC<FAQActionsProps> = ({
 }) => {
   return (
     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-      <div style={{ 
+      <div  style={{ 
         color: COLORS.text_desc, 
         fontFamily: FONTS.para_01.fontFamily,
-        fontSize: FONTS.para_02.fontSize 
+        fontSize: FONTS.heading_05.fontSize 
       }}>
         Showing {totalItems} FAQ{totalItems !== 1 ? 's' : ''} 
         {expandedCount > 0 && ` (${expandedCount} expanded)`}

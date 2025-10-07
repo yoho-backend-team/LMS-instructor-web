@@ -308,7 +308,7 @@ export const Attendance = () => {
         </div>
       </div>
 
-      <div className="flex gap-6 justify-start pt-6 overflow-x-auto">
+      <div className="flex gap-6 justify-start  flex-col md:flex-row pt-6 overflow-x-auto">
         {attendanceCards.map((card) => {
           // const lineData = Array.from({ length: 6 }, (_, i) => {
           //   const val =
@@ -356,83 +356,97 @@ export const Attendance = () => {
         })}
       </div>
 
-      <div className="flex flex-row gap-6  pt-6 ">
-        <div className="flex flex-col">
-          <h2
-            className="text-xl font-semibold mb-4 mt-2"
-            style={{ ...FONTS.heading_02 }}
-          >
-            Calendar
-          </h2>
-          <Calendar
-            mode="single"
-            required
-            selected={selectedDate}
-            onSelect={setSelectedDate}
-            month={selectedDate}
-            onMonthChange={handleCalendarMonthChange}
-            className="border **:gap-5 **:py-0.5 md:**:gap-2 rounded-lg shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),5px_5px_4px_rgba(189,194,199,0.75)]"
-            style={{ ...FONTS.heading_02, backgroundColor: COLORS.bg_Colour }}
-            showOutsideDays={false}
-          />
-        </div>
+     <div className="flex flex-col lg:flex-row gap-6 pt-6 w-full">
+  {/* Calendar Section */}
+  <div className="flex flex-col w-full lg:w-5/12">
+    <h2
+      className="text-xl font-semibold mb-4 mt-2"
+      style={{ ...FONTS.heading_02 }}
+    >
+      Calendar
+    </h2>
 
-        <div className="flex flex-col w-full">
-          <h3
-            className="text-lg font-semibold mb-4 mt-2"
-            style={{ ...FONTS.heading_02 }}
-          >
-            Day Overview
-          </h3>
+    <Calendar
+      mode="single"
+      required
+      selected={selectedDate}
+      onSelect={setSelectedDate}
+      month={selectedDate}
+      onMonthChange={handleCalendarMonthChange}
+      className="border **:gap-2 **:py-0.5 md:**:gap-2 rounded-lg shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),5px_5px_4px_rgba(189,194,199,0.75)]"
+      style={{ ...FONTS.heading_02, backgroundColor: COLORS.bg_Colour }}
+      showOutsideDays={false}
+    />
+  </div>
 
+  {/* Day Overview Section */}
+ <div className="flex flex-col w-full lg:w-7/12">
+  <h3
+    className="text-lg font-semibold mb-4 mt-2"
+    style={{ ...FONTS.heading_02 }}
+  >
+    Day Overview
+  </h3>
+
+  <div
+    className="flex flex-col justify-between rounded-md p-6 shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),5px_5px_4px_rgba(189,194,199,0.75)]"
+    style={{
+      backgroundColor: COLORS.bg_Colour,
+      minHeight: "375px",
+    }}
+  >
+    <p
+      className="text-sm mb-4 text-gray-700"
+      style={{ ...FONTS.para_01 }}
+    >
+      {selectedDate ? selectedDate.toDateString() : "Select a date"}
+    </p>
+
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-y-auto pr-2 flex-1 no-scrollbar">
+      {dailydata
+        ?.filter((item: any) => item?.class_name) // only include scheduled classes
+        .map((item: any, index: number) => (
           <div
-            className="flex flex-col justify-between rounded-md p-6 shadow-[-4px_-4px_4px_rgba(255,255,255,0.7),5px_5px_4px_rgba(189,194,199,0.75)]"
-            style={{ backgroundColor: COLORS.bg_Colour, height: "375px" }}
+            key={index}
+            className="rounded-md p-3 bg-[#f7f9fb] h-32 shadow-[inset_-2px_-2px_4px_rgba(255,255,255,0.7),inset_2px_2px_4px_rgba(189,194,199,0.6)]"
           >
-            <p
-              className="text-sm mb-4 text-gray-700"
-              style={{ ...FONTS.para_01 }}
-            >
-              {selectedDate ? selectedDate.toDateString() : "Select a date"}
-            </p>
-
-            <div className="grid grid-cols-2 gap-4 overflow-y-auto pr-2 flex-1 no-scrollbar">
-              {dailydata?.map((item: any, index: number) => (
-                <div
-                  key={index}
-                  className="rounded-md p-3 bg-[#f7f9fb] h-32 shadow-[inset_-2px_-2px_4px_rgba(255,255,255,0.7),inset_2px_2px_4px_rgba(189,194,199,0.6)]"
-                >
-                  <ul
-                    className="space-y-1 text-gray-700"
-                    style={{ ...FONTS.heading_06 }}
-                  >
-                    <li>
-                      <strong>Class:</strong> {item?.class_name}
-                    </li>
-                    <li>
-                      <strong>Duration:</strong> {item?.duration}
-                    </li>
-                    <li>
-                      <strong>Start:</strong> {formatISOTime(item?.start_date)}
-                    </li>
-                    <li>
-                      <strong>End:</strong> {formatISOTime(item?.end_time)}
-                    </li>
-                  </ul>
-                </div>
-              ))}
-            </div>
-
-            <button
-              className="w-max-sm mt-4 self-start px-4 py-2 bg-gray rounded-xl btnshadow text-white text-[14px] hover:!text-white btnhovershadow cursor-pointer"
+            <ul
+              className="space-y-1 text-gray-700"
               style={{ ...FONTS.heading_06 }}
-              onClick={handleNavigate}
             >
-              View Details
-            </button>
+              <li>
+                <strong>Class:</strong> {item.class_name}
+              </li>
+              <li>
+                <strong>Duration:</strong> {item.duration}
+              </li>
+              <li>
+                <strong>Start:</strong> {formatISOTime(item.start_date)}
+              </li>
+              <li>
+                <strong>End:</strong> {formatISOTime(item.end_time)}
+              </li>
+            </ul>
           </div>
-        </div>
-      </div>
+        ))}
+    </div>
+
+    {dailydata?.filter((item: any) => item?.class_name).length === 0 && (
+      <p className="text-gray-500 text-sm">No scheduled classes for this day.</p>
+    )}
+
+    <button
+      className="mt-4 self-start px-4 py-2 bg-gray rounded-xl btnshadow text-white text-[14px] hover:!text-white btnhovershadow cursor-pointer"
+      style={{ ...FONTS.heading_06 }}
+      onClick={handleNavigate}
+    >
+      View Details
+    </button>
+  </div>
+</div>
+
+</div>
+
     </div>
   );
 };
