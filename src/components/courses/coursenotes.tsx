@@ -74,12 +74,12 @@ function CourseNotes() {
         </div>
       </div>
 
-      {/* TABS DISPLAY */}
+  
       {activeTab === "notes" ? (
         <>
           <CourseButton activeTabs="notes" />
           <h1 className="text-black text-4xl font-semibold mb-4">Add Notes</h1>
-          <div className="grid grid-cols-2 md:grid-cols-1 w-full px-0 mx-0">
+          <div className="grid grid-cols-1 lg:grid-cols-2 w-full px-0 mx-0 gap-6">
             <Add_Notes selectedNotes={selectedNotes} activeTab={activeTab} />
             <NotesMaterials setselectedNotes={setselectedNotes} />
           </div>
@@ -90,9 +90,13 @@ function CourseNotes() {
           <h1 className="text-black text-4xl font-semibold mb-4">
             Add Study Materials
           </h1>
-          <div className="grid grid-cols-2 w-full px-0 mx-0">
-            <Add_Notes selectedNotes={selectedNotes} activeTab={activeTab} />
-            <StudyMaterials setselectedNotes={setselectedNotes} />
+          <div className="flex flex-col lg:flex-row w-full px-0 mx-0 gap-6">
+            <div className="w-full lg:w-1/2">
+              <Add_Notes selectedNotes={selectedNotes} activeTab={activeTab} />
+            </div>
+            <div className="w-full lg:w-1/2">
+              <StudyMaterials setselectedNotes={setselectedNotes} />
+            </div>
           </div>
         </>
       )}

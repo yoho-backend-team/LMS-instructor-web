@@ -35,7 +35,7 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
   const salarySlipRef = useRef<HTMLDivElement>(null)
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
   const [pdfPaymentData, setPdfPaymentData] = useState<any>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false) // Declare isModalOpen variable
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const dispatch = useDispatch<any>()
   const SalaryDetails = useSelector(selectPayment)
@@ -158,87 +158,193 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
     })
   })()
 
+  // Mobile & Tablet Card Component
+  const PaymentCard = ({ payment, index }: { payment: any; index: number }) => (
+    <div
+      className="bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] rounded-lg p-4 mb-4
+                transition-all duration-300 ease-in-out
+                hover:-translate-y-1 
+                hover:shadow-[6px_6px_8px_rgba(0,0,0,0.1),-2px_-2px_6px_rgba(255,255,255,0.8)]
+                cursor-pointer"
+      style={{ ...FONTS.heading_06 }}
+      key={index}
+    >
+      {/* Header Section */}
+      <div className="flex justify-between items-start mb-3">
+        <div>
+          <p className="text-sm text-gray-600" style={{ ...FONTS.heading_06 }}>Month</p>
+          <p className="font-medium text-lg">
+            {new Date(payment.payment_date).toLocaleString("en-US", { month: "long", year: "numeric" })}
+          </p>
+        </div>
+        <button
+          style={{
+            boxShadow: `rgba(255, 255, 255, 0.7) 5px 5px 4px, rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+          }}
+          className={`p-2 px-4 rounded-lg text-sm
+                    ${payment?.status !== "pending"
+                      ? "bg-gradient-to-r from-green-500 to-green-600 text-white"
+                      : "bg-gradient-to-r from-red-500 to-red-600 text-white"
+                    }`}
+        >
+          {payment?.status === "pending" ? "Pending" : "Paid"}
+        </button>
+      </div>
+
+      {/* Payment Details Grid */}
+      <div className="grid grid-cols-2 gap-4 mb-4">
+        <div>
+          <p className="text-sm text-gray-600" style={{ ...FONTS.heading_06 }}>Payment</p>
+          <p className="font-semibold text-lg text-[#7B00FF]">{payment?.salary_amount}</p>
+        </div>
+        <div>
+          <p className="text-sm text-gray-600" style={{ ...FONTS.heading_06 }}>Balance</p>
+          <p className="font-semibold">{payment?.balance}</p>
+        </div>
+      </div>
+
+      {/* Additional Details */}
+      <div className="space-y-2 mb-4">
+        <div>
+          <p className="text-sm text-gray-600" style={{ ...FONTS.heading_06 }}>Transaction ID</p>
+          <p className="text-sm font-medium truncate" title={payment?.transaction_id}>
+            {payment?.transaction_id || "N/A"}
+          </p>
+        </div>
+        <div>
+          <p className="text-sm text-gray-600" style={{ ...FONTS.heading_06 }}>Bank Name</p>
+          <p className="text-sm font-medium">{payment?.bank_details?.bank_name || "N/A"}</p>
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex justify-between items-center pt-3 border-t border-gray-300">
+        <button
+          onClick={() => handleDownloadPDF(payment)}
+          disabled={isGeneratingPDF}
+          className="flex items-center gap-2 bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] px-4 py-2 rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:scale-105"
+          title={isGeneratingPDF ? "Generating PDF..." : "Download PDF"}
+        >
+          <img src={Cloud || "/placeholder.svg"} alt="Download" className="w-5 h-5" />
+          <span className="text-sm font-medium">Download</span>
+        </button>
+        
+        <button
+          onClick={() => {
+            setIsModalOpen(true)
+            setSelectedDetail(payment)
+          }}
+          className="flex items-center gap-2 bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] px-4 py-2 rounded-lg cursor-pointer transition-all hover:scale-105"
+          title="View Details"
+        >
+          <img
+            src={Frame1 || "/placeholder.svg"}
+            alt="View"
+            className="w-5 h-5 object-cover rounded-md"
+          />
+          <span className="text-sm font-medium">View</span>
+        </button>
+      </div>
+    </div>
+  )
+
   return (
     <div className="p-4 custom-inset-shadow grid gap-4">
-      <section
-        className="grid grid-cols-7 text-center bg-gradient-to-r from-[#7B00FF] to-[#B200FF] !text-white p-4 rounded-lg"
-        style={{ ...FONTS.heading_03 }}
-      >
-        {headers.map((header, index) => (
-          <div key={index}>{header}</div>
-        ))}
-      </section>
+      {/* Desktop Table View (1024px and above) */}
+      <div className="hidden xl:block">
+        <section
+          className="grid grid-cols-7 text-center bg-gradient-to-r from-[#7B00FF] to-[#B200FF] !text-white p-4 rounded-lg"
+          style={{ ...FONTS.heading_03 }}
+        >
+          {headers.map((header, index) => (
+            <div key={index}>{header}</div>
+          ))}
+        </section>
 
-      <section>
-        {filteredPayments?.length ? (
-          filteredPayments?.map((PaymentTable: any, index: any) => (
-            <div
-              className="grid grid-cols-7 justify-center items-center my-5 text-center bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] text-black p-3 rounded-lg
-                        transition-all duration-300 ease-in-out
-                        hover:-translate-y-1 
-                        hover:shadow-[6px_6px_8px_rgba(0,0,0,0.1),-2px_-2px_6px_rgba(255,255,255,0.8)]
-                        cursor-pointer"
-              style={{ ...FONTS.heading_06 }}
-              key={index}
-            >
-              <p>
-                {new Date(PaymentTable.payment_date).toLocaleString("en-US", {
-                  month: "long",
-                })}
-              </p>
-              <p>{PaymentTable?.salary_amount}</p>
-              <p>{PaymentTable?.balance}</p>
-              <p>{PaymentTable?.transaction_id}</p>
-              <p>{PaymentTable?.bank_details?.bank_name ?? "nil"}</p>
-              <button
-                style={{
-                  boxShadow: `
-      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
-                }}
-                className={`p-2 rounded-lg w-[100px] m-auto
-                        ${PaymentTable?.status !== "pending"
-                    ? "bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-500 hover:to-green-600 shadow-[0px_3px_4px_0px_rgba(255,255,255,0.75)_inset,3px_-3px_3px_0px_rgba(255,255,255,0.25)_inset,-4px_8px_23px_0px_#3ABE65_inset,-8px_-8px_12px_0px_#3ABE65_inset,2px_3px_3px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-1px_-1px_6px_0px_rgba(255,255,255,0.75),-1px_-1px_6px_1px_rgba(255,255,255,0.25)]"
-                    : "bg-gradient-to-r from-red-500 to-red-600 text-white  shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_red_inset,-4px_-8px_10px_0px_#B20_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white"
-                  }`}
+        <section>
+          {filteredPayments?.length ? (
+            filteredPayments?.map((PaymentTable: any, index: any) => (
+              <div
+                className="grid grid-cols-7 justify-center items-center my-5 text-center bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] text-black p-3 rounded-lg
+                          transition-all duration-300 ease-in-out
+                          hover:-translate-y-1 
+                          hover:shadow-[6px_6px_8px_rgba(0,0,0,0.1),-2px_-2px_6px_rgba(255,255,255,0.8)]
+                          cursor-pointer"
+                style={{ ...FONTS.heading_06 }}
+                key={index}
               >
-                {PaymentTable?.status === "pending" ? "Pending" : "Paid"}
-              </button>
-
-              <p className="flex justify-center items-center gap-4">
+                <p>
+                  {new Date(PaymentTable.payment_date).toLocaleString("en-US", {
+                    month: "long",
+                  })}
+                </p>
+                <p>{PaymentTable?.salary_amount}</p>
+                <p>{PaymentTable?.balance}</p>
+                <p>{PaymentTable?.transaction_id}</p>
+                <p>{PaymentTable?.bank_details?.bank_name ?? "nil"}</p>
                 <button
-                  onClick={() => handleDownloadPDF(PaymentTable)}
-                  disabled={isGeneratingPDF}
-                  className="bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] p-2 rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                  title={isGeneratingPDF ? "Generating PDF..." : "Download PDF"}
+                  style={{
+                    boxShadow: `
+                      rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+                      rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+                  }}
+                  className={`p-2 rounded-lg w-[100px] m-auto
+                          ${PaymentTable?.status !== "pending"
+                      ? "bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-500 hover:to-green-600 shadow-[0px_3px_4px_0px_rgba(255,255,255,0.75)_inset,3px_-3px_3px_0px_rgba(255,255,255,0.25)_inset,-4px_8px_23px_0px_#3ABE65_inset,-8px_-8px_12px_0px_#3ABE65_inset,2px_3px_3px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-1px_-1px_6px_0px_rgba(255,255,255,0.75),-1px_-1px_6px_1px_rgba(255,255,255,0.25)]"
+                      : "bg-gradient-to-r from-red-500 to-red-600 text-white  shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_red_inset,-4px_-8px_10px_0px_#B20_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white"
+                    }`}
                 >
-                  <img src={Cloud || "/placeholder.svg"} alt="Download" />
+                  {PaymentTable?.status === "pending" ? "Pending" : "Paid"}
                 </button>
-                <button
-  onClick={() => {
-    setIsModalOpen(true);
-    setSelectedDetail(PaymentTable);
-  }}
-  className="bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] p-2 rounded-lg cursor-pointer"
-  title="View"
->
-  <img
-    src={Frame1 || "/placeholder.svg"}
-    alt="View"
-    className="w-6 h-6 object-cover rounded-md"
-  />
-</button>
 
-              </p>
+                <p className="flex justify-center items-center gap-4">
+                  <button
+                    onClick={() => handleDownloadPDF(PaymentTable)}
+                    disabled={isGeneratingPDF}
+                    className="bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] p-2 rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    title={isGeneratingPDF ? "Generating PDF..." : "Download PDF"}
+                  >
+                    <img src={Cloud || "/placeholder.svg"} alt="Download" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsModalOpen(true);
+                      setSelectedDetail(PaymentTable);
+                    }}
+                    className="bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] p-2 rounded-lg cursor-pointer"
+                    title="View"
+                  >
+                    <img
+                      src={Frame1 || "/placeholder.svg"}
+                      alt="View"
+                      className="w-6 h-6 object-cover rounded-md"
+                    />
+                  </button>
+                </p>
+              </div>
+            ))
+          ) : (
+            <div className="flex justify-center mt-3">
+              <p style={{ ...FONTS.heading_06 }}>No payment datas available</p>
             </div>
+          )}
+        </section>
+      </div>
+
+      {/* Tablet & Mobile Card View (below 1024px) */}
+      <div className="block xl:hidden">
+        {filteredPayments?.length ? (
+          filteredPayments?.map((payment: any, index: any) => (
+            <PaymentCard key={index} payment={payment} index={index} />
           ))
         ) : (
           <div className="flex justify-center mt-3">
             <p style={{ ...FONTS.heading_06 }}>No payment datas available</p>
           </div>
         )}
-      </section>
+      </div>
 
+      {/* Modal */}
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <div className="flex justify-between items-center mb-3">
           <h2 className="text-xl font-semibold mb-2" style={{ ...FONTS.heading_01 }}>
@@ -249,15 +355,15 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
             className="p-2 rounded-lg cursor-pointer"
             style={{
               boxShadow: `
-      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+                rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+                rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
             }}
           >
             <p className="h-5 w-5 text-[#716F6F] font-bold flex justify-center items-center rounded-full">X</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <section>
             <p style={{ ...FONTS.heading_04 }}>Month</p>
             <p
@@ -265,8 +371,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               style={{
                 ...FONTS.heading_06,
                 boxShadow: `
-      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+                  rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+                  rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
               }}
             >
               {new Date(selectedDetail?.payment_date).toLocaleString("en-US", {
@@ -282,8 +388,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               style={{
                 ...FONTS.heading_06,
                 boxShadow: `
-      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+                  rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+                  rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
               }}
             >
               {formatDateTime(selectedDetail?.payment_date)}
@@ -297,8 +403,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               style={{
                 ...FONTS.heading_06,
                 boxShadow: `
-      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+                  rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+                  rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
               }}
             >
               {selectedDetail?.attendance_details?.totalWorkingDays}
@@ -311,8 +417,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               style={{
                 ...FONTS.heading_06,
                 boxShadow: `
-      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+                  rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+                  rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
               }}
             >
               {selectedDetail?.salary_amount}
@@ -326,8 +432,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               style={{
                 ...FONTS.heading_06,
                 boxShadow: `
-      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      							rgba(106, 141, 175, 0.75) 2px 2px 3px inset`,
+                  rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+                  rgba(106, 141, 175, 0.75) 2px 2px 3px inset`,
               }}
             >
               {selectedDetail?.attendance_details?.absentDays}
@@ -341,8 +447,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               style={{
                 ...FONTS.heading_06,
                 boxShadow: `
-      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+                  rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+                  rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
               }}
             >
               {selectedDetail?.attendance_details?.presentDays}
@@ -356,8 +462,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               style={{
                 ...FONTS.heading_06,
                 boxShadow: `
-      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+                  rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+                  rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
               }}
             >
               {selectedDetail.paymentMethod || "Cash"}
@@ -371,8 +477,8 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
               style={{
                 ...FONTS.heading_06,
                 boxShadow: `
-      							rgba(255, 255, 255, 0.7) 5px 5px 4px, 
-      							rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
+                  rgba(255, 255, 255, 0.7) 5px 5px 4px, 
+                  rgba(189, 194, 199, 0.75) 2px 2px 3px inset`,
               }}
             >
               {selectedDetail.deductions || "NIL"}
@@ -380,31 +486,27 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
           </section>
 
           <section>
-          <section>
-    <p style={{ ...FONTS.heading_04 }}>Status</p>
-    <Button
-      className={`p-2 px-8 rounded-lg 
-        ${selectedDetail.status !== "pending"
-          ? "bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-500 hover:to-green-600 shadow-[...]"
-          : "bg-gradient-to-r from-red-500 to-red-600 text-white shadow-[...] hover:text-white"
-        }`}
-    >
-      {selectedDetail?.status === "pending" ? "Pending" : "Paid"}
-    </Button>
-  </section>
+            <p style={{ ...FONTS.heading_04 }}>Status</p>
+            <Button
+              className={`p-2 px-8 rounded-lg mt-4 w-full md:w-auto
+                ${selectedDetail.status !== "pending"
+                  ? "bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-500 hover:to-green-600"
+                  : "bg-gradient-to-r from-red-500 to-red-600 text-white"
+                }`}
+            >
+              {selectedDetail?.status === "pending" ? "Pending" : "Paid"}
+            </Button>
           </section>
         </div>
 
         <div className="flex justify-end mt-6">
-  <Button
-    onClick={() => setIsModalOpen(false)}
-    className="cursor-pointer bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white rounded-lg shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white"
-  >
-    Close
-  </Button>
-</div>
-
-      
+          <Button
+            onClick={() => setIsModalOpen(false)}
+            className="cursor-pointer bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white rounded-lg shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)] hover:text-white"
+          >
+            Close
+          </Button>
+        </div>
       </Modal>
 
       {pdfPaymentData && (
@@ -427,4 +529,4 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
   )
 }
 
-export default PaymentTable
+export default PaymentTable;

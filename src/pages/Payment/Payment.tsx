@@ -103,51 +103,6 @@ export const Payment = () => {
     }));
   };
 
-  // // Handle Request Edit button click
-  // const handleRequestEdit = () => {
-  //   setIsBankEditing(true);
-  // };
-
-  // // Handle Save bank details
-  // const handleSaveBankDetails = async () => {
-  //   try {
-  //     // Prepare data for API call
-  //     const updateData = {
-  //       id: staffDetail?.id, // Assuming you have staff ID
-  //       Bank_Details: {
-  //         Account_Number: bankEditDetails.Account_Number,
-  //         Branch: bankEditDetails.Branch,
-  //         IFSC: bankEditDetails.IFSC,
-  //       },
-  //     };
-
-  //     // Call the API service
-  //     const response = await updateInstructorbankdetails(updateData);
-
-  //     if (response) {
-  //       // Refresh the data after successful update
-  //       dispatch(getStudentPaymentThunk({}));
-  //       setIsBankEditing(false);
-
-  //       // Optional: Show success message
-  //       console.log("Bank details updated successfully");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error updating bank details:", error);
-  //     // Optional: Show error message to user
-  //   }
-  // };
-
-  // // Handle Cancel bank edit
-  // const handleCancelBankEdit = () => {
-  //   // Reset to original values
-  //   setBankEditDetails({
-  //     Account_Number: bankDetail?.Account_Number || "",
-  //     Branch: bankDetail?.Branch || "",
-  //     IFSC: bankDetail?.IFSC || "",
-  //   });
-  //   setIsBankEditing(false);
-  // };
 
   const [leftCards, setLeftCards] = useState<any>([
     {
@@ -202,7 +157,7 @@ export const Payment = () => {
   return (
     <div className="py-4">
       {/* Header */}
-      <div className="flex items-center justify-between py-2">
+      <div className="flex items-center justify-between py-2 px-4">
         <h2 className="" style={{ ...FONTS.heading_01 }}>
           Salary Details
         </h2>
@@ -261,8 +216,42 @@ export const Payment = () => {
         </div>
       </div>
 
-      <div className="flex h-screen">
-        <div className="w-[20%] bg-[#ebeff3]  p-4 flex flex-col gap-4">
+      {/* Mobile Cards - Top Layout */}
+      <div className="block lg:hidden px-4 mb-4">
+        <div className="grid grid-cols-2 gap-4">
+          {leftCards?.map((item: any, index: any) => (
+            <div
+              key={index}
+              className="px-3 py-4 rounded-lg cursor-pointer
+            bg-[#ebeff3]
+            shadow-[5px_5px_4px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)]
+            hover:shadow-[inset_-2px_-2px_4px_rgba(255,255,255,0.8),inset_2px_2px_4px_rgba(189,194,199,0.6)]
+            transition-shadow"
+            >
+              <h3 className="text-gray-700 font-semibold text-sm mb-1">
+                {item.title}
+              </h3>
+              <p className="text-gray-500 text-xs mb-2">{item.desc}</p>
+              <div className="flex items-center justify-between">
+                {item.image && (
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-8 h-8 object-contain"
+                  />
+                )}
+                <p className="text-gray-500 text-sm font-semibold text-end">
+                  {item.salary}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex flex-col lg:flex-row h-auto lg:h-screen">
+        {/* Desktop Sidebar - Hidden on mobile */}
+        <div className="hidden lg:block w-[20%] bg-[#ebeff3] p-4 flex flex-col gap-4">
           {leftCards?.map((item: any, index: any) => (
             <div
               key={index}
@@ -290,10 +279,12 @@ export const Payment = () => {
           ))}
         </div>
 
+        {/* Main Content */}
         <div className="flex-1 bg-gray-200 p-4">
+          {/* Payment Status Card */}
           <Card
             style={{ backgroundColor: COLORS.bg_Colour }}
-            className="px-4 custom-inset-shadow mt-6 flex flex-row"
+            className="px-4 custom-inset-shadow mt-4 lg:mt-6 flex flex-row justify-between items-center"
           >
             <h2 style={{ ...FONTS.heading_02 }}>Payment Status</h2>
 
@@ -339,7 +330,8 @@ export const Payment = () => {
             )}
           </Card>
 
-          <div className="flex absolute right-14 top-33 items-center gap-3">
+          {/* Filter Button */}
+          <div className="flex lg:absolute lg:right-14 lg:top-33 items-center gap-3 mt-4 lg:mt-0 justify-end lg:justify-start">
             <img
               src={filImg}
               alt="filter"
@@ -349,7 +341,8 @@ export const Payment = () => {
             />
           </div>
 
-          <div className="mt-8 custom-inset-shadow">
+          {/* Payment Details Table */}
+          <div className="mt-4 lg:mt-8 custom-inset-shadow">
             <PaymentDetails selectedStatus={selectedStatus ?? "All"} />
           </div>
         </div>
@@ -360,7 +353,7 @@ export const Payment = () => {
           className="fixed inset-0 z-50 flex items-center justify-center"
           style={{ background: "rgba(0,0,0,0.4)" }}
         >
-          <div className="bg-[#ebeff3] rounded-lg p-6 w-full max-w-2xl lg:max-h-[95vh] flex flex-col">
+          <div className="bg-[#ebeff3] rounded-lg p-6 w-full max-w-2xl lg:max-h-[95vh] flex flex-col mx-4 lg:mx-0">
             <div className="flex justify-between items-center mb-4">
               <h2 className="" style={{ ...FONTS.heading_02 }}>
                 Staff Settings
