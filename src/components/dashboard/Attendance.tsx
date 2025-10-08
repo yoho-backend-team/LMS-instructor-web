@@ -47,6 +47,9 @@ const Attendance: React.FC = () => {
         ]
     }, [Attendance, Attendance_data?.absent?.percentage, Attendance_data?.total?.percentage]);
 
+
+
+
     const attendanceMetrics = [
         {
             icon: profile,
@@ -64,57 +67,54 @@ const Attendance: React.FC = () => {
 
     return (
         <>
-            <Card className="w-full max-w-full h-auto min-h-[280px] p-4 sm:p-5 flex flex-col items-start gap-2.5 relative bg-[#ebeff3] rounded-2xl shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40]">
-                <CardContent className="flex flex-col w-full max-w-full items-start gap-4 sm:gap-5 relative flex-[0_0_auto] p-0">
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between relative self-stretch w-full flex-[0_0_auto] gap-3 sm:gap-0">
-                        <div className="flex flex-col w-full sm:w-[228px] items-start gap-2 sm:gap-3 relative">
-                            <div className="relative self-stretch mt-[-1.00px] [font-family:'Quicksand',Helvetica] font-bold text-dark text-lg sm:text-xl tracking-[0] leading-[normal]">
+            <Card className="w-full h-[300px] p-5 flex flex-col items-start gap-2.5 relative bg-[#ebeff3] rounded-2xl shadow-[4px_4px_8px_#bdc2c7bf,8px_8px_12px_#bdc2c740,-4px_-4px_8px_#ffffffbf,-8px_-8px_12px_#ffffff40]">
+                <CardContent className="flex flex-col w-[400px] items-start gap-5 relative flex-[0_0_auto] p-0">
+                    <div className="flex items-center justify-between relative self-stretch w-full flex-[0_0_auto]">
+                        <div className="flex flex-col w-[228px] items-start gap-3 relative">
+                            <div className="relative self-stretch mt-[-1.00px] [font-family:'Quicksand',Helvetica] font-bold text-dark text-xl tracking-[0] leading-[normal]">
                                 Attendance
                             </div>
                         </div>
 
-                        <Button 
-                            style={{ ...FONTS.heading_06 }}
+                        <Button style={{ ...FONTS.heading_06 }}
                             onClick={() => navigate('/attendance')}
-                            className="cursor-pointer btnshadow btnhovershadow hover:!text-white bg-gray-100 flex w-full sm:w-[104px] h-[38px] sm:h-[42px] items-center justify-center gap-2.5 px-3 py-2 relative rounded-lg text-sm sm:text-base" 
-                        >
-                            <span className="whitespace-nowrap">
+                            className="cursor-pointer btnshadow btnhovershadow hover:!text-white bg-gray-100 flex w-[104px] h-[42px] items-center justify-center gap-2.5 px-3 py-2 relative rounded-lg " >
+                            <span className="">
                                 Over All
                             </span>
                         </Button>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-[30px] relative self-stretch w-full flex-[0_0_auto]">
-                        {/* Bars Container */}
-                        <div className="flex justify-center sm:inline-flex items-center gap-3 sm:gap-[30px] relative flex-[0_0_auto] w-full sm:w-auto">
+                    <div className="flex items-center gap-[30px] relative self-stretch w-full flex-[0_0_auto]">
+                        <div className="inline-flex items-center gap-[30px] relative flex-[0_0_auto]">
                             {attendanceBars?.map((bar, index) => {
                                 return (
                                     <div
                                         key={`bar-${index}`}
-                                        className="relative w-6 sm:w-7 h-[120px] sm:h-[198px] bg-[#ebeff3] rounded-2xl border border-solid border-[#f4f6f8] shadow-[4px_4px_8px_#ffffffbf,inset_2px_2px_8px_#bdc2c7]"
+                                        className="relative w-7 h-[198px] bg-[#ebeff3] rounded-2xl border border-solid border-[#f4f6f8] shadow-[4px_4px_8px_#ffffffbf,inset_2px_2px_8px_#bdc2c7]"
                                     >
                                         <div
                                             style={{ height: bar.height }}
-                                            className={`absolute w-[22px] sm:w-[26px] ${bar.top} rounded-2xl ${bar.shadow} ${bar.color}`}
+                                            className={`absolute w-[26px]  ${bar.top} rounded-2xl ${bar.shadow} ${bar.color}`}
                                         />
                                     </div>
                                 )
-                            })}
+                            })
+                            }
                         </div>
 
-                        {/* Metrics Container */}
-                        <div className="flex flex-col w-full sm:w-[226px] items-start gap-3 sm:gap-5 relative">
+                        <div className="flex flex-col w-[226px] items-start gap-5 relative">
                             {attendanceMetrics.map((metric, index) => (
                                 <div
                                     key={`metric-${index}`}
-                                    className="flex items-center gap-3 sm:gap-4 relative self-stretch w-full flex-[0_0_auto]"
+                                    className="flex items-center gap-4 relative self-stretch w-full flex-[0_0_auto]"
                                 >
                                     <img
-                                        className="relative w-6 h-6 sm:w-8 sm:h-8 md:w-20 md:h-20 mt-[-10px] sm:mt-[-20.00px] mb-[-10px] sm:mb-[-20.00px] ml-[-10px] sm:ml-[-20.00px]"
+                                        className="relative w-20 h-20 mt-[-20.00px] mb-[-20.00px] ml-[-20.00px]"
                                         alt="Attendance icon"
                                         src={metric.icon}
                                     />
-                                    <div className="relative w-full [font-family:'Quicksand',Helvetica] font-bold text-[#706f6f] text-xs sm:text-sm tracking-[0] leading-[normal] break-words">
+                                    <div className="relative w-full [font-family:'Quicksand',Helvetica] font-bold text-[#706f6f] text-sm tracking-[0] leading-[normal]">
                                         {metric.text}
                                     </div>
                                 </div>
@@ -127,4 +127,4 @@ const Attendance: React.FC = () => {
     )
 }
 
-export default Attendance;
+export default Attendance

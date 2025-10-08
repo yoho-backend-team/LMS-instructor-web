@@ -108,7 +108,7 @@ export const CircularProgressWithLabelDemo: React.FC<{ value: number; color: str
         <div className="max-w-xs mx-auto w-full flex flex-col items-center">
             <CircularProgress
                 value={progress[0]}
-                size={85}
+                size={90}
                 strokeWidth={12}
                 showLabel
                 labelClassName="text-xl font-bold"
