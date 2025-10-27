@@ -7,201 +7,264 @@ import { ConfirmationDialog } from '@/components/ui/confirmation-dialog';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectProfile } from '@/features/Profile/reducers/selectors';
 import {
-  getStudentProfileThunk,
-  UpdateInstructorThunk,
+	getStudentProfileThunk,
+	UpdateInstructorThunk,
 } from '@/features/Profile/reducers/thunks';
 import { updateStudentProfile } from '@/features/Profile/services';
 import { useNavigate } from 'react-router-dom';
 import { useLoader } from '@/context/LoadingContext/Loader';
+import { uploadticketfile } from '@/features/Tickets/services/Ticket';
 
 const ProfileInformation: React.FC = () => {
-  const [activeMenuItem, setActiveMenuItem] = useState('profile');
-  const [isEditing, setIsEditing] = useState(false);
-  const [showCancelDialog, setShowCancelDialog] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const dispatch = useDispatch<any>();
-  const profileDetails = useSelector(selectProfile);
-  const navigate = useNavigate();
-  const { showLoader, hideLoader } = useLoader()
+	const [activeMenuItem, setActiveMenuItem] = useState('profile');
+	const [isEditing, setIsEditing] = useState(false);
+	const [showCancelDialog, setShowCancelDialog] = useState(false);
+	const [isSaving, setIsSaving] = useState(false);
+	const dispatch = useDispatch<any>();
+	const profileDetails = useSelector(selectProfile);
+	const navigate = useNavigate();
+	const { showLoader, hideLoader } = useLoader();
 
-  useEffect(() => {
-    (async () => {
-      showLoader()
-      const response = await dispatch(getStudentProfileThunk());
-      if (response) {
-        hideLoader()
-      } else {
-        hideLoader()
-      }
-    })()
-  }, [dispatch, hideLoader, showLoader]);
+	useEffect(() => {
+		(async () => {
+			showLoader();
+			const response = await dispatch(getStudentProfileThunk());
+			if (response) {
+				hideLoader();
+			} else {
+				hideLoader();
+			}
+		})();
+	}, [dispatch, hideLoader, showLoader]);
 
-   const [profileData, setProfileData] = useState({
-    name: profileDetails?.full_name,
-    traineeId: profileDetails?.userDetail?.staffId,
-    profileImage: profileDetails?.image,
-  });
+	const [profileData, setProfileData] = useState({
+		name: profileDetails?.full_name || '',
+		traineeId: profileDetails?.userDetail?.staffId || '',
+		profileImage: profileDetails?.image || '',
+	});
 
-  const [personalInfo, setPersonalInfo] = useState<any | null>(null);
-  const [instituteInfo, setInstituteInfo] = useState({
-    course: 'Theoretical Physics',
-    batch: 'Batch 2024-25',
-    studentId: profileDetails?.userDetail?.staffId,
-  });
+	// Update profileData when profileDetails changes
+	useEffect(() => {
+		setProfileData({
+			name: profileDetails?.full_name || '',
+			traineeId: profileDetails?.userDetail?.staffId || '',
+			profileImage: profileDetails?.image || '',
+		});
+	}, [profileDetails]);
 
-  const [originalPersonalInfo, setOriginalPersonalInfo] =
-    useState(personalInfo);
-  const [originalProfileImage, setOriginalProfileImage] = useState(
-    profileData.profileImage
-  );
+	const [personalInfo, setPersonalInfo] = useState<any>(null);
+	const [instituteInfo, setInstituteInfo] = useState({
+		course: 'Theoretical Physics',
+		batch: 'Batch 2024-25',
+		studentId: profileDetails?.userDetail?.staffId,
+	});
 
-  const handleMenuItemClick = (itemId: string) => {
-    if (isEditing && itemId !== 'profile') {
-      setIsEditing(false);
-    }
-    setActiveMenuItem(itemId);
-  };
+	const [originalPersonalInfo, setOriginalPersonalInfo] = useState<any>(null);
+	const [originalProfileImage, setOriginalProfileImage] = useState(
+		profileData.profileImage
+	);
 
-  const handleGoBack = () => {
-    navigate(-1);
-  };
+	const handleMenuItemClick = (itemId: string) => {
+		if (isEditing && itemId !== 'profile') {
+			setIsEditing(false);
+		}
+		setActiveMenuItem(itemId);
+	};
 
-  const handlePersonalInfoChange = async (data: any) => {
-    setPersonalInfo(data);
+	const handleGoBack = () => {
+		navigate(-1);
+	};
 
-    if (data.name !== profileData.name) {
-      setProfileData((prev) => ({ ...prev, name: data.name }));
-    }
-  };
+	const handlePersonalInfoChange = async (data: any) => {
+		setPersonalInfo(data);
 
-  const handleInstituteInfoChange = (data: typeof instituteInfo) => {
-    setInstituteInfo(data);
-  };
+		if (data.full_name !== profileData.name) {
+			setProfileData((prev) => ({ ...prev, name: data.full_name }));
+		}
+	};
 
-  const handleEditClick = () => {
-    if (!isEditing) {
-      setOriginalPersonalInfo(personalInfo);
-      setOriginalProfileImage(profileData.profileImage);
-    }
-    setIsEditing(!isEditing);
-  };
+	const handleInstituteInfoChange = (data: typeof instituteInfo) => {
+		setInstituteInfo(data);
+	};
 
-  const handleImageChange = (imageFile: File) => {
-    const imageUrl = URL.createObjectURL(imageFile);
-    setProfileData((prev) => ({ ...prev, profileImage: imageUrl }));
-  };
+	const handleEditClick = () => {
+		if (!isEditing) {
+			// Initialize personalInfo with current profile data when starting to edit
+			if (!personalInfo && profileDetails) {
+				const initialPersonalInfo = {
+					full_name: profileDetails?.full_name || '',
+					address1: profileDetails?.contact_info?.address1 || '',
+					address2: profileDetails?.contact_info?.address2 || '',
+					alternate_phone_number:
+						profileDetails?.contact_info?.alternate_phone_number || '',
+					city: profileDetails?.contact_info?.city || '',
+					pincode: profileDetails?.contact_info?.pincode || '',
+					state: profileDetails?.contact_info?.state || '',
+					phone_number: profileDetails?.contact_info?.phone_number || '',
+					dob: profileDetails?.dob || '',
+					email: profileDetails?.email || '',
+					gender: profileDetails?.gender || '',
+					qualification: profileDetails?.qualification || '',
+					roll_no: profileDetails?.roll_no || '',
+					image: profileDetails?.image || '',
+				};
+				setPersonalInfo(initialPersonalInfo);
+				setOriginalPersonalInfo(initialPersonalInfo);
+			} else {
+				setOriginalPersonalInfo(personalInfo);
+			}
+			setOriginalProfileImage(profileData.profileImage);
+		}
+		setIsEditing(!isEditing);
+	};
 
-  // Check if there are any changes
-  const hasChanges = () => {
-    const personalInfoChanged =
-      JSON.stringify(personalInfo) !== JSON.stringify(originalPersonalInfo);
-    const imageChanged = profileData.profileImage !== originalProfileImage;
-    return personalInfoChanged || imageChanged;
-  };
+	const handleImageChange = async (imageFile: File) => {
+		try {
+			const formData = new FormData();
+			formData.append('file', imageFile);
+			const response = await uploadticketfile(formData);
+			if (response) {
+				const newImageUrl = response?.data?.file;
+				setProfileData((prev) => ({
+					...prev,
+					profileImage: newImageUrl,
+				}));
+				// Also update personalInfo with new image
+				if (personalInfo) {
+					setPersonalInfo((prev: any) => ({
+						...prev,
+						image: newImageUrl,
+					}));
+				}
+			}
+		} catch (error) {
+			console.error('Error uploading image:', error);
+		}
+	};
 
-  const handleSave = async () => {
-    if (!hasChanges()) {
-      return;
-    }
-    setIsSaving(true);
+	// Check if there are any changes
+	const hasChanges = () => {
+		if (!personalInfo || !originalPersonalInfo) return false;
 
-    try {
-      const data = {
-        contact_info: {
-          address1: personalInfo?.address1,
-          address2: personalInfo?.address2,
-          city: personalInfo?.city,
-          state: personalInfo?.state,
-          pincode: personalInfo?.pincode,
-          phone_number: personalInfo?.phone_number,
-          alternate_phone_number: personalInfo?.alternate_phone_number,
-        },
-        roll_no: personalInfo?.roll_no,
-        qualification: personalInfo?.qualification,
-        gender: personalInfo?.gender,
-        email: personalInfo?.email,
-        dob: personalInfo?.dob,
-        full_name: personalInfo?.full_name,
-      };
+		const personalInfoChanged =
+			JSON.stringify(personalInfo) !== JSON.stringify(originalPersonalInfo);
+		const imageChanged = profileData.profileImage !== originalProfileImage;
+		return personalInfoChanged || imageChanged;
+	};
 
-      dispatch(UpdateInstructorThunk(data));
-      await updateStudentProfile({ ...data });
-      setIsEditing(false);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsSaving(false);
-    }
-  };
+	const handleSave = async () => {
+		if (!hasChanges() || !personalInfo) {
+			console.log('No changes to save');
+			setIsEditing(false);
+			return;
+		}
+		setIsSaving(true);
 
-  const handleCancel = () => {
-    if (hasChanges()) {
-      setShowCancelDialog(true);
-      return;
-    }
+		try {
+			const data = {
+				contact_info: {
+					address1: personalInfo?.address1 || '',
+					address2: personalInfo?.address2 || '',
+					city: personalInfo?.city || '',
+					state: personalInfo?.state || '',
+					pincode: personalInfo?.pincode || '',
+					phone_number: personalInfo?.phone_number || '',
+					alternate_phone_number: personalInfo?.alternate_phone_number || '',
+				},
+				roll_no: personalInfo?.roll_no || '',
+				qualification: personalInfo?.qualification || '',
+				gender: personalInfo?.gender || '',
+				email: personalInfo?.email || '',
+				dob: personalInfo?.dob || '',
+				full_name: personalInfo?.full_name || '',
+				image: profileData.profileImage, // Include the updated image
+			};
 
-    setIsEditing(false);
-  };
+			console.log('Saving data:', data); // Debug log
 
-  const confirmCancel = () => {
-    setPersonalInfo(originalPersonalInfo);
-    setProfileData((prev) => ({
-      ...prev,
-      profileImage: originalProfileImage,
-      name: originalPersonalInfo?.name,
-    }));
+			dispatch(UpdateInstructorThunk(data));
+			await updateStudentProfile({ ...data });
+			setIsEditing(false);
 
-    setIsEditing(false);
-    setShowCancelDialog(false);
-  };
+			// Refresh profile data
+			await dispatch(getStudentProfileThunk());
+		} catch (error) {
+			console.log('Error saving profile:', error);
+		} finally {
+			setIsSaving(false);
+		}
+	};
 
-  return (
-    <div className='min-h-fit' style={{ fontFamily: FONTS.para_01.fontFamily }}>
-      <div className='flex flex-col xl:flex-row gap-4 p-2 sm:p-4 max-w-[1400px] mx-auto'>
-        {/* Sidebar - Responsive width */}
-        <div className='w-full xl:w-[320px] 2xl:w-[380px] flex-shrink-0'>
-          <ProfileSidebar
-            name={profileData.name}
-            traineeId={profileData.traineeId}
-            profileImage={profileData.profileImage}
-            activeMenuItem={activeMenuItem}
-            onMenuItemClick={handleMenuItemClick}
-            onGoBack={handleGoBack}
-            onEditClick={handleEditClick}
-            onImageChange={handleImageChange}
-            isEditing={isEditing}
-          />
-        </div>
+	const handleCancel = () => {
+		if (hasChanges()) {
+			setShowCancelDialog(true);
+			return;
+		}
+		setIsEditing(false);
+	};
 
-        {/* Content - Takes remaining space */}
-        <div className='flex-1 min-w-0'>
-          <ProfileContent
-            personalInfo={personalInfo}
-            instituteInfo={instituteInfo}
-            onPersonalInfoChange={handlePersonalInfoChange}
-            onInstituteInfoChange={handleInstituteInfoChange}
-            isEditing={isEditing}
-            onSave={handleSave}
-            onCancel={handleCancel}
-            activeMenuItem={activeMenuItem}
-            isSaving={isSaving}
-          />
-        </div>
-      </div>
+	const confirmCancel = () => {
+		setPersonalInfo(originalPersonalInfo);
+		setProfileData((prev) => ({
+			...prev,
+			profileImage: originalProfileImage,
+			name: originalPersonalInfo?.full_name || prev.name,
+		}));
+		setIsEditing(false);
+		setShowCancelDialog(false);
+	};
 
-      {/* Confirmation Dialog */}
-      <ConfirmationDialog
-        isOpen={showCancelDialog}
-        onClose={() => { setShowCancelDialog(false), dispatch(getStudentProfileThunk()); }}
-        onConfirm={confirmCancel}
-        title='Discard Changes'
-        description='You have unsaved changes. Are you sure you want to discard them?'
-        confirmText='Discard'
-        cancelText='Keep Editing'
-        type='warning'
-      />
-    </div>
-  );
+	return (
+		<div className='min-h-fit' style={{ fontFamily: FONTS.para_01.fontFamily }}>
+			<div className='flex flex-col xl:flex-row gap-4 p-2 sm:p-4 max-w-[1400px] mx-auto'>
+				{/* Sidebar - Responsive width */}
+				<div className='w-full xl:w-[320px] 2xl:w-[380px] flex-shrink-0'>
+					<ProfileSidebar
+						name={profileData.name}
+						traineeId={profileData.traineeId}
+						profileImage={profileData.profileImage}
+						activeMenuItem={activeMenuItem}
+						onMenuItemClick={handleMenuItemClick}
+						onGoBack={handleGoBack}
+						onEditClick={handleEditClick}
+						onImageChange={handleImageChange}
+						isEditing={isEditing}
+					/>
+				</div>
+
+				{/* Content - Takes remaining space */}
+				<div className='flex-1 min-w-0'>
+					<ProfileContent
+						personalInfo={personalInfo}
+						instituteInfo={instituteInfo}
+						onPersonalInfoChange={handlePersonalInfoChange}
+						onInstituteInfoChange={handleInstituteInfoChange}
+						isEditing={isEditing}
+						onSave={handleSave}
+						onCancel={handleCancel}
+						activeMenuItem={activeMenuItem}
+						isSaving={isSaving}
+						profileImage={profileData.profileImage}
+					/>
+				</div>
+			</div>
+
+			{/* Confirmation Dialog */}
+			<ConfirmationDialog
+				isOpen={showCancelDialog}
+				onClose={() => {
+					setShowCancelDialog(false);
+					dispatch(getStudentProfileThunk());
+				}}
+				onConfirm={confirmCancel}
+				title='Discard Changes'
+				description='You have unsaved changes. Are you sure you want to discard them?'
+				confirmText='Discard'
+				cancelText='Keep Editing'
+				type='warning'
+			/>
+		</div>
+	);
 };
 
 export default ProfileInformation;

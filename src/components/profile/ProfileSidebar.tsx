@@ -33,8 +33,6 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
 			style={{
 				backgroundColor: COLORS.bg_Colour,
 				fontFamily: FONTS.para_01.fontFamily,
-				// height: '75vh',
-				
 			}}
 		>
 			{/* Header Section */}

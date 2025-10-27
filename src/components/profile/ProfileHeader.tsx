@@ -18,15 +18,13 @@ interface ProfileHeaderProps {
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 	name,
-	// traineeId,
-	// profileImage,
+	profileImage,
 	onEditClick,
 	onImageChange,
 	isEditing = false,
 	showEditButton = true,
 }) => {
-
-	const profile = useSelector(selectProfile)
+	const profile = useSelector(selectProfile);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const handleImageClick = () => {
@@ -40,7 +38,12 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 		if (file) {
 			onImageChange?.(file);
 		}
+		// Reset the input to allow selecting the same file again
+		event.target.value = '';
 	};
+
+	// Use the profileImage prop if available, otherwise fall back to profile?.image
+	const displayImage = profileImage || profile?.image;
 
 	return (
 		<Card
@@ -53,22 +56,23 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 					<div className='flex items-center gap-3 flex-1 min-w-0'>
 						<div className='flex-shrink-0 relative'>
 							<div
-								className={`w-12 h-12 sm:w-14 sm:h-14 rounded-lg overflow-hidden bg-gray-200 shadow-[inset_2px_2px_4px_rgba(189,194,199,0.75),inset_-2px_-2px_4px_rgba(255,255,255,0.7)] ${isEditing && showEditButton ? 'cursor-pointer group' : ''
-									}`}
-								onClick={handleImageClick}
+								className={`w-12 h-12 sm:w-14 sm:h-14 rounded-lg overflow-hidden bg-gray-200 shadow-[inset_2px_2px_4px_rgba(189,194,199,0.75),inset_-2px_-2px_4px_rgba(255,255,255,0.7)] ${
+									isEditing && showEditButton ? 'cursor-pointer group' : ''
+								}`}
 							>
 								<img
-									src={GetImageUrl(profile?.image) ?? undefined}
+									src={GetImageUrl(displayImage) ?? undefined}
 									alt={name}
-									className={`w-full h-full object-cover ${isEditing && showEditButton
-										? 'transition-all duration-200 group-hover:opacity-80'
-										: ''
-										}`}
+									className='w-full h-full object-cover'
 								/>
-								{/* Camera overlay - only show when editing and edit button is visible */}
+
+								{/* Small camera icon at bottom right - only show when editing */}
 								{isEditing && showEditButton && (
-									<div className='absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200'>
-										<Camera className='w-4 h-4 text-white' />
+									<div
+										className='absolute bottom-0 right-0 bg-blue-500 rounded-tl-lg p-1 cursor-pointer'
+										onClick={handleImageClick}
+									>
+										<Camera className='w-3 h-3 text-white' />
 									</div>
 								)}
 							</div>
@@ -95,7 +99,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 									fontWeight: FONTS.heading_05.fontWeight,
 								}}
 							>
-								{profile?.full_name}
+								{profile?.full_name || name}
 							</h3>
 							<p
 								className='text-xs leading-relaxed'
@@ -114,10 +118,11 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 						<div className='flex-shrink-0'>
 							<button
 								onClick={onEditClick}
-								className={`cursor-pointer border-none rounded-md px-2 py-2 flex items-center gap-1 text-xs font-medium transition-all duration-200 ${isEditing
-									? 'shadow-[inset_3px_3px_5px_rgba(189,194,199,0.75),inset_-3px_-3px_5px_rgba(255,255,255,0.7)]'
-									: 'shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] hover:shadow-[inset_3px_3px_5px_rgba(189,194,199,0.75),inset_-3px_-3px_5px_rgba(255,255,255,0.7)]'
-									}`}
+								className={`cursor-pointer border-none rounded-md px-2 py-2 flex items-center gap-1 text-xs font-medium transition-all duration-200 ${
+									isEditing
+										? 'shadow-[inset_3px_3px_5px_rgba(189,194,199,0.75),inset_-3px_-3px_5px_rgba(255,255,255,0.7)]'
+										: 'shadow-[3px_3px_5px_rgba(255,255,255,0.7),inset_2px_2px_3px_rgba(189,194,199,0.75)] hover:shadow-[inset_3px_3px_5px_rgba(189,194,199,0.75),inset_-3px_-3px_5px_rgba(255,255,255,0.7)]'
+								}`}
 								style={{
 									backgroundColor: COLORS.bg_Colour,
 									fontFamily: FONTS.para_01.fontFamily,
@@ -129,7 +134,6 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 									{isEditing ? 'Close' : 'Edit'}
 								</span>
 							</button>
-
 						</div>
 					)}
 				</div>
