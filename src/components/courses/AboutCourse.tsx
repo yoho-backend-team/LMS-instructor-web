@@ -181,7 +181,6 @@ const CourseList: React.FC = () => {
 	}, [dispatch, hideLoader, showLoader]);
 
 	const rating = Math.round(courseSelectData?.rating || 0);
-	console.log('Courese Select Data:', courseSelectData);
 
 	return (
 		<div className='p-8'>

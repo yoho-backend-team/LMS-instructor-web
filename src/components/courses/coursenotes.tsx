@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Add_Notes from './Add_notes';
 import NotesMaterials from './notes__materials';
 import CourseButton from './button';
@@ -6,11 +6,13 @@ import { Button } from '../ui/button';
 import navigationicon from '../../assets/courses icons/navigation arrow.svg';
 import studyIcon from '../../assets/courses icons/studyIcon.png';
 import notesIcon from '../../assets/courses icons/notesIcon.png';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import StudyMaterials from './studyMaterials';
 import { useLoader } from '@/context/LoadingContext/Loader';
 import { getDashBoardReports } from '@/features/Dashboard/reducers/thunks';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getInstructorcourseData } from '@/features/Course/reducers/thunks';
+import { selectCoursedata } from '@/features/Course/reducers/selector';
 
 function CourseNotes() {
 	const navigate = useNavigate();
@@ -18,6 +20,20 @@ function CourseNotes() {
 	const [selectedNotes, setselectedNotes] = useState<any | null>(null);
 	const { showLoader, hideLoader } = useLoader();
 	const dispatch = useDispatch<any>();
+	const { course } = useParams();
+	const courseSelectData = useSelector(selectCoursedata);
+
+	const fetchCourseData = useCallback(async () => {
+		try {
+			await dispatch(getInstructorcourseData(course ?? ''));
+		} catch (error) {
+			console.error('Course fetch error:', error);
+		}
+	}, []);
+
+	useEffect(() => {
+		fetchCourseData();
+	}, [course, dispatch]);
 
 	useEffect(() => {
 		(async () => {
@@ -109,8 +125,16 @@ function CourseNotes() {
 							Add Notes
 						</h1>
 						<div className='grid grid-cols-1 lg:grid-cols-2 w-full gap-4 sm:gap-6'>
-							<Add_Notes selectedNotes={selectedNotes} activeTab={activeTab} />
-							<NotesMaterials setselectedNotes={setselectedNotes} />
+							<Add_Notes
+								selectedNotes={selectedNotes}
+								activeTab={activeTab}
+								onRefresh={fetchCourseData}
+							/>
+							<NotesMaterials
+								setselectedNotes={setselectedNotes}
+								courseSelectData={courseSelectData}
+								onRefresh={fetchCourseData}
+							/>
 						</div>
 					</>
 				) : (
@@ -119,8 +143,16 @@ function CourseNotes() {
 							Add Study Materials
 						</h1>
 						<div className='grid grid-cols-1 lg:grid-cols-2 w-full gap-4 sm:gap-6'>
-							<Add_Notes selectedNotes={selectedNotes} activeTab={activeTab} />
-							<StudyMaterials setselectedNotes={setselectedNotes} />
+							<Add_Notes
+								selectedNotes={selectedNotes}
+								activeTab={activeTab}
+								onRefresh={fetchCourseData}
+							/>
+							<StudyMaterials
+								setselectedNotes={setselectedNotes}
+								courseSelectData={courseSelectData}
+								onRefresh={fetchCourseData}
+							/>
 						</div>
 					</>
 				)}

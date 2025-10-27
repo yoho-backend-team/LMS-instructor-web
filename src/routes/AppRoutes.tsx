@@ -65,12 +65,18 @@ const AppRoutes = () => {
 				<Route path='attendance' element={<Attendance />} />
 				<Route path='placement' element={<Placement />} />
 				<Route path='payment' element={<Payment />} />
-				<Route path='note_materials' element={<CourseNotes />} />
+				<Route path='note_materials/:course' element={<CourseNotes />} />
 				<Route path='course-track/:batchId' element={<CourseTrack />} />
 				<Route path='about/:course' element={<AboutCourse />} />
 				<Route
 					path='notes_materials'
-					element={<NotesMaterials setselectedNotes={() => {}} />}
+					element={
+						<NotesMaterials
+							setselectedNotes={() => {}}
+							courseSelectData={null}
+							onRefresh={() => {}}
+						/>
+					}
 				/>
 				<Route path='batches' element={<Batches />} />
 				<Route path='task' element={<Taskprojects />} />
