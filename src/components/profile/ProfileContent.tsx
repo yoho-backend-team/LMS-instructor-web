@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import PersonalInformation from './PersonalInformation';
 import IDCard from './IDCard';
 import { COLORS, FONTS } from '@/constants/uiConstants';
@@ -39,41 +39,60 @@ interface ProfileContentProps {
 	activeMenuItem?: string;
 	isSaving?: boolean;
 	profileImage?: string;
+	profileDetails?: any;
 }
 
 const ProfileContent: React.FC<ProfileContentProps> = ({
-	// personalInfo,
+	personalInfo,
 	isEditing = false,
 	onSave,
 	onCancel,
 	activeMenuItem = 'profile',
 	isSaving = false,
 	profileImage = '',
+	profileDetails,
 }) => {
 	const personalInfoRef = useRef<PersonalInformationRef>(null);
 	const [currentFormData, setCurrentFormData] = useState<PersonalInfo | null>(
 		null
 	);
 	const [saving, setSaving] = useState(false);
+	const [forceRefreshKey] = useState(0);
+
+	// Update form when profileDetails changes (after save or cancel)
+	useEffect(() => {
+		if (personalInfoRef.current && profileDetails && !isEditing) {
+			personalInfoRef.current.resetForm();
+		}
+	}, [profileDetails, isEditing]);
+
+	// Reset form when personalInfo changes from parent (for cancel functionality)
+	useEffect(() => {
+		if (personalInfo && personalInfoRef.current && !isEditing) {
+			personalInfoRef.current.resetForm();
+		}
+	}, [personalInfo, isEditing]);
 
 	const handlePersonalInfoChange = (data: PersonalInfo) => {
 		setCurrentFormData(data);
 	};
 
 	const handleCancel = () => {
-		if (personalInfoRef.current) personalInfoRef.current.resetForm();
+		if (personalInfoRef.current) {
+			personalInfoRef.current.resetForm();
+		}
 		setCurrentFormData(null);
 		if (onCancel) onCancel();
 	};
 
 	const formatPhoneNumber = (num: string) => {
 		if (!num) return '';
-		const cleaned = num.replace(/\D/g, ''); // remove non-digit characters
+		const cleaned = num.replace(/\D/g, '');
 		if (cleaned.length === 10)
 			return `+91-${cleaned.slice(0, 3)}-${cleaned.slice(3, 6)}-${cleaned.slice(
 				6
 			)}`;
-		return num; // return as-is if already formatted
+		return num;
 	};
 
 	const transformDataForAPI = (data: PersonalInfo) => {
@@ -84,7 +103,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
 			gender: data.gender || '',
 			qualification: data.qualification || '',
 			roll_no: data.roll_no || '',
-			image: profileImage || data.image || '', // Use profileImage prop from parent
+			image: profileImage || data.image || '',
 			contact_info: {
 				address1: data.address1 || '',
 				address2: data.address2 || '',
@@ -95,8 +114,6 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
 				phone_number: formatPhoneNumber(data.phone_number),
 			},
 		};
-
-		console.log('Transformed API data:', apiData); // Debug log
 		return apiData;
 	};
 
@@ -113,17 +130,15 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
 			setSaving(true);
 			const response = await updateStudentProfile(apiData);
 
-			console.log('Profile updated successfully:', response);
-
-			// Optional: handle response errors if API returns status
 			if (response?.status === 'failed') {
 				throw new Error(response?.message || 'Failed to update profile');
 			}
 
-			// Call optional parent onSave callback
+			// Call parent onSave callback which will refresh the profile data
 			if (onSave) await onSave(apiData);
 
-			handleCancel();
+			// Reset form data after successful save
+			setCurrentFormData(null);
 		} catch (error: any) {
 			console.error('Failed to update profile:', error);
 			alert(error.message || 'Failed to update profile');
@@ -190,6 +205,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
 
 							<div className='p-4 sm:p-6 overflow-y-auto flex-1 scrollbar-hide'>
 								<PersonalInformation
+									key={`personal-info-${forceRefreshKey}`}
 									ref={personalInfoRef}
 									isEditing={isEditing}
 									onDataChange={handlePersonalInfoChange}

@@ -20,7 +20,7 @@ const Classes = () => {
 	const [currentPage, setCurrentPage] = useState(1);
 
 	const dispatch = useDispatch<AppDispatch>();
-	const classData = useSelector(selectClass)?.data || [];
+	const classData = useSelector(selectClass) || [];
 	const { showLoader, hideLoader } = useLoader();
 
 	useEffect(() => {
@@ -181,7 +181,12 @@ const Classes = () => {
 					/>
 				)}
 				{activeTab === 'completed' && (
-					<Completedclass data={classData} classType={true} />
+					<Completedclass
+						data={classData}
+						classType={true}
+						currentPage={currentPage}
+						onPageChange={setCurrentPage}
+					/>
 				)}
 			</div>
 		</div>

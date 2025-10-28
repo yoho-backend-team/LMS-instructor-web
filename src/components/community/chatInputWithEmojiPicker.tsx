@@ -1,7 +1,7 @@
 // src/components/community/CommunitySide/ChatInputWithEmojiPicker.tsx
 import React, { useRef, useState } from 'react';
 import EmojiPicker from 'emoji-picker-react';
-import { RiEmojiStickerLine } from 'react-icons/ri';
+// import { RiEmojiStickerLine } from 'react-icons/ri';
 import cursor from '@/assets/icons/community/Icon.png';
 import { useOnClickOutside } from './hooks/useOnClickOutside';
 
@@ -33,13 +33,13 @@ const ChatInputWithEmojiPicker: React.FC<Props> = ({ onSend }) => {
 
   return (
     <div className="relative p-4 border-t bg-[#EBEFF3] flex items-center gap-2">
-      <button
+      {/* <button
         type="button"
         onClick={() => setShowPicker((s) => !s)}
         className="p-2 rounded-full bg-gray-300  transition cursor-pointer"
       >
         <RiEmojiStickerLine className="text-xl" />
-      </button>
+      </button> */}
 
       {showPicker && (
         <div ref={pickerRef} className="absolute bottom-14 left-2 z-50 w-[320px] h-[380px] rounded-xl shadow-xl bg-white">

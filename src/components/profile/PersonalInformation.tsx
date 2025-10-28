@@ -33,7 +33,7 @@ interface PersonalInformationProps {
 	onDataChange?: (data: PersonalInfo) => void;
 	isEditing?: boolean;
 	onReset?: () => void;
-	profileImage?: string; // Add this prop
+	profileImage?: string;
 }
 
 export interface PersonalInformationRef {
@@ -79,14 +79,55 @@ const PersonalInformation = forwardRef<
 		image: '',
 	});
 
-	const [originalData, setOriginalData] = useState<any>({});
+	const [, setOriginalData] = useState<any>({});
 
 	useEffect(() => {
 		dispatch(getStudentProfileThunk());
 	}, [dispatch]);
 
+	// Update formData and originalData whenever personalInfo or profileImage changes
 	useEffect(() => {
-		const newData = {
+		if (personalInfo) {
+			const newData = {
+				full_name: personalInfo?.full_name || '',
+				address1: personalInfo?.contact_info?.address1 || '',
+				address2: personalInfo?.contact_info?.address2 || '',
+				alternate_phone_number:
+					personalInfo?.contact_info?.alternate_phone_number || '',
+				city: personalInfo?.contact_info?.city || '',
+				pincode: personalInfo?.contact_info?.pincode || '',
+				state: personalInfo?.contact_info?.state || '',
+				phone_number: personalInfo?.contact_info?.phone_number || '',
+				dob: personalInfo?.dob || '',
+				email: personalInfo?.email || '',
+				gender: personalInfo?.gender || '',
+				qualification: personalInfo?.qualification || '',
+				roll_no: personalInfo?.roll_no || '',
+				image: profileImage || personalInfo?.image || '',
+			};
+
+			setFormData(newData);
+			setOriginalData(newData);
+		}
+	}, [personalInfo, profileImage]);
+
+	// Reset form when isEditing changes to false (when cancel is clicked)
+	useEffect(() => {
+		if (!isEditing) {
+			resetForm();
+		}
+	}, [isEditing]);
+
+	const handleInputChange = (key: keyof PersonalInfo, value: string) => {
+		const updatedData = { ...formData, [key]: value };
+		setFormData(updatedData);
+		onDataChange?.(updatedData);
+	};
+
+	// Reset form to original data
+	const resetForm = () => {
+		// Use the latest personalInfo from Redux
+		const latestData = {
 			full_name: personalInfo?.full_name || '',
 			address1: personalInfo?.contact_info?.address1 || '',
 			address2: personalInfo?.contact_info?.address2 || '',
@@ -101,29 +142,12 @@ const PersonalInformation = forwardRef<
 			gender: personalInfo?.gender || '',
 			qualification: personalInfo?.qualification || '',
 			roll_no: personalInfo?.roll_no || '',
-			image: profileImage || personalInfo?.image || '', // Use profileImage prop if available
+			image: profileImage || personalInfo?.image || '',
 		};
 
-		setFormData(newData);
-		setOriginalData(newData);
-	}, [personalInfo, profileImage]); // Add profileImage to dependencies
+		setFormData(latestData);
+		setOriginalData(latestData);
 
-	// Reset form when isEditing changes to false (when cancel is clicked)
-	useEffect(() => {
-		if (!isEditing) {
-			setFormData(originalData);
-		}
-	}, [isEditing, originalData]);
-
-	const handleInputChange = (key: keyof PersonalInfo, value: string) => {
-		const updatedData = { ...formData, [key]: value };
-		setFormData(updatedData);
-		onDataChange?.(updatedData);
-	};
-
-	// Reset form to original data
-	const resetForm = () => {
-		setFormData(originalData);
 		if (onReset) {
 			onReset();
 		}
@@ -227,7 +251,6 @@ const PersonalInformation = forwardRef<
 			editable: true,
 			ref: rollNoRef,
 		},
-		// Remove the Image URL field since it's now handled in ProfileHeader
 	];
 
 	return (
@@ -305,7 +328,7 @@ const PersonalInformation = forwardRef<
 									fontSize: FONTS.para_01.fontSize,
 								}}
 							>
-								{formData[field.key] || 'Not provided'}
+								{formData[field.key] || '-'}
 							</div>
 						)}
 					</div>

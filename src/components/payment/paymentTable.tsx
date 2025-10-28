@@ -29,15 +29,15 @@ interface PaymentTable {
 
 interface PaymentTableProps {
 	selectedStatus: string;
+	selectedYear: any;
 }
 
-const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
+const PaymentTable = ({ selectedStatus, selectedYear }: PaymentTableProps) => {
 	const [selectedDetail, setSelectedDetail] = useState<any>([]);
 	const salarySlipRef = useRef<HTMLDivElement>(null);
 	const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 	const [pdfPaymentData, setPdfPaymentData] = useState<any>(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
-
 	const dispatch = useDispatch<any>();
 	const SalaryDetails = useSelector(selectPayment);
 
@@ -142,16 +142,25 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
 	const filteredPayments = (() => {
 		if (!SalaryDetails) return [];
 
+		// 1️⃣ Filter by selected year (based on createdAt)
+		const yearFiltered = SalaryDetails.filter((payment: any) => {
+			const createdAt = new Date(payment.createdAt);
+			return createdAt.getFullYear() === Number(selectedYear);
+		});
+
+		// If no data for that year, return empty
+		if (!yearFiltered.length) return [];
+
+		// 2️⃣ Filter by status if needed
 		const statusLower = selectedStatus?.toLowerCase();
 
 		if (statusLower === 'all') {
-			return SalaryDetails;
+			return yearFiltered;
 		}
 
-		return SalaryDetails.filter((payment: any) => {
+		return yearFiltered.filter((payment: any) => {
 			const paymentStatus = payment?.status?.toLowerCase();
 
-			// Handle different variations of completed status
 			if (statusLower === 'complete' || statusLower === 'completed') {
 				return (
 					paymentStatus === 'completed' ||
@@ -161,12 +170,10 @@ const PaymentTable = ({ selectedStatus }: PaymentTableProps) => {
 				);
 			}
 
-			// Handle pending status
 			if (statusLower === 'pending') {
 				return paymentStatus === 'pending';
 			}
 
-			// Default exact match
 			return paymentStatus === statusLower;
 		});
 	})();

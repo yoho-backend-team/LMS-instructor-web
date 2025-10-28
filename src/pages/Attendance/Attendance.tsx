@@ -31,7 +31,7 @@ import {
 //   YAxis,
 //   Tooltip,
 // } from "recharts";
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { useLoader } from '@/context/LoadingContext/Loader';
 import AttendanceCardGraph from '@/components/dashboard/AttendanceCardGraph';
 
@@ -62,7 +62,7 @@ export const Attendance = () => {
 	const dispatch = useDispatch<AppDispatch>();
 	const dashData = useSelector(selectDashBoard);
 	const dailydata = useSelector(selectAttendanceDaily);
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 
 	useEffect(() => {
 		if (
@@ -106,10 +106,10 @@ export const Attendance = () => {
 		setSelectedYear(newMonth.getFullYear());
 	};
 
-	const handleNavigate = () => {
-		console.log(' clickde nav');
-		navigate('/classes');
-	};
+	// const handleNavigate = () => {
+	// 	console.log(' clickde nav');
+	// 	navigate('/classes');
+	// };
 
 	function formatISOTime(isoString: string): string {
 		const date = new Date(isoString);
@@ -368,13 +368,13 @@ export const Attendance = () => {
 							</p>
 						)}
 
-						<button
+						{/* <button
 							className='mt-4 self-start px-4 py-2 bg-gray rounded-xl btnshadow text-white text-[14px] hover:!text-white btnhovershadow cursor-pointer'
 							style={{ ...FONTS.heading_06 }}
 							onClick={handleNavigate}
 						>
 							View Details
-						</button>
+						</button> */}
 					</div>
 				</div>
 			</div>

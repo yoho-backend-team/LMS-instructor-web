@@ -1,118 +1,154 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from "react";
-import { FONTS, COLORS } from "@/constants/uiConstants";
-import type { HelpCenterTabsProps } from "./types";
+import React, { useRef } from 'react';
+import { FONTS, COLORS } from '@/constants/uiConstants';
+import type { HelpCenterTabsProps } from './types';
 
 const HelpCenterTabs: React.FC<HelpCenterTabsProps> = ({
-  tabs,
-  activeTab,
-  onTabChange,
+	tabs,
+	activeTab,
+	onTabChange,
 }) => {
-  return (
-    <div className="mb-4">
-      {/* Desktop/Tablet View - Scrollable */}
-      <div className="hidden md:block">
-        <div className="flex gap-2 lg:gap-3 overflow-x-auto pb-2 scrollbar-hide">
-          {tabs.map((tab: any, index) => (
-            <button
-              key={index}
-              onClick={() => onTabChange(tab?.category)}
-              className={`px-5 lg:px-3 py-3 rounded-md flex items-center justify-center 
+	const desktopScrollRef = useRef<HTMLDivElement>(null);
+	const mobileScrollRef = useRef<HTMLDivElement>(null);
+
+	const handleTabClick = (category: string, index: number) => {
+		onTabChange(category);
+
+		// Scroll the clicked tab into view
+		setTimeout(() => {
+			const scrollContainer =
+				window.innerWidth >= 768
+					? desktopScrollRef.current
+					: mobileScrollRef.current;
+
+			if (scrollContainer) {
+				const buttons = scrollContainer.querySelectorAll('button');
+				const clickedButton = buttons[index] as HTMLElement;
+
+				if (clickedButton) {
+					clickedButton.scrollIntoView({
+						behavior: 'smooth',
+						block: 'nearest',
+						inline: 'center',
+					});
+				}
+			}
+		}, 0);
+	};
+
+	return (
+		<div className='mb-4'>
+			{/* Desktop/Tablet View - Scrollable */}
+			<div className='hidden md:block'>
+				<div
+					ref={desktopScrollRef}
+					className='flex gap-2 lg:gap-3 overflow-x-auto pb-2 scrollbar-hide'
+				>
+					{tabs.map((tab: any, index) => (
+						<button
+							key={index}
+							onClick={() => handleTabClick(tab?.category, index)}
+							className={`px-5 lg:px-3 py-3 rounded-md flex items-center justify-center 
                 space-x-1 md:space-x-1.5 transition-all duration-200 cursor-pointer 
-                whitespace-nowrap flex-shrink-0 ${activeTab === tab?.category
-                  ? "bg-[#7b00ff] text-white"
-                  : "bg-[#ebeff3] text-white "
-                }`}
-              style={{
-                boxShadow: `
+                whitespace-nowrap flex-shrink-0 ${
+									activeTab === tab?.category
+										? 'bg-[#7b00ff] text-white'
+										: 'bg-[#ebeff3] text-white '
+								}`}
+							style={{
+								boxShadow: `
                   rgba(255, 255, 255, 0.7) 5px 5px 4px, 
             rgba(189, 194, 199, 0.75) 2px 2px 3px inset
                 `,
-                ...FONTS.para_02,
-                fontSize: "0.875rem",
-                color: activeTab === tab?.category ? "#ffffff" : COLORS.text_desc,
-              }}
-            >
-              <span
-                className="text-xs md:text-sm truncate"
-                style={{
-                  color:
-                    activeTab === tab?.category ? "#ffffff" : COLORS.text_desc,
-                }}
-              >
-                {tab?.category}
-              </span>
-              <span
-                className="text-xs px-1 md:px-1.5 py-0.5 rounded-full flex-shrink-0"
-                style={{
-                  backgroundColor:
-                    activeTab === tab?.category
-                      ? "rgba(255,255,255,0.2)"
-                      : COLORS.text_desc,
-                  fontSize: "0.65rem",
-                  color: COLORS.white,
-                }}
-              >
-                {tab.count}
-              </span>
-            </button>
-          ))}
-        </div>
-      </div>
+								...FONTS.para_02,
+								fontSize: '0.875rem',
+								color:
+									activeTab === tab?.category ? '#ffffff' : COLORS.text_desc,
+							}}
+						>
+							<span
+								className='text-xs md:text-sm truncate'
+								style={{
+									color:
+										activeTab === tab?.category ? '#ffffff' : COLORS.text_desc,
+								}}
+							>
+								{tab?.category}
+							</span>
+							<span
+								className='text-xs px-1 md:px-1.5 py-0.5 rounded-full flex-shrink-0'
+								style={{
+									backgroundColor:
+										activeTab === tab?.category
+											? 'rgba(255,255,255,0.2)'
+											: COLORS.text_desc,
+									fontSize: '0.65rem',
+									color: COLORS.white,
+								}}
+							>
+								{tab.count}
+							</span>
+						</button>
+					))}
+				</div>
+			</div>
 
-      {/* Mobile View - Scrollable */}
-      <div className="md:hidden">
-        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-          {tabs.map((tab: any, index) => (
-            <button
-              key={index}
-              onClick={() => onTabChange(tab?.category)}
-              className={`px-3 py-1.5 rounded-md flex items-center justify-center space-x-1.5 
-                transition-all duration-200 cursor-pointer whitespace-nowrap flex-shrink-0 ${activeTab === tab.category
-                  ? "bg-[#7b00ff] text-white"
-                  : "bg-[#ebeff3] text-white"
-                }`}
-              style={{
-                boxShadow: `
+			{/* Mobile View - Scrollable */}
+			<div className='md:hidden'>
+				<div
+					ref={mobileScrollRef}
+					className='flex gap-2 overflow-x-auto pb-2 scrollbar-hide'
+				>
+					{tabs.map((tab: any, index) => (
+						<button
+							key={index}
+							onClick={() => handleTabClick(tab?.category, index)}
+							className={`px-3 py-1.5 rounded-md flex items-center justify-center space-x-1.5 
+                transition-all duration-200 cursor-pointer whitespace-nowrap flex-shrink-0 ${
+									activeTab === tab.category
+										? 'bg-[#7b00ff] text-white'
+										: 'bg-[#ebeff3] text-white'
+								}`}
+							style={{
+								boxShadow: `
                   rgba(255, 255, 255, 0.7) 2px 2px 4px, 
                   rgba(189, 194, 199, 0.75) 1px 1px 2px inset
                 `,
-                ...FONTS.para_02,
-                fontSize: "0.875rem",
-                color: activeTab === tab?.category ? "#ffffff" : COLORS.text_desc,
-                minWidth: "fit-content",
-              }}
-            >
-              <span
-                className="text-sm"
-                style={{
-                  color:
-                    activeTab === tab?.category
-                      ? "#ffffff"
-                      : COLORS.text_desc,
-                }}
-              >
-                {tab.category}
-              </span>
-              <span
-                className="text-xs px-1.5 py-0.5 rounded-full"
-                style={{
-                  backgroundColor:
-                    activeTab === tab?.category
-                      ? "rgba(255,255,255,0.2)"
-                      : COLORS.text_desc,
-                  fontSize: "0.75rem",
-                  color: COLORS.white,
-                }}
-              >
-                {tab?.count}
-              </span>
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+								...FONTS.para_02,
+								fontSize: '0.875rem',
+								color:
+									activeTab === tab?.category ? '#ffffff' : COLORS.text_desc,
+								minWidth: 'fit-content',
+							}}
+						>
+							<span
+								className='text-sm'
+								style={{
+									color:
+										activeTab === tab?.category ? '#ffffff' : COLORS.text_desc,
+								}}
+							>
+								{tab.category}
+							</span>
+							<span
+								className='text-xs px-1.5 py-0.5 rounded-full'
+								style={{
+									backgroundColor:
+										activeTab === tab?.category
+											? 'rgba(255,255,255,0.2)'
+											: COLORS.text_desc,
+									fontSize: '0.75rem',
+									color: COLORS.white,
+								}}
+							>
+								{tab?.count}
+							</span>
+						</button>
+					))}
+				</div>
+			</div>
+		</div>
+	);
 };
 
 export default HelpCenterTabs;

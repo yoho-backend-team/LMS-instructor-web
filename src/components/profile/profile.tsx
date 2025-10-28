@@ -6,11 +6,7 @@ import { FONTS } from '@/constants/uiConstants';
 import { ConfirmationDialog } from '@/components/ui/confirmation-dialog';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectProfile } from '@/features/Profile/reducers/selectors';
-import {
-	getStudentProfileThunk,
-	UpdateInstructorThunk,
-} from '@/features/Profile/reducers/thunks';
-import { updateStudentProfile } from '@/features/Profile/services';
+import { getStudentProfileThunk } from '@/features/Profile/reducers/thunks';
 import { useNavigate } from 'react-router-dom';
 import { useLoader } from '@/context/LoadingContext/Loader';
 import { uploadticketfile } from '@/features/Tickets/services/Ticket';
@@ -152,7 +148,11 @@ const ProfileInformation: React.FC = () => {
 		return personalInfoChanged || imageChanged;
 	};
 
-	const handleSave = async () => {
+	const handleSave = async (apiData: any) => {
+		setOriginalPersonalInfo(apiData);
+		await dispatch(getStudentProfileThunk());
+		setOriginalProfileImage(profileData.profileImage);
+
 		if (!hasChanges() || !personalInfo) {
 			console.log('No changes to save');
 			setIsEditing(false);
@@ -160,34 +160,20 @@ const ProfileInformation: React.FC = () => {
 		}
 		setIsSaving(true);
 
+		setPersonalInfo(null);
+
+		setIsEditing(false);
+
 		try {
-			const data = {
-				contact_info: {
-					address1: personalInfo?.address1 || '',
-					address2: personalInfo?.address2 || '',
-					city: personalInfo?.city || '',
-					state: personalInfo?.state || '',
-					pincode: personalInfo?.pincode || '',
-					phone_number: personalInfo?.phone_number || '',
-					alternate_phone_number: personalInfo?.alternate_phone_number || '',
-				},
-				roll_no: personalInfo?.roll_no || '',
-				qualification: personalInfo?.qualification || '',
-				gender: personalInfo?.gender || '',
-				email: personalInfo?.email || '',
-				dob: personalInfo?.dob || '',
-				full_name: personalInfo?.full_name || '',
-				image: profileData.profileImage, // Include the updated image
-			};
+			// Update the original values to reflect the saved state
+			setOriginalPersonalInfo(apiData);
+			setOriginalProfileImage(profileData.profileImage);
 
-			console.log('Saving data:', data); // Debug log
+			// Reset personalInfo to null so it gets reinitialized with fresh data
+			setPersonalInfo(null);
 
-			dispatch(UpdateInstructorThunk(data));
-			await updateStudentProfile({ ...data });
 			setIsEditing(false);
-
-			// Refresh profile data
-			await dispatch(getStudentProfileThunk());
+			// }
 		} catch (error) {
 			console.log('Error saving profile:', error);
 		} finally {
@@ -204,6 +190,7 @@ const ProfileInformation: React.FC = () => {
 	};
 
 	const confirmCancel = () => {
+		// Reset to original values
 		setPersonalInfo(originalPersonalInfo);
 		setProfileData((prev) => ({
 			...prev,
@@ -245,6 +232,7 @@ const ProfileInformation: React.FC = () => {
 						activeMenuItem={activeMenuItem}
 						isSaving={isSaving}
 						profileImage={profileData.profileImage}
+						profileDetails={profileDetails}
 					/>
 				</div>
 			</div>
@@ -254,7 +242,6 @@ const ProfileInformation: React.FC = () => {
 				isOpen={showCancelDialog}
 				onClose={() => {
 					setShowCancelDialog(false);
-					dispatch(getStudentProfileThunk());
 				}}
 				onConfirm={confirmCancel}
 				title='Discard Changes'
