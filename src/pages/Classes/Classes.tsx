@@ -18,7 +18,7 @@ const Classes = () => {
 	);
 	const [isOn, setIsOn] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
-
+	const [classTypeCheck, setclassTypeCheck] = useState('offline');
 	const dispatch = useDispatch<AppDispatch>();
 	const classData = useSelector(selectClass) || [];
 	const { showLoader, hideLoader } = useLoader();
@@ -33,6 +33,7 @@ const Classes = () => {
 				})
 			);
 		})(activeTab, currentPage);
+		setclassTypeCheck(isOn === true ? 'online' : 'offline');
 	}, [activeTab, isOn, currentPage, dispatch]);
 
 	const handleTabChange = (tab: 'live' | 'upcoming' | 'completed') => {
@@ -183,7 +184,7 @@ const Classes = () => {
 				{activeTab === 'completed' && (
 					<Completedclass
 						data={classData}
-						classType={true}
+						classType={classTypeCheck}
 						currentPage={currentPage}
 						onPageChange={setCurrentPage}
 					/>

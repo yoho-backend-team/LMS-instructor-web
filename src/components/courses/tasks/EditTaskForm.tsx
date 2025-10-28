@@ -6,11 +6,11 @@ import { updateTaskData } from '../../../features/Course/services/Course';
 import type { Task } from './TaskTable';
 import { GetImageUrl } from '@/utils/helper';
 
-interface EditTaskFormProps {
-	task: Task;
-	onSave: (task: Task) => void;
-	onClose: () => void;
-}
+// interface EditTaskFormProps {
+// 	task: Task;
+// 	onSave: (task: Task) => void;
+// 	onClose: () => void;
+// }
 interface StudentSubmission {
 	_id: string;
 	student: string;
@@ -24,7 +24,7 @@ interface StudentSubmission {
 	updatedAt: string;
 }
 
-const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
+const EditTaskForm = ({ task, onSave, onClose }: any) => {
 	const [activeTab, setActiveTab] = useState('taskDetails');
 	const [currentPage, setCurrentPage] = useState(1);
 	const [itemsPerPage] = useState(5);
@@ -32,8 +32,7 @@ const EditTaskForm = ({ task, onSave, onClose }: EditTaskFormProps) => {
 
 	// Extract student submissions from task data
 	const studentSubmissions: StudentSubmission[] | any = task?.answers;
-	console.log('task questions', task?.question_file);
-	console.log(task, 'sow');
+
 	// Calculate pagination
 	const indexOfLastItem = currentPage * itemsPerPage;
 	const indexOfFirstItem = indexOfLastItem - itemsPerPage;

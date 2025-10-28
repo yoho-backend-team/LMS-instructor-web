@@ -22,7 +22,7 @@ interface FilterGroup {
 
 interface CompletedclassProps {
 	data?: any;
-	classType?: boolean;
+	classType?: any;
 	showOnlineOnly?: boolean;
 	currentPage?: number;
 	onPageChange?: React.Dispatch<React.SetStateAction<number>>;
