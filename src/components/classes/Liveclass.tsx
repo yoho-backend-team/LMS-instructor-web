@@ -6,13 +6,13 @@ import { getDashBoardReports } from '@/features/Dashboard/reducers/thunks';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-interface ClassItem {
-	day: string;
-	topic: string;
-	joinLink: string;
-	duration: string;
-	classtype: string;
-}
+// interface ClassItem {
+// 	day: string;
+// 	topic: string;
+// 	joinLink: string;
+// 	duration: string;
+// 	classtype: string;
+// }
 
 interface LiveclassProps {
 	showOnlineOnly: boolean;

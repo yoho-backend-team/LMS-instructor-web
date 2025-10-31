@@ -17,6 +17,9 @@ import CourseButton from '../button';
 import { useNavigate } from 'react-router-dom';
 
 export interface Task {
+	_id(_id: any, arg1: { remark: any; mark: any; status: any; student: any; }): unknown;
+	question_file(arg0: string, question_file: any): unknown;
+	answers: any;
 	id: string;
 	name: string;
 	type: string;

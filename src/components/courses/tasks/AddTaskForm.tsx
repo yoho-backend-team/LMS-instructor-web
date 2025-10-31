@@ -252,8 +252,8 @@ const AddTaskForm = ({ onSave, onClose, course }: AddTaskFormProps) => {
 			const res = await createTask(taskPayload, {});
 
 			// Create the task object for local state
-			const newTask: Task = {
-				id: res?.data?.data?._id || Date.now().toString(),
+			const newTask = {
+				_id: res?.data?.data?._id || Date.now().toString(),
 				name: formData.name || 'Unnamed',
 				type: formData.type,
 				task: formData.task,
@@ -264,7 +264,9 @@ const AddTaskForm = ({ onSave, onClose, course }: AddTaskFormProps) => {
 				question: formData.question.trim(),
 				score: '0',
 				file: formData.file,
-			};
+				question_file: fileUrl,
+				answers: [],
+			} as unknown as Task;
 
 			onSave(newTask);
 			toast.success('Success! Task added successfully!');

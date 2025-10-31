@@ -14,7 +14,7 @@ import { selectIdClass } from '@/features/classId/services/reducers/selector';
 import { getClassIdDetail } from '@/features/classId/services/reducers/thunks';
 import { useLoader } from '@/context/LoadingContext/Loader';
 import { getDashBoardReports } from '@/features/Dashboard/reducers/thunks';
-import { FileText, Upload, X, Download } from 'lucide-react';
+import { FileText, X, Download } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { GetImageUrl } from '@/utils/helper';
 
