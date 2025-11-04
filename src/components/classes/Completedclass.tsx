@@ -151,7 +151,7 @@ const Completedclass: React.FC<CompletedclassProps> = ({
 					style={{ backgroundColor: COLORS.bg_Colour }}
 					className='px-4 py-3 shadow-sm'
 				>
-					<div className='flex justify-between items-center'>
+					<div className='flex justify-end items-center'>
 						{/* Filter grid */}
 						{showFilters && (
 							<div className='flex-1 mr-4'>

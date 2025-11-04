@@ -14,9 +14,13 @@ import { selectIdClass } from '@/features/classId/services/reducers/selector';
 import { getClassIdDetail } from '@/features/classId/services/reducers/thunks';
 import { useLoader } from '@/context/LoadingContext/Loader';
 import { getDashBoardReports } from '@/features/Dashboard/reducers/thunks';
-import { FileText, Upload, X, Download } from 'lucide-react';
+import { Upload, X, Download } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { GetImageUrl } from '@/utils/helper';
+import PDFImage from '../../assets/classes/PDF icon.png';
+import ImageIcon from '../../assets/classes/image icon.png';
+import { updateClassService } from '@/features/classes/services';
+import { uploadticketfile } from '@/features/Tickets/services/Ticket';
 
 const ClassId = () => {
 	const { id, classType } = useParams();
@@ -39,15 +43,26 @@ const ClassId = () => {
 	});
 	const [notesPreview, setNotesPreview] = useState(null);
 	const [studyPreview, setStudyPreview] = useState(null);
+	const [isNotesUpload, setIsNotesUpload] = useState(false);
+	const [isStudyMaterialsUpload, setIsStudyMaterialsUpload] = useState(false);
+	const [newVideoUrl, setNewVideoUrl] = useState('');
 
-	useEffect(() => {
-		if (id) {
+	const fetchClassDetails = async () => {
+		try {
 			dispatch(
 				getClassIdDetail({
 					classType,
 					course: id,
 				})
 			);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	useEffect(() => {
+		if (id) {
+			fetchClassDetails();
 		}
 	}, [id, dispatch, classType]);
 
@@ -125,19 +140,39 @@ const ClassId = () => {
 		}
 
 		const formData = new FormData();
-		formData.append('title', notesForm.title);
-		formData.append('description', notesForm.description);
 		formData.append('file', notesForm.file);
 
 		try {
-			// Add your API call here
-			// await dispatch(uploadNotes(formData));
-			toast.success('Notes uploaded successfully');
-			setIsNotesModalOpen(false);
-			setNotesForm({ title: '', description: '', file: null });
-			setNotesPreview(null);
+			setIsNotesUpload(true);
+			const uploadRes = await uploadticketfile(formData);
+			if (uploadRes) {
+				const data = {
+					uuid: id,
+					type: classType,
+					notes: {
+						title: notesForm.title,
+						description: notesForm.description,
+						file: uploadRes?.data?.file,
+					},
+				};
+				const response = await updateClassService({ uuid: id }, data);
+				if (response) {
+					toast.success('Notes uploaded successfully');
+					fetchClassDetails();
+					setIsNotesModalOpen(false);
+					setNotesForm({ title: '', description: '', file: null });
+					setNotesPreview(null);
+				} else {
+					toast.error('Failed to upload notes');
+				}
+			} else {
+				toast.error('Failed to upload notes');
+				return;
+			}
 		} catch (error) {
-			toast.error('Failed to upload notes');
+			toast.error('Failed to upload notes, file exceeds 5MB limit');
+		} finally {
+			setIsNotesUpload(false);
 		}
 	};
 
@@ -150,19 +185,63 @@ const ClassId = () => {
 		}
 
 		const formData = new FormData();
-		formData.append('title', studyForm.title);
-		formData.append('description', studyForm.description);
 		formData.append('file', studyForm.file);
 
 		try {
-			// Add your API call here
-			// await dispatch(uploadStudyMaterial(formData));
-			toast.success('Study material uploaded successfully');
-			setIsStudyModalOpen(false);
-			setStudyForm({ title: '', description: '', file: null });
-			setStudyPreview(null);
+			setIsStudyMaterialsUpload(true);
+			const uploadRes = await uploadticketfile(formData);
+			if (uploadRes) {
+				const data = {
+					uuid: id,
+					type: classType,
+					study_materials: {
+						title: studyForm.title,
+						description: studyForm.description,
+						file: uploadRes?.data?.file,
+					},
+				};
+
+				const response = await updateClassService({ uuid: id }, data);
+				if (response) {
+					fetchClassDetails();
+					toast.success('Study material uploaded successfully');
+					setIsStudyModalOpen(false);
+					setStudyForm({ title: '', description: '', file: null });
+					setStudyPreview(null);
+				} else {
+					toast.error('Failed to upload study material');
+				}
+			}
 		} catch (error) {
-			toast.error('Failed to upload study material');
+			toast.error('Failed to upload study material, file exceeds 5MB limit');
+		} finally {
+			setIsStudyMaterialsUpload(false);
+		}
+	};
+
+	const handleUploadVideo = async (e: any) => {
+		e.preventDefault();
+		if (!newVideoUrl || newVideoUrl.trim() === '') {
+			toast.error('Please enter a video URL');
+			return;
+		}
+
+		try {
+			const data = {
+				uuid: id,
+				type: classType,
+				videos: { url: newVideoUrl.trim() },
+			};
+			const response = await updateClassService({ uuid: id }, data);
+			if (response) {
+				toast.success('Video URL uploaded successfully');
+				fetchClassDetails();
+				setNewVideoUrl('');
+			} else {
+				toast.error('Failed to upload video URL');
+			}
+		} catch (error) {
+			toast.error('Failed to upload video URL');
 		}
 	};
 
@@ -179,9 +258,9 @@ const ClassId = () => {
 
 	const getFileIcon = (fileUrl: any) => {
 		if (fileUrl?.endsWith('.pdf')) {
-			return <FileText className='w-12 h-12 text-red-500' />;
+			return <img src={PDFImage} className='w-12 h-12 object-contain' />;
 		}
-		return <FileText className='w-12 h-12 text-blue-500' />;
+		return <img src={ImageIcon} className='w-12 h-12 object-contain' />;
 	};
 
 	const getYouTubeEmbedUrl = (url: any) => {
@@ -192,7 +271,7 @@ const ClassId = () => {
 
 	const notes = classIdData.data?.notes || [];
 	const studyMaterials = classIdData.data?.study_materials || [];
-	const videoUrl = classIdData.data?.video_url;
+	const videoUrl = classIdData.data?.videos?.[0]?.url;
 
 	return (
 		<div className='mb-4 px-2 sm:px-4'>
@@ -303,7 +382,7 @@ const ClassId = () => {
 				</Card>
 
 				{/* Video Section */}
-				{videoUrl && (
+				{videoUrl ? (
 					<Card
 						style={{ backgroundColor: COLORS.bg_Colour }}
 						className='px-3 sm:px-4 py-4 min-h-[350px] sm:min-h-[400px]'
@@ -328,6 +407,33 @@ const ClassId = () => {
 							></iframe>
 						</div>
 					</Card>
+				) : (
+					<Card
+						style={{ backgroundColor: COLORS.bg_Colour }}
+						className='px-3 sm:px-4 py-4 min-h-[350px] sm:min-h-[400px]'
+					>
+						<CardTitle
+							style={{ ...FONTS.heading_02 }}
+							className='mb-4 text-base sm:text-lg'
+						>
+							Class Video Upload
+						</CardTitle>
+						<form onSubmit={handleUploadVideo} className='space-y-4'>
+							<input
+								type='text'
+								placeholder='Video URL'
+								value={newVideoUrl}
+								onChange={(e) => setNewVideoUrl(e.target.value)}
+								className='w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7B00FF] text-sm border-gray-300'
+							/>
+							<button
+								type='submit'
+								className='bg-[#7B00FF] text-white px-4 py-2 rounded-lg hover:bg-[#6500d9] transition-colors text-sm'
+							>
+								Upload Video
+							</button>
+						</form>
+					</Card>
 				)}
 			</div>
 
@@ -343,13 +449,13 @@ const ClassId = () => {
 					>
 						Notes
 					</CardTitle>
-					{/* <button
+					<button
 						onClick={() => setIsNotesModalOpen(true)}
 						className='flex items-center gap-2 bg-[#7B00FF] text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-[#6500d9] transition-colors text-sm'
 					>
 						<Upload className='w-4 h-4' />
 						Upload Notes
-					</button> */}
+					</button>
 				</div>
 
 				{notes.length > 0 ? (
@@ -359,28 +465,27 @@ const ClassId = () => {
 								key={note._id}
 								className='bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] p-4'
 							>
-								<div className='flex flex-col items-center gap-3'>
+								<div className='flex flex-row items-center gap-5'>
 									{getFileIcon(note.file)}
-									<div className='text-center w-full'>
+									<div className='text-left w-full'>
 										<h3
 											style={{ ...FONTS.heading_04 }}
-											className='text-[#2A2A2A] mb-2 text-sm sm:text-base break-words'
+											className='text-[#2A2A2A] text-sm sm:text-base break-words'
 										>
 											{note.title}
 										</h3>
 										<p
 											style={{ ...FONTS.para_02 }}
-											className='text-gray-600 mb-3 text-xs sm:text-sm break-words'
+											className='text-gray-600 text-xs sm:text-sm break-words'
 										>
 											{note.description}
 										</p>
 									</div>
 									<button
 										onClick={() => handleDownload(note.file, note.title)}
-										className='flex items-center gap-2 bg-[#7B00FF] text-white px-3 py-2 rounded-lg hover:bg-[#6500d9] transition-colors text-xs sm:text-sm w-full justify-center'
+										className='flex items-center gap-2 bg-[#7B00FF] text-white px-1 py-2 rounded-lg hover:bg-[#6500d9] transition-colors text-xs sm:text-sm justify-center w-14'
 									>
 										<Download className='w-4 h-4' />
-										Download
 									</button>
 								</div>
 							</Card>
@@ -408,13 +513,13 @@ const ClassId = () => {
 					>
 						Study Materials
 					</CardTitle>
-					{/* <button
+					<button
 						onClick={() => setIsStudyModalOpen(true)}
 						className='flex items-center gap-2 bg-[#7B00FF] text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-[#6500d9] transition-colors text-sm'
 					>
 						<Upload className='w-4 h-4' />
 						Upload Study Material
-					</button> */}
+					</button>
 				</div>
 
 				{studyMaterials.length > 0 ? (
@@ -424,18 +529,18 @@ const ClassId = () => {
 								key={material._id}
 								className='bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset] p-4'
 							>
-								<div className='flex flex-col items-center gap-3'>
+								<div className='flex flex-row items-center gap-5'>
 									{getFileIcon(material.file)}
-									<div className='text-center w-full'>
+									<div className='text-left w-full'>
 										<h3
 											style={{ ...FONTS.heading_04 }}
-											className='text-[#2A2A2A] mb-2 text-sm sm:text-base break-words'
+											className='text-[#2A2A2A] text-sm sm:text-base break-words'
 										>
 											{material.title}
 										</h3>
 										<p
 											style={{ ...FONTS.para_02 }}
-											className='text-gray-600 mb-3 text-xs sm:text-sm break-words'
+											className='text-gray-600 text-xs sm:text-sm break-words'
 										>
 											{material.description}
 										</p>
@@ -444,10 +549,9 @@ const ClassId = () => {
 										onClick={() =>
 											handleDownload(material.file, material.title)
 										}
-										className='flex items-center gap-2 bg-[#7B00FF] text-white px-3 py-2 rounded-lg hover:bg-[#6500d9] transition-colors text-xs sm:text-sm w-full justify-center'
+										className='flex items-center gap-2 bg-[#7B00FF] text-white px-3 py-2 rounded-lg hover:bg-[#6500d9] transition-colors text-xs sm:text-sm w-14 justify-center'
 									>
 										<Download className='w-4 h-4' />
-										Download
 									</button>
 								</div>
 							</Card>
@@ -534,8 +638,9 @@ const ClassId = () => {
 							<button
 								type='submit'
 								className='w-full bg-[#7B00FF] text-white px-4 py-2 rounded-lg hover:bg-[#6500d9] transition-colors text-sm'
+								disabled={isNotesUpload}
 							>
-								Upload
+								{isNotesUpload ? 'Uploading...' : 'Upload'}
 							</button>
 						</form>
 					</Card>
@@ -613,8 +718,9 @@ const ClassId = () => {
 							<button
 								type='submit'
 								className='w-full bg-[#7B00FF] text-white px-4 py-2 rounded-lg hover:bg-[#6500d9] transition-colors text-sm'
+								disabled={isStudyMaterialsUpload}
 							>
-								Upload
+								{isStudyMaterialsUpload ? 'Uploading...' : 'Upload'}
 							</button>
 						</form>
 					</Card>
