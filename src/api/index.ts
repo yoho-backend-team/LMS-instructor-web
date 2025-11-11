@@ -71,19 +71,35 @@ class Client {
 					data,
 					'instructor'
 				),
-			getByDaily: (params: string, data: any) => httpClient.get(HTTP_END_POINTS.Instructor.attendance.class_by_day.replace(":staffId", params), data)
+			getByDaily: (params: string, data: any) =>
+				httpClient.get(
+					HTTP_END_POINTS.Instructor.attendance.class_by_day.replace(
+						':staffId',
+						params
+					),
+					data
+				),
 		},
 		course_list: {
 			get: () =>
 				httpClient.get(
-					HTTP_END_POINTS.Instructor.course_list.get.replace(":instituteid", getInstructorInstituteDetails()?.uuid).replace(":branchid", getInstructorBranchDetails()?.uuid),
+					HTTP_END_POINTS.Instructor.course_list.get
+						.replace(':instituteid', getInstructorInstituteDetails()?.uuid)
+						.replace(':branchid', getInstructorBranchDetails()?.uuid),
 					{},
 					'instructor'
 				),
 		},
 		course: {
 			get: (params: string) =>
-				httpClient.get(HTTP_END_POINTS.Instructor.course.get.replace(":instituteid", getInstructorInstituteDetails()?.uuid).replace(":branchid", getInstructorBranchDetails()?.uuid).replace(":courseid", params), {}, 'instructor'),
+				httpClient.get(
+					HTTP_END_POINTS.Instructor.course.get
+						.replace(':instituteid', getInstructorInstituteDetails()?.uuid)
+						.replace(':branchid', getInstructorBranchDetails()?.uuid)
+						.replace(':courseid', params),
+					{},
+					'instructor'
+				),
 			notes: {
 				create: (data: any, params?: any) =>
 					httpClient.post(
@@ -113,14 +129,32 @@ class Client {
 					),
 			},
 			task: {
-				create: (data: any, params: any) => httpClient.post(HTTP_END_POINTS.Instructor.course.task.create, data, params, 'instructor')
-				,
-				get: (params: any) => httpClient.get(HTTP_END_POINTS.Instructor.course.task.get.replace(":course", params.course), params, 'instructor')
-				,
-				update: (params: any, data: any) => httpClient.patch(HTTP_END_POINTS.Instructor.course.task.update.replace(":taskid", params),
-					data,
-					{},
-					'instructor')
+				create: (data: any, params: any) =>
+					httpClient.post(
+						HTTP_END_POINTS.Instructor.course.task.create,
+						data,
+						params,
+						'instructor'
+					),
+				get: (params: any) =>
+					httpClient.get(
+						HTTP_END_POINTS.Instructor.course.task.get.replace(
+							':course',
+							params.course
+						),
+						params,
+						'instructor'
+					),
+				update: (params: any, data: any) =>
+					httpClient.patch(
+						HTTP_END_POINTS.Instructor.course.task.update.replace(
+							':taskid',
+							params
+						),
+						data,
+						{},
+						'instructor'
+					),
 			},
 			study_material: {
 				create: (data: any, params?: any) =>
@@ -153,30 +187,42 @@ class Client {
 			batches: {
 				get: (data: any) =>
 					httpClient.get(
-						HTTP_END_POINTS.Instructor.course.batches.get.replace(
-							':courseId',
-							data?.uuid
-						).replace(":instituteid", getInstructorInstituteDetails()?.uuid).replace(":branchid", getInstructorBranchDetails()?.uuid),
+						HTTP_END_POINTS.Instructor.course.batches.get
+							.replace(':courseId', data?.uuid)
+							.replace(':instituteid', getInstructorInstituteDetails()?.uuid)
+							.replace(':branchid', getInstructorBranchDetails()?.uuid),
 						{},
 						'instructor'
 					),
-				getWithUuid: (data: any) => httpClient.get(
-					HTTP_END_POINTS.Instructor.course.batches.getwithUuid.replace(":instituteid", getInstructorInstituteDetails()?.uuid).replace(":branchid", getInstructorBranchDetails()?.uuid).replace(":batchId", data?.batchId),
-					{},
-					'instructor'
-				),
-				updateModuleWithUUID: (params:any, data: any) => httpClient.update(
-					HTTP_END_POINTS.Instructor.course.batches.UpdateModulewithUuid.replace(":instituteid", getInstructorInstituteDetails()?.uuid).replace(":branchid", getInstructorBranchDetails()?.uuid)+ params?.batchId,
-					data,
-					{},
-					'instructor'
-				),
+				getWithUuid: (data: any) =>
+					httpClient.get(
+						HTTP_END_POINTS.Instructor.course.batches.getwithUuid
+							.replace(':instituteid', getInstructorInstituteDetails()?.uuid)
+							.replace(':branchid', getInstructorBranchDetails()?.uuid)
+							.replace(':batchId', data?.batchId),
+						{},
+						'instructor'
+					),
+				updateModuleWithUUID: (params: any, data: any) =>
+					httpClient.update(
+						HTTP_END_POINTS.Instructor.course.batches.UpdateModulewithUuid.replace(
+							':instituteid',
+							getInstructorInstituteDetails()?.uuid
+						).replace(':branchid', getInstructorBranchDetails()?.uuid) +
+							params?.batchId,
+						data,
+						{},
+						'instructor'
+					),
 			},
 		},
 		class: {
 			get: (params: any) =>
 				httpClient.get(
-					HTTP_END_POINTS.Instructor.class.get.replace(":courseid", params?.users),
+					HTTP_END_POINTS.Instructor.class.get.replace(
+						':courseid',
+						params?.users
+					),
 					params,
 					'instructor'
 				),
@@ -186,17 +232,21 @@ class Client {
 					params,
 					'instructor'
 				),
-			update: (data: { uuid: string }) =>
+			update: (params: any, data: any) =>
 				httpClient.update(
-					HTTP_END_POINTS.Instructor.class.update + data?.uuid,
+					HTTP_END_POINTS.Instructor.class.update + params?.uuid,
 					data,
+					{},
 					'instructor'
 				),
 		},
 		community: {
 			get: (params: any) =>
 				httpClient.get(
-					HTTP_END_POINTS.Instructor.community.get.replace(":courseid", getInstructorCourseId()?.uuid),
+					HTTP_END_POINTS.Instructor.community.get.replace(
+						':courseid',
+						getInstructorCourseId()?.uuid
+					),
 					params,
 					'instructor'
 				),
@@ -306,8 +356,9 @@ class Client {
 	};
 
 	staffIdCard = {
-		get: (data: any) => httpClient.get(HTTP_END_POINTS.staffIdCard.get.replace(":id",data)),
-	}
+		get: (data: any) =>
+			httpClient.get(HTTP_END_POINTS.staffIdCard.get.replace(':id', data)),
+	};
 }
 
 export default new Client();
