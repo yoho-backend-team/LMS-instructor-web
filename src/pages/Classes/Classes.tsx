@@ -11,6 +11,8 @@ import { getClassDetails } from '@/features/classes/reducers/thunks';
 import { selectClass } from '@/features/classes/reducers/selectors';
 import { useLoader } from '@/context/LoadingContext/Loader';
 import { getDashBoardReports } from '@/features/Dashboard/reducers/thunks';
+import { getInstructorcourse } from '@/features/Course/reducers/thunks';
+import { selectCourse } from '@/features/Course/reducers/selector';
 
 const Classes = () => {
 	const [activeTab, setActiveTab] = useState<'live' | 'upcoming' | 'completed'>(
@@ -19,22 +21,44 @@ const Classes = () => {
 	const [isOn, setIsOn] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [classTypeCheck, setclassTypeCheck] = useState('offline');
+	const [selectedCourse, setSelectedCourse] = useState<string>('');
 	const dispatch = useDispatch<AppDispatch>();
 	const classData = useSelector(selectClass) || [];
 	const { showLoader, hideLoader } = useLoader();
+	const coursedata = useSelector(selectCourse) || [];
+
+	// Default selected course once coursedata is available
+	useEffect(() => {
+		if (coursedata.length > 0 && !selectedCourse) {
+			setSelectedCourse(coursedata[0]?._id);
+		}
+	}, [coursedata, selectedCourse]);
 
 	useEffect(() => {
 		((tab: 'live' | 'upcoming' | 'completed', page: number = 1) => {
-			dispatch(
-				getClassDetails({
-					userType: isOn ? 'online' : 'offline',
-					classType: tab,
-					page: page,
-				})
-			);
+			selectedCourse &&
+				dispatch(
+					getClassDetails({
+						userType: isOn ? 'online' : 'offline',
+						classType: tab,
+						page: page,
+						users: selectedCourse,
+					})
+				);
 		})(activeTab, currentPage);
 		setclassTypeCheck(isOn === true ? 'online' : 'offline');
-	}, [activeTab, isOn, currentPage, dispatch]);
+	}, [activeTab, isOn, currentPage, selectedCourse, dispatch]);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				await dispatch(getInstructorcourse());
+			} catch (error: any) {
+				console.log('Course fetch error:', error.message);
+			}
+		};
+		fetchData();
+	}, [dispatch]);
 
 	const handleTabChange = (tab: 'live' | 'upcoming' | 'completed') => {
 		setActiveTab(tab);
@@ -44,6 +68,7 @@ const Classes = () => {
 	const toggleSwitch = () => {
 		setIsOn((prev) => !prev);
 	};
+
 	useEffect(() => {
 		(async () => {
 			try {
@@ -63,100 +88,116 @@ const Classes = () => {
 
 	return (
 		<div className='h-screen flex flex-col'>
-			{/* Fixed Header Section */}
+			{/* Header Section */}
 			<div className='pt-2 px-4 pb-3 relative flex-shrink-0'>
 				<h1 style={{ ...FONTS.heading_01 }} className='mb-4'>
 					Classes
 				</h1>
-				<Card style={{ backgroundColor: COLORS.bg_Colour }}>
+				<Card
+					style={{ backgroundColor: COLORS.bg_Colour }}
+					className='relative p-4'
+				>
 					<h2 style={{ ...FONTS.heading_02 }} className='ml-6'>
 						{isOn ? 'Online Classes' : 'Offline Classes'}
 					</h2>
 
-					<label className='inline-block cursor-pointer absolute right-20'>
-						<input
-							type='checkbox'
-							checked={isOn}
-							onChange={toggleSwitch}
-							className='sr-only peer'
-						/>
-						<div
-							className={`relative w-25 h-8 rounded-full flex items-center justify-between px-2 text-sm font-bold
-                transition-colors duration-300
-                ${
-									isOn
-										? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF]'
-										: 'bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset]'
-								}
-              `}
+					{/* Dropdown + Toggle Section */}
+					<div className='absolute right-6 top-4 flex items-center space-x-6'>
+						{/* Course Dropdown */}
+						<select
+							value={selectedCourse}
+							onChange={(e) => setSelectedCourse(e.target.value)}
+							className='min-w-[180px] px-3 py-2 rounded-md bg-[#ebeff3] text-[#2a2a2a] font-semibold focus:outline-none shadow-[inset_2px_2px_5px_rgba(189,194,199,0.75),inset_-2px_-2px_5px_rgba(255,255,255,0.75)]'
+							style={{ fontFamily: FONTS.heading_01.fontFamily }}
 						>
-							{isOn ? (
-								<span
-									style={{ fontFamily: FONTS.heading_01.fontFamily }}
-									className='text-white'
-								>
-									ONLINE
-								</span>
-							) : (
-								<span
-									style={{ fontFamily: FONTS.heading_01.fontFamily }}
-									className='absolute right-2 text-[#2a2a2a]'
-								>
-									OFFLINE
-								</span>
-							)}
+							{coursedata.map((course: any, index: number) => (
+								<option key={index} value={course._id}>
+									{course.course_name}
+								</option>
+							))}
+						</select>
 
+						{/* Toggle Switch */}
+						<label className='inline-block cursor-pointer'>
+							<input
+								type='checkbox'
+								checked={isOn}
+								onChange={toggleSwitch}
+								className='sr-only peer'
+							/>
 							<div
-								className={`absolute top-[2px] h-7 w-7 bg-white rounded-full shadow-md transition-transform duration-300
-                  ${isOn ? 'left-[calc(100%-30px)]' : 'left-[3px]'}
-                `}
-							></div>
-						</div>
-					</label>
+								className={`relative w-28 h-8 rounded-full flex items-center justify-between px-2 text-sm font-bold transition-colors duration-300
+									${
+										isOn
+											? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF]'
+											: 'bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset]'
+									}`}
+							>
+								{isOn ? (
+									<span
+										style={{ fontFamily: FONTS.heading_01.fontFamily }}
+										className='text-white'
+									>
+										ONLINE
+									</span>
+								) : (
+									<span
+										style={{ fontFamily: FONTS.heading_01.fontFamily }}
+										className='absolute right-2 text-[#2a2a2a]'
+									>
+										OFFLINE
+									</span>
+								)}
+								<div
+									className={`absolute top-[2px] h-7 w-7 bg-white rounded-full shadow-md transition-transform duration-300
+										${isOn ? 'left-[calc(100%-30px)]' : 'left-[3px]'}
+									`}
+								></div>
+							</div>
+						</label>
+					</div>
 
-					<div className='grid xl:grid-cols-8 lg:grid-cols-5 md:grid-cols-4 items-start mb-2 px-6 gap-36'>
+					{/* Tabs Section */}
+					<div className='grid xl:grid-cols-8 lg:grid-cols-5 md:grid-cols-4 items-start mb-2 px-6 gap-36 mt-16'>
 						<Button
 							style={{
 								...FONTS.heading_07,
-								color: activeTab === 'live' ? COLORS.white : undefined,
+								color: activeTab === 'live' ? COLORS.white : COLORS.black,
 							}}
 							onClick={() => handleTabChange('live')}
-							className={`px-2 min-w-[155px] rounded-[6px] cursor-pointer ${
+							className={`px-2 min-w-[155px] rounded-[6px] cursor-pointer hover:bg-gradient-to-l from-[#7B00FF] to-[#B200FF] hover:!text-white ${
 								activeTab === 'live'
-									? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)]'
+									? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF] !text-white'
 									: 'bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset]'
 							}`}
-							variant={activeTab === 'live' ? 'default' : 'outline'}
 						>
 							Live Class
 						</Button>
 						<Button
 							style={{
 								...FONTS.heading_07,
-								color: activeTab === 'upcoming' ? COLORS.white : undefined,
+								color: activeTab === 'upcoming' ? COLORS.white : COLORS.black,
 							}}
 							onClick={() => handleTabChange('upcoming')}
-							className={`px-2 min-w-[155px] cursor-pointer ${
+							className={`px-2 min-w-[155px] cursor-pointer hover:bg-gradient-to-l from-[#7B00FF] to-[#B200FF] hover:!text-white ${
 								activeTab === 'upcoming'
-									? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)]'
+									? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF] !text-white'
 									: 'bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset]'
 							}`}
-							variant={activeTab === 'upcoming' ? 'default' : 'outline'}
 						>
 							Upcoming Classes
 						</Button>
 						<Button
 							style={{
 								...FONTS.heading_07,
-								color: activeTab === 'completed' ? COLORS.white : undefined,
+								color: activeTab === 'completed' ? COLORS.white : COLORS.black,
 							}}
 							onClick={() => handleTabChange('completed')}
-							className={`px-2 min-w-[155px] cursor-pointer ${
+							className={`px-2 min-w-[155px] cursor-pointer hover:bg-gradient-to-l from-[#7B00FF] to-[#B200FF] hover:!text-white ${
 								activeTab === 'completed'
-									? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF] text-white shadow-[0px_2px_4px_0px_rgba(255,255,255,0.75)_inset,3px_3px_3px_0px_rgba(255,255,255,0.25)_inset,-8px_-8px_12px_0px_#7B00FF_inset,-4px_-8px_10px_0px_#B200FF_inset,4px_4px_8px_0px_rgba(189,194,199,0.75),8px_8px_12px_0px_rgba(189,194,199,0.25),-4px_-4px_12px_0px_rgba(255,255,255,0.75),-8px_-8px_12px_1px_rgba(255,255,255,0.25)]'
+									? 'bg-gradient-to-l from-[#7B00FF] to-[#B200FF] !text-white'
 									: 'bg-[#ebeff3] shadow-[5px_5px_4px_rgba(255,255,255,0.7),2px_2px_3px_rgba(189,194,199,0.75)_inset]'
 							}`}
-							variant={activeTab === 'completed' ? 'default' : 'outline'}
 						>
 							Completed Classes
 						</Button>
@@ -164,7 +205,7 @@ const Classes = () => {
 				</Card>
 			</div>
 
-			{/* Scrollable Content Section */}
+			{/* Scrollable Content */}
 			<div className='flex-1 overflow-y-auto px-4 pb-4 scrollbar-hide min-h-0'>
 				{activeTab === 'live' && (
 					<Liveclass
